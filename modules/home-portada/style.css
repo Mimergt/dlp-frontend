@@ -30,6 +30,21 @@ body.dlp-cat--pildoras .cwp_et_pb_layout_slider_standard .navMenu_slide .swiper-
 body.dlp-cat--pildoras .cwp_et_pb_layout_slider_standard .navMenu_slide .swiper-slide.swiper-slide-thumb-active { background-color: var(--dlp-acento) !important; }
 body.dlp-cat--pildoras .cwp_et_pb_layout_slider_standard .navMenu_slide .swiper-slide-thumb-active span.navMenu_label { color: #fff !important; }
 
+/* Pestaña curva clara: barra blanco nieve con relieve mínimo; la categoría activa es una pestaña blanca
+   que se funde con el contenido de abajo con esquinas curvas. Foto completa (sin círculo ni recorte);
+   mix-blend-mode: multiply funde el fondo blanco de las fotos con la barra. */
+body.dlp-cat--curva .cwp_et_pb_layout_slider_standard .navMenu_slide { --dlp-r: 24px; padding-top: 14px; background-color: #f6f6f8 !important; border: 1px solid #ececf0; border-bottom: 0; border-radius: 18px 18px 0 0; box-shadow: inset 0 1px 0 #fff, inset 0 -8px 12px -10px rgba(0,0,0,.08); }
+body.dlp-cat--curva .cwp_et_pb_layout_slider_standard .navMenu_slide .swiper-slide { display: flex; flex-direction: column; align-items: center; padding: 14px 8px 16px !important; border-radius: var(--dlp-r) var(--dlp-r) 0 0; background-color: transparent !important; transition: background-color .22s, box-shadow .22s; }
+body.dlp-cat--curva .cwp_et_pb_layout_slider_standard .navMenu_slide .swiper-slide img { width: auto !important; height: 92px !important; max-width: 120px; object-fit: contain; mix-blend-mode: multiply; transition: transform .25s ease; }
+body.dlp-cat--curva .cwp_et_pb_layout_slider_standard .navMenu_slide .swiper-slide span.navMenu_label { margin-top: 8px; font-weight: 700; font-size: 12px; line-height: 1.15; font-style: normal; text-transform: uppercase; letter-spacing: .05em; color: #9a9aa3 !important; text-shadow: 0 1px 0 #fff; transition: color .2s; }
+body.dlp-cat--curva .cwp_et_pb_layout_slider_standard .navMenu_slide .swiper-slide.swiper-slide-thumb-active { position: relative; z-index: 2; background-color: #fff !important; box-shadow: 0 -8px 16px -6px rgba(0,0,0,.10); }
+body.dlp-cat--curva .cwp_et_pb_layout_slider_standard .navMenu_slide .swiper-slide-thumb-active img { transform: translateY(-2px) scale(1.06); }
+body.dlp-cat--curva .cwp_et_pb_layout_slider_standard .navMenu_slide .swiper-slide-thumb-active span.navMenu_label { color: #111 !important; text-shadow: none; }
+body.dlp-cat--curva .cwp_et_pb_layout_slider_standard .navMenu_slide .swiper-slide-thumb-active span.navMenu_label::before { content: ""; display: block; width: 22px; height: 3px; margin: 0 auto 7px; border-radius: 3px; background: var(--dlp-acento); }
+body.dlp-cat--curva .cwp_et_pb_layout_slider_standard .navMenu_slide .swiper-slide-thumb-active::before, body.dlp-cat--curva .cwp_et_pb_layout_slider_standard .navMenu_slide .swiper-slide-thumb-active::after { content: ""; position: absolute; bottom: 0; width: var(--dlp-r); height: var(--dlp-r); pointer-events: none; }
+body.dlp-cat--curva .cwp_et_pb_layout_slider_standard .navMenu_slide .swiper-slide-thumb-active::before { left: calc(var(--dlp-r) * -1); background: radial-gradient(circle at 0 0, transparent var(--dlp-r), #fff calc(var(--dlp-r) + .5px)); }
+body.dlp-cat--curva .cwp_et_pb_layout_slider_standard .navMenu_slide .swiper-slide-thumb-active::after { right: calc(var(--dlp-r) * -1); background: radial-gradient(circle at 100% 0, transparent var(--dlp-r), #fff calc(var(--dlp-r) + .5px)); }
+
 /* ───────── PRODUCTOS (rejilla) ───────── */
 .dlp-prod--tarjeta ul.products li.product,
 .dlp-prod--minimal ul.products li.product,

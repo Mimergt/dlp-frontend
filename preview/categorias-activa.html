@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Categorías: indicador de pestaña activa</title>
+<style>
+  :root { --acento: #CF1E26; --acento-suave: #fdeaea; }
+  * { box-sizing: border-box; }
+  body { margin: 0; padding: 24px 16px 60px; background: #f4f4f6; font-family: "Open Sans", system-ui, -apple-system, Segoe UI, Roboto, sans-serif; color: #111; }
+  h1 { font-size: 20px; margin: 0 0 4px; }
+  p.lead { margin: 0 0 24px; color: #555; font-size: 14px; }
+  .opt { max-width: 1100px; margin: 0 auto 28px; }
+  .opt h2 { font-size: 15px; margin: 0 0 2px; }
+  .opt .desc { font-size: 13px; color: #666; margin: 0 0 8px; }
+  .stage { background: #fff; border-radius: 16px; padding: 18px 10px 0; overflow-x: auto; box-shadow: 0 1px 3px rgba(0,0,0,.06); }
+  .strip { display: flex; gap: 6px; min-width: max-content; }
+  .cat { flex: 0 0 132px; display: flex; flex-direction: column; align-items: center; text-align: center; cursor: pointer; position: relative; user-select: none; padding: 12px 6px 14px; transition: all .22s ease; }
+  .cat img { width: 84px; height: 84px; object-fit: cover; border-radius: 50%; display: block; transition: all .22s ease; position: relative; z-index: 1; }
+  .cat span { margin-top: 9px; font-size: 12px; font-weight: 700; line-height: 1.15; text-transform: uppercase; letter-spacing: .04em; color: #222; transition: color .2s; position: relative; z-index: 1; }
+
+  /* A · Tarjeta elevada */
+  .A .cat { border-radius: 22px; }
+  .A .cat.on { background: #fff; box-shadow: 0 10px 24px rgba(0,0,0,.13), 0 2px 6px rgba(0,0,0,.06); transform: translateY(-3px); }
+  .A .cat.on img { transform: scale(1.06); box-shadow: 0 6px 14px rgba(0,0,0,.2); }
+  .A .cat.on span { color: var(--acento); }
+  .A .cat:not(.on) img { box-shadow: 0 2px 8px rgba(0,0,0,.14); }
+
+  /* B · Redondito de color detrás de la foto */
+  .B .cat img { box-shadow: 0 2px 8px rgba(0,0,0,.14); }
+  .B .cat::before { content: ""; position: absolute; top: 4px; left: 50%; width: 104px; height: 104px; margin-left: -52px; border-radius: 50%; background: var(--acento-suave); box-shadow: 0 8px 18px rgba(207,30,38,.22); opacity: 0; transform: scale(.6); transition: all .25s cubic-bezier(.3,1.4,.5,1); }
+  .B .cat.on::before { opacity: 1; transform: scale(1); }
+  .B .cat.on img { transform: translateY(2px); }
+  .B .cat.on span { color: var(--acento); }
+
+  /* C · Puntito debajo del nombre */
+  .C .cat img { box-shadow: 0 2px 8px rgba(0,0,0,.14); }
+  .C .cat::after { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--acento); margin-top: 7px; box-shadow: 0 0 0 4px rgba(207,30,38,.15), 0 3px 8px rgba(207,30,38,.45); opacity: 0; transform: scale(0); transition: all .25s cubic-bezier(.3,1.6,.5,1); }
+  .C .cat.on::after { opacity: 1; transform: scale(1); }
+  .C .cat.on span { color: var(--acento); }
+  .C .cat.on img { transform: scale(1.05); box-shadow: 0 8px 16px rgba(0,0,0,.2); }
+
+  /* D · Foto flotante con aro y brillo del color de acento */
+  .D .cat img { box-shadow: 0 2px 8px rgba(0,0,0,.14); border: 3px solid transparent; }
+  .D .cat.on img { border-color: var(--acento); transform: translateY(-4px) scale(1.05); box-shadow: 0 12px 22px rgba(207,30,38,.35), 0 0 0 4px var(--acento-suave); }
+  .D .cat.on span { color: var(--acento); }
+  .D .cat span::after { content: ""; display: block; width: 18px; height: 3px; border-radius: 3px; background: var(--acento); margin: 6px auto 0; opacity: 0; transform: scaleX(.2); transition: all .25s; }
+  .D .cat.on span::after { opacity: 1; transform: scaleX(1); }
+
+  /* E · Pestaña curva (inspirada en tu referencia): barra oscura y la activa se funde con el contenido */
+  .E .stage { background: #111; padding: 14px 10px 0; }
+  .E .cat { padding: 12px 6px 16px; border-radius: 22px 22px 0 0; }
+  .E .cat img { box-shadow: 0 2px 8px rgba(0,0,0,.5); }
+  .E .cat span { color: #fff; }
+  .E .cat.on { background: #fff; box-shadow: 0 -6px 14px rgba(0,0,0,.18); }
+  .E .cat.on span { color: var(--acento); }
+  .E .cat.on::before, .E .cat.on::after { content: ""; position: absolute; bottom: 0; width: 22px; height: 22px; background: transparent; }
+  .E .cat.on::before { left: -22px; background: radial-gradient(circle at 0 0, transparent 22px, #fff 22.5px); }
+  .E .cat.on::after { right: -22px; background: radial-gradient(circle at 100% 0, transparent 22px, #fff 22.5px); }
+  .E .below { height: 26px; background: #fff; border-radius: 0 0 16px 16px; margin: 0 -10px; }
+  .below { display: none; }
+  .E .below { display: block; }
+</style>
+</head>
+<body>
+<h1>Categorías: indicador de la pestaña activa</h1>
+<p class="lead">Todas con foto arriba y nombre abajo. Toca cualquier categoría para ver cómo se marca. Color de acento: <b style="color:var(--acento)">#CF1E26</b> (se puede cambiar en el panel).</p>
+
+<div id="root"></div>
+
+<script>
+var cats = [
+  ["Promos", "2025/07/WEB-Combo-4ever_Alone-1200x1200px.jpg"],
+  ["Combos de res", "2020/07/5-DP-COMBO-TORITO-1200x1200px.jpg"],
+  ["Combos de pollo", "2025/05/11-DP-COMBO-CHICKEN_HONEY_MUSTARD-1200x1200px.jpg"],
+  ["Hamburguesas individuales", "2026/01/2-Hamburguesa-Del_Puente.png"],
+  ["Para compartir", "2020/07/BOX-Mr_Tocino-1200x1200px.jpg"],
+  ["Sides", "2020/07/WEB-Cheese-Poppers-1200x1200px.jpg"],
+  ["Bebidas", "2021/06/Portada-Seccio%CC%81n-bebidas-512x512px.jpg"],
+  ["Para hacer en casa", "2020/07/Web-del-puente.jpg"]
+];
+var opts = [
+  ["A", "A · Tarjeta elevada", "La pestaña activa sube un poco y se pone sobre una tarjeta blanca con sombra suave; la foto crece."],
+  ["B", "B · Redondito de color detrás de la foto", "Un círculo suave del color de acento aparece detrás de la foto, con sombra. Es el que más se parece a “un redondito que indica dónde estás”."],
+  ["C", "C · Puntito debajo del nombre", "Discreto: un punto brillante del color de acento debajo del nombre, la foto se eleva con sombra."],
+  ["D", "D · Foto flotante con aro", "La foto activa flota con aro de acento, brillo y una rayita debajo del nombre."],
+  ["E", "E · Pestaña curva (como tu referencia)", "Barra oscura y la activa se funde con el contenido de abajo con esquinas curvas. Cambia más el look de la barra."]
+];
+var root = document.getElementById("root");
+opts.forEach(function (o) {
+  var wrap = document.createElement("div");
+  wrap.className = "opt " + o[0];
+  var html = '<h2>' + o[1] + '</h2><p class="desc">' + o[2] + '</p><div class="stage"><div class="strip">';
+  cats.forEach(function (c, i) {
+    html += '<div class="cat' + (i === 0 ? ' on' : '') + '"><img src="https://i0.wp.com/dev.delpuente.com.gt/wp-content/uploads/' + c[1] + '?resize=200%2C200&ssl=1" alt=""><span>' + c[0] + '</span></div>';
+  });
+  html += '</div>' + (o[0] === "E" ? '<div class="below"></div>' : '') + '</div>';
+  wrap.innerHTML = html;
+  root.appendChild(wrap);
+  wrap.querySelectorAll(".cat").forEach(function (el) {
+    el.addEventListener("click", function () {
+      wrap.querySelectorAll(".cat").forEach(function (x) { x.classList.remove("on"); });
+      el.classList.add("on");
+    });
+  });
+});
+</script>
+</body>
+</html>

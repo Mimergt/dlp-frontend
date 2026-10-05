@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Categorías: pestaña curva clara con emboss</title>
+<style>
+  :root { --acento: #CF1E26; --r: 24px; }
+  * { box-sizing: border-box; }
+  body { margin: 0; padding: 24px 16px 60px; background: #fff; font-family: "Open Sans", system-ui, -apple-system, Segoe UI, Roboto, sans-serif; color: #111; }
+  h1 { font-size: 20px; margin: 0 0 4px; }
+  p.lead { margin: 0 0 24px; color: #555; font-size: 14px; }
+  .opt { max-width: 1100px; margin: 0 auto 34px; }
+  .opt h2 { font-size: 15px; margin: 0 0 2px; }
+  .opt .desc { font-size: 13px; color: #666; margin: 0 0 10px; }
+  .scroller { overflow-x: auto; padding: 0 0 2px; }
+  .bar { display: flex; gap: 0; min-width: max-content; padding: 14px 14px 0; border-radius: 18px 18px 0 0; }
+  .below { height: 90px; background: #fff; border: 1px solid #eee; border-top: 0; border-radius: 0 0 14px 14px; display: flex; align-items: center; justify-content: center; color: #bbb; font-size: 13px; }
+
+  .cat { flex: 0 0 140px; display: flex; flex-direction: column; align-items: center; text-align: center; cursor: pointer; position: relative; user-select: none; padding: 14px 8px 16px; border-radius: var(--r) var(--r) 0 0; transition: background .22s, box-shadow .22s; }
+  /* Foto completa, sin círculo ni recorte. multiply hace que el fondo blanco de la foto se funda con la barra. */
+  .cat img { width: auto; height: 92px; max-width: 120px; object-fit: contain; display: block; mix-blend-mode: multiply; transition: transform .25s ease; }
+  .cat span { margin-top: 8px; font-size: 12px; font-weight: 700; line-height: 1.15; text-transform: uppercase; letter-spacing: .05em; transition: color .2s; }
+  .cat.on img { transform: translateY(-2px) scale(1.06); }
+
+  /* La activa: blanca y unida al contenido con esquinas cóncavas */
+  .cat.on { background: #fff; z-index: 2; }
+  .cat.on::before, .cat.on::after { content: ""; position: absolute; bottom: 0; width: var(--r); height: var(--r); }
+  .cat.on::before { left: calc(var(--r) * -1); background: radial-gradient(circle at 0 0, transparent var(--r), #fff calc(var(--r) + .5px)); }
+  .cat.on::after { right: calc(var(--r) * -1); background: radial-gradient(circle at 100% 0, transparent var(--r), #fff calc(var(--r) + .5px)); }
+
+  /* ───────── 1 · Gris perla, relieve suave (neumórfico) ───────── */
+  .o1 .bar { background: linear-gradient(#e9e9ed, #e3e3e8); box-shadow: inset 0 2px 5px rgba(0,0,0,.09), inset 0 -1px 0 rgba(255,255,255,.7); }
+  .o1 .cat span { color: #6b6b73; text-shadow: 0 1px 0 rgba(255,255,255,.85); }
+  .o1 .cat.on { box-shadow: 0 -6px 12px rgba(0,0,0,.07), inset 0 2px 0 #fff; }
+  .o1 .cat.on span { color: var(--acento); text-shadow: none; }
+
+  /* ───────── 2 · Blanco hueso, grabado (debossed) ───────── */
+  .o2 .bar { background: #f2f1ee; box-shadow: inset 0 3px 8px rgba(60,50,30,.10), inset 0 -2px 0 #fff; border: 1px solid #e6e4df; border-bottom: 0; }
+  .o2 .cat span { color: #8a867d; text-shadow: 0 1px 0 #fff, 0 -1px 0 rgba(0,0,0,.06); }
+  .o2 .cat.on { box-shadow: 0 -4px 10px rgba(60,50,30,.08); }
+  .o2 .cat.on span { color: #222; text-shadow: none; }
+  .o2 .cat.on span::after { content: ""; display: block; width: 6px; height: 6px; margin: 7px auto 0; border-radius: 50%; background: var(--acento); box-shadow: 0 1px 3px rgba(207,30,38,.5); }
+
+  /* ───────── 3 · Blanco nieve, relieve mínimo (casi sin color) ───────── */
+  .o3 .bar { background: #f6f6f8; border: 1px solid #ececf0; border-bottom: 0; box-shadow: inset 0 1px 0 #fff, inset 0 -8px 12px -10px rgba(0,0,0,.08); }
+  .o3 .cat span { color: #9a9aa3; text-shadow: 0 1px 0 #fff; }
+  .o3 .cat.on { box-shadow: 0 -8px 16px -6px rgba(0,0,0,.10), 0 0 0 1px #ececf0; }
+  .o3 .cat.on::before { background: radial-gradient(circle at 0 0, transparent var(--r), #fff calc(var(--r) + .5px)); }
+  .o3 .cat.on span { color: #111; }
+  .o3 .cat.on::after { box-shadow: none; }
+  .o3 .cat.on span::before { content: ""; display: block; width: 22px; height: 3px; margin: 0 auto 7px; border-radius: 3px; background: var(--acento); }
+</style>
+</head>
+<body>
+<h1>Categorías: pestaña curva en tonos claros</h1>
+<p class="lead">Foto completa (sin círculo, sin recorte), barra clara con relieve suave y la activa fundida con el contenido. Toca cualquier categoría.</p>
+<div id="root"></div>
+<script>
+var cats = [
+  ["Promos", "2025/07/WEB-Combo-4ever_Alone-1200x1200px.jpg"],
+  ["Combos de res", "2020/07/5-DP-COMBO-TORITO-1200x1200px.jpg"],
+  ["Combos de pollo", "2025/05/11-DP-COMBO-CHICKEN_HONEY_MUSTARD-1200x1200px.jpg"],
+  ["Hamburguesas individuales", "2026/01/2-Hamburguesa-Del_Puente.png"],
+  ["Para compartir", "2020/07/BOX-Mr_Tocino-1200x1200px.jpg"],
+  ["Sides", "2020/07/WEB-Cheese-Poppers-1200x1200px.jpg"],
+  ["Bebidas", "2021/06/Portada-Seccio%CC%81n-bebidas-512x512px.jpg"],
+  ["Para hacer en casa", "2020/07/Web-del-puente.jpg"]
+];
+var opts = [
+  ["o1", "1 · Gris perla con relieve suave", "Barra hundida (sombra interior) en gris muy claro; la activa blanca y levemente elevada. Nombre del activo en rojo."],
+  ["o2", "2 · Blanco hueso, grabado", "Tono cálido tipo papel. Texto y fotos con efecto grabado (emboss); la activa con un puntito de acento."],
+  ["o3", "3 · Blanco nieve, relieve mínimo", "El más sutil: casi todo blanco, solo sombras finas. La activa marcada con una rayita de acento."]
+];
+var root = document.getElementById("root");
+opts.forEach(function (o) {
+  var wrap = document.createElement("div");
+  wrap.className = "opt " + o[0];
+  var html = '<h2>' + o[1] + '</h2><p class="desc">' + o[2] + '</p><div class="scroller"><div class="bar">';
+  cats.forEach(function (c, i) {
+    html += '<div class="cat' + (i === 2 ? ' on' : '') + '"><img src="https://i0.wp.com/dev.delpuente.com.gt/wp-content/uploads/' + c[1] + '?resize=240%2C240&ssl=1" alt=""><span>' + c[0] + '</span></div>';
+  });
+  html += '</div><div class="below">aquí empiezan los productos</div></div>';
+  wrap.innerHTML = html;
+  root.appendChild(wrap);
+  wrap.querySelectorAll(".cat").forEach(function (el) {
+    el.addEventListener("click", function () {
+      wrap.querySelectorAll(".cat").forEach(function (x) { x.classList.remove("on"); });
+      el.classList.add("on");
+    });
+  });
+});
+</script>
+</body>
+</html>
