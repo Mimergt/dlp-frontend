@@ -104,3 +104,13 @@ add_action('wp_enqueue_scripts', function () {
     }
     wp_localize_script('dlp-fe-home-quickview', 'dlpQV', ['ajaxurl' => admin_url('admin-ajax.php')]);
 }, 30);
+
+/*
+ * El carrito lateral añade por ajax, pero WooCommerce guarda igual el aviso "X han sido añadidos a tu carrito"
+ * y aparecía en la siguiente página. Con el carrito lateral abierto ese aviso sobra.
+ */
+foreach (['wp_ajax_xoo_wsc_add_to_cart', 'wp_ajax_nopriv_xoo_wsc_add_to_cart'] as $hook) {
+    add_action($hook, function () {
+        add_action('shutdown', 'wc_clear_notices', 5);
+    }, 0);
+}

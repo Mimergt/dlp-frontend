@@ -28,7 +28,11 @@ html.dlpqv-lock { overflow: hidden; }
 .dlpqv button.single_add_to_cart_button { display: block; width: 100%; padding: 14px; border: 0; border-radius: 12px; background: #111; color: #fff; font-size: 15px; font-weight: 700; text-transform: uppercase; letter-spacing: .03em; cursor: pointer; }
 .dlpqv button.single_add_to_cart_button:hover { background: var(--dlp-acento, #CF1E26); }
 .dlpqv .wc-pao-addon-container { margin-bottom: 12px; }
-.dlpqv .wc-pao-addon-name { font-weight: 700; }
+.dlpqv h2.wc-pao-addon-heading { margin: 14px 0 4px; padding: 0; font-size: 13px; line-height: 1.2; letter-spacing: .08em; text-transform: uppercase; color: #777; }
+.dlpqv h2.wc-pao-addon-name { margin: 10px 0 6px; padding: 0; font-size: 15px; line-height: 1.25; font-weight: 700; text-transform: none; color: #111; }
+.dlpqv .wc-pao-addon-description, .dlpqv .wc-pao-addon p { margin: 0 0 6px; padding: 0; font-size: 13px; color: #666; }
+.dlpqv .wc-pao-addon select, .dlpqv .wc-pao-addon input[type="number"], .dlpqv .wc-pao-addon input[type="text"] { max-width: 100%; padding: 8px 10px; border: 1px solid #ccc; border-radius: 8px; font-size: 14px; }
+.dlpqv .wc-pao-addon label { font-size: 14px; }
 .dlpqv #product-addons-total { margin: 10px 0; }
 
 @media (max-width: 680px) {

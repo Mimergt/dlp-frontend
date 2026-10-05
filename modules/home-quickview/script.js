@@ -55,6 +55,7 @@
         if (my !== token) return;
         if (!r || !r.success) { window.location.href = href; return; }
         $body.html(r.data.html);
+        $body.find('img').attr('loading', 'eager');
         enhance();
         // Inicializa los Add-Ons (calculan el total y validan) en el contenido recién insertado.
         $(document.body).trigger('quick-view-displayed');
