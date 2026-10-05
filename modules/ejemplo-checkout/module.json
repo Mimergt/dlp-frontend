@@ -1,0 +1,8 @@
+{
+  "label": "Ejemplo checkout (plantilla para copiar)",
+  "description": "Módulo de muestra. Copia esta carpeta, cambia el nombre y edita module.json, style.css y script.js.",
+  "where": ["checkout"],
+  "default": false,
+  "css": "style.css",
+  "js": "script.js"
+}

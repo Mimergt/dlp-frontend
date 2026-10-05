@@ -1,0 +1,71 @@
+<?php
+if (!defined('ABSPATH')) {
+    exit;
+}
+
+/**
+ * Carga los módulos activos que aplican a la página. Cada módulo va aislado:
+ * un archivo roto (PHP, JSON, CSS o JS) solo afecta a ese módulo.
+ *
+ * Solo para administradores (prueba sin cambiar nada para los visitantes):
+ *   ?dlp_fe_off=all            apaga todos los módulos en esa vista
+ *   ?dlp_fe_off=id1,id2        apaga esos módulos en esa vista
+ */
+class DLP_FE_Loader {
+    private static $loaded = [];
+
+    public static function init() {
+        add_action('wp_enqueue_scripts', [__CLASS__, 'enqueue'], 20);
+        add_action('admin_bar_menu', [__CLASS__, 'admin_bar'], 100);
+    }
+
+    private static function forced_off() {
+        if (!current_user_can('manage_options') || empty($_GET['dlp_fe_off'])) {
+            return [];
+        }
+        return array_filter(array_map('sanitize_key', explode(',', wp_unslash($_GET['dlp_fe_off']))));
+    }
+
+    public static function enqueue() {
+        $off = self::forced_off();
+        foreach (DLP_FE_Registry::all() as $id => $m) {
+            if (!$m['enabled'] || in_array('all', $off, true) || in_array($id, $off, true)) {
+                continue;
+            }
+            try {
+                if (!DLP_FE_Registry::matches($m['where'])) {
+                    continue;
+                }
+                if ($m['php'] && is_readable($m['dir'] . '/' . $m['php'])) {
+                    require_once $m['dir'] . '/' . $m['php'];
+                }
+                $base = DLP_FE_URL . 'modules/' . $id . '/';
+                if ($m['css'] && is_readable($m['dir'] . '/' . $m['css'])) {
+                    wp_enqueue_style('dlp-fe-' . $id, $base . $m['css'], [], filemtime($m['dir'] . '/' . $m['css']));
+                }
+                if ($m['js'] && is_readable($m['dir'] . '/' . $m['js'])) {
+                    wp_enqueue_script('dlp-fe-' . $id, $base . $m['js'], [], filemtime($m['dir'] . '/' . $m['js']), true);
+                }
+                self::$loaded[] = $id;
+            } catch (\Throwable $e) {
+                error_log('[dlp-frontend] módulo "' . $id . '" falló: ' . $e->getMessage());
+            }
+        }
+    }
+
+    /** Barra de admin: muestra qué módulos están activos en esta página y permite apagarlos solo para tu vista. */
+    public static function admin_bar($bar) {
+        if (is_admin() || !current_user_can('manage_options')) {
+            return;
+        }
+        $bar->add_node(['id' => 'dlp-fe', 'title' => 'DLP FE (' . count(self::$loaded) . ')', 'href' => admin_url('options-general.php?page=dlp-frontend')]);
+        foreach (self::$loaded as $id) {
+            $bar->add_node([
+                'id' => 'dlp-fe-' . $id, 'parent' => 'dlp-fe',
+                'title' => esc_html($id) . ' — apagar en esta vista',
+                'href'  => add_query_arg('dlp_fe_off', $id),
+            ]);
+        }
+        $bar->add_node(['id' => 'dlp-fe-all', 'parent' => 'dlp-fe', 'title' => 'Ver sin ningún módulo', 'href' => add_query_arg('dlp_fe_off', 'all')]);
+    }
+}
