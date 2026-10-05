@@ -1,0 +1,6 @@
+{
+  "label": "Pedido para recoger: botón \"Ya estoy aquí\"",
+  "description": "Botón y mensajes en la página de gracias y en Ver pedido (pasa dlv → rtp). El ajax ahora exige la llave del pedido.",
+  "boot": true,
+  "php": "module.php"
+}

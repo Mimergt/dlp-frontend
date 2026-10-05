@@ -1,0 +1,4 @@
+/* Base global de DLP Frontend. */
+
+/* Checkout: métodos de pago a ancho completo (ver módulo checkout-layout). */
+body .woocommerce-checkout-payment { float: none; width: 100%; }

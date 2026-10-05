@@ -1,0 +1,6 @@
+{
+  "label": "Plantillas WooCommerce propias",
+  "description": "Plantillas que reemplazan a las de WooCommerce sin pasar por el tema (hoy: página de gracias minimalista).",
+  "boot": true,
+  "php": "module.php"
+}

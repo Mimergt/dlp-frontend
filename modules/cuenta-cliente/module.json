@@ -1,0 +1,6 @@
+{
+  "label": "Mi cuenta: teléfono y avisos de contraseña",
+  "description": "Campo Teléfono obligatorio en Editar cuenta y avisos tras recuperar/cambiar contraseña.",
+  "boot": true,
+  "php": "module.php"
+}

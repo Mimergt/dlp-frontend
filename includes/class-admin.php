@@ -37,6 +37,9 @@ class DLP_FE_Admin {
         ?>
         <div class="wrap">
             <h1>DLP Frontend <small>v<?php echo esc_html(DLP_FE_VERSION); ?></small></h1>
+            <?php if (DLP_FE_Loader::legacy_theme_active()) : ?>
+                <div class="notice notice-warning"><p><strong>Modo espera:</strong> el tema <code>dlp</code> sigue activo y tiene su propia lógica PHP, así que los módulos de arranque están en pausa para no duplicarla. Al activar el tema DLP26 se cargan solos.</p></div>
+            <?php endif; ?>
             <?php if (!empty($_GET['saved'])) : ?><div class="notice notice-success"><p>Guardado.</p></div><?php endif; ?>
             <p>Cada módulo es independiente: si uno falla, desactívalo aquí y el resto del sitio sigue igual.
                Dónde: <code>all, home, shop, product, cart, checkout, account, category, page:slug, post_type:tipo</code> (separados por coma; vacío = el valor por defecto del módulo).</p>
@@ -50,7 +53,11 @@ class DLP_FE_Admin {
                         <tr>
                             <td><input type="checkbox" name="m[<?php echo esc_attr($id); ?>][enabled]" value="1" <?php checked($m['enabled']); ?>></td>
                             <td><strong><?php echo esc_html($m['label']); ?></strong> <code><?php echo esc_html($id); ?></code><br><span class="description"><?php echo esc_html($m['description']); ?></span></td>
-                            <td><input type="text" class="regular-text" name="m[<?php echo esc_attr($id); ?>][where]" value="<?php echo esc_attr($m['where_raw']); ?>" placeholder="<?php echo esc_attr($m['where_def']); ?>"></td>
+                            <td><?php if ($m['boot']) : ?>
+                                <em>Siempre (lógica de arranque)</em>
+                            <?php else : ?>
+                                <input type="text" class="regular-text" name="m[<?php echo esc_attr($id); ?>][where]" value="<?php echo esc_attr($m['where_raw']); ?>" placeholder="<?php echo esc_attr($m['where_def']); ?>">
+                            <?php endif; ?></td>
                         </tr>
                     <?php endforeach; ?>
                     </tbody>

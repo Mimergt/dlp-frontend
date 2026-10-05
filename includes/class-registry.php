@@ -36,6 +36,7 @@ class DLP_FE_Registry {
                 'css'         => $meta['css'] ?? '',
                 'js'          => $meta['js'] ?? '',
                 'php'         => $meta['php'] ?? '',
+                'boot'        => !empty($meta['boot']),
                 'where'       => $where,
                 'where_raw'   => $saved['where'] ?? '',
                 'where_def'   => implode(',', (array) ($meta['where'] ?? ['all'])),

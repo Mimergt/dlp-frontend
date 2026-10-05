@@ -15,8 +15,40 @@ class DLP_FE_Loader {
     private static $loaded = [];
 
     public static function init() {
+        add_action('after_setup_theme', [__CLASS__, 'boot'], 0);
         add_action('wp_enqueue_scripts', [__CLASS__, 'enqueue'], 20);
         add_action('admin_bar_menu', [__CLASS__, 'admin_bar'], 100);
+    }
+
+    /** Mientras el tema legacy "dlp" siga activo, la lógica PHP vive en él: no se duplica. */
+    public static function legacy_theme_active() {
+        return get_stylesheet() === 'dlp';
+    }
+
+    /**
+     * Módulos "boot" (lógica PHP que debe estar siempre cargada, p. ej. login de la app, campos del checkout).
+     * Se cargan donde antes se cargaba el functions.php del tema. Un módulo que falla no tumba a los demás.
+     * Emergencia: define('DLP_FE_DISABLED_MODULES', 'id1,id2'); en wp-config.php.
+     */
+    public static function boot() {
+        if (self::legacy_theme_active()) {
+            return;
+        }
+        $off = defined('DLP_FE_DISABLED_MODULES') ? array_map('trim', explode(',', (string) DLP_FE_DISABLED_MODULES)) : [];
+        foreach (DLP_FE_Registry::all() as $id => $m) {
+            if (!$m['boot'] || !$m['enabled'] || in_array($id, $off, true)) {
+                continue;
+            }
+            $file = $m['dir'] . '/' . $m['php'];
+            if (!$m['php'] || !is_readable($file)) {
+                continue;
+            }
+            try {
+                require_once $file;
+            } catch (\Throwable $e) {
+                error_log('[dlp-frontend] módulo boot "' . $id . '" falló: ' . $e->getMessage());
+            }
+        }
     }
 
     private static function forced_off() {
@@ -29,7 +61,7 @@ class DLP_FE_Loader {
     public static function enqueue() {
         $off = self::forced_off();
         foreach (DLP_FE_Registry::all() as $id => $m) {
-            if (!$m['enabled'] || in_array('all', $off, true) || in_array($id, $off, true)) {
+            if ($m['boot'] || !$m['enabled'] || in_array('all', $off, true) || in_array($id, $off, true)) {
                 continue;
             }
             try {

@@ -1,0 +1,7 @@
+{
+  "label": "Base (CSS global)",
+  "description": "Estilos globales y del checkout. Aquí se van sumando los ajustes de CSS.",
+  "where": ["all"],
+  "default": true,
+  "css": "style.css"
+}

@@ -1,0 +1,6 @@
+{
+  "label": "Checkout: campos y cuenta de invitado",
+  "description": "Quita campos (cumpleaños, código postal), dirección no obligatoria, y asigna pedidos de invitados a su cuenta por correo.",
+  "boot": true,
+  "php": "module.php"
+}

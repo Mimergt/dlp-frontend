@@ -1,0 +1,6 @@
+{
+  "label": "Pedidos: tiempo total y dispositivo",
+  "description": "Guarda tiempo_total al completar un pedido y el dispositivo (Android / IOS / MWeb) en cada pedido.",
+  "boot": true,
+  "php": "module.php"
+}
