@@ -164,7 +164,7 @@ class DLP_FE_Admin {
                             <div class="dlp-fe-row">
                                 <strong>Dónde se carga</strong>
                                 <div>
-                                <?php if ($m['boot']) : ?>
+                                <?php if ($m['boot'] && !$m['css'] && !$m['js']) : ?>
                                     <em>Siempre (lógica de arranque)</em>
                                 <?php else : ?>
                                     <input type="text" class="regular-text" name="m[<?php echo esc_attr($id); ?>][where]" value="<?php echo esc_attr($m['where_raw']); ?>" placeholder="<?php echo esc_attr($m['where_def']); ?>">

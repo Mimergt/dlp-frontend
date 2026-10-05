@@ -1,1 +1,65 @@
-/* Home / Portada. Solo se carga en la página de inicio. */
+/*
+ * Home / Portada.
+ * Los estilos se eligen en Apariencia → DLP Frontend → Home / Portada.
+ * El panel pone una clase en <body>: dlp-cat--<estilo> (categorías) y dlp-prod--<estilo> (productos).
+ * "clasico" no cambia nada. Color de acento: var(--dlp-home-portada-color-acento).
+ */
+:root { --dlp-acento: var(--dlp-home-portada-color-acento, #CF1E26); }
+
+/* ───────── CATEGORÍAS (carrusel con foto) ─────────
+   El plugin Anything Slider pone su CSS en la página con !important, por eso los selectores son largos. */
+
+/* Burbujas: foto redonda, nombre debajo, anillo en la activa */
+body.dlp-cat--burbujas .cwp_et_pb_layout_slider_standard .navMenu_slide .swiper-slide { display: flex; flex-direction: column; align-items: center; padding: 10px 0 !important; }
+body.dlp-cat--burbujas .cwp_et_pb_layout_slider_standard .navMenu_slide .swiper-slide img { width: 84px !important; height: 84px !important; max-width: none; object-fit: cover; border-radius: 50%; border: 3px solid transparent; box-shadow: 0 2px 10px rgba(0,0,0,.18); transition: transform .2s, border-color .2s; }
+body.dlp-cat--burbujas .cwp_et_pb_layout_slider_standard .navMenu_slide .swiper-slide span.navMenu_label { margin-top: 8px; font-weight: 700; font-size: 12px; line-height: 1.15; font-style: normal; text-transform: uppercase; letter-spacing: .04em; color: #111 !important; }
+body.dlp-cat--burbujas .cwp_et_pb_layout_slider_standard .navMenu_slide .swiper-slide-thumb-active img { border-color: var(--dlp-acento); transform: scale(1.07); }
+body.dlp-cat--burbujas .cwp_et_pb_layout_slider_standard .navMenu_slide .swiper-slide-thumb-active span.navMenu_label { color: var(--dlp-acento) !important; }
+
+/* Tarjetas: foto cuadrada con esquinas redondeadas y nombre sobre la foto */
+body.dlp-cat--tarjetas .cwp_et_pb_layout_slider_standard .navMenu_slide .swiper-slide { position: relative; overflow: hidden; border-radius: 16px; padding: 0 !important; }
+body.dlp-cat--tarjetas .cwp_et_pb_layout_slider_standard .navMenu_slide .swiper-slide img { display: block; width: 100% !important; height: auto; aspect-ratio: 1 / 1; object-fit: cover; transition: transform .3s; }
+body.dlp-cat--tarjetas .cwp_et_pb_layout_slider_standard .navMenu_slide .swiper-slide:hover img { transform: scale(1.05); }
+body.dlp-cat--tarjetas .cwp_et_pb_layout_slider_standard .navMenu_slide .swiper-slide span.navMenu_label { position: absolute; left: 0; right: 0; bottom: 0; margin: 0; padding: 28px 8px 9px; text-align: center; font-weight: 700; font-size: 12px; line-height: 1.15; font-style: normal; text-transform: uppercase; letter-spacing: .04em; color: #fff !important; background: linear-gradient(to top, rgba(0,0,0,.78), rgba(0,0,0,0)); }
+body.dlp-cat--tarjetas .cwp_et_pb_layout_slider_standard .navMenu_slide .swiper-slide-thumb-active { box-shadow: 0 0 0 3px var(--dlp-acento); }
+
+/* Píldoras: foto pequeña + nombre en una cápsula */
+body.dlp-cat--pildoras .cwp_et_pb_layout_slider_standard .navMenu_slide .swiper-slide { display: flex; align-items: center; gap: 8px; box-sizing: border-box; padding: 5px 12px 5px 5px !important; border-radius: 999px; background-color: #f1f1f1 !important; transition: background-color .2s; }
+body.dlp-cat--pildoras .cwp_et_pb_layout_slider_standard .navMenu_slide .swiper-slide img { flex: none; width: 42px !important; height: 42px !important; max-width: none; object-fit: cover; border-radius: 50%; }
+body.dlp-cat--pildoras .cwp_et_pb_layout_slider_standard .navMenu_slide .swiper-slide span.navMenu_label { margin: 0; text-align: left; font-weight: 700; font-size: 12px; line-height: 1.1; font-style: normal; text-transform: uppercase; letter-spacing: .03em; color: #111 !important; }
+body.dlp-cat--pildoras .cwp_et_pb_layout_slider_standard .navMenu_slide .swiper-slide.swiper-slide-thumb-active { background-color: var(--dlp-acento) !important; }
+body.dlp-cat--pildoras .cwp_et_pb_layout_slider_standard .navMenu_slide .swiper-slide-thumb-active span.navMenu_label { color: #fff !important; }
+
+/* ───────── PRODUCTOS (rejilla) ───────── */
+.dlp-prod--tarjeta ul.products li.product,
+.dlp-prod--minimal ul.products li.product,
+.dlp-prod--oscuro ul.products li.product { transition: transform .2s, box-shadow .2s, border-color .2s; }
+.dlp-prod--tarjeta ul.products li.product .woocommerce-loop-product__title,
+.dlp-prod--oscuro ul.products li.product .woocommerce-loop-product__title { font-size: 14px; font-weight: 700; text-transform: uppercase; letter-spacing: .02em; padding: 12px 10px 4px; }
+.dlp-prod--tarjeta ul.products li.product .price,
+.dlp-prod--minimal ul.products li.product .price,
+.dlp-prod--oscuro ul.products li.product .price { padding: 0 !important; }
+
+/* Tarjeta: caja blanca con sombra, precio en cápsula de acento */
+.dlp-prod--tarjeta ul.products li.product { background: #fff; border-radius: 18px; box-shadow: 0 2px 14px rgba(0,0,0,.09); padding: 0 0 16px; overflow: hidden; }
+.dlp-prod--tarjeta ul.products li.product:hover { transform: translateY(-4px); box-shadow: 0 10px 24px rgba(0,0,0,.16); }
+.dlp-prod--tarjeta ul.products li.product .et_shop_image img { border-radius: 0; }
+.dlp-prod--tarjeta ul.products li.product .price { display: inline-block; margin-top: 4px; background: var(--dlp-acento); color: #fff; border-radius: 999px; padding: 4px 16px !important; font-size: 16px !important; font-weight: 700; }
+.dlp-prod--tarjeta ul.products li.product .price .amount { color: #fff; }
+
+/* Minimal: foto grande redondeada, texto alineado a la izquierda, sin caja */
+.dlp-prod--minimal ul.products li.product { background: none; box-shadow: none; text-align: left; }
+.dlp-prod--minimal ul.products li.product .et_shop_image img { border-radius: 22px; }
+.dlp-prod--minimal ul.products li.product:hover .et_shop_image img { transform: scale(1.02); }
+.dlp-prod--minimal ul.products li.product .et_shop_image img { transition: transform .25s; }
+.dlp-prod--minimal ul.products li.product a.woocommerce-LoopProduct-link { text-align: left; }
+.dlp-prod--minimal ul.products li.product .woocommerce-loop-product__title { font-size: 15px; font-weight: 700; text-transform: none; padding: 10px 2px 2px; text-align: left !important; }
+.dlp-prod--minimal ul.products li.product .price { display: block; text-align: left !important; padding: 0 2px !important; font-size: 16px !important; font-weight: 600; color: var(--dlp-acento); }
+
+/* Oscuro: caja negra, precio en el color de acento */
+.dlp-prod--oscuro ul.products li.product { background: #111; color: #fff; border: 2px solid transparent; border-radius: 16px; padding: 0 0 16px; overflow: hidden; }
+.dlp-prod--oscuro ul.products li.product:hover { border-color: var(--dlp-acento); transform: translateY(-3px); }
+.dlp-prod--oscuro ul.products li.product .et_shop_image img { border-radius: 0; }
+.dlp-prod--oscuro ul.products li.product .woocommerce-loop-product__title { color: #fff; }
+.dlp-prod--oscuro ul.products li.product .price,
+.dlp-prod--oscuro ul.products li.product .price .amount { color: var(--dlp-acento) !important; font-size: 18px !important; font-weight: 800; }

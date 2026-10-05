@@ -61,7 +61,7 @@ class DLP_FE_Loader {
     public static function enqueue() {
         $off = self::forced_off();
         foreach (DLP_FE_Registry::all() as $id => $m) {
-            if ($m['boot'] || !$m['enabled'] || in_array('all', $off, true) || in_array($id, $off, true)) {
+            if (($m['boot'] && !$m['css'] && !$m['js']) || !$m['enabled'] || in_array('all', $off, true) || in_array($id, $off, true)) {
                 continue;
             }
             try {
@@ -103,6 +103,16 @@ class DLP_FE_Loader {
             return;
         }
         $handle = 'dlp-fe-' . $id;
+        // Clases en <body>: "body_class": "dlp-cat" + valor elegido → dlp-cat--burbujas
+        foreach ($m['schema'] as $key => $f) {
+            if ($f['body_class'] && $m['values'][$key] !== '' && $m['values'][$key] !== 'clasico') {
+                $cls = $f['body_class'] . '--' . sanitize_html_class((string) $m['values'][$key]);
+                add_filter('body_class', function ($c) use ($cls) {
+                    $c[] = $cls;
+                    return $c;
+                });
+            }
+        }
         $vars   = '';
         $js     = [];
         foreach ($m['schema'] as $key => $f) {

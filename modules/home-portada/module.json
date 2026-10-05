@@ -1,9 +1,48 @@
 {
   "label": "Home: portada",
-  "description": "CSS y JS de la página de inicio (banner, carrusel de categorías, secciones de productos).",
+  "description": "Estilo de las categorías (carrusel con foto) y de los productos del Home. \"Clásico\" deja el diseño actual sin cambios.",
   "section": "home",
-  "where": ["home"],
+  "where": [
+    "home"
+  ],
   "default": true,
   "css": "style.css",
-  "js": "script.js"
+  "js": "script.js",
+  "settings": [
+    {
+      "key": "estilo_categorias",
+      "label": "Estilo de categorías",
+      "type": "select",
+      "default": "clasico",
+      "body_class": "dlp-cat",
+      "css_var": false,
+      "options": {
+        "clasico": "Clásico (actual)",
+        "burbujas": "Burbujas: foto redonda, nombre debajo",
+        "tarjetas": "Tarjetas: foto cuadrada con el nombre encima",
+        "pildoras": "Píldoras: cápsulas compactas con foto pequeña"
+      }
+    },
+    {
+      "key": "estilo_productos",
+      "label": "Estilo de productos",
+      "type": "select",
+      "default": "clasico",
+      "body_class": "dlp-prod",
+      "css_var": false,
+      "options": {
+        "clasico": "Clásico (actual)",
+        "tarjeta": "Tarjeta: sombra y precio en cápsula",
+        "minimal": "Minimal: foto grande, sin caja",
+        "oscuro": "Oscuro: caja negra, precio en color de acento"
+      }
+    },
+    {
+      "key": "color_acento",
+      "label": "Color de acento",
+      "type": "color",
+      "default": "#CF1E26",
+      "help": "Para la categoría activa, precios y detalles de los estilos nuevos."
+    }
+  ]
 }

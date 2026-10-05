@@ -1,0 +1,16 @@
+{
+  "label": "Producto en modal (vista rápida)",
+  "description": "Al tocar un producto del listado se abre en una ventana sin ir a su página. Reemplaza la vista rápida de WooFood. Usa los Add-Ons de WooCommerce y el carrito lateral.",
+  "section": "home",
+  "boot": true,
+  "php": "module.php",
+  "where": ["home", "shop", "category"],
+  "default": true,
+  "css": "style.css",
+  "js": "script.js",
+  "settings": [
+    { "key": "comentarios", "label": "Campo de comentarios", "type": "checkbox", "default": 1, "help": "Muestra una caja \"Comentarios adicionales\"; el texto viaja con el pedido (se ve en el carrito y en el detalle del pedido)." },
+    { "key": "texto_comentarios", "label": "Texto de ayuda del campo", "type": "text", "default": "Comentarios adicionales..." },
+    { "key": "texto_boton", "label": "Texto del botón", "type": "text", "default": "Añadir al carrito" }
+  ]
+}

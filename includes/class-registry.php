@@ -44,6 +44,7 @@ class DLP_FE_Registry {
                 'options' => $f['options'] ?? [],
                 'help'    => $f['help'] ?? '',
                 'unit'    => $f['unit'] ?? '',
+                'body_class' => isset($f['body_class']) ? sanitize_html_class($f['body_class']) : '',
                 'css_var' => array_key_exists('css_var', $f) ? (bool) $f['css_var'] : in_array($type, ['color', 'number', 'image', 'text', 'select', 'checkbox'], true),
                 'js'      => array_key_exists('js', $f) ? (bool) $f['js'] : true,
             ];
