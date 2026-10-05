@@ -78,10 +78,54 @@ class DLP_FE_Loader {
                 if ($m['js'] && is_readable($m['dir'] . '/' . $m['js'])) {
                     wp_enqueue_script('dlp-fe-' . $id, $base . $m['js'], [], filemtime($m['dir'] . '/' . $m['js']), true);
                 }
+                self::output_settings($id, $m);
                 self::$loaded[] = $id;
             } catch (\Throwable $e) {
                 error_log('[dlp-frontend] módulo "' . $id . '" falló: ' . $e->getMessage());
             }
+        }
+    }
+
+    /** Valor seguro para usar dentro de una variable CSS. */
+    private static function css_value($f, $v) {
+        switch ($f['type']) {
+            case 'color':    return sanitize_hex_color((string) $v) ?: '';
+            case 'number':   return is_numeric($v) ? ($v + 0) . $f['unit'] : '';
+            case 'checkbox': return $v ? '1' : '0';
+            case 'image':    return $v ? 'url("' . esc_url_raw((string) $v) . '")' : 'none';
+            default:         return preg_replace('/[^\p{L}\p{N}\s#%.,()\/_-]/u', '', (string) $v);
+        }
+    }
+
+    /** Ajustes del módulo → variables CSS (--dlp-<modulo>-<clave>) y objeto JS (window.dlpFE["<modulo>"]). */
+    private static function output_settings($id, $m) {
+        if (empty($m['schema'])) {
+            return;
+        }
+        $handle = 'dlp-fe-' . $id;
+        $vars   = '';
+        $js     = [];
+        foreach ($m['schema'] as $key => $f) {
+            $v = $m['values'][$key];
+            if ($f['css_var']) {
+                $cv = self::css_value($f, $v);
+                if ($cv !== '') {
+                    $vars .= '--dlp-' . $id . '-' . str_replace('_', '-', $key) . ':' . $cv . ';';
+                }
+            }
+            if ($f['js']) {
+                $js[$key] = $f['type'] === 'checkbox' ? (bool) $v : $v;
+            }
+        }
+        if ($vars !== '') {
+            if (!wp_style_is($handle, 'registered')) {
+                wp_register_style($handle, false, [], DLP_FE_VERSION);
+                wp_enqueue_style($handle);
+            }
+            wp_add_inline_style($handle, ':root{' . $vars . '}');
+        }
+        if ($js && wp_script_is($handle, 'enqueued')) {
+            wp_add_inline_script($handle, 'window.dlpFE=window.dlpFE||{};window.dlpFE[' . wp_json_encode($id) . ']=' . wp_json_encode($js) . ';', 'before');
         }
     }
 
@@ -90,7 +134,7 @@ class DLP_FE_Loader {
         if (is_admin() || !current_user_can('manage_options')) {
             return;
         }
-        $bar->add_node(['id' => 'dlp-fe', 'title' => 'DLP FE (' . count(self::$loaded) . ')', 'href' => admin_url('options-general.php?page=dlp-frontend')]);
+        $bar->add_node(['id' => 'dlp-fe', 'title' => 'DLP FE (' . count(self::$loaded) . ')', 'href' => admin_url('themes.php?page=dlp-frontend')]);
         foreach (self::$loaded as $id) {
             $bar->add_node([
                 'id' => 'dlp-fe-' . $id, 'parent' => 'dlp-fe',

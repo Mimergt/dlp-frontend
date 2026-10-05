@@ -12,6 +12,47 @@ class DLP_FE_Registry {
 
     private static $modules = null;
 
+    /** Secciones del panel (pestañas). Orden de aparición. Un módulo declara "section" en su module.json. */
+    public static function sections() {
+        return [
+            'home'    => 'Home / Portada',
+            'general' => 'General',
+            'sistema' => 'Sistema',
+        ];
+    }
+
+    /** Valor guardado (o por defecto) de un ajuste de módulo. */
+    public static function setting($module_id, $key, $fallback = '') {
+        $all = self::all();
+        return isset($all[$module_id]['values'][$key]) ? $all[$module_id]['values'][$key] : $fallback;
+    }
+
+    private static function normalize_settings($raw, $saved) {
+        $schema = [];
+        $values = [];
+        foreach ((array) $raw as $f) {
+            if (empty($f['key'])) {
+                continue;
+            }
+            $key  = sanitize_key($f['key']);
+            $type = $f['type'] ?? 'text';
+            $f    = [
+                'key'     => $key,
+                'label'   => $f['label'] ?? $key,
+                'type'    => $type,
+                'default' => $f['default'] ?? ($type === 'checkbox' ? 0 : ''),
+                'options' => $f['options'] ?? [],
+                'help'    => $f['help'] ?? '',
+                'unit'    => $f['unit'] ?? '',
+                'css_var' => array_key_exists('css_var', $f) ? (bool) $f['css_var'] : in_array($type, ['color', 'number', 'image', 'text', 'select', 'checkbox'], true),
+                'js'      => array_key_exists('js', $f) ? (bool) $f['js'] : true,
+            ];
+            $schema[$key] = $f;
+            $values[$key] = array_key_exists($key, $saved) ? $saved[$key] : $f['default'];
+        }
+        return [$schema, $values];
+    }
+
     public static function all() {
         if (self::$modules !== null) {
             return self::$modules;
@@ -28,7 +69,12 @@ class DLP_FE_Registry {
             $where   = isset($saved['where']) && $saved['where'] !== ''
                 ? array_filter(array_map('trim', explode(',', $saved['where'])))
                 : (array) ($meta['where'] ?? ['all']);
+            [$schema, $values] = self::normalize_settings($meta['settings'] ?? [], isset($saved['settings']) && is_array($saved['settings']) ? $saved['settings'] : []);
+            $section = $meta['section'] ?? (!empty($meta['boot']) ? 'sistema' : 'general');
             self::$modules[$id] = [
+                'section'     => isset(self::sections()[$section]) ? $section : 'general',
+                'schema'      => $schema,
+                'values'      => $values,
                 'id'          => $id,
                 'dir'         => dirname($file),
                 'label'       => $meta['label'] ?? $id,

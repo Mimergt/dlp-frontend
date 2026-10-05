@@ -1,0 +1,9 @@
+{
+  "label": "Home: portada",
+  "description": "CSS y JS de la página de inicio (banner, carrusel de categorías, secciones de productos).",
+  "section": "home",
+  "where": ["home"],
+  "default": true,
+  "css": "style.css",
+  "js": "script.js"
+}

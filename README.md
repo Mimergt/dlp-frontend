@@ -12,7 +12,8 @@ Cada carpeta en `modules/<id>/` con un `module.json`:
 { "label": "Nombre", "description": "…", "where": ["checkout","cart"], "default": true,
   "css": "style.css", "js": "script.js", "php": "module.php" }
 ```
-- Se activan/desactivan y se les cambia el "dónde" en **Ajustes → DLP Frontend**.
+- Se gestionan en **Apariencia → DLP Frontend**: una pestaña por sección (`"section": "home" | "general" | "sistema"`, ver `DLP_FE_Registry::sections()`).
+- Un módulo puede declarar `"settings": [{"key","label","type","default",...}]` (tipos: text, textarea, color, number, checkbox, select, url, image). El panel los muestra solos; llegan a CSS como `var(--dlp-<modulo>-<clave>)` y a JS como `window.dlpFE["<modulo>"].<clave>`; en PHP: `DLP_FE_Registry::setting('<modulo>','<clave>')`.
 - Un módulo roto (PHP/JSON/CSS/JS) solo afecta a ese módulo.
 - `"boot": true` + `"php": "module.php"`: módulo de **lógica PHP siempre cargada** (donde antes corría el `functions.php` del tema): login de la app, campos del checkout, etc. Se activan/desactivan en el admin; emergencia: `define('DLP_FE_DISABLED_MODULES', 'id1,id2');` en `wp-config.php`.
 - Mientras el tema legacy `dlp` esté activo, los módulos boot esperan (el tema ya tiene esa lógica). Al activar `DLP26` arrancan solos.
