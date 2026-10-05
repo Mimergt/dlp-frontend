@@ -1,0 +1,20 @@
+/*
+ * Header: hamburguesa también en desktop.
+ * El módulo Menu de Divi 5 muestra .et_pb_menu__menu en desktop y .et_mobile_nav_menu (hamburguesa) en ≤980px.
+ * Aquí se invierte en desktop, solo dentro del header del Theme Builder (.et-l--header).
+ */
+.et-l--header .et_pb_menu .et_mobile_nav_menu .mobile_menu_bar:before { color: var(--dlp-header-menu-color-icono, #fff); font-size: var(--dlp-header-menu-tam-icono, 32px); }
+
+/* Panel desplegable (todos los tamaños): colores y desplazamiento si el menú es largo */
+.et-l--header .et_pb_menu .et_mobile_menu { background: var(--dlp-header-menu-fondo-panel, #111); max-height: var(--dlp-header-menu-alto-max, 80vh); overflow-y: auto; border-top: 0; box-shadow: 0 14px 30px rgba(0,0,0,.35); }
+.et-l--header .et_pb_menu .et_mobile_menu li a { color: var(--dlp-header-menu-color-texto, #fff); }
+.et-l--header .et_pb_menu .et_mobile_menu li a:hover { background: rgba(255,255,255,.08); }
+
+@media (min-width: 981px) {
+  .et-l--header .et_pb_menu .et_pb_menu__menu { display: none !important; }
+  .et-l--header .et_pb_menu .et_mobile_nav_menu { float: none; margin: 0 6px; display: flex !important; align-items: center; }
+  .et-l--header .et_pb_menu .et_pb_menu__wrap { justify-content: flex-end; }
+  .et-l--header .et_pb_menu .et_mobile_menu { top: 100%; right: 0; left: auto; width: var(--dlp-header-menu-ancho-panel, 340px); padding: 18px; text-align: left; list-style: none !important; border-radius: 0 0 14px 14px; }
+  .et-l--header .et_pb_menu .et_mobile_menu ul { padding: 0; text-align: left; list-style: none !important; }
+  .et-l--header .et_pb_menu .et_mobile_menu li ul { padding-left: 10px; visibility: visible !important; display: block !important; }
+}

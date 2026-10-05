@@ -1,0 +1,16 @@
+{
+  "label": "Header: menú hamburguesa en desktop",
+  "description": "Muestra el botón de hamburguesa también en computadora (el módulo Menu del Theme Builder solo lo muestra en móvil) y estiliza el panel desplegable. Vive en el plugin, así que no se pierde si se vuelve a guardar el header en Divi.",
+  "section": "general",
+  "where": ["all"],
+  "default": true,
+  "css": "style.css",
+  "settings": [
+    { "key": "color_icono", "label": "Color de la hamburguesa", "type": "color", "default": "#ffffff" },
+    { "key": "tam_icono", "label": "Tamaño de la hamburguesa", "type": "number", "default": 32, "unit": "px" },
+    { "key": "fondo_panel", "label": "Fondo del panel", "type": "color", "default": "#111111" },
+    { "key": "color_texto", "label": "Color del texto del panel", "type": "color", "default": "#ffffff" },
+    { "key": "ancho_panel", "label": "Ancho del panel (computadora)", "type": "number", "default": 340, "unit": "px" },
+    { "key": "alto_max", "label": "Alto máximo del panel", "type": "number", "default": 80, "unit": "vh", "help": "Si el menú es largo, el panel se desplaza dentro de este alto." }
+  ]
+}
