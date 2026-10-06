@@ -1,0 +1,14 @@
+{
+  "label": "Mi cuenta: página personalizada",
+  "description": "Mi cuenta con solo Pedidos, Direcciones, Perfil y Cerrar sesión. Pestañas con ícono arriba (celular y escritorio), pedidos en tarjetas, libreta de direcciones propia (hasta 3, con mapa) y perfil con el mismo estilo del checkout.",
+  "section": "general",
+  "boot": true,
+  "php": "module.php",
+  "where": ["account"],
+  "default": true,
+  "css": "style.css",
+  "js": "script.js",
+  "settings": [
+    { "key": "saludo", "label": "Saludo", "type": "text", "default": "Hola", "css_var": false }
+  ]
+}
