@@ -6,6 +6,17 @@
   if (!root || !cfg) return;
   var form = root.querySelector('form'), msg = root.querySelector('.dlplg-msg'), btn = root.querySelector('.dlplg-go');
 
+  // Celular: la hoja blanca llega hasta el borde inferior (la altura del header de Divi varía)
+  function fit() {
+    if (window.innerWidth >= 768) { form.style.minHeight = ''; return; }
+    form.style.minHeight = '0px';
+    form.style.minHeight = Math.max(0, window.innerHeight - (form.getBoundingClientRect().top + window.pageYOffset)) + 'px';
+  }
+  fit();
+  window.addEventListener('load', fit);
+  window.addEventListener('resize', fit);
+  [300, 1200].forEach(function (ms) { setTimeout(fit, ms); });
+
   function show(t) { msg.textContent = t; msg.hidden = !t; }
   root.querySelector('.dlplg-eye').addEventListener('click', function () {
     var i = root.querySelector('input[name=pwd]'), v = i.type === 'password';
