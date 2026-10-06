@@ -65,3 +65,9 @@ body.single-product form.cart .quantity input.qty { height: 48px; border: 1px so
 body.single-product form.cart button.single_add_to_cart_button { height: 48px; padding: 0 28px; border: 0 !important; border-radius: 999px !important; background: var(--dlp-btn, #111) !important; color: var(--dlp-btn-tx, #fff) !important; font: 800 13px/1 "Open Sans", system-ui, sans-serif !important; letter-spacing: .05em; text-transform: uppercase; }
 body.single-product .woocommerce-tabs ul.tabs li a, body.single-product .woocommerce-tabs .panel, body.single-product .woocommerce-tabs .panel p { color: var(--dlp-tx, #111) !important; }
 body.tax-product_cat select.orderby, body.post-type-archive-product select.orderby { height: 42px; border: 1px solid var(--dlp-line, #e9e9ee); border-radius: 12px; background: var(--dlp-field, #fcfcfd); color: var(--dlp-tx, #111); }
+
+/* Categorías y tienda: dos columnas como en el home */
+body.tax-product_cat ul.products, body.post-type-archive-product ul.products { display: grid !important; grid-template-columns: repeat(2, 1fr); gap: 12px; margin: 0 0 24px; padding: 0; }
+body.tax-product_cat ul.products::before, body.tax-product_cat ul.products::after, body.post-type-archive-product ul.products::before, body.post-type-archive-product ul.products::after { display: none !important; }
+body.tax-product_cat ul.products li.product, body.post-type-archive-product ul.products li.product { float: none !important; width: auto !important; margin: 0 !important; }
+@media (min-width: 981px) { body.tax-product_cat ul.products, body.post-type-archive-product ul.products { grid-template-columns: repeat(4, 1fr); } }
