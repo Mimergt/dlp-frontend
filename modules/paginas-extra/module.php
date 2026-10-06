@@ -38,3 +38,24 @@ add_filter('template_include', function ($tpl) {
     }
     return $tpl;
 }, 99);
+
+// Producto y categorías llevan al inicio (el menú vive ahí). ?dlp_native=1 las deja ver tal cual.
+add_action('template_redirect', function () {
+    if (is_admin() || !function_exists('is_product') || (isset($_GET['dlp_native']) && $_GET['dlp_native']) || (isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] !== 'GET')) {
+        return;
+    }
+    if (isset($_GET['add-to-cart']) || isset($_GET['wc-ajax'])) {
+        return;
+    }
+    if (is_product() && DLP_FE_Registry::setting('paginas-extra', 'redir_producto')) {
+        $p = get_queried_object();
+        if ($p && !empty($p->post_name)) {
+            wp_safe_redirect(home_url('/#producto-' . $p->post_name), 301);
+            exit;
+        }
+    }
+    if ((is_product_category() || is_product_tag() || is_shop()) && DLP_FE_Registry::setting('paginas-extra', 'redir_categoria')) {
+        wp_safe_redirect(home_url('/'), 301);
+        exit;
+    }
+}, 6);

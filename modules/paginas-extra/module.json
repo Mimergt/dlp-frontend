@@ -4,11 +4,41 @@
   "section": "general",
   "boot": true,
   "php": "module.php",
-  "where": ["all"],
+  "where": [
+    "all"
+  ],
   "default": true,
   "css": "style.css",
   "settings": [
-    { "key": "titulo_404", "label": "404: título", "type": "text", "default": "No encontramos esa página", "css_var": false },
-    { "key": "texto_404", "label": "404: texto", "type": "text", "default": "Puede que el enlace esté roto o que la página ya no exista.", "css_var": false }
+    {
+      "key": "titulo_404",
+      "label": "404: título",
+      "type": "text",
+      "default": "No encontramos esa página",
+      "css_var": false
+    },
+    {
+      "key": "texto_404",
+      "label": "404: texto",
+      "type": "text",
+      "default": "Puede que el enlace esté roto o que la página ya no exista.",
+      "css_var": false
+    },
+    {
+      "key": "redir_producto",
+      "label": "Producto → inicio con la vista rápida abierta",
+      "type": "checkbox",
+      "default": 1,
+      "css_var": false,
+      "help": "La página de cada producto lleva al inicio y abre su ventana (#producto-slug). Los enlaces compartidos siguen funcionando."
+    },
+    {
+      "key": "redir_categoria",
+      "label": "Categorías y tienda → inicio",
+      "type": "checkbox",
+      "default": 1,
+      "css_var": false,
+      "help": "Las páginas de categoría y /tienda/ llevan al inicio. Con ?dlp_native=1 se ven sin redirigir (para revisar)."
+    }
   ]
 }
