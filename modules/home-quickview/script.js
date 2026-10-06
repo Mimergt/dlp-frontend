@@ -67,22 +67,35 @@
 
   function money(n) {
     var sym = $body.find('.dlpqv-tag .woocommerce-Price-currencySymbol').first().text() || 'Q';
-    return sym + (Math.round(n * 100) / 100).toFixed(2);
+    return sym + (Math.round(n * 100) / 100).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
   }
 
-  // Total en vivo en el botón: lo calculan los Add-Ons (Subtotal); sin extras seleccionados, precio × cantidad.
-  function updateTotal() {
-    var $t = $body.find('#product-addons-total');
-    var txt = '';
-    var $sub = $t.find('.wc-pao-subtotal-line .amount').last();
-    if ($sub.length) txt = $.trim($sub.text());
-    if (!txt) {
-      var base = parseFloat($t.attr('data-price'));
-      if (isNaN(base)) base = parseFloat($body.find('.dlpqv-hero').attr('data-price'));
-      var qty = parseFloat($body.find('input.qty').val()) || 1;
-      if (!isNaN(base)) txt = money(base * qty);
+  /*
+   * Total calculado aquí con las mismas reglas de los Add-Ons (flat_fee: una vez; quantity_based: por cada unidad;
+   * percentage_based: % del precio). Los Add-Ons solo calculan su propio subtotal cuando TODOS los obligatorios
+   * están completos, por eso no se depende de él para mostrar el total mientras se arma el pedido.
+   */
+  function calcTotal($form) {
+    var base = parseFloat($body.find('.dlpqv-hero').attr('data-price')) || 0;
+    var qty = parseFloat($form.find('input.qty').val()) || 1;
+    var perUnit = base, flat = 0;
+    function add(price, type, mult) {
+      price = (parseFloat(price) || 0) * (mult == null ? 1 : mult);
+      if (!price) return;
+      if (type === 'quantity_based') perUnit += price;
+      else if (type === 'percentage_based') perUnit += base * price / 100;
+      else flat += price;
     }
-    if (txt) $body.find('.dlpqv-tot').text(txt);
+    $form.find('select.wc-pao-addon-field option:selected').each(function () { add($(this).attr('data-price'), $(this).attr('data-price-type')); });
+    $form.find('input.wc-pao-addon-radio:checked, input.wc-pao-addon-checkbox:checked').each(function () { add($(this).attr('data-price'), $(this).attr('data-price-type')); });
+    $form.find('input.wc-pao-addon-input-multiplier').each(function () { add($(this).attr('data-price'), $(this).attr('data-price-type'), parseFloat($(this).val()) || 0); });
+    return perUnit * qty + flat;
+  }
+
+  function updateTotal() {
+    var $form = $body.find('form.cart').first();
+    if (!$form.length) return;
+    $body.find('.dlpqv-tot').text(money(calcTotal($form)));
   }
 
   function stepper($in, min, max) {
@@ -113,10 +126,14 @@
       var $c = $(this).closest('.wc-pao-addon-container');
       var $desc = $c.find('.wc-pao-addon-description').first();
       var $price = $c.find('h2.wc-pao-addon-name .wc-pao-addon-price').first();
-      var priceTxt = $.trim($price.text()).replace(/[()]/g, '');
-      var $chip = $('<div class="dlpqv-chip"><div class="dlpqv-chip-t"><span></span><small></small></div></div>');
-      $chip.find('span').text($.trim($desc.text()) || 'Cantidad');
-      $chip.find('small').text(priceTxt ? priceTxt + ' c/u' : '');
+      var unit = parseFloat($(this).attr('data-price')) || 0;
+      var main = $.trim($desc.text()) || 'Cantidad';
+      var parts = [];
+      if (unit && !/c\/u/i.test(main)) parts.push('+' + money(unit) + ' c/u');
+      if (isFinite(r.max) && r.max != null && !/hasta/i.test(main)) parts.push('hasta ' + r.max);
+      var text = main + (parts.length ? ' (' + parts.join(', ') + ')' : '');
+      var $chip = $('<div class="dlpqv-chip"><div class="dlpqv-chip-t"></div></div>');
+      $chip.find('.dlpqv-chip-t').text(text);
       $desc.hide();
       $price.hide();
       var $w = $(this).closest('.dlpqv-step-wrap');

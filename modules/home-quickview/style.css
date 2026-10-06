@@ -104,6 +104,12 @@ html.dlpqv-lock { overflow: hidden; }
 .dlpqv-lbl { overflow: hidden; text-overflow: ellipsis; }
 .dlpqv-lbl-s { display: none; }
 
+/* Botón corto ("Añadir") en pantallas chicas y tabletas */
+@media (max-width: 900px) {
+  .dlpqv-lbl-l { display: none; }
+  .dlpqv-lbl-s { display: inline; }
+}
+
 /* ───────── Celular: hoja inferior ───────── */
 @media (max-width: 680px) {
   .dlpqv { padding: 0; align-items: flex-end; }
@@ -113,8 +119,6 @@ html.dlpqv-lock { overflow: hidden; }
   .dlpqv-close { top: 18px; }
   .dlpqv-hero img { width: 72%; max-height: 230px; object-fit: contain; }
   .dlpqv-title { font-size: 20px; }
-  .dlpqv-lbl-l { display: none; }
-  .dlpqv-lbl-s { display: inline; }
   .dlpqv-foot { gap: 10px; padding-bottom: calc(16px + env(safe-area-inset-bottom, 0px)); }
   .dlpqv-foot .dlpqv-step { width: 32px; height: 32px; font-size: 18px; }
   .dlpqv-foot .dlpqv-step-wrap input { width: 30px; font-size: 15px; }
