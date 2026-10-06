@@ -1,0 +1,18 @@
+{
+  "label": "Ingresar: página de login propia",
+  "description": "Reemplaza el contenido de la página /ingresar/ (y a Theme My Login) con un formulario propio: correo y contraseña, «Continuar como invitado» y recuperar contraseña. Sin registro. Entra por Ajax, con límite de intentos. El contenido de Divi de esa página se conserva pero no se muestra.",
+  "section": "general",
+  "boot": true,
+  "php": "module.php",
+  "where": ["page:ingresar"],
+  "default": true,
+  "css": "style.css",
+  "js": "script.js",
+  "settings": [
+    { "key": "slug", "label": "Página de ingreso (slug)", "type": "text", "default": "ingresar", "css_var": false },
+    { "key": "titulo", "label": "Título", "type": "text", "default": "Hola de nuevo", "css_var": false },
+    { "key": "texto", "label": "Texto bajo el título", "type": "text", "default": "Ingresa con tu correo y contraseña.", "css_var": false },
+    { "key": "url_invitado", "label": "«Continuar como invitado» lleva a", "type": "text", "default": "/", "css_var": false },
+    { "key": "texto_invitado", "label": "Texto del botón de invitado", "type": "text", "default": "Continuar como invitado", "css_var": false }
+  ]
+}
