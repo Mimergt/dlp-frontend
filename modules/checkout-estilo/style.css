@@ -1,0 +1,93 @@
+/* Checkout en tarjetas. Selectores largos: Divi y el tema aplican estilos fuertes a los campos de WooCommerce. */
+body.dlpck-on { --dlck-i: var(--dlp-checkout-estilo-color-icono, #111); --dlck-b: var(--dlp-checkout-estilo-color-boton, #111); }
+body.dlpck-on #customer_details, body.dlpck-on #order_review_heading, body.dlpck-on .woocommerce-additional-fields > h3, body.dlpck-on .woocommerce-billing-fields > h3 { display: none !important; }
+
+/* Encabezado y avisos */
+.dlpck-head { max-width: 1100px; margin: 0 auto 6px; }
+.dlpck-back { display: inline-flex; align-items: center; gap: 6px; padding: 7px 14px 7px 8px; border: 1px solid #e9e9ee; border-radius: 999px; color: #111 !important; font: 700 11px/1 "Open Sans", system-ui, sans-serif; letter-spacing: .05em; text-transform: uppercase; text-decoration: none !important; background: #fff; }
+.dlpck-back svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.dlpck-head h1 { margin: 14px 0 6px; padding: 0; font: 800 20px/1.2 "Open Sans", system-ui, sans-serif; letter-spacing: .03em; text-transform: uppercase; color: #111; }
+body.dlpck-on .woocommerce-form-login-toggle, body.dlpck-on .woocommerce-form-coupon-toggle { max-width: 1100px; margin: 0 auto; }
+body.dlpck-on .woocommerce-form-login-toggle .woocommerce-info, body.dlpck-on .woocommerce-form-coupon-toggle .woocommerce-info { margin: 0 0 6px; padding: 4px 2px; border: 0; background: none; color: #8d8d96; font: 400 13px/1.4 "Open Sans", system-ui, sans-serif; }
+body.dlpck-on .woocommerce-info::before { display: none; }
+body.dlpck-on .woocommerce-info a { color: #111; font-weight: 700; text-decoration: underline; text-underline-offset: 3px; }
+body.dlpck-on form.checkout_coupon, body.dlpck-on form.woocommerce-form-login { max-width: 1100px; margin: 0 auto 10px; border-radius: 18px; }
+
+/* Estructura */
+.dlpck { max-width: 1100px; margin: 8px auto 0; }
+.dlpck-card { box-sizing: border-box; margin: 0 0 12px; padding: 16px; border: 1px solid #e9e9ee; border-radius: 18px; background: #fff; }
+.dlpck-card > h3 { display: flex; align-items: center; gap: 10px; margin: 0 0 12px; padding: 0; font: 800 12px/1 "Open Sans", system-ui, sans-serif; letter-spacing: .07em; text-transform: uppercase; color: #111; }
+.dlpck-card > h3 i { flex: none; display: grid; place-items: center; width: 28px; height: 28px; border-radius: 50%; background: var(--dlck-i, #111); }
+.dlpck-card > h3 svg { width: 16px; height: 16px; fill: none; stroke: #fff; stroke-width: 1.9; stroke-linecap: round; stroke-linejoin: round; }
+
+/* Campos */
+.dlpck-fields { display: grid; grid-template-columns: 1fr 1fr; gap: 0 10px; }
+.dlpck-fields > p.form-row { float: none !important; width: auto !important; margin: 0 0 10px !important; padding: 0 !important; grid-column: 1 / -1; }
+.dlpck-fields > p.form-row-first, .dlpck-fields > p.form-row-last { grid-column: auto; }
+.dlpck-fields > p[style*="display: none"], .dlpck-fields > p.hidden { display: none !important; }
+body.dlpck-on .dlpck label:not(.checkbox):not(.wf_field_wrapper) { display: block; margin: 0 0 4px 2px; font: 700 10.5px/1.3 "Open Sans", system-ui, sans-serif; letter-spacing: .05em; text-transform: uppercase; color: #55555e; }
+body.dlpck-on .dlpck label .optional { font-weight: 600; text-transform: none; letter-spacing: 0; color: #8d8d96; }
+body.dlpck-on .dlpck input.input-text, body.dlpck-on .dlpck textarea, body.dlpck-on .dlpck select { box-sizing: border-box; width: 100%; min-height: 44px; padding: 10px 14px; border: 1px solid #e9e9ee !important; border-radius: 12px !important; background: #fcfcfd !important; color: #111; font: 400 14px/1.3 "Open Sans", system-ui, sans-serif; box-shadow: none; }
+body.dlpck-on .dlpck textarea { min-height: 84px; }
+body.dlpck-on .dlpck input.input-text:focus, body.dlpck-on .dlpck textarea:focus, body.dlpck-on .dlpck select:focus { outline: 0; border-color: #111 !important; background: #fff !important; }
+body.dlpck-on .dlpck .woocommerce-input-wrapper { display: block; }
+body.dlpck-on .dlpck input[type=checkbox] { accent-color: #111; width: 18px; height: 18px; margin-right: 8px; vertical-align: middle; }
+body.dlpck-on .dlpck label.checkbox { display: flex; align-items: center; margin: 4px 0; font: 600 13px/1.4 "Open Sans", system-ui, sans-serif; text-transform: none; letter-spacing: 0; color: #111; }
+.dlpck-extras > * { margin: 0 0 10px; }
+
+/* Delivery / Pickup como control segmentado */
+.dlpck .selec-del { margin: 0 0 12px; }
+.dlpck .selec-del .woofood_order_type { display: flex; gap: 2px; padding: 4px; border-radius: 14px; background: #f6f6f8; }
+.dlpck .selec-del label.wf_field_wrapper { position: relative; flex: 1; margin: 0; padding: 11px 6px; border-radius: 11px; text-align: center; font: 700 12px/1 "Open Sans", system-ui, sans-serif; letter-spacing: .05em; text-transform: uppercase; color: #777; cursor: pointer; transition: background-color .2s, color .2s, box-shadow .2s; }
+.dlpck .selec-del label.wf_field_wrapper input, .dlpck .selec-del .checkmark { position: absolute; opacity: 0; width: 0; height: 0; pointer-events: none; }
+.dlpck .selec-del label.wf_field_wrapper:has(input:checked) { background: #fff; color: #111; box-shadow: 0 2px 6px rgba(0,0,0,.12); }
+
+/* Cajas de ubicación / tienda (de dlp-tiendas) */
+.dlpck #dlp-delivery-box, .dlpck #dlp-pickup-box { margin: 0 0 12px; padding: 0; border: 0; background: none; box-shadow: none; }
+.dlpck #dlp-delivery-box > h3, .dlpck #dlp-pickup-box > h3 { margin: 0 0 6px; font: 700 12px/1.2 "Open Sans", system-ui, sans-serif; letter-spacing: .05em; text-transform: uppercase; color: #55555e; }
+.dlpck #dlp-delivery-box > p { margin: 0 0 10px; font-size: 13px; color: #6b6b75; }
+.dlpck .dlp-actions { display: flex; gap: 8px; flex-wrap: wrap; margin: 0 0 10px; }
+.dlpck .dlp-actions .button { flex: 1; margin: 0; padding: 12px 10px; border: 1.5px solid #111; border-radius: 999px; background: #fff; color: #111; font: 700 11.5px/1.1 "Open Sans", system-ui, sans-serif; letter-spacing: .03em; text-transform: uppercase; }
+.dlpck .dlp-actions .button.alt { background: #111; color: #fff; }
+.dlpck #dlp-checkout-map { border-radius: 14px; overflow: hidden; }
+
+/* Resumen */
+.dlpck-sum table.shop_table { width: 100%; margin: 0; border: 0; border-collapse: collapse; }
+.dlpck-sum table.shop_table th, .dlpck-sum table.shop_table td { padding: 8px 0; border: 0; border-bottom: 1px dashed #e9e9ee; background: none; font: 400 13px/1.4 "Open Sans", system-ui, sans-serif; color: #111; }
+.dlpck-sum table.shop_table thead { display: none; }
+.dlpck-sum table.shop_table td.product-total, .dlpck-sum table.shop_table tfoot td { text-align: right; white-space: nowrap; font-weight: 700; }
+.dlpck-sum table.shop_table td.product-name { font-weight: 700; }
+.dlpck-sum table.shop_table .variation, .dlpck-sum table.shop_table dl { margin: 4px 0 0; font-weight: 400; font-size: 11.5px; color: #6b6b75; }
+.dlpck-sum table.shop_table tfoot th { font-weight: 700; }
+.dlpck-sum table.shop_table tr.order-total th, .dlpck-sum table.shop_table tr.order-total td { border: 0; font-size: 16px; font-weight: 800; }
+
+/* Pago */
+.dlpck #payment { margin: 0; padding: 0; border: 0; border-radius: 0; background: none !important; }
+.dlpck #payment ul.payment_methods { margin: 0 0 10px; padding: 0; border: 0; list-style: none; }
+.dlpck #payment ul.payment_methods > li { margin: 0 0 8px; padding: 12px; border: 1.5px solid #e9e9ee; border-radius: 14px; background: #fff; }
+.dlpck #payment ul.payment_methods > li:has(input:checked) { border-color: #111; }
+.dlpck #payment ul.payment_methods label { margin: 0 !important; font: 700 13px/1.3 "Open Sans", system-ui, sans-serif !important; letter-spacing: 0 !important; text-transform: none !important; color: #111 !important; }
+.dlpck #payment div.payment_box { margin: 8px 0 0; padding: 0; background: none !important; color: #6b6b75; font-size: 12px; }
+.dlpck #payment div.payment_box::before { display: none; }
+.dlpck #payment .place-order { margin: 0; padding: 0; background: none; }
+.dlpck #payment .woocommerce-terms-and-conditions-wrapper { display: none; }
+.dlpck-legal { margin: 10px 0 0; font: 400 11px/1.4 "Open Sans", system-ui, sans-serif; color: #8d8d96; text-align: center; }
+.dlpck-legal p { margin: 0; }
+.dlpck-legal a { color: #111; text-decoration: underline; }
+body.dlpck-on .dlpck #place_order { display: flex; align-items: center; justify-content: space-between; box-sizing: border-box; width: 100%; height: 52px; margin: 0; padding: 0 22px; border: 0 !important; border-radius: 999px !important; background: var(--dlck-b, #111) !important; color: #fff !important; font: 800 13px/1 "Open Sans", system-ui, sans-serif !important; letter-spacing: .05em; text-transform: uppercase; cursor: pointer; box-shadow: none; }
+body.dlpck-on .dlpck #place_order .dlpck-tot { font-weight: 700; letter-spacing: .01em; }
+body.dlpck-on .dlpck #place_order:hover { opacity: .92; }
+
+/* Escritorio: dos columnas, resumen y pago fijos a la derecha */
+@media (min-width: 1024px) {
+  .dlpck { display: grid; grid-template-columns: 1.25fr 1fr; gap: 24px; align-items: start; }
+  .dlpck-side { position: sticky; top: 16px; }
+}
+
+/* Celular / tableta: botón de pagar fijo abajo */
+@media (max-width: 1023px) {
+  body.dlpck-on { padding-bottom: 96px; }
+  body.dlpck-on .dlpck #payment .place-order { position: fixed; left: 0; right: 0; bottom: 0; z-index: 9995; padding: 10px 14px calc(14px + env(safe-area-inset-bottom, 0px)); background: rgba(255,255,255,.97); border-top: 1px solid #e9e9ee; box-shadow: 0 -10px 24px -14px rgba(0,0,0,.2); }
+}
+@media (min-width: 1024px) { .dlpck-legal { display: none; } .dlpck #payment .woocommerce-terms-and-conditions-wrapper { display: block; margin-bottom: 10px; font-size: 11px; color: #8d8d96; text-align: center; } }
+@media (max-width: 480px) { .dlpck-card { padding: 14px; } }

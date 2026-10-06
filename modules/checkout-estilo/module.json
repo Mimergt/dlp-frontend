@@ -1,0 +1,14 @@
+{
+  "label": "Checkout: diseño nuevo (tarjetas)",
+  "description": "Reorganiza la página de pago en tarjetas con ícono (Entrega, Tus datos, Factura y notas, Tu pedido, Pago). En celular el botón «Realizar pedido» queda fijo abajo con el total y hay un botón para regresar; en computadora son dos columnas con el resumen fijo a la derecha. No cambia ningún campo ni la lógica (mapa, tienda, cobertura).",
+  "section": "general",
+  "where": ["checkout"],
+  "default": true,
+  "css": "style.css",
+  "js": "script.js",
+  "settings": [
+    { "key": "color_icono", "label": "Color de los íconos de sección", "type": "color", "default": "#111111", "css_var": true },
+    { "key": "color_boton", "label": "Color del botón «Realizar pedido»", "type": "color", "default": "#111111", "css_var": true },
+    { "key": "texto_volver", "label": "Texto del botón de regresar", "type": "text", "default": "Seguir pidiendo", "js": true }
+  ]
+}
