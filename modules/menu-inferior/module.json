@@ -1,0 +1,18 @@
+{
+  "label": "Menú inferior (celular)",
+  "description": "Barra flotante abajo, solo en celular, con Menú, Cuenta y Carrito. El botón Carrito abre el carrito lateral (Xootix) y muestra la cantidad; el botón flotante original se oculta en celular. No se muestra en el checkout.",
+  "section": "general",
+  "where": ["all"],
+  "default": true,
+  "php": "module.php",
+  "css": "style.css",
+  "js": "script.js",
+  "settings": [
+    { "key": "texto_menu", "label": "Texto del botón Menú", "type": "text", "default": "Menú" },
+    { "key": "url_menu", "label": "Enlace del botón Menú", "type": "url", "default": "", "help": "Vacío = página de inicio. En el inicio, el botón sube a las categorías." },
+    { "key": "texto_cuenta", "label": "Texto del botón Cuenta", "type": "text", "default": "Cuenta" },
+    { "key": "texto_carrito", "label": "Texto del botón Carrito", "type": "text", "default": "Carrito" },
+    { "key": "color_activo", "label": "Fondo del botón activo", "type": "color", "default": "#111111", "css_var": true },
+    { "key": "color_insignia", "label": "Color de la insignia del carrito", "type": "color", "default": "#CF1E26", "css_var": true }
+  ]
+}
