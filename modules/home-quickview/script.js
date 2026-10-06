@@ -106,16 +106,31 @@
     if (!$qtyBox.length) $qtyBox = $q;
     $qtyBox.addClass('dlpqv-qty');
 
-    // Extras numéricos (ej. "Cambio a Angus") también como − / +
+    // Extras numéricos (ej. "Cambio a Angus"): una opción con el texto a la izquierda y − 0 + a la derecha.
     $form.find('input.wc-pao-addon-input-multiplier').each(function () {
       var r = {}; try { r = JSON.parse($(this).attr('data-restrictions') || '{}'); } catch (e) {}
       stepper($(this), r.min != null ? +r.min : 0, r.max != null ? +r.max : Infinity);
+      var $c = $(this).closest('.wc-pao-addon-container');
+      var $desc = $c.find('.wc-pao-addon-description').first();
+      var $price = $c.find('h2.wc-pao-addon-name .wc-pao-addon-price').first();
+      var priceTxt = $.trim($price.text()).replace(/[()]/g, '');
+      var $chip = $('<div class="dlpqv-chip"><div class="dlpqv-chip-t"><span></span><small></small></div></div>');
+      $chip.find('span').text($.trim($desc.text()) || 'Cantidad');
+      $chip.find('small').text(priceTxt ? priceTxt + ' c/u' : '');
+      $desc.hide();
+      $price.hide();
+      var $w = $(this).closest('.dlpqv-step-wrap');
+      $w.before($chip);
+      $chip.append($w);
+      $chip.toggleClass('on', parseFloat($(this).val()) > 0);
     });
 
     // Pie fijo: cantidad + botón con el total
     var $btn = $form.find('button.single_add_to_cart_button').first();
     var label = $.trim($btn.text()) || 'Añadir al carrito';
-    $btn.empty().append($('<span class="dlpqv-lbl"></span>').text(label), '<span class="dlpqv-tot"></span>');
+    var short = (window.dlpFE && window.dlpFE['home-quickview'] && window.dlpFE['home-quickview'].texto_boton_corto) || 'Añadir';
+    var $lbl = $('<span class="dlpqv-lbl"></span>').append($('<span class="dlpqv-lbl-l"></span>').text(label), $('<span class="dlpqv-lbl-s"></span>').text(short));
+    $btn.empty().append($lbl, '<span class="dlpqv-tot"></span>');
     $('<div class="dlpqv-foot"></div>').append($qtyBox, $btn).appendTo($form);
 
     // Inicializa los Add-Ons (validación y totales) en el contenido recién insertado.
@@ -176,6 +191,7 @@
     var min = $w.data('min'), max = $w.data('max');
     var v = Math.min(max, Math.max(min, (parseFloat($in.val()) || 0) + step));
     $in.val(v).trigger('input').trigger('change');
+    $w.closest('.dlpqv-chip').toggleClass('on', v > 0);
   });
 
   // Al añadir al carrito, el carrito lateral se abre solo: se cierra el modal.
