@@ -27,3 +27,16 @@ body.dlplg-page .et_pb_row { padding-top: 0 !important; }
 .dlplg-guest:hover { background: #f4f4f5; }
 .dlplg-or { display: flex; align-items: center; gap: 10px; margin: 14px 0; color: #8d8d96; font-size: 11px; text-transform: uppercase; letter-spacing: .06em; }
 .dlplg-or::before, .dlplg-or::after { content: ""; flex: 1; height: 1px; background: #e9e9ee; }
+
+/* Escritorio: aire antes del footer */
+.dlplg { padding-bottom: 72px; }
+body.dlplg-page .et_pb_section { padding-bottom: 0 !important; }
+
+/* Celular: la hoja blanca llega hasta abajo, cubriendo el menú inferior */
+@media (max-width: 767px) {
+  .dlplg { max-width: none; width: 100vw; margin-left: calc(50% - 50vw); padding-bottom: 0; }
+  .dlplg-form { min-height: calc(100vh - 218px); min-height: calc(100dvh - 218px); padding: 26px 20px 120px; border-radius: 26px 26px 0 0; box-shadow: none; }
+  body.dlplg-page .et_pb_section { padding-top: 12px !important; }
+  body.dlplg-page .et_pb_row { width: 100% !important; max-width: none !important; }
+  body.dlplg-page .et_pb_column { margin: 0 !important; }
+}
