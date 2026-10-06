@@ -104,6 +104,15 @@
       window.addEventListener('load', applyPadding);
       window.addEventListener('resize', applyPadding);
       [400, 1200, 2500].forEach(function (ms) { setTimeout(applyPadding, ms); });
+      // En celular la pestaña activa es más ancha: Swiper recalcula posiciones cuando cambia cuál es.
+      if (window.MutationObserver && nav.swiper) {
+        var pend = false;
+        new MutationObserver(function () {
+          if (pend || window.innerWidth >= 768) return;
+          pend = true;
+          requestAnimationFrame(function () { pend = false; nav.swiper.update(); });
+        }).observe(nav, { subtree: true, attributes: true, attributeFilter: ['class'] });
+      }
     }
     if (cfg.barra_fija) buildSubnav(nav);
   });

@@ -53,6 +53,20 @@ body.dlp-cat--curva .cwp_et_pb_layout_slider_standard .navMenu_slide .swiper-sli
 body.dlp-cat--curva .cwp_et_pb_layout_slider_standard .navMenu_slide .swiper-slide:not(.swiper-slide-thumb-active):hover img { transform: translateY(-2px) scale(1.05); }
 body.dlp-cat--curva .cwp_et_pb_layout_slider_standard .navMenu_slide .swiper-slide:not(.swiper-slide-thumb-active):hover span.navMenu_label { color: #444 !important; }
 
+/* Celular (curva): pestañas pequeñas; solo la activa muestra la foto grande. La activa es más ancha y el script avisa a Swiper
+   para que recalcule posiciones al cambiar de categoría. */
+@media (max-width: 767px) {
+  body.dlp-cat--curva .cwp_et_pb_layout_slider_standard .navMenu_slide { --dlp-r: 14px; padding-top: 8px; border-radius: 14px 14px 0 0; }
+  body.dlp-cat--curva .cwp_et_pb_layout_slider_standard .navMenu_slide .swiper-slide { width: 76px !important; justify-content: flex-end; padding: 6px 4px 9px !important; }
+  body.dlp-cat--curva .cwp_et_pb_layout_slider_standard .navMenu_slide .swiper-slide img { height: 30px !important; max-width: 56px; transition: height .22s ease, transform .22s ease; }
+  body.dlp-cat--curva .cwp_et_pb_layout_slider_standard .navMenu_slide .swiper-slide span.navMenu_label { margin-top: 4px; font-size: 8.5px; letter-spacing: .03em; text-align: center; }
+  body.dlp-cat--curva .cwp_et_pb_layout_slider_standard .navMenu_slide .swiper-slide.swiper-slide-thumb-active { width: 108px !important; }
+  body.dlp-cat--curva .cwp_et_pb_layout_slider_standard .navMenu_slide .swiper-slide-thumb-active img { height: 64px !important; max-width: 92px; transform: none; }
+  body.dlp-cat--curva .cwp_et_pb_layout_slider_standard .navMenu_slide .swiper-slide-thumb-active span.navMenu_label { font-size: 10px; }
+  body.dlp-cat--curva .cwp_et_pb_layout_slider_standard .navMenu_slide .swiper-slide-thumb-active span.navMenu_label::before { width: 16px; height: 2px; margin-bottom: 4px; }
+  body.dlp-cat--curva .cwp_et_pb_layout_slider_standard .navMenu_slide .swiper-slide:not(.swiper-slide-thumb-active):hover img { transform: none; }
+}
+
 /* ───────── Barra mini fija de categorías (la crea script.js) ───────── */
 .dlp-subnav { position: fixed; top: var(--dlp-home-portada-barra-fija-top, 0px); left: 0; right: 0; z-index: 9990; background: #f6f6f8; border-bottom: 1px solid #ececf0; box-shadow: 0 8px 18px -8px rgba(0,0,0,.18); transform: translateY(-110%); opacity: 0; visibility: hidden; transition: transform .25s ease, opacity .2s ease, visibility .25s; }
 .dlp-subnav.is-on { transform: none; opacity: 1; visibility: visible; }
