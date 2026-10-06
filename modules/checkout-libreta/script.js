@@ -22,7 +22,7 @@
     $list.empty(); $radios.empty();
     L.list.forEach(function (a) {
       window.fabfw_select_address.addresses[a.id] = { dlp_lat: a.lat, dlp_lng: a.lng };
-      var $r = $('<input type="radio" name="fabfw_address_billing_id">').val(a.id);
+      var $r = $('<input type="radio" name="fabfw_address_billing_id">').val(a.id).prop('checked', selected === a.id);
       $radios.append($r);
       var chip = a.ok ? '<span class="dlplib-chip ok">Abierta</span>' : '<span class="dlplib-chip no">Cerrada</span>';
       var $c = $(
@@ -41,10 +41,10 @@
     var a = L.list.filter(function (x) { return x.id === id; })[0];
     if (!a || !a.ok) return;
     selected = id;
-    $radios.find('input').prop('checked', false).filter(function () { return this.value === id; }).prop('checked', true).trigger('change');
+    render();
     $('#billing_address_2').val(a.address || '').trigger('change');
     $('#billing_address_name').val(a.ref || '').trigger('change');
-    render();
+    $radios.find('input:checked').trigger('change'); // dlp-tiendas pone el pin y verifica cobertura y horario
     refreshSave();
   }
 
