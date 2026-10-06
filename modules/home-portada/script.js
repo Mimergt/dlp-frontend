@@ -85,13 +85,25 @@
     }
   }
 
-  whenReady(function (nav) {
-    var sw = nav.swiper;
-    if (curva) {
-      var pad = window.innerWidth >= 768 ? 28 : 16;
+  // Margen lateral: idempotente, porque el plugin del carrusel puede reiniciar sus parámetros durante la carga.
+  function applyPadding() {
+    var nav = document.querySelector('.navMenu_slide');
+    var sw = nav && nav.swiper;
+    if (!sw) return;
+    var pad = window.innerWidth >= 768 ? 28 : 16;
+    if (sw.params.slidesOffsetBefore !== pad || sw.params.slidesOffsetAfter !== pad) {
       sw.params.slidesOffsetBefore = pad;
       sw.params.slidesOffsetAfter = pad;
       sw.update();
+    }
+  }
+
+  whenReady(function (nav) {
+    if (curva) {
+      applyPadding();
+      window.addEventListener('load', applyPadding);
+      window.addEventListener('resize', applyPadding);
+      [400, 1200, 2500].forEach(function (ms) { setTimeout(applyPadding, ms); });
     }
     if (cfg.barra_fija) buildSubnav(nav);
   });
