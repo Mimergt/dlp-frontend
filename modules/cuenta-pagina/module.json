@@ -4,11 +4,27 @@
   "section": "general",
   "boot": true,
   "php": "module.php",
-  "where": ["account"],
+  "where": [
+    "account"
+  ],
   "default": true,
   "css": "style.css",
   "js": "script.js",
   "settings": [
-    { "key": "saludo", "label": "Saludo", "type": "text", "default": "Hola", "css_var": false }
+    {
+      "key": "saludo",
+      "label": "Saludo",
+      "type": "text",
+      "default": "Hola",
+      "css_var": false
+    },
+    {
+      "key": "url_login",
+      "label": "Página de ingreso (si no hay sesión)",
+      "type": "text",
+      "default": "/ingresar/",
+      "css_var": false,
+      "help": "Quien entre a Mi cuenta sin iniciar sesión va a esta página, con regreso automático a Mi cuenta. Vacío = el formulario de WooCommerce."
+    }
   ]
 }

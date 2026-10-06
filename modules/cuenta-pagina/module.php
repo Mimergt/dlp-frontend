@@ -23,6 +23,23 @@ add_filter('woocommerce_account_menu_items', function ($items) {
     return array_intersect_key($items, array_flip(['orders', 'edit-address', 'edit-account', 'customer-logout']));
 }, 99);
 
+// Sin sesión: a la página de ingreso (recuperar contraseña de WooCommerce se respeta)
+add_action('template_redirect', function () {
+    if (!function_exists('is_account_page') || !is_account_page() || is_user_logged_in() || is_wc_endpoint_url('lost-password')) {
+        return;
+    }
+    $login = trim((string) DLP_FE_Registry::setting('cuenta-pagina', 'url_login'));
+    if ($login === '') {
+        return;
+    }
+    $url = home_url($login);
+    if (untrailingslashit(wp_parse_url($url, PHP_URL_PATH) ?: '') === untrailingslashit(wp_parse_url(home_url(add_query_arg([])), PHP_URL_PATH) ?: '')) {
+        return; // ya estamos ahí
+    }
+    wp_safe_redirect(add_query_arg('redirect_to', rawurlencode(wc_get_page_permalink('myaccount')), $url));
+    exit;
+}, 5);
+
 add_action('template_redirect', function () {
     if (function_exists('is_account_page') && is_account_page() && is_user_logged_in() && !is_wc_endpoint_url()) {
         wp_safe_redirect(wc_get_account_endpoint_url('orders'));
