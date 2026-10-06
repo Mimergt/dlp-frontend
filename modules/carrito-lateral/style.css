@@ -1,11 +1,13 @@
 /* Panel del carrito lateral (Xootix): esquinas redondeadas del lado interior y botones tipo píldora. */
-body .xoo-wsc-container { border-radius: var(--dlp-carrito-lateral-radio, 24px) 0 0 var(--dlp-carrito-lateral-radio, 24px); overflow: hidden; box-shadow: -12px 0 40px rgba(0,0,0,.18); }
+body .xoo-wsc-container { border-radius: var(--dlp-carrito-lateral-radio, 24px) 0 0 var(--dlp-carrito-lateral-radio, 24px); overflow: hidden; box-shadow: -12px 0 40px rgba(0,0,0,.18); background: var(--dlp-bg, #fff); color: var(--dlp-tx, #111); }
+body .xoo-wsc-container :is(.xoo-wsc-header, .xoo-wsc-body, .xoo-wsc-footer, .xoo-wsc-sc-cont, .xoo-wsc-ft-totals, .xoo-wsc-sum-col, .xoo-wsc-product) { background: transparent !important; color: var(--dlp-tx, #111); border-color: var(--dlp-line, #e9e9ee) !important; }
+body .xoo-wsc-container :is(.xoo-wsc-pname, .xoo-wsc-pname a, .xoo-wsc-ft-amt, .xoo-wsc-ft-amt-value, .xoo-wsc-ft-amt-label, .xoo-wsc-sm-info, .xoo-wsc-smr-del, .xoo-wsc-hdr-text, .xoo-wsc-header span, .xoo-wsc-price, .xoo-wsc-qty-price) { color: var(--dlp-tx, #111) !important; }
 body .xoo-wsc-ft-buttons-cont { display: flex; flex-direction: column; gap: 10px; padding: 4px 16px 6px; }
-body .xoo-wsc-ft-buttons-cont .xoo-wsc-ft-btn { display: block; box-sizing: border-box; width: 100%; margin: 0; padding: 14px 20px; border: 2px solid #111; border-radius: 999px; background: #111; color: #fff; font-weight: 700; font-size: 14px; letter-spacing: .04em; text-align: center; text-transform: uppercase; text-decoration: none; transition: background-color .2s, color .2s, transform .15s, box-shadow .2s; }
+body .xoo-wsc-ft-buttons-cont .xoo-wsc-ft-btn { display: block; box-sizing: border-box; width: 100%; margin: 0; padding: 14px 20px; border: 2px solid var(--dlp-btn, #111); border-radius: 999px; background: var(--dlp-btn, #111); color: var(--dlp-btn-tx, #fff); font-weight: 700; font-size: 14px; letter-spacing: .04em; text-align: center; text-transform: uppercase; text-decoration: none; transition: background-color .2s, color .2s, transform .15s, box-shadow .2s; }
 body .xoo-wsc-ft-buttons-cont .xoo-wsc-ft-btn:hover { transform: translateY(-1px); box-shadow: 0 8px 18px rgba(0,0,0,.18); }
 body .xoo-wsc-ft-buttons-cont .xoo-wsc-ft-btn:active { transform: none; box-shadow: none; }
-body .xoo-wsc-ft-buttons-cont .xoo-wsc-ft-btn-continue { background: #fff; color: #111; }
-body .xoo-wsc-ft-buttons-cont .xoo-wsc-ft-btn-continue:hover { background: #111; color: #fff; }
-body .xoo-wsc-ft-buttons-cont .xoo-wsc-ft-btn-checkout { background: var(--dlp-carrito-lateral-color-pagar, #111); border-color: var(--dlp-carrito-lateral-color-pagar, #111); }
+body .xoo-wsc-ft-buttons-cont .xoo-wsc-ft-btn-continue { background: var(--dlp-bg, #fff); border-color: var(--dlp-tx, #111); color: var(--dlp-tx, #111); }
+body .xoo-wsc-ft-buttons-cont .xoo-wsc-ft-btn-continue:hover { background: var(--dlp-tx, #111); color: var(--dlp-bg, #fff); }
+body .xoo-wsc-ft-buttons-cont .xoo-wsc-ft-btn-checkout { background: var(--dlp-sc-pay, var(--dlp-carrito-lateral-color-pagar, #111)); border-color: var(--dlp-sc-pay, var(--dlp-carrito-lateral-color-pagar, #111)); color: var(--dlp-btn-tx, #fff); }
 body.dlp-sc-vercarro--ocultar .xoo-wsc-ft-btn-cart { display: none !important; }
 @media (max-width: 480px) { body .xoo-wsc-container { max-width: 92vw; } }

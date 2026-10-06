@@ -1,0 +1,28 @@
+/* Variables de color del sitio. Los módulos las usan así: var(--dlp-card, #fff) (con su color claro de respaldo). */
+body {
+  --dlp-bg: #fff; --dlp-surface: #f6f6f8; --dlp-card: #fff; --dlp-tx: #111; --dlp-mut: #8d8d96; --dlp-line: #e9e9ee;
+  --dlp-field: #fcfcfd; --dlp-btn: #111; --dlp-btn-tx: #fff; --dlp-ac: #CF1E26; --dlp-ok: #17803d; --dlp-nav: #fff;
+  --dlp-chip: #efeff2; --dlp-shadow: 0 6px 18px rgba(0,0,0,.12);
+  --dlp-mi-on: var(--dlp-menu-inferior-color-activo, #111); --dlp-mi-badge: var(--dlp-menu-inferior-color-insignia, #111); --dlp-sc-pay: var(--dlp-carrito-lateral-color-pagar, #111);
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  html:not([data-dlp-tema="claro"]) body {
+    --dlp-bg: var(--dlp-tema-oscuro-bg, #000); --dlp-surface: var(--dlp-tema-oscuro-surface, #0d0d0f); --dlp-card: var(--dlp-tema-oscuro-card, #121214);
+    --dlp-tx: var(--dlp-tema-oscuro-tx, #f4f4f5); --dlp-mut: var(--dlp-tema-oscuro-mut, #8f8f98); --dlp-line: var(--dlp-tema-oscuro-line, #26262b);
+    --dlp-field: var(--dlp-tema-oscuro-field, #18181b); --dlp-btn: var(--dlp-tema-oscuro-btn, #fff); --dlp-btn-tx: var(--dlp-tema-oscuro-btn-tx, #111);
+    --dlp-ac: var(--dlp-tema-oscuro-ac, #e8434a); --dlp-ok: var(--dlp-tema-oscuro-ok, #30c25f); --dlp-nav: var(--dlp-tema-oscuro-nav, #161619);
+    --dlp-chip: #1f1f24; --dlp-shadow: 0 6px 18px rgba(0,0,0,.6);
+    --dlp-mi-on: var(--dlp-btn); --dlp-mi-badge: var(--dlp-ac); --dlp-sc-pay: var(--dlp-btn);
+    color-scheme: dark;
+  }
+}
+html[data-dlp-tema="oscuro"] body {
+  --dlp-bg: var(--dlp-tema-oscuro-bg, #000); --dlp-surface: var(--dlp-tema-oscuro-surface, #0d0d0f); --dlp-card: var(--dlp-tema-oscuro-card, #121214);
+  --dlp-tx: var(--dlp-tema-oscuro-tx, #f4f4f5); --dlp-mut: var(--dlp-tema-oscuro-mut, #8f8f98); --dlp-line: var(--dlp-tema-oscuro-line, #26262b);
+  --dlp-field: var(--dlp-tema-oscuro-field, #18181b); --dlp-btn: var(--dlp-tema-oscuro-btn, #fff); --dlp-btn-tx: var(--dlp-tema-oscuro-btn-tx, #111);
+  --dlp-ac: var(--dlp-tema-oscuro-ac, #e8434a); --dlp-ok: var(--dlp-tema-oscuro-ok, #30c25f); --dlp-nav: var(--dlp-tema-oscuro-nav, #161619);
+  --dlp-chip: #1f1f24; --dlp-shadow: 0 6px 18px rgba(0,0,0,.6);
+  --dlp-mi-on: var(--dlp-btn); --dlp-mi-badge: var(--dlp-ac); --dlp-sc-pay: var(--dlp-btn);
+    color-scheme: dark;
+}
