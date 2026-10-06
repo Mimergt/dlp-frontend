@@ -140,7 +140,20 @@ function dlp_fe_gr_render($order) {
             }
             ?>
             <a class="dlpgr-btn o" href="<?php echo esc_url($url_s); ?>"><?php echo esc_html($o('texto_seguir') ?: 'Seguir pidiendo'); ?></a>
-            <div class="dlpgr-extra"><?php do_action('woocommerce_thankyou', $order->get_id()); ?></div>
+            <?php
+            ob_start();
+            do_action('woocommerce_thankyou_' . $order->get_payment_method(), $order->get_id());
+            $pasarela = trim(ob_get_clean());
+            ob_start();
+            do_action('woocommerce_thankyou', $order->get_id());
+            $detalle = trim(ob_get_clean());
+            if ($pasarela !== '') {
+                echo '<div class="dlpgr-extra">' . $pasarela . '</div>'; // phpcs:ignore
+            }
+            if ($detalle !== '') {
+                echo '<details class="dlpgr-det"><summary>Ver detalle del pedido</summary><div class="dlpgr-extra">' . $detalle . '</div></details>'; // phpcs:ignore
+            }
+            ?>
         </div>
     </div>
     <?php

@@ -17,7 +17,6 @@ if ( function_exists( 'dlp_fe_gr_render' ) ) :
 <div class="woocommerce-order">
 	<?php if ( $order ) : ?>
 		<?php do_action( 'woocommerce_before_thankyou', $order->get_id() ); ?>
-		<?php do_action( 'woocommerce_thankyou_' . $order->get_payment_method(), $order->get_id() ); ?>
 	<?php endif; ?>
 	<?php dlp_fe_gr_render( $order ); ?>
 </div>

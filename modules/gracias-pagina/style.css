@@ -45,7 +45,9 @@ body.dlpgr-page .et_pb_row { padding-top: 0 !important; padding-bottom: 0 !impor
 .dlpgr .dlpgr-btn { display: flex; align-items: center; justify-content: center; box-sizing: border-box; width: 100%; height: 50px; margin: 10px 0 0; padding: 0; border: 1.5px solid #111; border-radius: 999px; background: #111; color: #fff !important; font: 800 13px/1 "Open Sans", system-ui, sans-serif; letter-spacing: .05em; text-transform: uppercase; text-decoration: none !important; cursor: pointer; }
 .dlpgr .dlpgr-btn.o { border-color: var(--linea); background: #fff; color: #111 !important; }
 .dlpgr .dlpgr-btn.r { border-color: var(--acento); background: var(--acento); }
-.dlpgr-extra:empty { display: none; }
+.dlpgr-det { margin-top: 14px; }
+.dlpgr-det summary { cursor: pointer; padding: 8px 2px; color: #111; font: 700 12.5px/1.3 "Open Sans", system-ui, sans-serif; text-decoration: underline; text-underline-offset: 3px; }
+.dlpgr-extra h2, .dlpgr-extra .woocommerce-order-details__title, .dlpgr-extra .woocommerce-column__title { margin: 14px 0 8px; padding: 0; color: #111; font: 800 15px/1.3 "Open Sans", system-ui, sans-serif; }
 .dlpgr-extra { margin-top: 12px; font-size: 13px; }
 
 /* Hamburguesa que se arma (5 s en bucle) */

@@ -72,6 +72,7 @@ class S:
         if j.get("redirect"):
             m = re.search(r"order-received/(\d+)", j["redirect"])
             out["order"] = int(m.group(1)) if m else j["redirect"]
+            out["url"] = j["redirect"]
         return out
 
 BASEF = {"billing_first_name": "Prueba", "billing_last_name": "Automatizada", "billing_phone": "55550000", "payment_method": "cod", "billing_country": "GT", "billing_state": "GT-GU"}
