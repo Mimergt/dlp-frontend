@@ -1,6 +1,6 @@
 # Memoria del proyecto DLP Frontend (Del Puente)
 
-Documento de retoma: léelo completo al empezar una sesión nueva. Última actualización: **2026-10-06**, plugin **v0.13.0** en dev (dlp-tiendas 0.10.1).
+Documento de retoma: léelo completo al empezar una sesión nueva. Última actualización: **2026-10-06**, plugin **v0.15.4** en dev (dlp-tiendas 0.10.1).
 
 ## 1. Qué es y dónde vive
 
@@ -39,6 +39,8 @@ Documento de retoma: léelo completo al empezar una sesión nueva. Última actua
 | `checkout-estilo` | Checkout en tarjetas con íconos (Entrega, Tus datos, Factura y notas, Tu pedido, Pago); botón "Realizar pedido · total" fijo en celular; dos columnas en escritorio; botón "Seguir pidiendo"; en Pickup oculta dirección y referencia. | checkout |
 | `checkout-campos-editor` | **Reemplaza** a Checkout Field Editor. Opción `dlp_fe_checkout_fields`; claves compatibles (`billing_nit`, `billing_nitname`, `billing_address_name`). Se edita en Apariencia → DLP Frontend → Campos del checkout. | siempre |
 | `checkout-libreta` | **Reemplaza** a Fr Address Book. Meta de usuario `dlp_fe_addresses` (id, nombre, dirección, referencia, lat, lng), **máximo 3**; tarjetas con tienda y estado (Abierta/Cerrada); las cerradas no se pueden elegir. Usa el puente `fabfw_address_billing_id` + `window.fabfw_select_address` hacia dlp-tiendas (que pone el pin y valida). | checkout |
+| `cuenta-pagina` | Mi cuenta propia: saludo + pestañas con ícono (Pedidos, Direcciones, Perfil), "Cerrar sesión" al final, pedidos en tarjetas, libreta de direcciones con mapa (hasta 3), perfil con estilo del checkout. `/mi-cuenta/` → Pedidos; sin sesión → `/ingresar/`. Endpoint de direcciones `edit-address` (antes `tsm-addresses`, corregido en el ajuste de WooCommerce). | account |
+| `login-pagina` | Ingreso propio (concepto "app": fondo oscuro + hoja blanca) pintado sobre la página existente `/ingresar/` (id 4082; su contenido de Divi se conserva pero no se muestra). Entra por Ajax (`wp_signon`, límite de intentos por IP y cuenta), "Continuar como invitado" → `/`, recuperar contraseña → WooCommerce. Sin registro. `wp-login.php` redirige aquí; atajo de emergencia `wp-login.php?dlp_native=1`. | page:ingresar |
 | `checkout-campos` | Quita campos (cumpleaños, CP), dirección opcional; **invitado**: correo nuevo → cuenta automática; correo existente → el pedido se asocia a esa cuenta sin sobrescribir sus datos. | siempre |
 | `checkout-layout` | Selector Delivery/Pickup arriba y pagos bajo las notas. | siempre |
 | `pedido-recoger` | Botón "Ya estoy aquí por mi pedido" (dlv → rtp, exige llave del pedido). | siempre |
@@ -56,19 +58,31 @@ Panel de administración: Apariencia → DLP Frontend (estilo shadcn: `admin/pan
 - **Eliminado:** campo "Pedido en Restaurante" (Pickup lo reemplaza); rastreo y "Califica este pedido" (fuera por ahora). **No se toca:** la pasarela de tarjeta (EpicPay).
 - Libreta de direcciones propia, desde cero, **3 direcciones máximo**; el servidor sigue revalidando cobertura y horario (dlp-tiendas).
 - Datos viejos de libreta (Fr Address Book / WCMCA) **borrados en dev el 2026-10-06**; respaldo en el servidor: `~/dlp-backups/libreta-vieja-20261006-0342.sql.gz`.
-- Plugins desactivados en dev: Fr Address Book, Checkout Field Editor Pro.
+- Plugins desactivados en dev: Fr Address Book, Checkout Field Editor Pro, **Theme My Login** (2026-10-06; ingreso propio verificado por el usuario). Dev tiene `disable-emails` activo a propósito: los correos (recuperar contraseña, pedidos) no salen en dev.
+- Ingreso: concepto 2 elegido; **sin registro** (las cuentas se crean solas en el primer pedido); invitado va al menú.
 
 ## 5. Pendientes
 
-1. **Mi cuenta** (`/mi-cuenta/`): página personalizada solo con Pedidos, Direcciones, Perfil y Salir. Mockups en `preview/mi-cuenta.html` (4 conceptos); **falta elegir**. Direcciones debe usar la libreta propia (agregar con mapa, eliminar, máx. 3).
-2. Poner **latitud/longitud reales** de cada tienda (dlp-tiendas → tienda → Datos → Ubicación). Hoy solo 3 de 16 tiendas tienen punto (centro de cobertura); sirve para "Restaurante más cercano".
-3. Probar con tiendas **abiertas** (desde las 11:00): elegir dirección "Abierta" de punta a punta, pickup más cercano y un pedido completo, incluido **invitado con correo nuevo y con correo existente** (la lógica y la validación están verificadas; la creación real del pedido no).
-4. Guardar el Menu de Divi en el header (hamburguesa en escritorio).
-5. Probar en un **celular real** (modal, `#producto-…` desde WhatsApp, splash, menú inferior, compra).
-6. Probar el guardado del editor de campos y la libreta con sesión iniciada (se probó el editor; la libreta se probó con datos simulados).
-7. `dlp-tiendas`: exponer una API JS propia en lugar del puente `fabfw_*`; quitar sus referencias a Fr Address Book.
-8. Limpieza del tema viejo `dlp` y sus copias de respaldo cuando se migre a producción; revisar `wp-file-manager` y `woocommerce-legacy-rest-api` (seguridad).
-9. Migración a producción (no iniciada): recordar que allí también hay datos de libreta vieja y la configuración de plugins por replicar.
+**Pruebas que dependen de tiendas abiertas (desde las 11:00 hora Guatemala, tiendas cierran ~20:45)**
+1. Pedido completo de punta a punta: delivery con dirección de la libreta "Abierta", pickup con "Restaurante más cercano", invitado con correo nuevo y con correo existente.
+2. Con sesión iniciada: guardar una dirección en el checkout y verla en Mi cuenta; agregar con mapa desde Mi cuenta.
+
+**Del usuario**
+3. Guardar el módulo Menu del header en Divi (hamburguesa en escritorio).
+4. Poner latitud/longitud reales de cada tienda (dlp-tiendas → tienda → Datos); hoy solo 3 de 16 tienen punto.
+5. Probar en un celular real (modal, `#producto-…` desde WhatsApp, splash, menú inferior, compra, ingreso).
+6. Probar la recuperación de contraseña en producción (en dev los correos están bloqueados).
+
+**Páginas/áreas sin rediseñar**
+7. Carrito `/carrito/` (con el carrito lateral casi no se usa: decidir si se estiliza o se redirige), página de gracias (hoy minimalista), detalle del pedido en Mi cuenta (`view-order`), recuperar/restablecer contraseña (formularios de WooCommerce), `/restaurantes/` (Ubicaciones, hecha en Divi), página de producto individual, tienda/categorías fuera del Home, 404, políticas.
+8. Correos de WooCommerce con la marca (plantillas `emails/*` del tema viejo se descartaron).
+9. Perfil: NIT y nombre de factura en Mi cuenta; "Pedir de nuevo" en Pedidos.
+
+**Técnico / limpieza**
+10. `dlp-tiendas`: API JS propia en lugar del puente `fabfw_*` y quitar referencias a Fr Address Book.
+11. Limpiar el tema viejo `dlp` y `dlp-26-functions.php` (copias de respaldo, código muerto) y confirmar qué cambios pendientes del repo `dlp_funciones` se guardan.
+12. Seguridad: revisar `wp-file-manager` y `woocommerce-legacy-rest-api`.
+13. Migración a producción (no iniciada): respaldo, plan de plugins a apagar (Theme My Login, Fr Address Book, Checkout Field Editor), borrar datos viejos de libreta también allí, reglas de Cloudflare, prueba en celular.
 
 ## 6. Cosas que muerden (aprendidas)
 
