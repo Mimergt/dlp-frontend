@@ -47,6 +47,28 @@ body.dlp-cat--curva .cwp_et_pb_layout_slider_standard .navMenu_slide .swiper-sli
 body.dlp-cat--curva .cwp_et_pb_layout_slider_standard .navMenu_slide .swiper-slide-thumb-active::before { left: calc(var(--dlp-r) * -1); background: radial-gradient(circle at 0 0, transparent var(--dlp-r), #fff calc(var(--dlp-r) + .5px)); }
 body.dlp-cat--curva .cwp_et_pb_layout_slider_standard .navMenu_slide .swiper-slide-thumb-active::after { right: calc(var(--dlp-r) * -1); background: radial-gradient(circle at 100% 0, transparent var(--dlp-r), #fff calc(var(--dlp-r) + .5px)); }
 
+/* Hover de las pestañas (estilo curva): se aclaran y suben un poco */
+body.dlp-cat--curva .cwp_et_pb_layout_slider_standard .navMenu_slide .swiper-slide:not(.swiper-slide-thumb-active) { cursor: pointer; }
+body.dlp-cat--curva .cwp_et_pb_layout_slider_standard .navMenu_slide .swiper-slide:not(.swiper-slide-thumb-active):hover { background-color: #fff !important; box-shadow: 0 -6px 12px -8px rgba(0,0,0,.14); }
+body.dlp-cat--curva .cwp_et_pb_layout_slider_standard .navMenu_slide .swiper-slide:not(.swiper-slide-thumb-active):hover img { transform: translateY(-2px) scale(1.05); }
+body.dlp-cat--curva .cwp_et_pb_layout_slider_standard .navMenu_slide .swiper-slide:not(.swiper-slide-thumb-active):hover span.navMenu_label { color: #444 !important; }
+
+/* ───────── Barra mini fija de categorías (la crea script.js) ───────── */
+.dlp-subnav { position: fixed; top: var(--dlp-home-portada-barra-fija-top, 0px); left: 0; right: 0; z-index: 9990; background: #f6f6f8; border-bottom: 1px solid #ececf0; box-shadow: 0 8px 18px -8px rgba(0,0,0,.18); transform: translateY(-110%); opacity: 0; visibility: hidden; transition: transform .25s ease, opacity .2s ease, visibility .25s; }
+.dlp-subnav.is-on { transform: none; opacity: 1; visibility: visible; }
+.dlp-subnav__track { display: flex; gap: 4px; max-width: 1240px; margin: 0 auto; padding: 6px 14px 0; overflow-x: auto; scrollbar-width: none; scroll-snap-type: x proximity; }
+.dlp-subnav__track::-webkit-scrollbar { display: none; }
+.dlp-subnav__tab { flex: 0 0 auto; display: flex; align-items: center; gap: 8px; padding: 7px 14px 10px; margin: 0; border: 0; border-radius: 14px 14px 0 0; background: transparent; font: inherit; cursor: pointer; scroll-snap-align: center; transition: background-color .2s, box-shadow .2s; }
+.dlp-subnav__tab img { display: block; width: auto; height: 30px; max-width: 46px; object-fit: contain; mix-blend-mode: multiply; transition: transform .2s; }
+.dlp-subnav__tab span { font-weight: 700; font-size: 11px; line-height: 1.1; letter-spacing: .05em; text-transform: uppercase; color: #9a9aa3; text-shadow: 0 1px 0 #fff; white-space: nowrap; transition: color .2s; }
+.dlp-subnav__tab:hover { background-color: #fff; box-shadow: 0 -4px 10px -6px rgba(0,0,0,.14); }
+.dlp-subnav__tab:hover img { transform: scale(1.08); }
+.dlp-subnav__tab:hover span { color: #444; }
+.dlp-subnav__tab.is-active { background: linear-gradient(var(--dlp-acento), var(--dlp-acento)) no-repeat center bottom / 24px 3px, #fff; box-shadow: 0 -6px 12px -8px rgba(0,0,0,.14); }
+.dlp-subnav__tab.is-active span { color: #111; text-shadow: none; }
+.dlp-subnav__tab:focus-visible { outline: 2px solid var(--dlp-acento); outline-offset: -2px; }
+@media (max-width: 767px) { .dlp-subnav__tab { padding: 6px 10px 9px; gap: 6px; } .dlp-subnav__tab img { height: 26px; } }
+
 /* ───────── PRODUCTOS (rejilla) ───────── */
 .dlp-prod--tarjeta ul.products li.product,
 .dlp-prod--minimal ul.products li.product,

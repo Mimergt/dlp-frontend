@@ -44,6 +44,23 @@
       "type": "color",
       "default": "#CF1E26",
       "help": "Para la categoría activa, precios y detalles de los estilos nuevos."
+    },
+    {
+      "key": "barra_fija",
+      "label": "Barra de categorías fija al hacer scroll",
+      "type": "checkbox",
+      "default": 1,
+      "css_var": false,
+      "help": "Al pasar de largo las categorías aparece arriba una versión compacta; se quita al volver a ellas."
+    },
+    {
+      "key": "barra_fija_top",
+      "label": "Separación superior de la barra fija",
+      "type": "number",
+      "default": 0,
+      "unit": "px",
+      "js": false,
+      "help": "Súbela si más adelante el header pasa a ser fijo (alto del header)."
     }
   ]
 }
