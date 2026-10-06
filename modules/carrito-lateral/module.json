@@ -6,8 +6,8 @@
   "default": true,
   "css": "style.css",
   "settings": [
-    { "key": "ver_carro", "label": "Botón «Ver carro»", "type": "select", "default": "clasico", "body_class": "dlp-sc-vercarro", "css_var": false,
-      "options": { "clasico": "Mostrar (actual)", "ocultar": "Ocultar (solo Seguir comprando y Pagar)" } },
+    { "key": "ver_carro", "label": "Botón «Ver carro»", "type": "select", "default": "ocultar", "body_class": "dlp-sc-vercarro", "css_var": false,
+      "options": { "ocultar": "Ocultar (solo Seguir comprando y Pagar)", "mostrar": "Mostrar" } },
     { "key": "radio", "label": "Redondeo de las esquinas del panel", "type": "number", "default": 24, "unit": "px", "css_var": true },
     { "key": "color_pagar", "label": "Color del botón Pagar", "type": "color", "default": "#111111", "css_var": true }
   ]
