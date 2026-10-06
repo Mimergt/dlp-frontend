@@ -35,7 +35,7 @@ add_filter('the_content', function ($content) {
     }
     $o     = function ($k) { return DLP_FE_Registry::setting('login-pagina', $k); };
     $guest = home_url($o('url_invitado') ?: '/');
-    $lost  = function_exists('wc_lostpassword_url') ? wc_lostpassword_url() : wp_lostpassword_url();
+    $lost  = function_exists('wc_get_endpoint_url') ? wc_get_endpoint_url('lost-password', '', wc_get_page_permalink('myaccount')) : wp_lostpassword_url(); // directo a WooCommerce (Theme My Login reescribe wc_lostpassword_url)
     $to    = isset($_GET['redirect_to']) ? wp_validate_redirect(wp_unslash($_GET['redirect_to']), '') : '';
     ob_start();
     ?>
