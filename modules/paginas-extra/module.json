@@ -1,0 +1,14 @@
+{
+  "label": "Páginas sueltas: recuperar contraseña, 404, detalle del pedido, producto y categorías",
+  "description": "Estilo propio (claro y oscuro con el módulo Tema) para: recuperar/restablecer contraseña, página 404, detalle de un pedido en Mi cuenta, página de producto y páginas de categoría/tienda.",
+  "section": "general",
+  "boot": true,
+  "php": "module.php",
+  "where": ["all"],
+  "default": true,
+  "css": "style.css",
+  "settings": [
+    { "key": "titulo_404", "label": "404: título", "type": "text", "default": "No encontramos esa página", "css_var": false },
+    { "key": "texto_404", "label": "404: texto", "type": "text", "default": "Puede que el enlace esté roto o que la página ya no exista.", "css_var": false }
+  ]
+}

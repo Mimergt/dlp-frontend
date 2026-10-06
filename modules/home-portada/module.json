@@ -3,7 +3,9 @@
   "description": "Estilo de las categorías (carrusel con foto) y de los productos del Home. \"Clásico\" deja el diseño actual sin cambios.",
   "section": "home",
   "where": [
-    "home"
+    "home",
+    "shop",
+    "category"
   ],
   "default": true,
   "css": "style.css",
