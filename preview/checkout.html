@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Página de pago: conceptos</title>
+<style>
+  :root { --acento: #CF1E26; --tinta: #111; --gris: #f6f6f8; --linea: #e9e9ee; --mut: #8d8d96; }
+  * { box-sizing: border-box; }
+  body { margin: 0; padding: 24px 16px 70px; background: #d9d9de; font-family: "Open Sans", system-ui, -apple-system, Segoe UI, Roboto, sans-serif; color: var(--tinta); }
+  h1 { font-size: 20px; margin: 0 0 4px; }
+  p.lead { margin: 0 0 24px; color: #444; font-size: 14px; max-width: 800px; }
+  .wrap { display: flex; flex-wrap: wrap; gap: 34px 28px; justify-content: center; }
+  .concept { width: 375px; }
+  .concept.wide { width: 860px; }
+  .concept h2 { font-size: 14px; margin: 0 0 2px; }
+  .concept .desc { font-size: 12.5px; color: #555; margin: 0 0 10px; min-height: 52px; }
+  .meta { font-size: 12px; font-weight: 700; color: #333; margin-top: 8px; }
+
+  .phone { position: relative; width: 375px; height: 700px; background: #fff; border-radius: 26px; overflow: hidden; box-shadow: 0 14px 40px rgba(0,0,0,.28); }
+  .desk { position: relative; width: 860px; height: 700px; background: #fff; border-radius: 14px; overflow: hidden; box-shadow: 0 14px 40px rgba(0,0,0,.28); }
+  .scroll { position: absolute; inset: 0; overflow-y: auto; scrollbar-width: none; padding-bottom: 110px; }
+  .scroll::-webkit-scrollbar { display: none; }
+  .top { height: 54px; background: #000; display: flex; align-items: center; justify-content: space-between; padding: 0 16px; color: #fff; font-weight: 800; letter-spacing: .04em; font-size: 14px; position: sticky; top: 0; z-index: 5; }
+  .top small { font-weight: 600; font-size: 11px; opacity: .7; }
+  .pg { padding: 14px 14px 0; }
+  .pg h1 { font-size: 18px; margin: 4px 0 12px; text-transform: uppercase; letter-spacing: .03em; }
+
+  /* piezas */
+  .links { display: flex; gap: 14px; font-size: 12px; margin: 0 0 12px; color: var(--mut); }
+  .links a { color: var(--tinta); font-weight: 700; text-decoration: underline; text-underline-offset: 3px; }
+  .seg { display: flex; background: var(--gris); border-radius: 14px; padding: 4px; gap: 2px; margin-bottom: 12px; }
+  .seg b { flex: 1; text-align: center; padding: 10px 6px; border-radius: 11px; font-size: 12px; text-transform: uppercase; letter-spacing: .04em; color: #777; font-weight: 700; }
+  .seg b.on { background: #fff; color: var(--tinta); box-shadow: 0 2px 6px rgba(0,0,0,.12); }
+  .card { border: 1px solid var(--linea); border-radius: 18px; padding: 14px; margin-bottom: 12px; background: #fff; }
+  .card h3 { margin: 0 0 10px; font-size: 12px; text-transform: uppercase; letter-spacing: .06em; color: var(--tinta); display: flex; align-items: center; gap: 8px; }
+  .card h3 i { width: 22px; height: 22px; border-radius: 50%; background: var(--tinta); color: #fff; font-style: normal; font-size: 11px; display: grid; place-items: center; }
+  .f { margin-bottom: 9px; }
+  .f label { display: block; font-size: 10.5px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; color: #55555e; margin: 0 0 4px 2px; }
+  .f label em { color: var(--acento); font-style: normal; }
+  .f label s { text-decoration: none; color: var(--mut); font-weight: 600; text-transform: none; letter-spacing: 0; }
+  .f div { height: 42px; border: 1px solid var(--linea); border-radius: 12px; background: #fcfcfd; padding: 0 12px; display: flex; align-items: center; color: #b0b0b8; font-size: 13px; }
+  .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .btn2 { display: flex; gap: 8px; margin-bottom: 10px; }
+  .btn2 b { flex: 1; text-align: center; padding: 11px 6px; border-radius: 999px; font-size: 11.5px; text-transform: uppercase; letter-spacing: .03em; border: 1.5px solid var(--tinta); }
+  .btn2 b.fill { background: var(--tinta); color: #fff; }
+  .map { height: 90px; border-radius: 14px; background: repeating-linear-gradient(45deg, #eef0f3, #eef0f3 10px, #e6e9ed 10px, #e6e9ed 20px); display: grid; place-items: center; font-size: 11px; color: #6b7280; margin-bottom: 4px; }
+  .ok { display: inline-block; background: #e7f6ec; color: #17803d; font-size: 11px; font-weight: 700; padding: 5px 10px; border-radius: 999px; margin: 2px 0 8px; }
+  .sw { display: flex; align-items: center; justify-content: space-between; padding: 8px 2px; font-size: 13px; }
+  .sw i { width: 38px; height: 22px; border-radius: 999px; background: #d4d4da; position: relative; }
+  .sw i::after { content: ""; position: absolute; left: 2px; top: 2px; width: 18px; height: 18px; border-radius: 50%; background: #fff; box-shadow: 0 1px 3px rgba(0,0,0,.25); }
+  .pay { display: flex; align-items: center; gap: 10px; padding: 12px; border: 1.5px solid var(--tinta); border-radius: 14px; font-size: 13px; font-weight: 700; }
+  .pay i { width: 16px; height: 16px; border-radius: 50%; border: 5px solid var(--tinta); }
+  .pay small { display: block; font-weight: 400; color: var(--mut); font-size: 11.5px; }
+  .sum .li { display: flex; justify-content: space-between; gap: 10px; font-size: 12.5px; padding: 7px 0; border-bottom: 1px dashed var(--linea); }
+  .sum .li small { display: block; color: var(--mut); font-size: 11px; margin-top: 2px; line-height: 1.35; }
+  .sum .tt { display: flex; justify-content: space-between; font-size: 13px; padding: 8px 0 0; font-weight: 700; }
+  .sum .tt.big { font-size: 16px; }
+  .legal { font-size: 10.5px; color: var(--mut); text-align: center; padding: 4px 10px 0; line-height: 1.4; }
+  .legal u { color: var(--tinta); }
+
+  /* barra fija inferior con el botón de pagar */
+  .pbar { position: absolute; left: 0; right: 0; bottom: 0; z-index: 8; padding: 10px 14px 16px; background: rgba(255,255,255,.96); border-top: 1px solid var(--linea); box-shadow: 0 -10px 24px -14px rgba(0,0,0,.2); }
+  .go { display: flex; align-items: center; justify-content: space-between; height: 52px; border-radius: 999px; background: var(--tinta); color: #fff; padding: 0 22px; font-weight: 800; font-size: 13px; letter-spacing: .05em; text-transform: uppercase; }
+  .go.red { background: var(--acento); }
+  .go span:last-child { font-weight: 700; letter-spacing: .01em; }
+  .pbar .mini { display: flex; justify-content: space-between; font-size: 11px; color: var(--mut); margin: 0 4px 7px; }
+
+  /* 2 · pasos */
+  .steps { display: flex; align-items: center; gap: 6px; margin: 0 0 14px; }
+  .steps div { flex: 1; text-align: center; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; color: var(--mut); }
+  .steps div i { display: grid; place-items: center; width: 26px; height: 26px; margin: 0 auto 5px; border-radius: 50%; background: var(--gris); font-style: normal; font-size: 12px; }
+  .steps div.on { color: var(--tinta); }
+  .steps div.on i { background: var(--tinta); color: #fff; }
+  .steps div.done i { background: var(--acento); color: #fff; }
+  .steps hr { flex: 0 0 18px; border: 0; height: 2px; background: var(--linea); margin: -16px 0 0; }
+
+  /* 3 · acordeón */
+  .acc { border: 1px solid var(--linea); border-radius: 18px; margin-bottom: 10px; overflow: hidden; }
+  .acc > .h { display: flex; align-items: center; justify-content: space-between; padding: 14px; font-size: 12px; font-weight: 800; text-transform: uppercase; letter-spacing: .05em; }
+  .acc > .h span { display: flex; align-items: center; gap: 8px; }
+  .acc > .h small { color: #17803d; font-weight: 700; text-transform: none; letter-spacing: 0; font-size: 11px; }
+  .acc > .h .chev { color: var(--mut); font-size: 16px; }
+  .acc > .b { padding: 0 14px 14px; }
+  .acc.closed > .b { display: none; }
+  .acc.done > .h i { background: #17803d; }
+  .sumtop { display: flex; align-items: center; justify-content: space-between; background: var(--gris); border-radius: 16px; padding: 12px 14px; margin-bottom: 12px; font-size: 12.5px; font-weight: 700; }
+  .sumtop small { color: var(--mut); font-weight: 600; display: block; font-size: 11px; }
+
+  /* 4 · escritorio */
+  .dk-body { display: grid; grid-template-columns: 1.25fr 1fr; gap: 22px; padding: 18px 22px 0; align-items: start; }
+  .dk-top { height: 54px; background: #000; display: flex; align-items: center; justify-content: space-between; padding: 0 28px; color: #fff; font-weight: 800; letter-spacing: .04em; }
+  .dk-side { position: sticky; top: 14px; }
+  .dk-side .go { margin-top: 14px; }
+</style>
+</head>
+<body>
+<h1>Página de pago: 4 conceptos</h1>
+<p class="lead">Mismos datos que hoy (Delivery/Pickup, ubicación, teléfono, correo, factura opcional, notas, efectivo y tu pedido «Felices los 4») en cuatro formas de presentarlos. Los campos y la lógica no cambian: lo del mapa, la tienda y la hora sigue siendo de <b>dlp-tiendas</b>; aquí solo se cambia cómo se ve. Dentro de cada celular puedes hacer scroll. El texto de los campos es de ejemplo.</p>
+<div class="wrap" id="wrap"></div>
+
+<script>
+function F(l, ph, opt) { return '<div class="f"><label>' + l + (opt === 1 ? ' <s>(opcional)</s>' : opt === 0 ? ' <em>*</em>' : '') + '</label><div>' + ph + '</div></div>'; }
+var delivery =
+  '<div class="seg"><b class="on">Delivery</b><b>Pickup</b></div>' +
+  '<div class="btn2"><b class="fill">📍 Usar mi ubicación</b><b>Elegir en el mapa</b></div>' +
+  '<div class="map">Mapa · pin de entrega</div><span class="ok">✓ Tenemos cobertura en tu zona</span>' +
+  F("Dirección completa", "Ej: 2 Ave 3-14, Apto 143", 1) + F("Referencia", "Casa, trabajo, portón negro…", 1);
+var datos = '<div class="row2">' + F("Nombre", "Tu nombre", 0) + F("Apellido", "Tu apellido", 0) + '</div>' + F("Teléfono", "Ingresa tu teléfono", 0) + F("Correo electrónico", "micorreo@ejemplo.com", 0);
+var factura = '<div class="row2">' + F("Nombre factura", "Nombre", 1) + F("NIT", "NIT o CF", 1) + '</div>';
+var extras = '<div class="sw"><span>Crear mi cuenta automáticamente</span><i></i></div><div class="sw"><span>Pedido en restaurante</span><i></i></div>' + F("Notas del pedido", "Instrucciones de entrega…", 1);
+var pago = '<div class="pay"><i></i><div>Pago en efectivo<small>Paga al recibir tu comida.</small></div></div>';
+var resumen = '<div class="sum"><div class="li"><div><b>Felices los 4</b> × 1<small>Carne: Premium Blend · Complemento: 4 Curly Fries · Bebida: 4 Frezka Rosa de Jamaica</small></div><b>Q210.00</b></div><div class="tt"><span>Subtotal</span><span>Q210.00</span></div><div class="tt big"><span>Total</span><span>Q210.00</span></div></div>';
+var legal = '<p class="legal">Tus datos se usan para procesar el pedido según nuestra <u>política de privacidad</u>.</p>';
+var topbar = '<div class="top"><span>DEL PUENTE</span><small>Pago</small></div>';
+var links = '<div class="links"><span>¿Ya tienes cuenta? <a>Inicia sesión</a></span><span>¿Cupón? <a>Aplicar</a></span></div>';
+
+var c = [];
+c[0] = ["1 · Una página con tarjetas", "Todo en un solo scroll, agrupado en tarjetas numeradas (Entrega, Tus datos, Factura, Pago, Tu pedido). El botón de pagar queda fijo abajo con el total.",
+  '<div class="scroll">' + topbar + '<div class="pg"><h1>Finalizar compra</h1>' + links +
+  '<div class="card"><h3><i>1</i>Entrega</h3>' + delivery + '</div>' +
+  '<div class="card"><h3><i>2</i>Tus datos</h3>' + datos + '</div>' +
+  '<div class="card"><h3><i>3</i>Factura</h3>' + factura + extras + '</div>' +
+  '<div class="card sum"><h3><i>4</i>Tu pedido</h3>' + resumen + '</div>' +
+  '<div class="card"><h3><i>5</i>Pago</h3>' + pago + '</div>' + legal + '</div></div>' +
+  '<div class="pbar"><div class="go"><span>Realizar pedido</span><span>Q210.00</span></div></div>', "Un solo scroll · lo más directo"];
+c[1] = ["2 · Por pasos", "Tres pantallas cortas: Entrega, Datos y Pago, con indicador arriba y botón «Continuar». Menos campos a la vez; la última paso muestra el resumen.",
+  '<div class="scroll">' + topbar + '<div class="pg"><h1>Finalizar compra</h1>' +
+  '<div class="steps"><div class="done"><i>✓</i>Entrega</div><hr><div class="on"><i>2</i>Datos</div><hr><div><i>3</i>Pago</div></div>' +
+  '<div class="card"><h3>Tus datos</h3>' + datos + '</div>' +
+  '<div class="card"><h3>Factura <s style="text-decoration:none;color:#8d8d96;text-transform:none;letter-spacing:0;font-weight:600">(opcional)</s></h3>' + factura + '</div>' +
+  '<div class="card">' + extras + '</div></div></div>' +
+  '<div class="pbar"><div class="mini"><span>Delivery · Zona 10</span><span>1 producto</span></div><div class="go"><span>Continuar</span><span>→</span></div></div>', "3 pasos · más guiado, más clics"];
+c[2] = ["3 · Acordeón con resumen arriba", "Resumen plegado arriba («1 producto · Q210.00»). Cada sección se abre sola al completar la anterior y muestra una palomita verde con lo ya llenado.",
+  '<div class="scroll">' + topbar + '<div class="pg"><h1>Finalizar compra</h1>' +
+  '<div class="sumtop"><span>Tu pedido<small>Felices los 4 × 1</small></span><span>Q210.00 ▾</span></div>' +
+  '<div class="acc done"><div class="h"><span><i style="width:22px;height:22px;border-radius:50%;background:#17803d;color:#fff;font-style:normal;font-size:11px;display:grid;place-items:center">✓</i>Entrega</span><small>Delivery · Zona 10</small></div><div class="b" style="display:none"></div></div>' +
+  '<div class="acc"><div class="h"><span><i style="width:22px;height:22px;border-radius:50%;background:#111;color:#fff;font-style:normal;font-size:11px;display:grid;place-items:center">2</i>Tus datos</span><span class="chev">⌃</span></div><div class="b">' + datos + '</div></div>' +
+  '<div class="acc closed"><div class="h"><span><i style="width:22px;height:22px;border-radius:50%;background:#d4d4da;color:#fff;font-style:normal;font-size:11px;display:grid;place-items:center">3</i>Factura y notas</span><span class="chev">⌄</span></div></div>' +
+  '<div class="acc closed"><div class="h"><span><i style="width:22px;height:22px;border-radius:50%;background:#d4d4da;color:#fff;font-style:normal;font-size:11px;display:grid;place-items:center">4</i>Pago</span><span class="chev">⌄</span></div></div>' + legal + '</div></div>' +
+  '<div class="pbar"><div class="go red"><span>Realizar pedido</span><span>Q210.00</span></div></div>', "Acordeón · lo más compacto"];
+c[3] = ["4 · Escritorio: dos columnas", "En computadora: formulario a la izquierda y el resumen con el botón de pagar fijo a la derecha, siempre visible mientras se llena.",
+  '<div class="dk-top"><span>DEL PUENTE</span><small style="opacity:.7;font-weight:600">Pago</small></div><div class="scroll" style="top:54px"><div class="dk-body"><div><h1 style="font-size:18px;text-transform:uppercase;letter-spacing:.03em;margin:0 0 12px">Finalizar compra</h1>' + links +
+  '<div class="card"><h3><i>1</i>Entrega</h3>' + delivery + '</div><div class="card"><h3><i>2</i>Tus datos</h3>' + datos + '</div><div class="card"><h3><i>3</i>Factura</h3>' + factura + extras + '</div></div>' +
+  '<div class="dk-side"><div class="card sum"><h3>Tu pedido</h3>' + resumen + '</div><div class="card"><h3>Pago</h3>' + pago + '</div><div class="go"><span>Realizar pedido</span><span>Q210.00</span></div>' + legal + '</div></div></div>', "≥ 1024 px · resumen fijo a la derecha"];
+
+var wrap = document.getElementById("wrap");
+c.forEach(function (x, i) {
+  var el = document.createElement("div");
+  el.className = "concept" + (i === 3 ? " wide" : "");
+  el.innerHTML = '<h2>' + x[0] + '</h2><p class="desc">' + x[1] + '</p><div class="' + (i === 3 ? "desk" : "phone") + '">' + x[2] + '</div><div class="meta">' + x[3] + '</div>';
+  wrap.appendChild(el);
+});
+</script>
+</body>
+</html>
