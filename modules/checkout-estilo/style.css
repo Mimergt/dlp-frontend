@@ -104,3 +104,7 @@ body.dlpck-on #additional_enrestaurante_field { display: none !important; }
 /* Pickup: sin dirección ni referencia (la tienda se elige en el selector) */
 body.dlpck-pickup #billing_address_2_field, body.dlpck-pickup #billing_address_name_field { display: none !important; }
 body.dlpck-pickup .dlpck-card:first-child .dlpck-fields { display: none; }
+
+/* Menos aire entre el header y el botón de regresar (Divi pone 50px de sección + 30px de fila) */
+body.dlpck-on .et_pb_section:has(.dlpck-head) { padding-top: 12px !important; }
+body.dlpck-on .et_pb_row:has(.dlpck-head) { padding-top: 0 !important; }
