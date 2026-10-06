@@ -1,0 +1,19 @@
+/* Splash y transición entre páginas: solo celular. */
+.dlpta { display: none; }
+@media (max-width: 767px) {
+  .dlpta { position: fixed; inset: 0; z-index: 9994; display: grid; place-items: center; background: rgba(255,255,255,.97); opacity: 0; visibility: hidden; pointer-events: none; transition: opacity .35s ease, visibility 0s linear .35s; }
+  .dlpta.is-on { opacity: 1; visibility: visible; pointer-events: auto; transition: opacity .2s ease, visibility 0s; animation: dlpta-failsafe 0s linear 4s forwards; }
+  .dlpta-lg { display: flex; flex-direction: column; align-items: center; gap: 14px; margin-top: -40px; animation: dlpta-pulse 1s ease-in-out infinite; color: #111; }
+  .dlpta-lg img { display: block; width: min(56vw, 240px); height: auto; }
+  .dlpta-lg b { font: 800 20px/1 "Open Sans", system-ui, sans-serif; letter-spacing: .08em; text-transform: uppercase; }
+  .dlpta-lg em { font: 600 12px/1.2 "Open Sans", system-ui, sans-serif; letter-spacing: .06em; text-transform: uppercase; color: #8d8d96; font-style: normal; }
+  .dlpta-lg small { display: block; width: 56px; height: 4px; border-radius: 4px; background: linear-gradient(90deg, var(--dlp-acento, #CF1E26) 40%, rgba(128,128,128,.25) 40%); background-size: 200% 100%; animation: dlpta-bar 1s linear infinite; }
+  /* Claro: el logo (blanco) se vuelve negro */
+  body:not(.dlp-ta--oscuro) .dlpta-lg img { filter: brightness(0); }
+  body.dlp-ta--oscuro .dlpta { background: rgba(17,17,17,.98); }
+  body.dlp-ta--oscuro .dlpta-lg { color: #fff; }
+}
+@keyframes dlpta-pulse { 50% { opacity: .45; transform: scale(.97); } }
+@keyframes dlpta-bar { to { background-position: -100% 0; } }
+@keyframes dlpta-failsafe { to { opacity: 0; visibility: hidden; pointer-events: none; } }
+@media (prefers-reduced-motion: reduce) { .dlpta-lg, .dlpta-lg small { animation: none; } }

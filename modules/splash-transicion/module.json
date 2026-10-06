@@ -1,0 +1,18 @@
+{
+  "label": "Splash y transición entre páginas (celular)",
+  "description": "Solo en celular: al abrir el sitio y al cambiar de página se muestra una pantalla con el logo (palpitando, con barra) que luego se desvanece, como una app. El menú inferior queda visible. Si algo falla, la pantalla se quita sola a los 4 segundos.",
+  "section": "general",
+  "where": ["all"],
+  "default": true,
+  "php": "module.php",
+  "css": "style.css",
+  "js": "script.js",
+  "settings": [
+    { "key": "estilo", "label": "Estilo", "type": "select", "default": "claro", "body_class": "dlp-ta", "css_var": false,
+      "options": { "claro": "Claro (fondo blanco, logo en negro)", "oscuro": "Oscuro (fondo negro, logo en blanco)" } },
+    { "key": "logo", "label": "Logo (opcional)", "type": "image", "default": "", "help": "Vacío = logo del header de Divi. Si usas el estilo Claro con un logo blanco, se oscurece solo." },
+    { "key": "texto", "label": "Texto bajo el logo (opcional)", "type": "text", "default": "" },
+    { "key": "min_ms", "label": "Tiempo mínimo del splash al abrir el sitio", "type": "number", "default": 700, "unit": "ms", "js": true },
+    { "key": "transicion", "label": "Mostrar también al cambiar de página", "type": "checkbox", "default": 1, "js": true }
+  ]
+}
