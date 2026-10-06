@@ -144,15 +144,13 @@ class DLP_FE_Admin {
             </nav>
             <div class="dlpfe-main">
             <?php if (DLP_FE_Loader::legacy_theme_active()) : ?>
-                <div class="notice notice-warning"><p><strong>Modo espera:</strong> el tema <code>dlp</code> sigue activo y tiene su propia lógica PHP, así que los módulos de arranque están en pausa. Al activar DLP26 se cargan solos.</p></div>
+                <div class="notice notice-warning inline"><p><strong>Modo espera:</strong> el tema <code>dlp</code> sigue activo y tiene su propia lógica PHP, así que los módulos de arranque están en pausa. Al activar DLP26 se cargan solos.</p></div>
             <?php endif; ?>
-            <?php if (!empty($_GET['saved'])) : ?><div class="notice notice-success is-dismissible"><p>Guardado.</p></div><?php endif; ?>
+            <?php if (!empty($_GET['saved'])) : ?><div class="notice notice-success is-dismissible inline"><p>Guardado.</p></div><?php endif; ?>
 
 
 
-            <p class="description">Cada módulo es independiente: si uno falla, desactívalo y el resto del sitio sigue igual.
-                Dónde se carga: <code>all, home, shop, product, cart, checkout, account, category, page:slug, post_type:tipo</code> (separados por coma; vacío = valor por defecto del módulo).
-                Los ajustes de cada módulo quedan disponibles en CSS como <code>var(--dlp-modulo-clave)</code> y en JS como <code>window.dlpFE["modulo"]</code>.</p>
+
 
             <?php if ($tab === 'campos') : dlp_fe_cf_render_admin(); elseif (!$mods) : ?>
                 <p><em>Todavía no hay módulos en esta sección.</em></p>
@@ -192,6 +190,11 @@ class DLP_FE_Admin {
                 <?php endforeach; ?>
                 <?php submit_button('Guardar ' . $sections[$tab]); ?>
             </form>
+            <?php endif; ?>
+            <?php if ($tab !== 'campos') : ?>
+            <details class="dlpfe-help"><summary>Ayuda sobre los módulos</summary><p>            Cada módulo es independiente: si uno falla, desactívalo y el resto del sitio sigue igual.
+                Dónde se carga: <code>all, home, shop, product, cart, checkout, account, category, page:slug, post_type:tipo</code> (separados por coma; vacío = valor por defecto del módulo).
+                Los ajustes de cada módulo quedan disponibles en CSS como <code>var(--dlp-modulo-clave)</code> y en JS como <code>window.dlpFE["modulo"]</code>.</p></details>
             <?php endif; ?>
             </div>
             </div>

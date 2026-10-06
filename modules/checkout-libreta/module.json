@@ -1,0 +1,15 @@
+{
+  "label": "Checkout: libreta de direcciones",
+  "description": "Direcciones guardadas del cliente con su punto en el mapa. En el checkout se muestran como tarjetas con la tienda que las cubre; si esa tienda está cerrada la dirección queda deshabilitada con el aviso. Reemplaza al plugin Fr Address Book (sus datos antiguos no se usan ni se borran).",
+  "section": "general",
+  "boot": true,
+  "php": "module.php",
+  "where": ["checkout"],
+  "default": true,
+  "css": "style.css",
+  "js": "script.js",
+  "settings": [
+    { "key": "max", "label": "Máximo de direcciones por cliente", "type": "number", "default": 10, "css_var": false },
+    { "key": "titulo", "label": "Título de la lista", "type": "text", "default": "Tus direcciones", "css_var": false, "js": true }
+  ]
+}
