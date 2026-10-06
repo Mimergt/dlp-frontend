@@ -25,7 +25,7 @@
     timer = setTimeout(function () {
       $.post(A.ajaxurl, { action: 'dlp_tiendas_check_point', nonce: A.covNonce, lat: ll.lat, lng: ll.lng }).done(function (r) {
         if (my !== seq) return;
-        var covered = r.ok || (r.reason && r.reason !== 'sin_sobertura' && r.reason !== 'sin_cobertura' && r.reason !== 'punto_invalido');
+        var covered = r.ok || (r.reason && r.reason !== 'sin_cobertura' && r.reason !== 'punto_invalido');
         if (covered) { point = ll; setCov(r.ok ? 'ok' : 'warn', r.ok ? 'Tenemos cobertura en esta ubicación.' : 'Hay cobertura, pero ahora: ' + r.msg); }
         else { setCov('no', r.msg); }
         validate();

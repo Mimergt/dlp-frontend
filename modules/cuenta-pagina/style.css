@@ -1,0 +1,83 @@
+/* Mi cuenta personalizada. Íconos en negro (activa) y gris (inactivas); sin bordes negros. */
+body.woocommerce-account .woocommerce { max-width: 980px; margin: 0 auto; }
+body.woocommerce-account .woocommerce-MyAccount-navigation { display: none !important; }
+body.woocommerce-account .woocommerce-MyAccount-content { float: none !important; width: 100% !important; margin: 0; padding: 0; font-family: "Open Sans", system-ui, sans-serif; }
+body.woocommerce-account .et_pb_section:has(.dlpac-head) { padding-top: 16px !important; }
+body.woocommerce-account .et_pb_row:has(.dlpac-head) { padding-top: 0 !important; }
+
+.dlpac-head { margin: 0 0 14px; font-family: "Open Sans", system-ui, sans-serif; }
+.dlpac-hello { font-size: 22px; font-weight: 800; color: #111; line-height: 1.2; }
+.dlpac-mail { margin: 2px 0 14px; color: #8d8d96; font-size: 13px; }
+.dlpac-tabs { display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; }
+.dlpac-tabs::-webkit-scrollbar { display: none; }
+.dlpac-tab { flex: none; display: inline-flex; align-items: center; gap: 8px; padding: 9px 16px 9px 12px; border: 1px solid #e9e9ee; border-radius: 999px; background: #fff; color: #8d8d96 !important; font: 700 12px/1 "Open Sans", system-ui, sans-serif; letter-spacing: .05em; text-transform: uppercase; text-decoration: none !important; transition: background-color .15s, color .15s; }
+.dlpac-tab svg { width: 18px; height: 18px; fill: none; stroke: #9a9aa3; stroke-width: 1.9; stroke-linecap: round; stroke-linejoin: round; transition: stroke .15s; }
+.dlpac-tab:hover { background: #fafafa; color: #111 !important; }
+.dlpac-tab.is-on { border-color: transparent; background: #f1f1f3; color: #111 !important; }
+.dlpac-tab.is-on svg, .dlpac-tab:hover svg { stroke: #111; }
+.dlpac-logout { display: flex; align-items: center; justify-content: center; gap: 8px; margin: 22px 0 0; padding: 12px; border: 1px solid #e9e9ee; border-radius: 999px; background: #fff; color: #111 !important; font: 700 12px/1 "Open Sans", system-ui, sans-serif; letter-spacing: .05em; text-transform: uppercase; text-decoration: none !important; }
+.dlpac-logout svg { width: 18px; height: 18px; fill: none; stroke: #111; stroke-width: 1.9; stroke-linecap: round; stroke-linejoin: round; }
+.dlpac-logout:hover { background: #f4f4f5; }
+
+/* Pedidos como tarjetas */
+body.woocommerce-account table.woocommerce-orders-table, body.woocommerce-account table.woocommerce-orders-table tbody { display: block; width: 100%; border: 0; background: none; }
+body.woocommerce-account table.woocommerce-orders-table thead { display: none; }
+body.woocommerce-account table.woocommerce-orders-table tr { display: grid; grid-template-columns: 1fr auto; gap: 4px 12px; margin: 0 0 10px; padding: 14px; border: 1px solid #e9e9ee; border-radius: 18px; background: #fff; }
+body.woocommerce-account table.woocommerce-orders-table td { display: block; padding: 0 !important; border: 0 !important; background: none; font-size: 13px; color: #55555e; text-align: left !important; }
+body.woocommerce-account table.woocommerce-orders-table td::before { display: none !important; }
+body.woocommerce-account table.woocommerce-orders-table td.woocommerce-orders-table__cell-order-number { grid-column: 1; font-weight: 800; font-size: 14px; }
+body.woocommerce-account table.woocommerce-orders-table td.woocommerce-orders-table__cell-order-number a { color: #111; text-decoration: none; }
+body.woocommerce-account table.woocommerce-orders-table td.woocommerce-orders-table__cell-order-status { grid-column: 2; grid-row: 1; justify-self: end; padding: 3px 10px !important; border-radius: 999px; background: #f1f1f3; color: #111; font-size: 11px; font-weight: 700; }
+body.woocommerce-account table.woocommerce-orders-table tr[class*="status-completed"] td.woocommerce-orders-table__cell-order-status { background: #e7f6ec; color: #17803d; }
+body.woocommerce-account table.woocommerce-orders-table tr[class*="status-cancelled"] td.woocommerce-orders-table__cell-order-status, body.woocommerce-account table.woocommerce-orders-table tr[class*="status-failed"] td.woocommerce-orders-table__cell-order-status { background: #fee2e2; color: #b91c1c; }
+body.woocommerce-account table.woocommerce-orders-table td.woocommerce-orders-table__cell-order-date { grid-column: 1; color: #8d8d96; font-size: 12px; }
+body.woocommerce-account table.woocommerce-orders-table td.woocommerce-orders-table__cell-order-total { grid-column: 2; grid-row: 2; justify-self: end; font-weight: 800; color: #111; }
+body.woocommerce-account table.woocommerce-orders-table td.woocommerce-orders-table__cell-order-actions { grid-column: 1 / -1; display: flex; gap: 8px; margin-top: 8px; }
+body.woocommerce-account .woocommerce-button, body.woocommerce-account a.button.view, body.woocommerce-account .woocommerce-orders-table__cell-order-actions .button { margin: 0; padding: 10px 18px; border: 1.5px solid #111 !important; border-radius: 999px !important; background: #fff !important; color: #111 !important; font: 700 11.5px/1 "Open Sans", system-ui, sans-serif !important; letter-spacing: .04em; text-transform: uppercase; text-decoration: none; }
+body.woocommerce-account .woocommerce-pagination { margin: 14px 0 0; }
+body.woocommerce-account .woocommerce-message, body.woocommerce-account .woocommerce-info { border-radius: 14px; }
+
+/* Perfil (editar cuenta) */
+body.woocommerce-account form.woocommerce-EditAccountForm { padding: 16px; border: 1px solid #e9e9ee; border-radius: 18px; background: #fff; }
+body.woocommerce-account form.woocommerce-EditAccountForm p.form-row { float: none !important; width: 100% !important; margin: 0 0 12px !important; padding: 0 !important; }
+body.woocommerce-account form.woocommerce-EditAccountForm label { display: block; margin: 0 0 4px 2px; font: 700 10.5px/1.3 "Open Sans", system-ui, sans-serif; letter-spacing: .05em; text-transform: uppercase; color: #55555e; }
+body.woocommerce-account form.woocommerce-EditAccountForm input.input-text, body.woocommerce-account form.woocommerce-EditAccountForm input[type=text], body.woocommerce-account form.woocommerce-EditAccountForm input[type=email], body.woocommerce-account form.woocommerce-EditAccountForm input[type=password], body.woocommerce-account form.woocommerce-EditAccountForm input[type=tel] { box-sizing: border-box; width: 100%; min-height: 44px; padding: 10px 14px; border: 1px solid #e9e9ee !important; border-radius: 12px !important; background: #fcfcfd !important; font: 400 14px/1.3 "Open Sans", system-ui, sans-serif; box-shadow: none; }
+body.woocommerce-account form.woocommerce-EditAccountForm input:focus { outline: 0; border-color: #111 !important; background: #fff !important; }
+body.woocommerce-account form.woocommerce-EditAccountForm fieldset { margin: 14px 0 0; padding: 14px 0 0; border: 0; border-top: 1px solid #f1f1f3; }
+body.woocommerce-account form.woocommerce-EditAccountForm legend { padding: 0 6px 0 0; font: 800 12px/1 "Open Sans", system-ui, sans-serif; letter-spacing: .06em; text-transform: uppercase; }
+body.woocommerce-account form.woocommerce-EditAccountForm em, body.woocommerce-account form.woocommerce-EditAccountForm span em { color: #8d8d96; font-size: 12px; }
+body.woocommerce-account form.woocommerce-EditAccountForm button.button { width: 100%; height: 50px; margin: 6px 0 0; border: 0 !important; border-radius: 999px !important; background: #111 !important; color: #fff !important; font: 800 13px/1 "Open Sans", system-ui, sans-serif !important; letter-spacing: .05em; text-transform: uppercase; }
+
+/* Direcciones */
+.dlpac-count { margin: 0 0 10px; color: #8d8d96; font-size: 12.5px; }
+.dlpac-card { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; margin: 0 0 10px; padding: 14px; border: 1px solid #e9e9ee; border-radius: 18px; background: #fff; font-family: "Open Sans", system-ui, sans-serif; }
+.dlpac-main { min-width: 0; font-size: 13.5px; color: #111; }
+.dlpac-a { margin-top: 3px; color: #55555e; font-size: 12.5px; overflow-wrap: anywhere; }
+.dlpac-s { margin-top: 2px; color: #8d8d96; font-size: 11.5px; }
+.dlpac-msg { margin-top: 6px; padding: 6px 8px; border-radius: 8px; background: #fef2f2; color: #b91c1c; font-size: 11.5px; line-height: 1.35; }
+.dlpac-chip { display: inline-block; margin-left: 4px; padding: 2px 8px; border-radius: 999px; font-size: 10.5px; font-weight: 700; }
+.dlpac-chip.ok { background: #e7f6ec; color: #17803d; }
+.dlpac-chip.no { background: #fee2e2; color: #b91c1c; }
+body.woocommerce-account .dlpac-del { flex: none; padding: 6px 10px; border: 0; border-radius: 999px; background: #f4f4f5; color: #71717a; font: 600 11.5px/1 "Open Sans", system-ui, sans-serif; cursor: pointer; }
+body.woocommerce-account .dlpac-del:hover { background: #fee2e2; color: #b91c1c; }
+body.woocommerce-account .dlpac-add, body.woocommerce-account .dlpac-save { width: 100%; height: 50px; margin: 4px 0 0; border: 0; border-radius: 999px; background: #111; color: #fff; font: 800 13px/1 "Open Sans", system-ui, sans-serif; letter-spacing: .05em; text-transform: uppercase; cursor: pointer; }
+body.woocommerce-account .dlpac-save:disabled { opacity: .4; cursor: not-allowed; }
+.dlpac-empty { margin: 8px 0; color: #8d8d96; font-size: 13px; }
+
+/* Ventana para agregar dirección */
+.dlpac-modal { position: fixed; inset: 0; z-index: 10000002; display: flex; align-items: flex-end; justify-content: center; background: rgba(17,17,17,.5); }
+.dlpac-modal[hidden] { display: none; }
+.dlpac-sheet { position: relative; box-sizing: border-box; width: 100%; max-width: 560px; max-height: 94vh; overflow-y: auto; padding: 20px 18px 22px; border-radius: 22px 22px 0 0; background: #fff; font-family: "Open Sans", system-ui, sans-serif; }
+.dlpac-sheet h3 { margin: 0 0 4px; padding: 0; font-size: 17px; font-weight: 800; }
+.dlpac-hint { margin: 0 0 10px; color: #8d8d96; font-size: 12.5px; }
+.dlpac-x { position: absolute; top: 12px; right: 14px; width: 32px; height: 32px; border: 0; border-radius: 50%; background: #f4f4f5; color: #111; font-size: 20px; line-height: 32px; cursor: pointer; }
+.dlpac-map { height: 230px; border-radius: 14px; overflow: hidden; background: #eef0f3; }
+.dlpac-cov { margin: 8px 0 4px; min-height: 18px; font-size: 12px; font-weight: 600; }
+.dlpac-cov.ok { color: #17803d; } .dlpac-cov.warn { color: #92400e; } .dlpac-cov.no { color: #b91c1c; } .dlpac-cov.wait { color: #8d8d96; }
+.dlpac-sheet label { display: block; margin: 8px 0 0; font: 700 10.5px/1.3 "Open Sans", system-ui, sans-serif; letter-spacing: .05em; text-transform: uppercase; color: #55555e; }
+.dlpac-sheet label em { font-style: normal; font-weight: 600; text-transform: none; letter-spacing: 0; color: #8d8d96; }
+.dlpac-sheet input { box-sizing: border-box; display: block; width: 100%; min-height: 44px; margin-top: 4px; padding: 10px 14px; border: 1px solid #e9e9ee; border-radius: 12px; background: #fcfcfd; font: 400 14px/1.3 "Open Sans", system-ui, sans-serif; text-transform: none; letter-spacing: 0; color: #111; }
+.dlpac-sheet input:focus { outline: 0; border-color: #111; background: #fff; }
+.dlpac-sheet .dlpac-save { margin-top: 14px; }
+html.dlpac-lock { overflow: hidden; }
+@media (min-width: 768px) { .dlpac-modal { align-items: center; } .dlpac-sheet { border-radius: 22px; } }
