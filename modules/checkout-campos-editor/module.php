@@ -46,6 +46,16 @@ function dlp_fe_cf_items() {
     return is_array($saved) && $saved ? $saved : dlp_fe_cf_defaults();
 }
 
+/** Tipo de pedido enviado (delivery|pickup): en el envío del checkout o en la actualización de totales (post_data). */
+function dlp_fe_cf_posted_type() {
+    $t = isset($_POST['woofood_order_type']) ? sanitize_key(wp_unslash($_POST['woofood_order_type'])) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Missing
+    if ($t === '' && !empty($_POST['post_data'])) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
+        parse_str(wp_unslash($_POST['post_data']), $pd); // phpcs:ignore WordPress.Security.NonceVerification.Missing
+        $t = isset($pd['woofood_order_type']) ? sanitize_key($pd['woofood_order_type']) : '';
+    }
+    return $t;
+}
+
 add_filter('woocommerce_checkout_fields', function ($fields) {
     $prio = 20;
     foreach (dlp_fe_cf_items() as $it) {
@@ -85,6 +95,15 @@ add_filter('woocommerce_checkout_fields', function ($fields) {
             $f['custom_attributes'] = array_merge((array) ($f['custom_attributes'] ?? []), ['data-dlp-card' => $it['section']]);
         }
         $fields[$g][$k] = $f;
+    }
+    // Pickup: la dirección y su referencia no se piden (la tienda se elige en el selector); en el servidor
+    // seguirían siendo obligatorias aunque estén ocultas.
+    if (dlp_fe_cf_posted_type() === 'pickup') {
+        foreach (dlp_fe_cf_items() as $it) {
+            if ($it['section'] === 'entrega' && isset($fields['billing'][$it['key']])) {
+                $fields['billing'][$it['key']]['required'] = false;
+            }
+        }
     }
     foreach (['billing', 'order'] as $g) {
         if (!empty($fields[$g])) {
