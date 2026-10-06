@@ -1,6 +1,6 @@
 /*
- * Menú inferior: el botón Carrito reutiliza el carrito lateral (Xootix) haciendo clic en su botón flotante
- * (oculto por CSS en celular), y copia la cantidad de su contador.
+ * Menú inferior: el botón Carrito abre el carrito lateral (Xootix) con su clase xoo-wsc-cart-trigger y copia la
+ * cantidad de su contador (el botón flotante original se oculta por CSS en celular).
  */
 (function () {
   'use strict';
@@ -22,9 +22,8 @@
     if (!b) return;
     var k = b.getAttribute('data-dlpmi');
     if (k === 'cart') {
-      e.preventDefault();
-      var basket = document.querySelector('.xoo-wsc-basket');
-      if (basket) basket.click(); else window.location.href = (window.wc_cart_params && wc_cart_params.cart_url) || '/carrito/';
+      // El carrito lateral abre su panel solo (clase xoo-wsc-cart-trigger); sin él, se va a la página del carrito.
+      if (!document.querySelector('.xoo-wsc-container')) window.location.href = (window.wc_cart_params && wc_cart_params.cart_url) || '/carrito/';
     } else if (k === 'menu') {
       var tabs = document.querySelector('.navMenu_slide');
       if (tabs && document.body.classList.contains('home')) {

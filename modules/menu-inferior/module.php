@@ -5,8 +5,8 @@ if (!defined('ABSPATH')) {
 
 /**
  * Menú inferior para celular: Menú, Cuenta y Carrito.
- * El carrito no tiene lógica propia: el script le pasa el clic al botón flotante del carrito lateral (Xootix) para
- * abrir exactamente el mismo panel, y copia la cantidad de su contador.
+ * El carrito no tiene lógica propia: el botón lleva la clase xoo-wsc-cart-trigger, con la que el carrito lateral
+ * (Xootix) abre su propio panel, y el script copia la cantidad de su contador.
  */
 add_action('wp_footer', function () {
     if (!function_exists('WC') || is_checkout() || is_order_received_page()) {
@@ -35,7 +35,7 @@ add_action('wp_footer', function () {
             <?php echo $icons['user']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
             <span><?php echo esc_html($o('texto_cuenta')); ?></span>
         </a>
-        <button type="button" class="dlpmi-it" data-dlpmi="cart">
+        <button type="button" class="dlpmi-it xoo-wsc-cart-trigger" data-dlpmi="cart">
             <?php echo $icons['cart']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
             <span><?php echo esc_html($o('texto_carrito')); ?></span>
             <i class="dlpmi-bd"<?php echo $count ? '' : ' hidden'; ?>><?php echo (int) $count; ?></i>
