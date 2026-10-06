@@ -98,3 +98,11 @@ Faltan: pedidos con extras de varios días de disponibilidad, cupones, tarjeta (
 - La opción `woocommerce_registration_generate_password` está en "no" en dev, pero `wc_create_new_customer` genera contraseña si llega vacía; el invitado con correo nuevo pasa la validación.
 - El carrito lateral (Xootix): `.xoo-wsc-cart-trigger` abre el panel; la versión premium vive en `woocommerce-side-cart-premium`.
 - Hora del servidor en UTC; WordPress usa la zona de Guatemala (las tiendas cierran ~20:45).
+
+
+## Página de gracias (0.17.x) — módulo `gracias-pagina`
+- Plantilla `plantillas-woocommerce/templates/checkout/thankyou.php` llama a `dlp_fe_gr_render()`; diseño: negro arriba con hamburguesa SVG que se arma (5 s), hoja blanca con barra de 4 estados con íconos animados, total/pago, «Ver mi pedido» (solo si la cuenta es la dueña), «Seguir pidiendo», detalle plegado.
+- Estados: pending/on-hold=Recibido, processing=Preparando, dlv/rtp=En camino/Listo, completed=Entregado. Refresco: ajax `dlp_fe_gr_status` (exige order_key) cada 20 s, recarga si cambia. Sin rastreo ni tiempo estimado inventado (solo `woofood_time_to_pickup` si existe).
+- «Ya estoy aquí» sale de `dlp_fe_recoger_button()` (pedido-recoger); filtro `dlp_fe_recoger_en_gracias` apaga su caja gris.
+- Prueba: `chk.py` ahora devuelve `url` del pedido; un pedido de invitado abre bien con la misma sesión (el navegador sin sesión pide login porque la cuenta se crea sola). Pedidos de prueba 158807–158809 cancelados.
+- Pendiente: probar estados dlv/rtp en pickup cuando esos estados existan en dev (el plugin WooFood no los registra ahí).
