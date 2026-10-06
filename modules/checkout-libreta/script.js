@@ -73,18 +73,21 @@
   var $chk = $save.find('input[type=checkbox]'), $nm = $save.find('.dlplib-name');
   $chk.on('change', function () { $nm.prop('hidden', !this.checked); if (this.checked) $nm.trigger('focus'); });
 
+  var $full = $('<p class="dlplib-hint dlplib-full" hidden></p>').text('Ya tienes ' + L.max + ' direcciones guardadas. Elimina una para guardar esta.');
   function refreshSave() {
     var has = $('#billing_dlp_lat').val() && $('#billing_dlp_lng').val();
     var src = $('#dlp_geo_source').val();
-    var show = L.logged && has && src !== 'saved' && L.list.length < Math.max(L.max, 1) + 1;
+    var full = L.list.length >= Math.max(L.max, 1);
+    var show = L.logged && has && src !== 'saved' && !full;
     $save.prop('hidden', !show);
+    $full.prop('hidden', !(L.logged && has && src !== 'saved' && full));
     if (!show) { $chk.prop('checked', false); $nm.prop('hidden', true); }
   }
 
   function toggleBlock() { $wrap.find('.dlplib-title, .dlplib-list').prop('hidden', !L.list.length); }
 
   var title = $('<div class="dlplib-title"></div>').text(cfg.titulo || 'Tus direcciones');
-  $wrap.append(title, $list, $radios, $save);
+  $wrap.append(title, $list, $radios, $save, $full);
   $box.find('.dlp-actions').first().before($wrap);
   render(); toggleBlock(); refreshSave();
   setInterval(refreshSave, 700);

@@ -100,3 +100,7 @@ body.dlpck-on .dlpck input::placeholder, body.dlpck-on .dlpck textarea::placehol
 
 /* «Pedido en Restaurante» ya no se usa (Pickup lo reemplaza) */
 body.dlpck-on #additional_enrestaurante_field { display: none !important; }
+
+/* Pickup: sin dirección ni referencia (la tienda se elige en el selector) */
+body.dlpck-pickup #billing_address_2_field, body.dlpck-pickup #billing_address_name_field { display: none !important; }
+body.dlpck-pickup .dlpck-card:first-child .dlpck-fields { display: none; }

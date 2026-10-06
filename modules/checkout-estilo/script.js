@@ -85,6 +85,14 @@
 
   document.body.classList.add('dlpck-on');
 
+  // En Pickup no se pide dirección: solo la tienda
+  function pickupMode() {
+    var c = form.querySelector('input[name="woofood_order_type"]:checked');
+    document.body.classList.toggle('dlpck-pickup', !!c && c.value === 'pickup');
+  }
+  pickupMode();
+  form.addEventListener('change', function (e) { if (e.target.name === 'woofood_order_type') pickupMode(); });
+
   // Botón de pagar con el total (WooCommerce vuelve a dibujar #payment al cambiar los totales)
   function tune() {
     var b = $('#place_order');

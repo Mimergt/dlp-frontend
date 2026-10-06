@@ -4,12 +4,27 @@
   "section": "general",
   "boot": true,
   "php": "module.php",
-  "where": ["checkout"],
+  "where": [
+    "checkout"
+  ],
   "default": true,
   "css": "style.css",
   "js": "script.js",
   "settings": [
-    { "key": "max", "label": "Máximo de direcciones por cliente", "type": "number", "default": 10, "css_var": false },
-    { "key": "titulo", "label": "Título de la lista", "type": "text", "default": "Tus direcciones", "css_var": false, "js": true }
+    {
+      "key": "max",
+      "label": "Máximo de direcciones por cliente",
+      "type": "number",
+      "default": 3,
+      "css_var": false
+    },
+    {
+      "key": "titulo",
+      "label": "Título de la lista",
+      "type": "text",
+      "default": "Tus direcciones",
+      "css_var": false,
+      "js": true
+    }
   ]
 }

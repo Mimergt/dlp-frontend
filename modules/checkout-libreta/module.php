@@ -76,7 +76,7 @@ add_action('woocommerce_checkout_order_processed', function ($order_id, $posted,
     }
     $max = max(1, (int) DLP_FE_Registry::setting('checkout-libreta', 'max'));
     if (count($list) >= $max) {
-        array_shift($list); // se libera la más antigua
+        return; // libreta llena: el cliente debe eliminar una para guardar otra
     }
     $list[] = $new;
     update_user_meta($uid, DLP_FE_LIB_META, array_values($list));
