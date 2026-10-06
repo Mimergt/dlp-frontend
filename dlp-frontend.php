@@ -2,7 +2,7 @@
 /**
  * Plugin Name: DLP Frontend
  * Description: Ajustes de front-end de Del Puente (CSS/JS por módulos que se pueden activar o desactivar por página).
- * Version: 0.15.3
+ * Version: 0.15.4
  * Author: Mimer
  * Requires PHP: 7.4
  */
@@ -11,7 +11,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-define('DLP_FE_VERSION', '0.15.3');
+define('DLP_FE_VERSION', '0.15.4');
 define('DLP_FE_FILE', __FILE__);
 define('DLP_FE_DIR', plugin_dir_path(__FILE__));
 define('DLP_FE_URL', plugin_dir_url(__FILE__));

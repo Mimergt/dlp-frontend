@@ -97,3 +97,20 @@ function dlp_fe_lg_ajax() {
 }
 add_action('wp_ajax_nopriv_dlp_fe_login', 'dlp_fe_lg_ajax');
 add_action('wp_ajax_dlp_fe_login', 'dlp_fe_lg_ajax');
+
+// wp-login.php (solo la pantalla de ingreso, GET) → página de ingreso propia. Atajo de emergencia: ?dlp_native=1 muestra el ingreso nativo.
+add_action('login_form_login', function () {
+    if (!empty($_GET['dlp_native']) || (isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] !== 'GET') || !empty($_GET['interim-login'])) {
+        return;
+    }
+    $slug = trim((string) DLP_FE_Registry::setting('login-pagina', 'slug'), '/');
+    if ($slug === '') {
+        return;
+    }
+    $url = home_url('/' . $slug . '/');
+    if (!empty($_GET['redirect_to'])) {
+        $url = add_query_arg('redirect_to', rawurlencode(wp_unslash($_GET['redirect_to'])), $url);
+    }
+    wp_safe_redirect($url);
+    exit;
+});
