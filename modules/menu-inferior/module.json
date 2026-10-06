@@ -59,8 +59,20 @@
       "key": "color_insignia",
       "label": "Color de la insignia del carrito",
       "type": "color",
-      "default": "#CF1E26",
+      "default": "#111111",
       "css_var": true
+    },
+    {
+      "key": "footer",
+      "label": "Footer de Divi en celular",
+      "type": "select",
+      "default": "ocultar",
+      "body_class": "dlp-mi-footer",
+      "css_var": false,
+      "options": {
+        "ocultar": "Ocultar (lo reemplaza el menú inferior)",
+        "mostrar": "Mostrar"
+      }
     }
   ]
 }
