@@ -46,9 +46,10 @@ add_action('woocommerce_before_account_navigation', function () {
     echo '</nav></div>';
 });
 
-add_action('woocommerce_after_account_navigation', function () {
+// Al final del contenido de cada sección (después de pedidos / direcciones / perfil)
+add_action('woocommerce_account_content', function () {
     echo '<a class="dlpac-logout" href="' . esc_url(wc_logout_url()) . '">' . dlp_fe_acc_icon('logout') . '<span>Cerrar sesión</span></a>';
-});
+}, 99);
 
 // Direcciones: libreta propia en lugar de las direcciones de facturación/envío de WooCommerce
 add_action('wp', function () {

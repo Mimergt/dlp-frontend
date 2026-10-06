@@ -83,3 +83,21 @@ html.dlpac-lock { overflow: hidden; }
 @media (min-width: 768px) { .dlpac-modal { align-items: center; } .dlpac-sheet { border-radius: 22px; } }
 
 @media (max-width: 420px) { .dlpac-tabs { gap: 6px; } .dlpac-tab { gap: 6px; padding: 9px 12px 9px 9px; font-size: 11px; letter-spacing: .03em; } .dlpac-tab svg { width: 16px; height: 16px; } }
+
+/* Sin el título de página de Divi/WooCommerce ("Pedidos", "Dirección"): la cabecera propia ya lo dice */
+body.woocommerce-account .et_pb_title_container, body.woocommerce-account .et_pb_post_title, body.woocommerce-account h1.entry-title, body.woocommerce-account h1.main_title { display: none !important; }
+body.woocommerce-account .woocommerce-MyAccount-content { padding-bottom: 28px; }
+body.woocommerce-account .et_pb_section:has(.dlpac-head) { padding-bottom: 40px !important; }
+.dlpac-logout { margin-top: 26px; }
+
+/* Avisos de WooCommerce con el estilo de la página (antes rojos y a todo el ancho) */
+body.woocommerce-account .woocommerce-info, body.woocommerce-account .woocommerce-message { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin: 0 0 14px; padding: 12px 14px; border: 0; border-radius: 14px; background: #f1f1f3; color: #111; font: 400 13px/1.4 "Open Sans", system-ui, sans-serif; }
+body.woocommerce-account .woocommerce-info::before, body.woocommerce-account .woocommerce-message::before { display: none; }
+body.woocommerce-account .woocommerce-info .button, body.woocommerce-account .woocommerce-message .button { float: none; margin: 0; padding: 9px 16px; border: 1.5px solid #111 !important; border-radius: 999px !important; background: #fff !important; color: #111 !important; font: 700 11.5px/1 "Open Sans", system-ui, sans-serif !important; letter-spacing: .04em; text-transform: uppercase; }
+body.woocommerce-account .woocommerce-error { border-radius: 14px; }
+
+/* Escritorio: pedidos en dos columnas */
+@media (min-width: 1024px) {
+  body.woocommerce-account table.woocommerce-orders-table tbody { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  body.woocommerce-account table.woocommerce-orders-table tr { margin: 0; }
+}
