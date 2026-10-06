@@ -19,3 +19,7 @@ Cada carpeta en `modules/<id>/` con un `module.json`:
 - Mientras el tema legacy `dlp` esté activo, los módulos boot esperan (el tema ya tiene esa lógica). Al activar `DLP26` arrancan solos.
 - Admins: la barra superior muestra los módulos cargados y permite apagarlos solo en tu vista (`?dlp_fe_off=id` o `?dlp_fe_off=all`).
 - Emergencia: `define('DLP_FE_DISABLED', true);` en `wp-config.php` apaga todo el plugin.
+
+## Enlaces directos a un producto
+Con el módulo `home-quickview` activo, `#producto-<slug>` (o `#producto-<id>`) abre el producto en el modal al cargar la página:
+`https://delpuente.com.gt/#producto-combos-las-favoritas`. Al abrir un producto desde una tarjeta se agrega el hash a la URL (se puede copiar y compartir) y el botón Atrás del teléfono cierra el modal. El slug es el de la URL del producto (`/producto/<slug>/`). Funciona en las páginas donde carga el módulo (Home, tienda y categorías).

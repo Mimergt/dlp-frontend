@@ -1,0 +1,182 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Modal de producto: opciones</title>
+<style>
+  :root { --acento: #CF1E26; --tinta: #111; --gris: #f6f6f8; --linea: #ececf0; }
+  * { box-sizing: border-box; }
+  body { margin: 0; padding: 24px 16px 70px; background: #d9d9de; font-family: "Open Sans", system-ui, -apple-system, Segoe UI, Roboto, sans-serif; color: var(--tinta); }
+  h1 { font-size: 20px; margin: 0 0 4px; }
+  p.lead { margin: 0 0 26px; color: #444; font-size: 14px; max-width: 780px; }
+  .opt { max-width: 1100px; margin: 0 auto 50px; }
+  .opt h2 { font-size: 15px; margin: 0 0 2px; }
+  .opt .desc { font-size: 13px; color: #555; margin: 0 0 14px; max-width: 800px; }
+  .stage { display: flex; justify-content: center; padding: 26px 12px; background: rgba(0,0,0,.45); border-radius: 18px; }
+
+  /* Piezas comunes */
+  .modal { position: relative; background: #fff; border-radius: 22px; box-shadow: 0 24px 60px rgba(0,0,0,.35); overflow: hidden; }
+  .close { position: absolute; top: 12px; right: 12px; z-index: 3; width: 36px; height: 36px; border: 0; border-radius: 50%; background: var(--tinta); color: #fff; font-size: 22px; line-height: 36px; cursor: pointer; }
+  .tag { display: inline-block; background: var(--tinta); color: #fff; border-radius: 999px; padding: 8px 14px; font-weight: 700; font-size: 15px; line-height: 1; box-shadow: 0 6px 14px rgba(0,0,0,.25); font-variant-numeric: tabular-nums; }
+  h3.title { margin: 0; font-size: 22px; line-height: 1.15; font-weight: 800; letter-spacing: .01em; text-transform: uppercase; }
+  .incl { margin: 0; padding: 0; list-style: none; display: flex; flex-wrap: wrap; gap: 6px; }
+  .incl li { font-size: 12px; font-weight: 600; background: var(--gris); border-radius: 999px; padding: 5px 10px; color: #333; }
+  .group { margin-top: 16px; }
+  .group .gt { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
+  .group .gt b { font-size: 14px; letter-spacing: .02em; }
+  .req { font-size: 11px; font-weight: 700; color: #fff; background: var(--acento); border-radius: 999px; padding: 3px 8px; }
+  .opc { font-size: 11px; font-weight: 700; color: #777; background: var(--gris); border-radius: 999px; padding: 3px 8px; }
+  select.sel { width: 100%; padding: 12px 14px; border: 1px solid #d5d5db; border-radius: 12px; font: 600 14px "Open Sans", sans-serif; background: #fff; }
+  .chips { display: grid; gap: 8px; }
+  .chip { display: flex; align-items: center; justify-content: space-between; padding: 12px 14px; border: 1.5px solid var(--linea); border-radius: 12px; cursor: pointer; font-size: 14px; font-weight: 600; transition: border-color .15s, background .15s; user-select: none; }
+  .chip:hover { border-color: #bbb; }
+  .chip.on { border-color: var(--tinta); background: #fafafa; box-shadow: inset 0 0 0 1px var(--tinta); }
+  .chip small { color: #777; font-weight: 600; font-size: 12px; }
+  .chip .dot { width: 18px; height: 18px; border-radius: 50%; border: 2px solid #bbb; margin-right: 10px; flex: none; position: relative; }
+  .chip.on .dot { border-color: var(--tinta); }
+  .chip.on .dot::after { content: ""; position: absolute; inset: 3px; border-radius: 50%; background: var(--tinta); }
+  .chip .l { display: flex; align-items: center; }
+  .step { display: inline-flex; align-items: center; gap: 4px; }
+  .step button { width: 34px; height: 34px; border: 0; border-radius: 50%; background: var(--tinta); color: #fff; font-size: 20px; line-height: 1; cursor: pointer; }
+  .step button:hover { background: var(--acento); }
+  .step span { min-width: 30px; text-align: center; font-weight: 700; font-size: 15px; }
+  .step.sm button { width: 30px; height: 30px; font-size: 18px; background: #e8e8ec; color: #111; }
+  .step.sm button:hover { background: var(--tinta); color: #fff; }
+  .note { width: 100%; padding: 12px 14px; border: 1px solid #d5d5db; border-radius: 12px; font: 400 14px "Open Sans", sans-serif; resize: none; }
+  .addbtn { flex: 1; border: 0; border-radius: 14px; background: var(--tinta); color: #fff; font: 800 14px "Open Sans", sans-serif; letter-spacing: .04em; text-transform: uppercase; padding: 15px 18px; cursor: pointer; display: flex; align-items: center; justify-content: space-between; gap: 14px; transition: background .2s; }
+  .addbtn:hover { background: var(--acento); }
+  .addbtn .tot { font-variant-numeric: tabular-nums; }
+  .foot { display: flex; align-items: center; gap: 14px; padding: 14px 20px; background: #fff; border-top: 1px solid var(--linea); box-shadow: 0 -10px 20px -14px rgba(0,0,0,.18); }
+
+  /* Opción 1 · dos columnas, pie fijo */
+  .m1 { width: 820px; max-width: 100%; display: flex; flex-direction: column; }
+  .m1 .cols { display: grid; grid-template-columns: 5fr 6fr; }
+  .m1 .media { background: var(--gris); display: grid; place-items: center; padding: 26px; }
+  .m1 .media img { width: 100%; height: auto; mix-blend-mode: multiply; display: block; }
+  .m1 .info { padding: 28px 28px 8px; }
+  .m1 .head { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; padding-right: 36px; }
+  .m1 .incl { margin: 14px 0 4px; }
+  .m1 .notebox { margin-top: 16px; }
+  .m1 .toggle { background: none; border: 0; padding: 0; font: 700 13px "Open Sans", sans-serif; color: #444; cursor: pointer; text-decoration: underline; text-underline-offset: 3px; }
+  .m1 .note { display: none; margin-top: 8px; }
+  .m1 .note.show { display: block; }
+
+  /* Opción 2 · hoja inferior (celular) */
+  .phone { width: 390px; max-width: 100%; }
+  .m2 { display: flex; flex-direction: column; border-radius: 24px 24px 0 0; max-height: 780px; }
+  .m2 .grab { width: 44px; height: 5px; border-radius: 3px; background: #d0d0d6; margin: 10px auto 0; flex: none; }
+  .m2 .scroll { overflow-y: auto; padding: 0 0 6px; }
+  .m2 .hero { position: relative; background: var(--gris); margin: 10px 14px 0; border-radius: 18px; padding: 14px; }
+  .m2 .hero img { display: block; width: 78%; margin: 0 auto; mix-blend-mode: multiply; }
+  .m2 .hero .tag { position: absolute; left: 12px; top: 12px; }
+  .m2 .body { padding: 14px 18px 4px; }
+  .m2 h3.title { font-size: 20px; }
+  .m2 .incl { margin-top: 10px; }
+  .m2 .foot { padding: 12px 14px 16px; }
+  .m2 .addbtn { white-space: nowrap; font-size: 13px; letter-spacing: .02em; padding: 15px 14px; }
+
+  /* Opción 3 · compacta: cabecera con miniatura, extras como protagonistas */
+  .m3 { width: 640px; max-width: 100%; display: flex; flex-direction: column; }
+  .m3 header { display: flex; align-items: center; gap: 16px; padding: 18px 64px 16px 20px; border-bottom: 1px solid var(--linea); background: linear-gradient(#fff, #fbfbfc); }
+  .m3 header img { width: 84px; height: 84px; border-radius: 16px; background: var(--gris); object-fit: contain; mix-blend-mode: multiply; flex: none; }
+  .m3 header .tt { flex: 1; min-width: 0; }
+  .m3 header h3.title { font-size: 19px; }
+  .m3 header .sub { margin-top: 6px; font-size: 12px; color: #666; font-weight: 600; }
+  .m3 .content { padding: 4px 20px 16px; }
+  .m3 .twocol { display: grid; grid-template-columns: 1fr 1fr; gap: 0 20px; }
+  .m3 .group { margin-top: 14px; }
+  .m3 .foot { gap: 12px; }
+  .total-line { font-size: 12px; color: #666; font-weight: 600; margin-right: auto; }
+
+  @media (max-width: 760px) { .m1 .cols { grid-template-columns: 1fr; } .m3 .twocol { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<h1>Modal de producto: 3 opciones</h1>
+<p class="lead">Con el “Combo – Las Favoritas” real. Mejoras comunes a las tres: una sola tipografía (Open Sans, igual que las tarjetas), precio como etiqueta negra, descripción en pastillas, extras como opciones tocables en vez de un menú pequeño, comentario opcional plegado, y un pie fijo con cantidad y botón que muestra el total en vivo. Puedes tocar las opciones y los botones + / − para ver cómo responde.</p>
+<div id="root"></div>
+
+<script>
+var IMG = "https://i0.wp.com/dev.delpuente.com.gt/wp-content/uploads/2025/07/DP-Web-Las_4-Favoritas-1200x1200px.jpg?resize=700%2C700&ssl=1";
+var INCL = ["1 Carnuda", "1 Del Puente", "1 Clásica", "1 Tejana", "4 papas medianas", "4 frezcas"];
+var BASE = 195;
+
+function incl() { return '<ul class="incl">' + INCL.map(function (i) { return '<li>' + i + '</li>'; }).join('') + '</ul>'; }
+function extras(id) {
+  return '' +
+  '<div class="group"><div class="gt"><b>Elige tu bebida</b><span class="req">Obligatorio</span></div>' +
+    '<select class="sel"><option>Elige una opción…</option><option>Frezka</option><option>Frezka 2</option><option>Frezka 3</option></select></div>' +
+  '<div class="group"><div class="gt"><b>Elige tu complemento</b><span class="req">Obligatorio</span></div><div class="chips" data-radio>' +
+    '<div class="chip on" data-p="0"><span class="l"><i class="dot"></i>Papas</span><small>Incluido</small></div>' +
+    '<div class="chip" data-p="10"><span class="l"><i class="dot"></i>Papas grandes</span><small>+Q10.00</small></div>' +
+    '<div class="chip" data-p="10"><span class="l"><i class="dot"></i>Aros de cebolla</span><small>+Q10.00</small></div></div></div>' +
+  '<div class="group"><div class="gt"><b>Cambio a Angus</b><span class="opc">Opcional</span></div>' +
+    '<div class="chip" style="cursor:default"><span class="l">Cambia tu torta a Angus (+Q10.00 c/u, hasta 3)</span><span class="step sm" data-angus><button type="button" data-d="-1">−</button><span>0</span><button type="button" data-d="1">+</button></span></div></div>';
+}
+function foot() {
+  return '<div class="foot"><span class="step" data-qty><button type="button" data-d="-1">−</button><span>1</span><button type="button" data-d="1">+</button></span>' +
+         '<button class="addbtn" type="button"><span>Añadir al carrito</span><span class="tot">Q' + BASE.toFixed(2) + '</span></button></div>';
+}
+
+var opts = [
+ ["m1", "1 · Dos columnas con pie fijo", "El más parecido al actual, ordenado: foto grande sobre fondo tinte, nombre y etiqueta de precio arriba, y un pie siempre visible con cantidad y botón con el total.", function () {
+   return '<div class="modal m1"><button class="close">×</button><div class="cols">' +
+     '<div class="media"><img src="' + IMG + '" alt=""></div>' +
+     '<div class="info"><div class="head"><h3 class="title">Combo – Las Favoritas</h3></div>' +
+       '<div style="margin-top:10px"><span class="tag">Q195.00</span></div>' + '<div class="incl-wrap" style="margin-top:14px">' + incl() + '</div>' +
+       extras() +
+       '<div class="notebox"><button class="toggle" type="button">+ Agregar un comentario</button><textarea class="note" rows="2" placeholder="Ej.: sin cebolla, por favor"></textarea></div></div>' +
+     '</div>' + foot() + '</div>'; }],
+ ["m2", "2 · Hoja inferior (celular)", "Pensada para el teléfono: sube desde abajo, foto con la etiqueta de precio encima, contenido que se desplaza y pie fijo con el botón al alcance del pulgar.", function () {
+   return '<div class="phone"><div class="modal m2"><div class="grab"></div><div class="scroll">' +
+     '<div class="hero"><span class="tag">Q195.00</span><img src="' + IMG + '" alt=""></div>' +
+     '<div class="body"><h3 class="title">Combo – Las Favoritas</h3>' + incl() + extras() +
+       '<div class="notebox" style="margin-top:16px"><textarea class="note" rows="2" placeholder="Comentarios adicionales (opcional)"></textarea></div></div>' +
+     '</div>' + foot() + '</div></div>'; }],
+ ["m3", "3 · Compacta con cabecera", "Cabecera con miniatura y nombre; la selección (extras) es la protagonista y se acomoda en dos columnas en computadora. Ocupa menos alto y evita tanto desplazamiento.", function () {
+   return '<div class="modal m3"><button class="close">×</button>' +
+     '<header><img src="' + IMG + '" alt=""><div class="tt"><h3 class="title">Combo – Las Favoritas</h3><div class="sub">' + INCL.join(' · ') + '</div></div><span class="tag">Q195.00</span></header>' +
+     '<div class="content"><div class="twocol"><div>' +
+       '<div class="group"><div class="gt"><b>Elige tu bebida</b><span class="req">Obligatorio</span></div><select class="sel"><option>Elige una opción…</option><option>Frezka</option><option>Frezka 2</option><option>Frezka 3</option></select></div>' +
+       '<div class="group"><div class="gt"><b>Cambio a Angus</b><span class="opc">Opcional</span></div><div class="chip" style="cursor:default"><span class="l">+Q10.00 c/u (hasta 3)</span><span class="step sm" data-angus><button type="button" data-d="-1">−</button><span>0</span><button type="button" data-d="1">+</button></span></div></div>' +
+       '<div class="group"><div class="gt"><b>Comentario</b><span class="opc">Opcional</span></div><textarea class="note" rows="2" placeholder="Ej.: sin cebolla"></textarea></div>' +
+     '</div><div>' +
+       '<div class="group"><div class="gt"><b>Elige tu complemento</b><span class="req">Obligatorio</span></div><div class="chips" data-radio>' +
+         '<div class="chip on" data-p="0"><span class="l"><i class="dot"></i>Papas</span><small>Incluido</small></div>' +
+         '<div class="chip" data-p="10"><span class="l"><i class="dot"></i>Papas grandes</span><small>+Q10.00</small></div>' +
+         '<div class="chip" data-p="10"><span class="l"><i class="dot"></i>Aros de cebolla</span><small>+Q10.00</small></div></div></div>' +
+     '</div></div></div>' + foot() + '</div>'; }]
+];
+
+var root = document.getElementById("root");
+opts.forEach(function (o) {
+  var wrap = document.createElement("div");
+  wrap.className = "opt";
+  wrap.innerHTML = '<h2>' + o[1] + '</h2><p class="desc">' + o[2] + '</p><div class="stage">' + o[3]() + '</div>';
+  root.appendChild(wrap);
+});
+
+// Interacción mínima: chips, cantidad, Angus, total en vivo, comentario plegado
+document.querySelectorAll(".opt").forEach(function (box) {
+  function total() {
+    var extra = 0;
+    box.querySelectorAll("[data-radio] .chip.on").forEach(function (c) { extra += +c.dataset.p; });
+    var a = box.querySelector("[data-angus] span"); extra += (a ? +a.textContent : 0) * 10;
+    var q = +box.querySelector("[data-qty] span").textContent;
+    box.querySelector(".tot").textContent = "Q" + ((BASE + extra) * q).toFixed(2);
+  }
+  box.addEventListener("click", function (e) {
+    var chip = e.target.closest("[data-radio] .chip");
+    if (chip) { chip.parentNode.querySelectorAll(".chip").forEach(function (c) { c.classList.remove("on"); }); chip.classList.add("on"); total(); return; }
+    var b = e.target.closest(".step button");
+    if (b) {
+      var st = b.closest(".step"), sp = st.querySelector("span"), min = st.hasAttribute("data-qty") ? 1 : 0, max = st.hasAttribute("data-qty") ? 20 : 3;
+      sp.textContent = Math.max(min, Math.min(max, +sp.textContent + (+b.dataset.d))); total(); return;
+    }
+    if (e.target.classList.contains("toggle")) { var n = box.querySelector(".note"); n.classList.toggle("show"); e.target.textContent = n.classList.contains("show") ? "− Ocultar comentario" : "+ Agregar un comentario"; }
+  });
+});
+</script>
+</body>
+</html>

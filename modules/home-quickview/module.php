@@ -16,7 +16,12 @@ function dlp_fe_qv_opt($key) {
 }
 
 function dlp_fe_quickview() {
-    $id      = isset($_REQUEST['product_id']) ? absint($_REQUEST['product_id']) : 0;
+    $id   = isset($_REQUEST['product_id']) ? absint($_REQUEST['product_id']) : 0;
+    $slug = isset($_REQUEST['slug']) ? sanitize_title(wp_unslash($_REQUEST['slug'])) : '';
+    if (!$id && $slug !== '') {
+        $found = get_page_by_path($slug, OBJECT, 'product');
+        $id    = $found ? (int) $found->ID : 0;
+    }
     $product = $id ? wc_get_product($id) : false;
     if (!$product || $product->get_status() !== 'publish' || !$product->is_visible()) {
         wp_send_json_error('no disponible', 404);
@@ -30,16 +35,16 @@ function dlp_fe_quickview() {
     $GLOBALS['dlp_fe_qv_rendering'] = true;
     ob_start();
     ?>
-    <div class="dlpqv-grid">
-        <div class="dlpqv-media"><?php echo $product->get_image('woocommerce_single'); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></div>
-        <div class="dlpqv-info">
-            <h2 class="dlpqv-title" id="dlpqv-title"><?php echo esc_html($product->get_name()); ?></h2>
-            <div class="dlpqv-price price"><?php echo $product->get_price_html(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></div>
-            <?php if ($product->get_short_description()) : ?>
-                <div class="dlpqv-desc"><?php echo wp_kses_post(wpautop($product->get_short_description())); ?></div>
-            <?php endif; ?>
-            <?php woocommerce_template_single_add_to_cart(); ?>
-        </div>
+    <div class="dlpqv-hero" data-price="<?php echo esc_attr(wc_get_price_to_display($product)); ?>">
+        <span class="dlpqv-tag"><?php echo $product->get_price_html(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></span>
+        <?php echo $product->get_image('woocommerce_single'); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+    </div>
+    <div class="dlpqv-info">
+        <h2 class="dlpqv-title" id="dlpqv-title"><?php echo esc_html($product->get_name()); ?></h2>
+        <?php if ($product->get_short_description()) : ?>
+            <div class="dlpqv-desc"><?php echo wp_kses_post(wpautop($product->get_short_description())); ?></div>
+        <?php endif; ?>
+        <?php woocommerce_template_single_add_to_cart(); ?>
     </div>
     <?php
     $html = ob_get_clean();
@@ -49,19 +54,22 @@ function dlp_fe_quickview() {
     wp_send_json_success([
         'html'  => $html,
         'title' => $product->get_name(),
+        'slug'  => $product->get_slug(),
+        'id'    => $product->get_id(),
         'url'   => get_permalink($id),
     ]);
 }
 add_action('wp_ajax_dlp_fe_quickview', 'dlp_fe_quickview');
 add_action('wp_ajax_nopriv_dlp_fe_quickview', 'dlp_fe_quickview');
 
-// Caja de comentarios dentro del formulario (solo cuando se dibuja en el modal).
+// Comentario dentro del formulario, DESPUÉS de los extras (los Add-Ons se dibujan en prioridad 10).
 add_action('woocommerce_before_add_to_cart_button', function () {
     if (empty($GLOBALS['dlp_fe_qv_rendering']) || !dlp_fe_qv_opt('comentarios')) {
         return;
     }
-    echo '<textarea name="dlp_nota" class="dlpqv-nota" rows="3" maxlength="300" placeholder="' . esc_attr(dlp_fe_qv_opt('texto_comentarios')) . '"></textarea>';
-}, 5);
+    echo '<div class="dlpqv-notebox"><label class="dlpqv-notelabel" for="dlp_nota">Comentarios <span>Opcional</span></label>'
+        . '<textarea name="dlp_nota" id="dlp_nota" class="dlpqv-nota" rows="2" maxlength="300" placeholder="' . esc_attr(dlp_fe_qv_opt('texto_comentarios')) . '"></textarea></div>';
+}, 20);
 
 // El texto del botón.
 add_filter('woocommerce_product_single_add_to_cart_text', function ($text) {
@@ -101,6 +109,15 @@ add_action('wp_enqueue_scripts', function () {
     }
     if (defined('WC_PRODUCT_ADDONS_PLUGIN_URL') && defined('WC_PRODUCT_ADDONS_VERSION')) {
         wp_enqueue_style('woocommerce-addons-css', WC_PRODUCT_ADDONS_PLUGIN_URL . '/assets/css/frontend/frontend.css', ['dashicons'], WC_PRODUCT_ADDONS_VERSION);
+    }
+    // Los Add-Ons usan tipTip (tooltips) y WooCommerce solo lo carga en la página del producto; sin él su
+    // inicialización falla en el listado y no calcula totales ni valida en el navegador.
+    if (function_exists('WC') && defined('WC_VERSION')) {
+        $deps = ['jquery'];
+        if (wp_script_is('wc-dompurify', 'registered')) {
+            $deps[] = 'wc-dompurify';
+        }
+        wp_enqueue_script('wc-jquery-tiptip', WC()->plugin_url() . '/assets/js/jquery-tiptip/jquery.tipTip.min.js', $deps, WC_VERSION, true);
     }
     wp_localize_script('dlp-fe-home-quickview', 'dlpQV', ['ajaxurl' => admin_url('admin-ajax.php')]);
 }, 30);
