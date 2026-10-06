@@ -97,3 +97,6 @@ body.dlpck-on .dlpck #place_order.dlp-disabled { opacity: .45; cursor: not-allow
 /* Tipografía uniforme (el tema fuerza otra en textos y placeholders) */
 body.dlpck-on .dlpck #dlp-delivery-box > p, body.dlpck-on .dlpck .dlp-msg, body.dlpck-on .dlpck .dlp-tip, body.dlpck-on .dlpck #dlp-delivery-box > h3, body.dlpck-on .dlpck #dlp-pickup-box > h3 { font-family: "Open Sans", system-ui, sans-serif !important; }
 body.dlpck-on .dlpck input::placeholder, body.dlpck-on .dlpck textarea::placeholder { font-family: "Open Sans", system-ui, sans-serif; color: #b0b0b8; opacity: 1; }
+
+/* «Pedido en Restaurante» ya no se usa (Pickup lo reemplaza) */
+body.dlpck-on #additional_enrestaurante_field { display: none !important; }

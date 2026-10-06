@@ -42,7 +42,7 @@
   var c3 = card('receipt', 'Factura y notas');
   fields(['billing_nitname_field', 'billing_nit_field'], c3.body);
   var extras = el('div', 'dlpck-extras');
-  mv('.woocommerce-account-fields', extras); mv('#additional_enrestaurante_field', extras); mv('#order_comments_field', extras);
+  mv('.woocommerce-account-fields', extras); mv('#order_comments_field', extras);
   c3.body.appendChild(extras);
 
   var c4 = card('bag', 'Tu pedido', 'dlpck-sum');
