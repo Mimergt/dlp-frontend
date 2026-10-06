@@ -58,3 +58,74 @@ body.dlp-prod--etiqueta ul.products li.product:hover a.woocommerce-LoopProduct-l
   body:not(.dlp-ta--oscuro) .dlpta-lg img { filter: none; }
   body .dlpta-lg { color: #fff; }
 }
+
+/* Checkout */
+.dlpck-back { background: var(--dlp-card); border-color: var(--dlp-line); color: var(--dlp-tx) !important; }
+.dlpck-head h1, .dlpck-card > h3, body.dlpck-on .dlpck label.checkbox, .dlpck #payment ul.payment_methods label, .dlpck-sum table.shop_table th, .dlpck-sum table.shop_table td, .dlpck-legal a { color: var(--dlp-tx) !important; }
+body.dlpck-on .woocommerce-info a { color: var(--dlp-tx) !important; }
+body.dlpck-on .woocommerce-form-login-toggle .woocommerce-info, body.dlpck-on .woocommerce-form-coupon-toggle .woocommerce-info { color: var(--dlp-mut) !important; }
+.dlpck-card { background: var(--dlp-card); border-color: var(--dlp-line); }
+.dlpck-card > h3 i { background: var(--dlp-btn); }
+.dlpck-card > h3 svg { stroke: var(--dlp-btn-tx); }
+body.dlpck-on .dlpck label:not(.checkbox):not(.wf_field_wrapper), .dlpck #dlp-delivery-box > h3, .dlpck #dlp-pickup-box > h3 { color: var(--dlp-mut); }
+body.dlpck-on .dlpck input.input-text, body.dlpck-on .dlpck textarea, body.dlpck-on .dlpck select { background: var(--dlp-field) !important; border-color: var(--dlp-line) !important; color: var(--dlp-tx); }
+body.dlpck-on .dlpck input.input-text:focus, body.dlpck-on .dlpck textarea:focus, body.dlpck-on .dlpck select:focus { border-color: var(--dlp-tx) !important; background: var(--dlp-field) !important; }
+body.dlpck-on .dlpck input::placeholder, body.dlpck-on .dlpck textarea::placeholder { color: #5d5d66; }
+body.dlpck-on .dlpck input[type=checkbox] { accent-color: var(--dlp-btn); }
+.dlpck .selec-del .woofood_order_type { background: var(--dlp-chip); }
+.dlpck .selec-del label.wf_field_wrapper { color: var(--dlp-mut); }
+.dlpck .selec-del label.wf_field_wrapper:has(input:checked) { background: var(--dlp-btn); color: var(--dlp-btn-tx); box-shadow: none; }
+.dlpck #dlp-delivery-box > p, .dlpck-sum table.shop_table .variation, .dlpck-sum table.shop_table dl, .dlpck #payment div.payment_box, .dlpck-legal { color: var(--dlp-mut) !important; }
+body.dlpck-on .dlpck .dlp-actions .button { background: transparent !important; border-color: var(--dlp-tx) !important; color: var(--dlp-tx) !important; }
+body.dlpck-on .dlpck .dlp-actions .button.alt { background: var(--dlp-btn) !important; border-color: var(--dlp-btn) !important; color: var(--dlp-btn-tx) !important; }
+.dlpck-sum table.shop_table th, .dlpck-sum table.shop_table td { border-bottom-color: var(--dlp-line); }
+.dlpck #payment ul.payment_methods > li { background: var(--dlp-field); border-color: var(--dlp-line); }
+.dlpck #payment ul.payment_methods > li:has(input:checked) { border-color: var(--dlp-tx); }
+body.dlpck-on .dlpck #place_order { background: var(--dlp-btn) !important; color: var(--dlp-btn-tx) !important; }
+body.dlpck-on .dlpck #payment .woocommerce-terms-and-conditions-wrapper { color: var(--dlp-mut); }
+@media (max-width: 1023px) { body.dlpck-on .dlpck #payment .place-order { background: color-mix(in srgb, var(--dlp-bg) 97%, transparent); border-top-color: var(--dlp-line); box-shadow: 0 -10px 24px -14px rgba(0,0,0,.8); } }
+
+/* Libreta de direcciones del checkout */
+.dlplib-title, .dlplib-addr { color: var(--dlp-mut); }
+.dlplib-main, .dlplib-chk { color: var(--dlp-tx); }
+.dlplib-store, .dlplib-hint { color: var(--dlp-mut); }
+.dlplib-card { background: var(--dlp-field); border-color: var(--dlp-line); }
+.dlplib-card:hover { border-color: var(--dlp-mut); }
+.dlplib-card.is-on { border-color: var(--dlp-tx); box-shadow: 0 0 0 1px var(--dlp-tx); }
+.dlplib-card.is-off { background: var(--dlp-surface); }
+.dlplib-msg, .dlpac-msg { background: rgba(232,67,74,.14); color: #ff8a90; }
+.dlplib-chip.ok, .dlpac-chip.ok { background: rgba(48,194,95,.16); color: var(--dlp-ok); }
+.dlplib-chip.no, .dlpac-chip.no { background: rgba(232,67,74,.16); color: #ff8a90; }
+body.dlpck-on .dlplib .dlplib-del, body.woocommerce-account .dlpac-del { background: var(--dlp-chip); color: var(--dlp-mut); }
+body.dlpck-on .dlplib .dlplib-del:hover, body.woocommerce-account .dlpac-del:hover { background: rgba(232,67,74,.18); color: #ff8a90; }
+.dlplib-save { border-color: var(--dlp-line); }
+
+/* Mi cuenta */
+.dlpac-hello { color: var(--dlp-tx); }
+.dlpac-mail, .dlpac-count, .dlpac-empty, .dlpac-s, .dlpac-hint { color: var(--dlp-mut); }
+.dlpac-tab { background: var(--dlp-card); border-color: var(--dlp-line); color: var(--dlp-mut) !important; }
+.dlpac-tab svg { stroke: var(--dlp-mut); }
+.dlpac-tab:hover { background: var(--dlp-chip); color: var(--dlp-tx) !important; }
+.dlpac-tab.is-on { background: var(--dlp-chip); color: var(--dlp-tx) !important; }
+.dlpac-tab.is-on svg, .dlpac-tab:hover svg { stroke: var(--dlp-tx); }
+.dlpac-logout { background: var(--dlp-card); border-color: var(--dlp-line); color: var(--dlp-tx) !important; }
+.dlpac-logout svg { stroke: var(--dlp-tx); }
+.dlpac-logout:hover { background: var(--dlp-chip); }
+body.woocommerce-account table.woocommerce-orders-table tr, body.woocommerce-account form.woocommerce-EditAccountForm, .dlpac-card, .dlpac-sheet { background: var(--dlp-card); border-color: var(--dlp-line); }
+body.woocommerce-account table.woocommerce-orders-table td, body.woocommerce-account table.woocommerce-orders-table th, .dlpac-a { color: var(--dlp-mut); }
+body.woocommerce-account table.woocommerce-orders-table .woocommerce-orders-table__cell-order-number a, body.woocommerce-account table.woocommerce-orders-table td.woocommerce-orders-table__cell-order-total, .dlpac-main, .dlpac-sheet h3 { color: var(--dlp-tx) !important; }
+body.woocommerce-account table.woocommerce-orders-table td.woocommerce-orders-table__cell-order-status { background: var(--dlp-chip); color: var(--dlp-tx); }
+body.woocommerce-account table.woocommerce-orders-table tr[class*="status-completed"] td.woocommerce-orders-table__cell-order-status { background: rgba(48,194,95,.16); color: var(--dlp-ok); }
+body.woocommerce-account table.woocommerce-orders-table tr[class*="status-cancelled"] td.woocommerce-orders-table__cell-order-status, body.woocommerce-account table.woocommerce-orders-table tr[class*="status-failed"] td.woocommerce-orders-table__cell-order-status { background: rgba(232,67,74,.16); color: #ff8a90; }
+body.woocommerce-account .woocommerce-button, body.woocommerce-account a.button.view, body.woocommerce-account .woocommerce-orders-table__cell-order-actions .button, body.woocommerce-account .woocommerce-info .button, body.woocommerce-account .woocommerce-message .button { background: transparent !important; border-color: var(--dlp-tx) !important; color: var(--dlp-tx) !important; }
+body.woocommerce-account form.woocommerce-EditAccountForm label, .dlpac-sheet label { color: var(--dlp-mut); }
+body.woocommerce-account form.woocommerce-EditAccountForm input.input-text, body.woocommerce-account form.woocommerce-EditAccountForm input[type=text], body.woocommerce-account form.woocommerce-EditAccountForm input[type=email], body.woocommerce-account form.woocommerce-EditAccountForm input[type=password], body.woocommerce-account form.woocommerce-EditAccountForm input[type=tel], .dlpac-sheet input { background: var(--dlp-field) !important; border-color: var(--dlp-line) !important; color: var(--dlp-tx) !important; }
+body.woocommerce-account form.woocommerce-EditAccountForm input:focus, .dlpac-sheet input:focus { border-color: var(--dlp-tx) !important; }
+body.woocommerce-account form.woocommerce-EditAccountForm fieldset { border-top-color: var(--dlp-line); }
+body.woocommerce-account form.woocommerce-EditAccountForm legend { color: var(--dlp-tx); }
+body.woocommerce-account form.woocommerce-EditAccountForm button.button, body.woocommerce-account .dlpac-add, body.woocommerce-account .dlpac-save { background: var(--dlp-btn) !important; color: var(--dlp-btn-tx) !important; }
+body.woocommerce-account .woocommerce-info, body.woocommerce-account .woocommerce-message { background: var(--dlp-chip); color: var(--dlp-tx); }
+.dlpac-modal { background: rgba(0,0,0,.65); }
+.dlpac-x { background: var(--dlp-chip); color: var(--dlp-tx); }
+.dlpac-map { background: var(--dlp-surface); }
+.dlpac-cov.ok { color: var(--dlp-ok); } .dlpac-cov.warn { color: #fbbf24; } .dlpac-cov.no { color: #ff8a90; }
