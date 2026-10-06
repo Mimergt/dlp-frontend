@@ -1,6 +1,6 @@
 # Memoria del proyecto DLP Frontend (Del Puente)
 
-Documento de retoma: léelo completo al empezar una sesión nueva. Última actualización: **2026-10-06**, plugin **v0.15.4** en dev (dlp-tiendas 0.10.1).
+Documento de retoma: léelo completo al empezar una sesión nueva. Última actualización: **2026-10-06**, plugin **v0.16.0** en dev (dlp-tiendas 0.10.1).
 
 ## 1. Qué es y dónde vive
 
@@ -34,7 +34,7 @@ Documento de retoma: léelo completo al empezar una sesión nueva. Última actua
 | `home-quickview` | Producto en modal tipo hoja inferior; enlaces directos `#producto-<slug\|id>`; total con extras; botón "Añadir" corto en celular. | home, shop, category |
 | `header-menu` | Hamburguesa también en escritorio. **Falta:** guardar el módulo Menu del header en Divi (Theme Builder, layout 158753). | all |
 | `menu-inferior` | Barra flotante en celular: Menú, Ubicaciones (`/restaurantes/`), Cuenta, Carrito (abre el carrito lateral con la clase `xoo-wsc-cart-trigger`, insignia con cantidad). Oculta el footer de Divi y el botón flotante del carrito en celular. No sale en checkout. | all |
-| `carrito-lateral` | Estilo del panel Xootix: esquinas redondeadas, botones píldora, "Ver carro" oculto. | all |
+| `carrito-lateral` | Estilo del panel Xootix: esquinas redondeadas, botones píldora, "Ver carro" oculto. `/carrito/` redirige a `/#carrito` y el script abre el carrito lateral. | all |
 | `splash-transicion` | Solo celular: splash con logo (palpita + barra) al abrir y entre páginas; se quita sola a los 4 s. | all |
 | `checkout-estilo` | Checkout en tarjetas con íconos (Entrega, Tus datos, Factura y notas, Tu pedido, Pago); botón "Realizar pedido · total" fijo en celular; dos columnas en escritorio; botón "Seguir pidiendo"; en Pickup oculta dirección y referencia. | checkout |
 | `checkout-campos-editor` | **Reemplaza** a Checkout Field Editor. Opción `dlp_fe_checkout_fields`; claves compatibles (`billing_nit`, `billing_nitname`, `billing_address_name`). Se edita en Apariencia → DLP Frontend → Campos del checkout. | siempre |
@@ -59,6 +59,7 @@ Panel de administración: Apariencia → DLP Frontend (estilo shadcn: `admin/pan
 - Libreta de direcciones propia, desde cero, **3 direcciones máximo**; el servidor sigue revalidando cobertura y horario (dlp-tiendas).
 - Datos viejos de libreta (Fr Address Book / WCMCA) **borrados en dev el 2026-10-06**; respaldo en el servidor: `~/dlp-backups/libreta-vieja-20261006-0342.sql.gz`.
 - Plugins desactivados en dev: Fr Address Book, Checkout Field Editor Pro, **Theme My Login** (2026-10-06; ingreso propio verificado por el usuario). Dev tiene `disable-emails` activo a propósito: los correos (recuperar contraseña, pedidos) no salen en dev.
+- `/registro/` redirige (301) al inicio. No hay "Pedir de nuevo" (hay productos que solo se venden ciertos días). NIT y nombre de factura se editan en Perfil (user meta `billing_nit`/`billing_nitname`, prellenan el checkout). `/restaurantes/` la edita el usuario en Divi.
 - Ingreso: concepto 2 elegido; **sin registro** (las cuentas se crean solas en el primer pedido); invitado va al menú.
 
 ## 5. Pendientes
@@ -83,6 +84,10 @@ Panel de administración: Apariencia → DLP Frontend (estilo shadcn: `admin/pan
 11. Limpiar el tema viejo `dlp` y `dlp-26-functions.php` (copias de respaldo, código muerto) y confirmar qué cambios pendientes del repo `dlp_funciones` se guardan.
 12. Seguridad: revisar `wp-file-manager` y `woocommerce-legacy-rest-api`.
 13. Migración a producción (no iniciada): respaldo, plan de plugins a apagar (Theme My Login, Fr Address Book, Checkout Field Editor), borrar datos viejos de libreta también allí, reglas de Cloudflare, prueba en celular.
+
+## 5b. Pruebas automatizadas de pedidos (2026-10-06, dev, tiendas abiertas)
+Arnés en `scripts/pruebas/` (README). 14 pedidos de prueba, todos **cancelados**. Cubierto y correcto: invitado (correo nuevo → cuenta automática; correo existente → pedido a esa cuenta sin sobrescribir sus datos), pickup (tienda + hora; rechazos), delivery (cobertura, punto, datos faltantes, mínimo Q60), libreta con sesión (máx. 3; la 4.ª no se guarda; dirección guardada; prellenado), extras obligatorios y comentarios, dispositivo (MWeb), tienda/NIT/notas en el pedido. Bug hallado y corregido: en Pickup el servidor exigía dirección y referencia (v0.15.5). Nota: en la configuración guardada del editor, `billing_address_2` y `billing_address_name` están como **obligatorios**. Un fallo aislado (página de error en un pedido) no se repitió en 4 intentos.
+Faltan: pedidos con extras de varios días de disponibilidad, cupones, tarjeta (no se toca), y todo lo que depende de correos (bloqueados en dev).
 
 ## 6. Cosas que muerden (aprendidas)
 
