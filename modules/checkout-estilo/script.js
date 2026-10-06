@@ -24,26 +24,41 @@
     return { root: s, body: s.lastChild };
   }
   function mv(sel, to) { var e = $(sel, form); if (e) to.appendChild(e); return e; }
-  function fields(ids, to) {
+  var grids = {};
+  function fields(ids, to, name) {
     var g = el('div', 'dlpck-fields');
     ids.forEach(function (id) { mv('#' + id, g); });
     to.appendChild(g);
+    grids[name] = g;
   }
 
   var wrap = el('div', 'dlpck'), main = el('div', 'dlpck-main'), side = el('div', 'dlpck-side');
 
   var c1 = card('pin', 'Entrega');
   mv('.selec-del', c1.body); mv('#dlp-delivery-box', c1.body); mv('#dlp-pickup-box', c1.body);
-  fields(['billing_address_2_field', 'billing_address_1_field', 'billing_address_name_field', 'billing_state_field', 'billing_city_field'], c1.body);
+  fields(['billing_address_2_field', 'billing_address_1_field', 'billing_address_name_field', 'billing_state_field', 'billing_city_field'], c1.body, 'entrega');
 
   var c2 = card('user', 'Tus datos');
-  fields(['billing_first_name_field', 'billing_last_name_field', 'billing_phone_field', 'billing_email_field'], c2.body);
+  fields(['billing_first_name_field', 'billing_last_name_field', 'billing_phone_field', 'billing_email_field'], c2.body, 'datos');
 
   var c3 = card('receipt', 'Factura y notas');
-  fields(['billing_nitname_field', 'billing_nit_field'], c3.body);
+  fields(['billing_nitname_field', 'billing_nit_field'], c3.body, 'factura');
   var extras = el('div', 'dlpck-extras');
   mv('.woocommerce-account-fields', extras); mv('#order_comments_field', extras);
   c3.body.appendChild(extras);
+
+  // Sección y orden vienen del editor de campos (data-dlp-card en el input, data-priority en el contenedor)
+  form.querySelectorAll('[data-dlp-card]').forEach(function (inp) {
+    var p = inp.closest('p.form-row'), g = grids[inp.getAttribute('data-dlp-card')];
+    if (p && g) g.appendChild(p);
+  });
+  // Campos nuevos que ningún grupo reclamó: a "Tus datos"
+  form.querySelectorAll('.woocommerce-billing-fields__field-wrapper > p.form-row').forEach(function (p) { if (grids.datos) grids.datos.appendChild(p); });
+  Object.keys(grids).forEach(function (k) {
+    Array.prototype.slice.call(grids[k].children)
+      .sort(function (a, b) { return (parseInt(a.getAttribute('data-priority'), 10) || 0) - (parseInt(b.getAttribute('data-priority'), 10) || 0); })
+      .forEach(function (n) { grids[k].appendChild(n); });
+  });
 
   var c4 = card('bag', 'Tu pedido', 'dlpck-sum');
   mv('#order_review', c4.body);

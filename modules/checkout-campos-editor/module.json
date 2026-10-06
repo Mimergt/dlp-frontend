@@ -1,0 +1,8 @@
+{
+  "label": "Checkout: editor de campos",
+  "description": "Reemplaza al plugin «Checkout Field Editor». Etiquetas, textos de ayuda, obligatoriedad, orden, ancho y sección de cada campo del formulario de pago, más campos nuevos. Se edita en Apariencia → DLP Frontend → Campos del checkout.",
+  "section": "general",
+  "boot": true,
+  "php": "module.php",
+  "default": true
+}

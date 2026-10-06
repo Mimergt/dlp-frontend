@@ -1,0 +1,88 @@
+/* Panel de DLP Frontend — estilo shadcn (zinc, bordes finos, interruptores). Todo bajo .dlpfe para no tocar el resto del admin. */
+.dlpfe { --b: #e4e4e7; --bg: #fafafa; --fg: #18181b; --mut: #71717a; --pri: #18181b; max-width: 1280px; margin: 20px 20px 0 2px; color: var(--fg); font-family: Inter, -apple-system, "Segoe UI", system-ui, sans-serif; font-size: 14px; }
+.dlpfe * { box-sizing: border-box; }
+.dlpfe-top { display: flex; align-items: baseline; gap: 10px; margin: 0 0 18px; }
+.dlpfe-top h1 { margin: 0; padding: 0; font-size: 22px; font-weight: 600; letter-spacing: -.01em; }
+.dlpfe-top small { color: var(--mut); font-size: 12px; }
+.dlpfe-layout { display: grid; grid-template-columns: 210px 1fr; gap: 24px; align-items: start; }
+.dlpfe-nav { display: flex; flex-direction: column; gap: 2px; padding: 10px; background: #fff; border: 1px solid var(--b); border-radius: 12px; }
+.dlpfe-nav a { display: block; padding: 8px 12px; border-radius: 8px; color: #52525b; font-weight: 500; text-decoration: none; }
+.dlpfe-nav a:hover { background: #f4f4f5; color: var(--fg); }
+.dlpfe-nav a.on { background: #f4f4f5; color: var(--fg); font-weight: 600; }
+.dlpfe-nav hr { border: 0; border-top: 1px solid var(--b); margin: 6px 4px; }
+.dlpfe-main { min-width: 0; }
+.dlpfe .notice { margin: 0 0 14px; border-radius: 10px; }
+
+/* Botones, tarjetas */
+.dlpfe-btn { appearance: none; display: inline-flex; align-items: center; gap: 6px; padding: 7px 14px; border: 1px solid var(--b); border-radius: 8px; background: #fff; color: var(--fg); font: 500 13px/1.2 inherit; cursor: pointer; }
+.dlpfe-btn:hover { background: #f4f4f5; }
+.dlpfe-primary { background: var(--pri); border-color: var(--pri); color: #fff; }
+.dlpfe-primary:hover { background: #27272a; }
+.dlpfe-danger { color: #b91c1c; border-color: #fecaca; }
+.dlpfe-card { background: #fff; border: 1px solid var(--b); border-radius: 12px; box-shadow: 0 1px 2px rgba(0,0,0,.04); }
+.dlpfe-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; margin: 0 0 16px; }
+.dlpfe-head h2 { margin: 0 0 4px; padding: 0; font-size: 18px; font-weight: 600; letter-spacing: -.01em; }
+.dlpfe-head p { margin: 0; color: var(--mut); max-width: 640px; }
+.dlpfe-hint { color: var(--mut); font-size: 12px; }
+.dlpfe-save { margin: 16px 0 0; display: flex; align-items: center; gap: 12px; }
+
+/* Tabla de campos */
+.dlpfe-cols { display: grid; grid-template-columns: minmax(0, 2fr) minmax(300px, 1fr); gap: 20px; align-items: start; }
+.dlpfe-tablecard { overflow: hidden; }
+.dlpfe-table { width: 100%; border-collapse: collapse; }
+.dlpfe-table th { padding: 10px 12px; background: #fafafa; border-bottom: 1px solid var(--b); color: var(--mut); font-size: 12px; font-weight: 500; text-align: left; }
+.dlpfe-table td { padding: 10px 12px; border-bottom: 1px solid #f4f4f5; vertical-align: middle; }
+.dlpfe-table tr:last-child td { border-bottom: 0; }
+.dlpfe-table tbody tr[draggable] { cursor: grab; }
+.dlpfe-table tbody tr:hover td { background: #fafafa; }
+.dlpfe-table tr.sel td { background: #f4f4f5; }
+.dlpfe-table tr.locked td { background: #fafafa; color: var(--mut); }
+.dlpfe-table .h { width: 28px; color: #d4d4d8; padding-right: 0; }
+.dlpfe-table .n { font-weight: 600; }
+.dlpfe-table .k { color: var(--mut); font: 11px ui-monospace, SFMono-Regular, Menlo, monospace; }
+.dlpfe-table .r { text-align: right; }
+.dlpfe-badge { display: inline-block; padding: 2px 8px; border: 1px solid var(--b); border-radius: 6px; font-size: 12px; color: #52525b; }
+
+/* Interruptor */
+.dlpfe-sw { position: relative; display: inline-block; width: 36px; height: 20px; padding: 0; border: 0; border-radius: 999px; background: #d4d4d8; cursor: pointer; transition: background .15s; vertical-align: middle; }
+.dlpfe-sw i { position: absolute; top: 2px; left: 2px; width: 16px; height: 16px; border-radius: 50%; background: #fff; box-shadow: 0 1px 2px rgba(0,0,0,.25); transition: transform .15s; }
+.dlpfe-sw.on { background: var(--pri); }
+.dlpfe-sw.on i { transform: translateX(16px); }
+
+/* Panel de edición */
+.dlpfe-edit { padding: 18px; position: sticky; top: 42px; }
+.dlpfe-edit h3 { margin: 0 0 14px; font-size: 15px; font-weight: 600; }
+.dlpfe-empty { color: var(--mut); padding: 8px 0; }
+.dlpfe-f { margin: 0 0 14px; }
+.dlpfe-f label { display: block; margin: 0 0 5px; font-size: 12px; font-weight: 600; }
+.dlpfe-f p { margin: 5px 0 0; color: var(--mut); font-size: 12px; }
+.dlpfe-f input[type=text], .dlpfe-f select, .dlpfe-f textarea { width: 100%; max-width: none; min-height: 36px; padding: 7px 10px; border: 1px solid var(--b); border-radius: 8px; background: #fff; box-shadow: none; font-size: 13px; }
+.dlpfe-f input:focus, .dlpfe-f select:focus, .dlpfe-f textarea:focus { border-color: var(--pri); outline: 0; box-shadow: 0 0 0 3px rgba(24,24,27,.08); }
+.dlpfe-seg { display: flex; padding: 3px; border: 1px solid var(--b); border-radius: 8px; background: #f4f4f5; gap: 2px; }
+.dlpfe-seg button { flex: 1; padding: 6px 4px; border: 0; border-radius: 6px; background: transparent; color: var(--mut); font: 500 12px/1.2 inherit; cursor: pointer; }
+.dlpfe-seg button.on { background: #fff; color: var(--fg); box-shadow: 0 1px 2px rgba(0,0,0,.12); }
+.dlpfe-line { display: flex; align-items: center; justify-content: space-between; margin: 0 0 12px; font-size: 13px; }
+.dlpfe-code { margin: 4px 0 0; color: var(--mut); font-size: 12px; }
+.dlpfe-actions { margin-top: 14px; }
+
+/* Módulos existentes (pestañas Home / General / Sistema) con el mismo estilo */
+.dlpfe .dlp-fe-mod { margin: 0 0 14px; background: #fff; border: 1px solid var(--b); border-radius: 12px; box-shadow: 0 1px 2px rgba(0,0,0,.04); overflow: hidden; }
+.dlpfe .dlp-fe-mod > header { display: flex; gap: 14px; align-items: flex-start; padding: 14px 18px; border-bottom: 1px solid var(--b); background: #fff; }
+.dlpfe .dlp-fe-mod > header h3 { margin: 0 0 3px; font-size: 15px; font-weight: 600; }
+.dlpfe .dlp-fe-mod > header code { background: #f4f4f5; border-radius: 4px; padding: 1px 6px; font-size: 11px; color: var(--mut); }
+.dlpfe .dlp-fe-mod .description { color: var(--mut); }
+.dlpfe .dlp-fe-body { padding: 4px 18px 10px; }
+.dlpfe .dlp-fe-row { display: grid; grid-template-columns: 220px 1fr; gap: 16px; align-items: start; padding: 12px 0; border-bottom: 1px solid #f4f4f5; }
+.dlpfe .dlp-fe-row:last-child { border-bottom: 0; }
+.dlpfe .dlp-fe-row > strong { font-size: 13px; font-weight: 600; padding-top: 6px; }
+.dlpfe .dlp-fe-body input[type=text], .dlpfe .dlp-fe-body input[type=url], .dlpfe .dlp-fe-body input[type=number], .dlpfe .dlp-fe-body select, .dlpfe .dlp-fe-body textarea { min-height: 36px; border: 1px solid var(--b); border-radius: 8px; box-shadow: none; }
+.dlpfe .dlp-fe-body input:focus, .dlpfe .dlp-fe-body select:focus, .dlpfe .dlp-fe-body textarea:focus { border-color: var(--pri); box-shadow: 0 0 0 3px rgba(24,24,27,.08); }
+/* "Activo" y las casillas Sí/No como interruptores */
+.dlpfe .dlp-fe-mod > header > label > input[type=checkbox], .dlpfe .dlp-fe-row label > input[type=checkbox] { appearance: none; -webkit-appearance: none; position: relative; width: 36px; height: 20px; margin: 0 8px 0 0; border: 0; border-radius: 999px; background: #d4d4d8; cursor: pointer; vertical-align: middle; transition: background .15s; }
+.dlpfe .dlp-fe-mod > header > label > input[type=checkbox]::before, .dlpfe .dlp-fe-row label > input[type=checkbox]::before { content: ""; position: absolute; top: 2px; left: 2px; width: 16px; height: 16px; margin: 0; border-radius: 50%; background: #fff; box-shadow: 0 1px 2px rgba(0,0,0,.25); transition: transform .15s; }
+.dlpfe .dlp-fe-mod > header > label > input[type=checkbox]:checked, .dlpfe .dlp-fe-row label > input[type=checkbox]:checked { background: var(--pri); }
+.dlpfe .dlp-fe-mod > header > label > input[type=checkbox]:checked::before, .dlpfe .dlp-fe-row label > input[type=checkbox]:checked::before { transform: translateX(16px); }
+.dlpfe .dlp-fe-mod > header > label { padding-top: 2px; font-weight: 600; white-space: nowrap; }
+.dlpfe p.submit .button-primary { background: var(--pri); border-color: var(--pri); border-radius: 8px; padding: 2px 16px; }
+
+@media (max-width: 960px) { .dlpfe-layout, .dlpfe-cols { grid-template-columns: 1fr; } .dlpfe .dlp-fe-row { grid-template-columns: 1fr; } .dlpfe-edit { position: static; } }

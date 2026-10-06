@@ -28,6 +28,7 @@ class DLP_FE_Admin {
         if ($hook !== self::HOOK) {
             return;
         }
+        wp_enqueue_style('dlpfe-panel', DLP_FE_URL . 'admin/panel.css', ['wp-color-picker'], filemtime(DLP_FE_DIR . 'admin/panel.css'));
         wp_enqueue_media();
         wp_enqueue_style('wp-color-picker');
         wp_enqueue_script('wp-color-picker');
@@ -37,6 +38,9 @@ class DLP_FE_Admin {
 
     private static function tab() {
         $tab = isset($_REQUEST['tab']) ? sanitize_key(wp_unslash($_REQUEST['tab'])) : 'home';
+        if ($tab === 'campos' && function_exists('dlp_fe_cf_render_admin')) {
+            return 'campos';
+        }
         return isset(DLP_FE_Registry::sections()[$tab]) ? $tab : 'home';
     }
 
@@ -123,28 +127,34 @@ class DLP_FE_Admin {
     public static function render() {
         $tab      = self::tab();
         $sections = DLP_FE_Registry::sections();
-        $mods     = array_filter(DLP_FE_Registry::all(), function ($m) use ($tab) {
+        $mods     = $tab === 'campos' ? [] : array_filter(DLP_FE_Registry::all(), function ($m) use ($tab) {
             return $m['section'] === $tab;
         });
         ?>
-        <div class="wrap">
-            <h1>DLP Frontend <small style="font-weight:400;font-size:13px">v<?php echo esc_html(DLP_FE_VERSION); ?></small></h1>
+        <div class="wrap dlpfe">
+            <div class="dlpfe-top"><h1>DLP Frontend</h1><small>v<?php echo esc_html(DLP_FE_VERSION); ?></small></div>
+            <div class="dlpfe-layout">
+            <nav class="dlpfe-nav">
+                <?php foreach ($sections as $slug => $label) : ?>
+                    <a class="<?php echo $slug === $tab ? 'on' : ''; ?>" href="<?php echo esc_url(admin_url('themes.php?page=dlp-frontend&tab=' . $slug)); ?>"><?php echo esc_html($label); ?></a>
+                <?php endforeach; ?>
+                <?php if (function_exists('dlp_fe_cf_render_admin')) : ?>
+                    <hr><a class="<?php echo $tab === 'campos' ? 'on' : ''; ?>" href="<?php echo esc_url(admin_url('themes.php?page=dlp-frontend&tab=campos')); ?>">Campos del checkout</a>
+                <?php endif; ?>
+            </nav>
+            <div class="dlpfe-main">
             <?php if (DLP_FE_Loader::legacy_theme_active()) : ?>
                 <div class="notice notice-warning"><p><strong>Modo espera:</strong> el tema <code>dlp</code> sigue activo y tiene su propia lógica PHP, así que los módulos de arranque están en pausa. Al activar DLP26 se cargan solos.</p></div>
             <?php endif; ?>
             <?php if (!empty($_GET['saved'])) : ?><div class="notice notice-success is-dismissible"><p>Guardado.</p></div><?php endif; ?>
 
-            <nav class="nav-tab-wrapper" style="margin-bottom:16px">
-                <?php foreach ($sections as $slug => $label) : ?>
-                    <a class="nav-tab <?php echo $slug === $tab ? 'nav-tab-active' : ''; ?>" href="<?php echo esc_url(admin_url('themes.php?page=dlp-frontend&tab=' . $slug)); ?>"><?php echo esc_html($label); ?></a>
-                <?php endforeach; ?>
-            </nav>
+
 
             <p class="description">Cada módulo es independiente: si uno falla, desactívalo y el resto del sitio sigue igual.
                 Dónde se carga: <code>all, home, shop, product, cart, checkout, account, category, page:slug, post_type:tipo</code> (separados por coma; vacío = valor por defecto del módulo).
                 Los ajustes de cada módulo quedan disponibles en CSS como <code>var(--dlp-modulo-clave)</code> y en JS como <code>window.dlpFE["modulo"]</code>.</p>
 
-            <?php if (!$mods) : ?>
+            <?php if ($tab === 'campos') : dlp_fe_cf_render_admin(); elseif (!$mods) : ?>
                 <p><em>Todavía no hay módulos en esta sección.</em></p>
             <?php else : ?>
             <form method="post" action="<?php echo esc_url(admin_url('admin-post.php')); ?>">
@@ -183,6 +193,8 @@ class DLP_FE_Admin {
                 <?php submit_button('Guardar ' . $sections[$tab]); ?>
             </form>
             <?php endif; ?>
+            </div>
+            </div>
         </div>
         <?php
     }
