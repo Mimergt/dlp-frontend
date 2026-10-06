@@ -59,7 +59,7 @@ body.dlp-cat--curva .cwp_et_pb_layout_slider_standard .navMenu_slide .swiper-sli
   body.dlp-cat--curva .cwp_et_pb_layout_slider_standard .navMenu_slide { --dlp-r: 14px; padding-top: 8px; border-radius: 14px 14px 0 0; }
   body.dlp-cat--curva .cwp_et_pb_layout_slider_standard .navMenu_slide .swiper-slide { width: 76px !important; justify-content: flex-end; padding: 6px 4px 9px !important; }
   body.dlp-cat--curva .cwp_et_pb_layout_slider_standard .navMenu_slide .swiper-slide img { height: 30px !important; max-width: 56px; transition: height .22s ease, transform .22s ease; }
-  body.dlp-cat--curva .cwp_et_pb_layout_slider_standard .navMenu_slide .swiper-slide span.navMenu_label { margin-top: 4px; font-size: 8.5px; letter-spacing: .03em; text-align: center; }
+  body.dlp-cat--curva .cwp_et_pb_layout_slider_standard .navMenu_slide .swiper-slide span.navMenu_label { margin-top: 4px; font-size: 8.5px; letter-spacing: .03em; text-align: center; min-height: 2.3em; display: block; }
   body.dlp-cat--curva .cwp_et_pb_layout_slider_standard .navMenu_slide .swiper-slide.swiper-slide-thumb-active { width: 108px !important; }
   body.dlp-cat--curva .cwp_et_pb_layout_slider_standard .navMenu_slide .swiper-slide-thumb-active img { height: 64px !important; max-width: 92px; transform: none; }
   body.dlp-cat--curva .cwp_et_pb_layout_slider_standard .navMenu_slide .swiper-slide-thumb-active span.navMenu_label { font-size: 10px; }
