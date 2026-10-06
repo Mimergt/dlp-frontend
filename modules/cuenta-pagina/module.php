@@ -169,3 +169,22 @@ add_action('wp_ajax_dlp_fe_lib_save', function () {
     update_user_meta($uid, DLP_FE_LIB_META, array_values($list));
     wp_send_json_success();
 });
+
+// Perfil: nombre para la factura y NIT (se usan para prellenar el checkout)
+add_action('woocommerce_edit_account_form', function () {
+    $uid = get_current_user_id();
+    echo '<fieldset><legend>Factura</legend>';
+    foreach (['billing_nitname' => 'Nombre para la factura', 'billing_nit' => 'NIT o C/F'] as $k => $l) {
+        echo '<p class="woocommerce-form-row woocommerce-form-row--wide form-row form-row-wide"><label for="' . esc_attr($k) . '">' . esc_html($l) . ' <span class="optional">(opcional)</span></label>'
+            . '<input type="text" class="woocommerce-Input input-text" name="' . esc_attr($k) . '" id="' . esc_attr($k) . '" value="' . esc_attr(get_user_meta($uid, $k, true)) . '" maxlength="80"></p>';
+    }
+    echo '</fieldset>';
+}, 20);
+
+add_action('woocommerce_save_account_details', function ($user_id) {
+    foreach (['billing_nitname', 'billing_nit'] as $k) {
+        if (isset($_POST[$k])) { // phpcs:ignore WordPress.Security.NonceVerification.Missing -- WooCommerce valida el nonce del formulario
+            update_user_meta($user_id, $k, mb_substr(sanitize_text_field(wp_unslash($_POST[$k])), 0, 80));
+        }
+    }
+}, 25);

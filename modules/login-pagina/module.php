@@ -114,3 +114,12 @@ add_action('login_form_login', function () {
     wp_safe_redirect($url);
     exit;
 });
+
+// /registro/ ya no existe como opción: las cuentas se crean solas al hacer el primer pedido
+add_action('template_redirect', function () {
+    $slug = trim((string) DLP_FE_Registry::setting('login-pagina', 'slug_registro'), '/');
+    if ($slug !== '' && function_exists('is_page') && is_page($slug)) {
+        wp_safe_redirect(home_url('/'), 301);
+        exit;
+    }
+}, 1);

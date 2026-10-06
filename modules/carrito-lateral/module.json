@@ -2,13 +2,48 @@
   "label": "Carrito lateral: estilo",
   "description": "Estiliza el panel del carrito lateral (Xootix): esquinas redondeadas, botones tipo píldora y opción de ocultar «Ver carro». Solo CSS; no toca la lógica del carrito.",
   "section": "general",
-  "where": ["all"],
+  "where": [
+    "all"
+  ],
   "default": true,
   "css": "style.css",
   "settings": [
-    { "key": "ver_carro", "label": "Botón «Ver carro»", "type": "select", "default": "ocultar", "body_class": "dlp-sc-vercarro", "css_var": false,
-      "options": { "ocultar": "Ocultar (solo Seguir comprando y Pagar)", "mostrar": "Mostrar" } },
-    { "key": "radio", "label": "Redondeo de las esquinas del panel", "type": "number", "default": 24, "unit": "px", "css_var": true },
-    { "key": "color_pagar", "label": "Color del botón Pagar", "type": "color", "default": "#111111", "css_var": true }
-  ]
+    {
+      "key": "ver_carro",
+      "label": "Botón «Ver carro»",
+      "type": "select",
+      "default": "ocultar",
+      "body_class": "dlp-sc-vercarro",
+      "css_var": false,
+      "options": {
+        "ocultar": "Ocultar (solo Seguir comprando y Pagar)",
+        "mostrar": "Mostrar"
+      }
+    },
+    {
+      "key": "radio",
+      "label": "Redondeo de las esquinas del panel",
+      "type": "number",
+      "default": 24,
+      "unit": "px",
+      "css_var": true
+    },
+    {
+      "key": "color_pagar",
+      "label": "Color del botón Pagar",
+      "type": "color",
+      "default": "#111111",
+      "css_var": true
+    },
+    {
+      "key": "carrito_a_lateral",
+      "label": "Página /carrito/ → inicio con el carrito lateral abierto",
+      "type": "checkbox",
+      "default": 1,
+      "css_var": false
+    }
+  ],
+  "boot": true,
+  "php": "module.php",
+  "js": "script.js"
 }
