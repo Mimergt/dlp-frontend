@@ -1,28 +1,100 @@
 {
   "label": "Tema: modo claro y oscuro",
   "description": "Define los colores del sitio (variables --dlp-*) en versión clara y oscura. En automático sigue al teléfono: si el iPhone está en modo oscuro, el sitio también. Los demás módulos usan estas variables; lo que aún no se migró se queda en claro. El cliente puede forzar claro u oscuro con window.dlpTema.set('claro'|'oscuro'|'auto').",
-  "section": "general",
+  "section": "tema",
   "boot": true,
   "php": "module.php",
-  "where": ["all"],
+  "where": [
+    "all"
+  ],
   "default": true,
   "css": "style.css",
   "js": "script.js",
   "settings": [
-    { "key": "modo", "label": "Modo por defecto", "type": "select", "default": "auto", "css_var": false,
-      "options": { "auto": "Automático (sigue al teléfono)", "claro": "Siempre claro", "oscuro": "Siempre oscuro" },
-      "help": "Si el cliente eligió un modo propio, ese manda." },
-    { "key": "oscuro_bg", "label": "Oscuro: fondo", "type": "color", "default": "#000000" },
-    { "key": "oscuro_surface", "label": "Oscuro: fondo secundario", "type": "color", "default": "#0d0d0f" },
-    { "key": "oscuro_card", "label": "Oscuro: tarjetas y hojas", "type": "color", "default": "#121214" },
-    { "key": "oscuro_tx", "label": "Oscuro: texto", "type": "color", "default": "#f4f4f5" },
-    { "key": "oscuro_mut", "label": "Oscuro: texto secundario", "type": "color", "default": "#8f8f98" },
-    { "key": "oscuro_line", "label": "Oscuro: bordes", "type": "color", "default": "#26262b" },
-    { "key": "oscuro_field", "label": "Oscuro: campos de formulario", "type": "color", "default": "#18181b" },
-    { "key": "oscuro_btn", "label": "Oscuro: botón principal", "type": "color", "default": "#ffffff" },
-    { "key": "oscuro_btn_tx", "label": "Oscuro: texto del botón principal", "type": "color", "default": "#111111" },
-    { "key": "oscuro_ac", "label": "Oscuro: rojo de marca", "type": "color", "default": "#e8434a" },
-    { "key": "oscuro_ok", "label": "Oscuro: verde de éxito", "type": "color", "default": "#30c25f" },
-    { "key": "oscuro_nav", "label": "Oscuro: barra inferior", "type": "color", "default": "#161619" }
+    {
+      "key": "modo",
+      "label": "Modo por defecto",
+      "type": "select",
+      "default": "auto",
+      "css_var": false,
+      "options": {
+        "auto": "Automático (sigue al teléfono)",
+        "claro": "Siempre claro",
+        "oscuro": "Siempre oscuro"
+      },
+      "help": "Automático sigue al teléfono: iPhone en modo oscuro = sitio oscuro. Para revisar un modo sin cambiar el teléfono, elige «Siempre oscuro» o «Siempre claro» y vuelve a «Automático» al terminar. En el navegador: dlpTema.set('oscuro') en la consola."
+    },
+    {
+      "key": "oscuro_bg",
+      "label": "Oscuro: fondo",
+      "type": "color",
+      "default": "#000000"
+    },
+    {
+      "key": "oscuro_surface",
+      "label": "Oscuro: fondo secundario",
+      "type": "color",
+      "default": "#0d0d0f"
+    },
+    {
+      "key": "oscuro_card",
+      "label": "Oscuro: tarjetas y hojas",
+      "type": "color",
+      "default": "#121214"
+    },
+    {
+      "key": "oscuro_tx",
+      "label": "Oscuro: texto",
+      "type": "color",
+      "default": "#f4f4f5"
+    },
+    {
+      "key": "oscuro_mut",
+      "label": "Oscuro: texto secundario",
+      "type": "color",
+      "default": "#8f8f98"
+    },
+    {
+      "key": "oscuro_line",
+      "label": "Oscuro: bordes",
+      "type": "color",
+      "default": "#26262b"
+    },
+    {
+      "key": "oscuro_field",
+      "label": "Oscuro: campos de formulario",
+      "type": "color",
+      "default": "#18181b"
+    },
+    {
+      "key": "oscuro_btn",
+      "label": "Oscuro: botón principal",
+      "type": "color",
+      "default": "#ffffff"
+    },
+    {
+      "key": "oscuro_btn_tx",
+      "label": "Oscuro: texto del botón principal",
+      "type": "color",
+      "default": "#111111"
+    },
+    {
+      "key": "oscuro_ac",
+      "label": "Oscuro: rojo de marca",
+      "type": "color",
+      "default": "#e8434a"
+    },
+    {
+      "key": "oscuro_ok",
+      "label": "Oscuro: verde de éxito",
+      "type": "color",
+      "default": "#30c25f"
+    },
+    {
+      "key": "oscuro_nav",
+      "label": "Oscuro: barra inferior",
+      "type": "color",
+      "default": "#161619"
+    }
   ]
 }

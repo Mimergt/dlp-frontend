@@ -17,6 +17,7 @@ class DLP_FE_Registry {
         return [
             'home'    => 'Home / Portada',
             'general' => 'General',
+            'tema'    => 'Tema oscuro',
             'sistema' => 'Sistema',
         ];
     }
