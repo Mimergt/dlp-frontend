@@ -1,0 +1,60 @@
+/* Reglas SOLO para el modo oscuro. El módulo les antepone la condición (teléfono en oscuro o modo forzado), así que aquí
+   se escriben sin ella. Sin comentarios dentro de reglas y solo un nivel de @media. */
+
+/* Base de Divi */
+body, body #page-container, body #et-main-area, body #main-content { background-color: var(--dlp-bg) !important; color: var(--dlp-tx); }
+body .et_pb_section.et_section_regular, body .et_pb_section.et_pb_fullwidth_section { background-color: var(--dlp-bg) !important; }
+body .et_pb_section :is(h1, h2, h3, h4, h5, h6, .et_pb_text_inner, .et_pb_text_inner p) { color: var(--dlp-tx); }
+body .et_pb_section :is(.et_pb_text_inner a:not(.et_pb_button)) { color: var(--dlp-ac); }
+body .et_pb_section hr, body .et_pb_divider:before { border-color: var(--dlp-line); }
+
+/* Pestañas de categorías (estilo curva) */
+body.dlp-cat--curva .cwp_et_pb_layout_slider_standard .navMenu_slide { background-color: var(--dlp-surface) !important; border-color: var(--dlp-line); box-shadow: inset 0 1px 0 var(--dlp-line), inset 0 -8px 12px -10px rgba(0,0,0,.5); }
+body.dlp-cat--curva .cwp_et_pb_layout_slider_standard .navMenu_slide .swiper-slide { background-color: var(--dlp-surface) !important; }
+body.dlp-cat--curva .cwp_et_pb_layout_slider_standard .navMenu_slide .swiper-slide.swiper-slide-thumb-active, body.dlp-cat--curva .cwp_et_pb_layout_slider_standard .navMenu_slide .swiper-slide:not(.swiper-slide-thumb-active):hover { background-color: var(--dlp-bg) !important; box-shadow: 0 -8px 16px -6px rgba(255,255,255,.06); }
+body.dlp-cat--curva .cwp_et_pb_layout_slider_standard .navMenu_slide .swiper-slide img { mix-blend-mode: normal; background: #fff; border-radius: 14px; padding: 3px; }
+body.dlp-cat--curva .cwp_et_pb_layout_slider_standard .navMenu_slide .swiper-slide span.navMenu_label { color: var(--dlp-mut) !important; text-shadow: none; }
+body.dlp-cat--curva .cwp_et_pb_layout_slider_standard .navMenu_slide .swiper-slide-thumb-active span.navMenu_label, body.dlp-cat--curva .cwp_et_pb_layout_slider_standard .navMenu_slide .swiper-slide:not(.swiper-slide-thumb-active):hover span.navMenu_label { color: var(--dlp-tx) !important; }
+body.dlp-cat--curva .cwp_et_pb_layout_slider_standard .navMenu_slide .swiper-slide-thumb-active::before { background: radial-gradient(circle at 0 0, transparent var(--dlp-r), var(--dlp-bg) calc(var(--dlp-r) + .5px)); }
+body.dlp-cat--curva .cwp_et_pb_layout_slider_standard .navMenu_slide .swiper-slide-thumb-active::after { background: radial-gradient(circle at 100% 0, transparent var(--dlp-r), var(--dlp-bg) calc(var(--dlp-r) + .5px)); }
+
+/* Barra fija de categorías */
+.dlp-subnav { background: color-mix(in srgb, var(--dlp-bg) 96%, transparent); border-bottom-color: var(--dlp-line); box-shadow: 0 8px 18px -10px rgba(0,0,0,.7); }
+.dlp-subnav__tab { background: var(--dlp-card); border-color: var(--dlp-line); }
+.dlp-subnav__tab img { mix-blend-mode: normal; background: #fff; border-radius: 8px; }
+.dlp-subnav__tab span { color: var(--dlp-mut); }
+.dlp-subnav__tab:hover { border-color: var(--dlp-mut); }
+.dlp-subnav__tab:hover span, .dlp-subnav__tab.is-active span { color: var(--dlp-tx); }
+.dlp-subnav__tab.is-active { border-color: var(--dlp-tx); box-shadow: 0 0 0 1px var(--dlp-tx); }
+
+/* Tarjetas de producto (etiqueta) */
+body.dlp-prod--etiqueta ul.products li.product { background: var(--dlp-card); border-color: var(--dlp-line); color: var(--dlp-tx); }
+body.dlp-prod--etiqueta ul.products li.product:hover { box-shadow: 0 12px 26px rgba(0,0,0,.6); }
+body.dlp-prod--etiqueta .et_pb_shop .woocommerce ul.products li.product .woocommerce-loop-product__title, body.dlp-prod--etiqueta ul.products li.product .woocommerce-loop-product__title { color: var(--dlp-tx) !important; }
+body.dlp-prod--etiqueta ul.products li.product .price { background: var(--dlp-btn); box-shadow: 0 6px 14px rgba(0,0,0,.6); }
+body.dlp-prod--etiqueta .et_pb_shop .woocommerce ul.products li.product .price, body.dlp-prod--etiqueta .et_pb_shop .woocommerce ul.products li.product .price .amount, body.dlp-prod--etiqueta .et_pb_shop .woocommerce ul.products li.product .price bdi, body.dlp-prod--etiqueta .et_pb_shop .woocommerce ul.products li.product .price .woocommerce-Price-currencySymbol, body.dlp-prod--etiqueta ul.products li.product .price .amount, body.dlp-prod--etiqueta ul.products li.product .price bdi, body.dlp-prod--etiqueta ul.products li.product .price .woocommerce-Price-currencySymbol { color: var(--dlp-btn-tx) !important; }
+body.dlp-prod--etiqueta ul.products li.product a.woocommerce-LoopProduct-link::after { background: var(--dlp-btn); color: var(--dlp-btn-tx); }
+body.dlp-prod--etiqueta ul.products li.product:hover a.woocommerce-LoopProduct-link::after { background: var(--dlp-ac); color: #fff; }
+
+/* Vista rápida del producto */
+.dlpqv { --q-tinta: var(--dlp-tx); --q-gris: var(--dlp-chip); --q-linea: var(--dlp-line); --q-acento: var(--dlp-ac); }
+.dlpqv-dialog { background: var(--dlp-card); }
+.dlpqv-grab { background: var(--dlp-line); }
+.dlpqv-close, .dlpqv-tag, .dlpqv-tag .amount, .dlpqv-tag bdi, .dlpqv-tag .woocommerce-Price-currencySymbol, .dlpqv .dlpqv-step { color: var(--dlp-bg); }
+.dlpqv-close:hover, .dlpqv .dlpqv-step:hover { color: #fff; }
+.dlpqv-hero img { mix-blend-mode: normal; background: #fff; border-radius: 14px; }
+.dlpqv-loading, .dlpqv-desc, .dlpqv h2.wc-pao-addon-name .wc-pao-addon-price, .dlpqv .wc-pao-addon-description, .dlpqv .wc-pao-addon-description p, .dlpqv .wc-pao-addon-wrap label .wc-pao-addon-price, .dlpqv .dlpqv-chip-t small, .dlpqv-notelabel span, .dlpqv .wc-pao-addon-container:not(.wc-pao-required-addon) h2.wc-pao-addon-name::after { color: var(--dlp-mut); }
+.dlpqv .wc-pao-addon .wc-pao-addon-wrap select.wc-pao-addon-field, .dlpqv .wc-pao-addon-wrap > div > label, .dlpqv .dlpqv-chip, .dlpqv .dlpqv-nota { background-color: var(--dlp-field); color: var(--dlp-tx); }
+.dlpqv input.wc-pao-addon-radio:checked + label, .dlpqv input.wc-pao-addon-checkbox:checked + label, .dlpqv .dlpqv-chip.on { background: var(--dlp-chip); }
+.dlpqv .wc-pao-addon-wrap > div > label:hover { border-color: var(--dlp-mut); }
+.dlpqv .wc-pao-addon-wrap .dlpqv-step { background: var(--dlp-chip); color: var(--dlp-tx); }
+.dlpqv .wc-pao-addon-wrap .dlpqv-step:hover { background: var(--dlp-tx); color: var(--dlp-bg); }
+.dlpqv-foot { background: var(--dlp-card); box-shadow: 0 -10px 20px -14px rgba(0,0,0,.8); }
+.dlpqv .dlpqv-foot button.single_add_to_cart_button { color: var(--dlp-bg); }
+
+/* Splash de carga (celular) */
+@media (max-width: 767px) {
+  body .dlpta { background: rgba(0,0,0,.97); }
+  body:not(.dlp-ta--oscuro) .dlpta-lg img { filter: none; }
+  body .dlpta-lg { color: #fff; }
+}
