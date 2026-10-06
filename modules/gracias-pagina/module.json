@@ -1,0 +1,34 @@
+{
+  "label": "Pedido recibido: página de gracias",
+  "description": "Rediseña la página que ve el cliente al terminar su pedido: fondo negro con una hamburguesa que se arma, hoja blanca con la barra de estados (Recibido, Preparando, En camino/Listo, Entregado) que se actualiza sola cada 20 segundos, total, forma de pago y botones. No incluye rastreo.",
+  "section": "general",
+  "boot": true,
+  "php": "module.php",
+  "where": ["checkout"],
+  "default": true,
+  "css": "style.css",
+  "js": "script.js",
+  "settings": [
+    {
+      "key": "url_seguir",
+      "label": "«Seguir pidiendo» lleva a",
+      "type": "text",
+      "default": "/",
+      "css_var": false
+    },
+    {
+      "key": "texto_seguir",
+      "label": "Texto del botón «Seguir pidiendo»",
+      "type": "text",
+      "default": "Seguir pidiendo",
+      "css_var": false
+    },
+    {
+      "key": "intervalo",
+      "label": "Revisar el estado cada (segundos)",
+      "type": "number",
+      "default": 20,
+      "css_var": false
+    }
+  ]
+}

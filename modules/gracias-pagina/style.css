@@ -1,0 +1,77 @@
+/* Pedido recibido: fondo negro arriba, hoja blanca abajo. Solo en la página de gracias. */
+body.dlpgr-page, body.dlpgr-page #page-container, body.dlpgr-page #et-main-area, body.dlpgr-page .et-l--post, body.dlpgr-page #main-content { background: #000 !important; }
+body.dlpgr-page .et_pb_title_container, body.dlpgr-page .et_pb_post_title, body.dlpgr-page h1.entry-title { display: none !important; }
+body.dlpgr-page .et_pb_section { background: #000 !important; padding-top: 12px !important; padding-bottom: 0 !important; }
+body.dlpgr-page .et_pb_row { padding-top: 0 !important; padding-bottom: 0 !important; }
+.dlpgr { --acento: #CF1E26; --tinta: #111; --linea: #e9e9ee; --mut: #8d8d96; --ok: #17803d; max-width: 440px; margin: 0 auto; padding-bottom: 72px; font-family: "Open Sans", system-ui, sans-serif; }
+.dlpgr-hero { padding: 6px 12px 20px; color: #fff; text-align: center; }
+.dlpgr-scene { width: 200px; height: 160px; margin: 0 auto; }
+.dlpgr-sc { width: 100%; height: 100%; }
+.dlpgr-t { margin: 8px 0 4px; padding: 0; color: #fff; font: 800 24px/1.2 "Open Sans", system-ui, sans-serif; }
+.dlpgr-s { margin: 0 10px; color: #b4b4bc; font-size: 13.5px; line-height: 1.5; }
+.dlpgr-s b { color: #fff; }
+.dlpgr-sheet { padding: 22px 16px 24px; border-radius: 26px; background: #fff; color: var(--tinta); }
+
+/* Barra de estados */
+.dlpgr-steps { position: relative; display: flex; justify-content: space-between; margin: 2px 2px 6px; }
+.dlpgr-steps::before { content: ""; position: absolute; left: 12%; right: 12%; top: 24px; height: 3px; background: var(--linea); }
+.dlpgr-fill { position: absolute; left: 12%; top: 24px; height: 3px; background: var(--ok); }
+.dlpgr-st { position: relative; z-index: 1; width: 25%; text-align: center; color: var(--mut); font: 700 10px/1.2 "Open Sans", system-ui, sans-serif; letter-spacing: .03em; text-transform: uppercase; }
+.dlpgr-ic { position: relative; display: grid; place-items: center; width: 50px; height: 50px; margin: 0 auto 7px; border-radius: 50%; background: #efeff2; }
+.dlpgr-ic svg { width: 26px; height: 26px; overflow: visible; fill: none; stroke: #a3a3ac; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.dlpgr-st.done { color: var(--tinta); }
+.dlpgr-st.done .dlpgr-ic { background: var(--ok); }
+.dlpgr-st.done .dlpgr-ic svg, .dlpgr-st.now .dlpgr-ic svg { stroke: #fff; }
+.dlpgr-st.now { color: var(--tinta); }
+.dlpgr-st.now .dlpgr-ic { background: var(--acento); animation: dlpgr-pulse 1.6s infinite; }
+@keyframes dlpgr-pulse { 0% { box-shadow: 0 0 0 0 rgba(207,30,38,.45); } 100% { box-shadow: 0 0 0 14px rgba(207,30,38,0); } }
+.dlpgr-st.done.first .dlpgr-ic { animation: dlpgr-pop .5s ease; }
+@keyframes dlpgr-pop { 50% { transform: scale(1.18); } }
+.dlpgr-st.now .steam { stroke-dasharray: 6; animation: dlpgr-steam 1.2s linear infinite; }
+@keyframes dlpgr-steam { to { stroke-dashoffset: -12; } }
+.dlpgr-st.now .moto { animation: dlpgr-ride .9s infinite alternate ease-in-out; }
+@keyframes dlpgr-ride { from { transform: translateX(-3px); } to { transform: translateX(3px); } }
+.dlpgr-st.now .wheel { transform-box: fill-box; transform-origin: center; animation: dlpgr-spin .5s linear infinite; }
+@keyframes dlpgr-spin { to { transform: rotate(360deg); } }
+.dlpgr-st.now .bag { animation: dlpgr-bob 1s infinite alternate ease-in-out; }
+@keyframes dlpgr-bob { from { transform: translateY(1.5px); } to { transform: translateY(-1.5px); } }
+.dlpgr-st.now .home { animation: dlpgr-pop 1s infinite; }
+
+/* Total y botones */
+.dlpgr-card { margin: 10px 0 0; padding: 12px 14px; border: 1px solid var(--linea); border-radius: 18px; }
+.dlpgr-row { display: flex; justify-content: space-between; gap: 10px; padding: 4px 0; font-size: 13px; }
+.dlpgr-row span { color: var(--mut); }
+.dlpgr-row b { color: var(--tinta); text-align: right; }
+.dlpgr .dlpgr-btn { display: flex; align-items: center; justify-content: center; box-sizing: border-box; width: 100%; height: 50px; margin: 10px 0 0; padding: 0; border: 1.5px solid #111; border-radius: 999px; background: #111; color: #fff !important; font: 800 13px/1 "Open Sans", system-ui, sans-serif; letter-spacing: .05em; text-transform: uppercase; text-decoration: none !important; cursor: pointer; }
+.dlpgr .dlpgr-btn.o { border-color: var(--linea); background: #fff; color: #111 !important; }
+.dlpgr .dlpgr-btn.r { border-color: var(--acento); background: var(--acento); }
+.dlpgr-extra:empty { display: none; }
+.dlpgr-extra { margin-top: 12px; font-size: 13px; }
+
+/* Hamburguesa que se arma (5 s en bucle) */
+.dlpgr .ly { transform-box: fill-box; transform-origin: 50% 100%; opacity: 0; animation-duration: 5s; animation-iteration-count: infinite; animation-timing-function: cubic-bezier(.3,.8,.4,1); }
+.dlpgr .ly.l0 { animation-name: dlpgr-ly0; } .dlpgr .ly.l1 { animation-name: dlpgr-ly1; } .dlpgr .ly.l2 { animation-name: dlpgr-ly2; }
+.dlpgr .ly.l3 { animation-name: dlpgr-ly3; } .dlpgr .ly.l4 { animation-name: dlpgr-ly4; } .dlpgr .ly.l5 { animation-name: dlpgr-ly5; }
+.dlpgr .bur { transform-box: fill-box; transform-origin: 50% 100%; animation: dlpgr-bpop 5s infinite; }
+@keyframes dlpgr-ly0 { 0%,4% { opacity: 0; transform: translateY(-70px); } 11% { opacity: 1; transform: translateY(3px); } 14% { opacity: 1; transform: none; } 86% { opacity: 1; transform: none; } 94%,100% { opacity: 0; transform: translateY(8px); } }
+@keyframes dlpgr-ly1 { 0%,13% { opacity: 0; transform: translateY(-70px); } 20% { opacity: 1; transform: translateY(3px); } 23% { opacity: 1; transform: none; } 86% { opacity: 1; transform: none; } 94%,100% { opacity: 0; transform: translateY(8px); } }
+@keyframes dlpgr-ly2 { 0%,22% { opacity: 0; transform: translateY(-70px); } 29% { opacity: 1; transform: translateY(3px); } 32% { opacity: 1; transform: none; } 86% { opacity: 1; transform: none; } 94%,100% { opacity: 0; transform: translateY(8px); } }
+@keyframes dlpgr-ly3 { 0%,31% { opacity: 0; transform: translateY(-70px); } 38% { opacity: 1; transform: translateY(3px); } 41% { opacity: 1; transform: none; } 86% { opacity: 1; transform: none; } 94%,100% { opacity: 0; transform: translateY(8px); } }
+@keyframes dlpgr-ly4 { 0%,40% { opacity: 0; transform: translateY(-70px); } 47% { opacity: 1; transform: translateY(3px); } 50% { opacity: 1; transform: none; } 86% { opacity: 1; transform: none; } 94%,100% { opacity: 0; transform: translateY(8px); } }
+@keyframes dlpgr-ly5 { 0%,50% { opacity: 0; transform: translateY(-70px); } 57% { opacity: 1; transform: translateY(3px); } 60% { opacity: 1; transform: none; } 86% { opacity: 1; transform: none; } 94%,100% { opacity: 0; transform: translateY(8px); } }
+@keyframes dlpgr-bpop { 0%,66% { transform: scale(1); } 72% { transform: scale(1.05); } 78%,100% { transform: scale(1); } }
+.dlpgr .sparkle { fill: #fff; opacity: 0; transform-box: fill-box; transform-origin: center; animation: dlpgr-tw 5s infinite; }
+.dlpgr .sparkle.b { animation-delay: .3s; }
+@keyframes dlpgr-tw { 0%,70% { opacity: 0; transform: scale(.3); } 76% { opacity: 1; transform: scale(1); } 86%,100% { opacity: 0; transform: scale(.3); } }
+@media (prefers-reduced-motion: reduce) {
+  .dlpgr .ly, .dlpgr .bur, .dlpgr .sparkle, .dlpgr-st .dlpgr-ic, .dlpgr-st * { animation: none !important; }
+  .dlpgr .ly { opacity: 1; }
+}
+
+/* Celular: la hoja blanca llega hasta abajo */
+@media (max-width: 767px) {
+  .dlpgr { max-width: none; width: 100vw; margin-left: calc(50% - 50vw); padding-bottom: 0; }
+  .dlpgr-sheet { padding-bottom: 60px; border-radius: 26px 26px 0 0; }
+  body.dlpgr-page .et_pb_row { width: 100% !important; max-width: none !important; }
+  body.dlpgr-page .et_pb_column { margin: 0 !important; }
+}

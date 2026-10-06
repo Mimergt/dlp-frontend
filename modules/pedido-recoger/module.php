@@ -24,7 +24,17 @@ function dlp_fe_recoger_render($order) {
     }
 }
 
+/** Solo el botón (para páginas con diseño propio, ej. gracias-pagina). */
+function dlp_fe_recoger_button($order) {
+    wp_enqueue_script('dlp-fe-pedido-recoger', DLP_FE_URL . 'modules/pedido-recoger/script.js', ['jquery'], filemtime(__DIR__ . '/script.js'), true);
+    wp_localize_script('dlp-fe-pedido-recoger', 'dlpRecoger', ['ajaxurl' => admin_url('admin-ajax.php')]);
+    return '<a href="#" class="button changeStatus rtp dlpgr-btn r" data-order-id="' . esc_attr($order->get_id()) . '" data-order-key="' . esc_attr($order->get_order_key()) . '">Ya estoy aquí por mi pedido</a>';
+}
+
 add_action('woocommerce_thankyou', function ($order_id) {
+    if (!apply_filters('dlp_fe_recoger_en_gracias', true)) {
+        return;
+    }
     dlp_fe_recoger_render(wc_get_order($order_id));
 }, 5);
 
