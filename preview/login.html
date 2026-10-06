@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Ingresar: conceptos</title>
+<style>
+:root{--acento:#CF1E26;--tinta:#111;--gris:#f6f6f8;--linea:#e9e9ee;--mut:#8d8d96}
+*{box-sizing:border-box}body{margin:0;padding:24px 16px 70px;background:#d9d9de;font-family:"Open Sans",system-ui,-apple-system,"Segoe UI",sans-serif;color:var(--tinta)}
+h1{font-size:20px;margin:0 0 4px}p.lead{margin:0 0 24px;color:#444;font-size:14px;max-width:820px}
+.wrap{display:flex;flex-wrap:wrap;gap:34px 28px;justify-content:center}.concept{width:375px}.concept.wide{width:900px}
+.concept h2{font-size:14px;margin:0 0 2px}.concept .desc{font-size:12.5px;color:#555;margin:0 0 10px;min-height:52px}.meta{font-size:12px;font-weight:700;color:#333;margin-top:8px}
+.phone{position:relative;width:375px;height:690px;background:#fff;border-radius:26px;overflow:hidden;box-shadow:0 14px 40px rgba(0,0,0,.28)}
+.desk{position:relative;width:900px;height:560px;background:#fff;border-radius:14px;overflow:hidden;box-shadow:0 14px 40px rgba(0,0,0,.28)}
+.top{height:54px;background:#000;color:#fff;display:flex;align-items:center;padding:0 16px;font-weight:800;letter-spacing:.04em;font-size:14px}
+.pad{padding:22px 20px}.t{font-size:22px;font-weight:800;margin:0 0 4px}.s{color:var(--mut);font-size:13px;margin:0 0 18px;line-height:1.4}
+.f{margin-bottom:12px}.f label{display:block;font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:#55555e;margin:0 0 4px 2px}.f div{height:46px;border:1px solid var(--linea);border-radius:12px;background:#fcfcfd;padding:0 14px;display:flex;align-items:center;justify-content:space-between;font-size:14px;color:#b0b0b8}
+.btn{display:flex;align-items:center;justify-content:center;height:50px;border-radius:999px;background:#111;color:#fff;font-weight:800;font-size:13px;letter-spacing:.05em;text-transform:uppercase;margin-top:6px;cursor:pointer}.btn.o{background:#fff;color:#111;border:1.5px solid #e9e9ee}
+.lnk{text-align:center;font-size:12.5px;color:var(--mut);margin-top:14px}.lnk b{color:#111;text-decoration:underline;text-underline-offset:3px;cursor:pointer}
+.row{display:flex;justify-content:space-between;align-items:center;font-size:12.5px;margin:2px 2px 8px}.chk{display:flex;align-items:center;gap:7px}.chk i{width:16px;height:16px;border:1.5px solid #c4c4cc;border-radius:5px}
+.seg{display:flex;background:var(--gris);border-radius:14px;padding:4px;gap:2px;margin:0 0 16px}.seg b{flex:1;text-align:center;padding:10px 6px;border-radius:11px;font-size:12px;text-transform:uppercase;letter-spacing:.04em;color:#777}.seg b.on{background:#fff;color:#111;box-shadow:0 2px 6px rgba(0,0,0,.12)}
+.hero{height:210px;background:linear-gradient(160deg,#1c1c1c,#000);display:grid;place-items:center;color:#fff;text-align:center;position:relative}.hero b{font-size:24px;letter-spacing:.08em;display:block}.hero small{opacity:.7;font-size:12px;letter-spacing:.2em}
+.sheet{position:absolute;left:0;right:0;top:170px;bottom:0;background:#fff;border-radius:26px 26px 0 0;padding:22px 20px}
+.or{display:flex;align-items:center;gap:10px;color:var(--mut);font-size:11px;text-transform:uppercase;letter-spacing:.06em;margin:16px 0}.or::before,.or::after{content:"";flex:1;height:1px;background:var(--linea)}
+.otp{display:flex;gap:8px;margin:6px 0 14px}.otp i{flex:1;height:54px;border:1.5px solid var(--linea);border-radius:12px;display:grid;place-items:center;font-style:normal;font-size:22px;font-weight:800}.otp i.on{border-color:#111}
+.ok{display:inline-block;background:#e7f6ec;color:#17803d;font-size:11.5px;font-weight:700;padding:5px 11px;border-radius:999px;margin:0 0 12px}
+.split{display:grid;grid-template-columns:1fr 1fr;height:100%}.img{background:linear-gradient(160deg,#222,#000);color:#fff;display:flex;flex-direction:column;justify-content:flex-end;padding:34px}.img b{font-size:30px;line-height:1.15}.img span{opacity:.7;font-size:13px;margin-top:8px}.frm{padding:44px 54px;display:flex;flex-direction:column;justify-content:center}
+.guest{margin-top:14px;padding:14px;border:1px dashed #d4d4d8;border-radius:14px;text-align:center;font-size:12.5px;color:#55555e}.guest b{display:block;color:#111;margin-bottom:2px}
+</style></head><body>
+<h1>Página de ingreso: 4 conceptos</h1>
+<p class="lead">Hoy el ingreso lo maneja el plugin <b>Theme My Login</b> sobre la página <code>/ingresar/</code> (y <code>/registro/</code>). Estos conceptos se pueden hacer con código propio dentro de dlp-frontend, usando el inicio de sesión de WordPress (sin dejar de funcionar el login de la app). Los datos son de ejemplo.</p>
+<div class="wrap">
+
+<div class="concept"><h2>1 · Clásico con pestañas</h2><p class="desc">Correo y contraseña, con pestañas Ingresar / Crear cuenta. Lo más parecido a lo de hoy, con el estilo nuevo.</p>
+<div class="phone"><div class="top">DEL PUENTE</div><div class="pad"><div class="t">Bienvenido</div><p class="s">Ingresa para ver tus pedidos y pedir más rápido.</p>
+<div class="seg"><b class="on">Ingresar</b><b>Crear cuenta</b></div>
+<div class="f"><label>Correo electrónico</label><div>micorreo@ejemplo.com</div></div>
+<div class="f"><label>Contraseña</label><div>••••••••<span style="font-size:12px;color:#111;font-weight:700">Ver</span></div></div>
+<div class="row"><span class="chk"><i></i>Recordarme</span><b style="text-decoration:underline;text-underline-offset:3px">¿Olvidaste tu contraseña?</b></div>
+<div class="btn">Ingresar</div>
+<div class="guest"><b>¿Solo quieres pedir?</b>Puedes hacerlo sin cuenta, como invitado.</div></div></div><div class="meta">Contraseña · lo más familiar</div></div>
+
+<div class="concept"><h2>2 · Pantalla tipo app</h2><p class="desc">Fondo oscuro con la marca arriba y una hoja blanca abajo. Campos grandes y un solo botón. Parecido a la pantalla de entrada de una app.</p>
+<div class="phone"><div class="hero"><div><b>DEL PUENTE</b><small>HAMBURGUESAS</small></div></div><div class="sheet"><div class="t">Hola de nuevo</div><p class="s">Ingresa con tu correo y contraseña.</p>
+<div class="f"><label>Correo electrónico</label><div>micorreo@ejemplo.com</div></div>
+<div class="f"><label>Contraseña</label><div>••••••••<span style="font-size:12px;color:#111;font-weight:700">Ver</span></div></div>
+<div class="row"><span></span><b style="text-decoration:underline;text-underline-offset:3px">¿Olvidaste tu contraseña?</b></div>
+<div class="btn">Ingresar</div><div class="or">o</div><div class="btn o">Continuar como invitado</div>
+<div class="lnk">¿No tienes cuenta? <b>Crear cuenta</b></div></div></div><div class="meta">Contraseña · el más «app»</div></div>
+
+<div class="concept"><h2>3 · Sin contraseña (código por correo)</h2><p class="desc">Solo el correo: enviamos un código de 6 dígitos y se entra sin recordar nada. Encaja con las cuentas que se crean solas en el primer pedido.</p>
+<div class="phone"><div class="top">DEL PUENTE</div><div class="pad"><div class="t">Ingresa con tu correo</div><p class="s">Te enviamos un código de 6 dígitos. Sin contraseñas.</p>
+<div class="f"><label>Correo electrónico</label><div>micorreo@ejemplo.com</div></div><div class="btn">Enviar código</div>
+<div style="height:34px"></div><span class="ok">✓ Enviamos un código a micorreo@ejemplo.com</span>
+<div class="f"><label>Código de 6 dígitos</label></div><div class="otp"><i>4</i><i>8</i><i>2</i><i class="on"></i><i></i><i></i></div>
+<div class="btn">Verificar y entrar</div><div class="lnk">¿No llegó? <b>Reenviar código</b> · <b>Usar contraseña</b></div></div></div><div class="meta">Sin contraseña · el más rápido, requiere correo confiable</div></div>
+
+<div class="concept wide"><h2>4 · Escritorio: imagen + formulario</h2><p class="desc">En computadora, mitad foto/marca y mitad formulario. Sirve con cualquiera de los tres de celular.</p>
+<div class="desk"><div class="split"><div class="img"><b>Tu pedido,<br>más rápido.</b><span>Ingresa para ver tus pedidos y guardar tus direcciones.</span></div>
+<div class="frm"><div class="t">Bienvenido</div><p class="s">Ingresa con tu correo y contraseña.</p>
+<div class="f"><label>Correo electrónico</label><div>micorreo@ejemplo.com</div></div><div class="f"><label>Contraseña</label><div>••••••••</div></div>
+<div class="row"><span class="chk"><i></i>Recordarme</span><b style="text-decoration:underline;text-underline-offset:3px">¿Olvidaste tu contraseña?</b></div>
+<div class="btn">Ingresar</div><div class="lnk">¿No tienes cuenta? <b>Crear cuenta</b> · <b>Continuar como invitado</b></div></div></div></div><div class="meta">≥ 1024 px</div></div>
+
+</div></body></html>
