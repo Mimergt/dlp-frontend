@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Grid de productos: opciones</title>
+<style>
+  :root { --acento: #CF1E26; --tinta: #111; --gris: #f6f6f8; }
+  * { box-sizing: border-box; }
+  body { margin: 0; padding: 24px 16px 60px; background: #fff; font-family: "Open Sans", system-ui, -apple-system, Segoe UI, Roboto, sans-serif; color: var(--tinta); }
+  h1 { font-size: 20px; margin: 0 0 4px; }
+  p.lead { margin: 0 0 26px; color: #555; font-size: 14px; max-width: 760px; }
+  .opt { max-width: 1100px; margin: 0 auto 44px; }
+  .opt h2 { font-size: 15px; margin: 0 0 2px; }
+  .opt .desc { font-size: 13px; color: #666; margin: 0 0 14px; }
+  .grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 22px; }
+  .grid.two { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+
+  /* Base común: tipografía consistente */
+  .card { position: relative; display: flex; flex-direction: column; cursor: pointer; }
+  .card img { display: block; width: 100%; height: auto; aspect-ratio: 1 / 1; object-fit: cover; }
+  .name { margin: 0; font-size: 14px; line-height: 1.3; font-weight: 700; letter-spacing: .02em; text-transform: uppercase; min-height: calc(1.3em * 2); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+  .price { font-size: 16px; font-weight: 700; line-height: 1; letter-spacing: .01em; font-variant-numeric: tabular-nums; }
+  .plus { flex: none; width: 34px; height: 34px; border-radius: 50%; background: var(--tinta); color: #fff; display: grid; place-items: center; font-size: 22px; line-height: 1; font-weight: 400; transition: background .2s, transform .2s; }
+  .card:hover .plus { background: var(--acento); transform: scale(1.08); }
+
+  /* 1 · Minimal alineado (el actual, con tipografía regularizada) */
+  .p1 .card { text-align: center; }
+  .p1 .card img { border-radius: 22px; transition: transform .25s; }
+  .p1 .card:hover img { transform: scale(1.03); }
+  .p1 .name { margin-top: 12px; }
+  .p1 .price { margin-top: auto; padding-top: 8px; color: var(--acento); }
+
+  /* 2 · Foto sobre fondo tinte, nombre a la izquierda y precio a la derecha */
+  .p2 .card { background: var(--gris); border-radius: 22px; padding: 12px 12px 14px; transition: box-shadow .2s, transform .2s; }
+  .p2 .card:hover { box-shadow: 0 10px 24px rgba(0,0,0,.10); transform: translateY(-3px); }
+  .p2 .card img { mix-blend-mode: multiply; border-radius: 14px; }
+  .p2 .foot { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; margin-top: 10px; }
+  .p2 .name { font-size: 13px; }
+  .p2 .price { flex: none; background: #fff; border-radius: 999px; padding: 7px 12px; box-shadow: 0 1px 3px rgba(0,0,0,.08); }
+
+  /* 3 · Tarjeta con botón + (invita a abrir el modal) */
+  .p3 .card { background: #fff; border: 1px solid #ececf0; border-radius: 20px; padding: 10px 10px 14px; transition: box-shadow .2s, transform .2s, border-color .2s; }
+  .p3 .card:hover { box-shadow: 0 12px 26px rgba(0,0,0,.10); transform: translateY(-3px); border-color: transparent; }
+  .p3 .card img { border-radius: 14px; }
+  .p3 .name { margin: 10px 4px 0; }
+  .p3 .foot { display: flex; align-items: center; justify-content: space-between; margin: auto 4px 0; padding-top: 10px; }
+
+  /* 4 · Precio como etiqueta sobre la foto */
+  .p4 .card { text-align: center; }
+  .p4 .imgwrap { position: relative; }
+  .p4 .card img { border-radius: 20px; transition: transform .25s; }
+  .p4 .card:hover img { transform: scale(1.03); }
+  .p4 .price { position: absolute; left: 10px; top: 10px; background: var(--acento); color: #fff; border-radius: 999px; padding: 8px 13px; box-shadow: 0 6px 14px rgba(207,30,38,.35); }
+  .p4 .name { margin-top: 12px; }
+
+  /* 5 · Lista compacta (ideal en celular: 2 columnas) */
+  .p5 .card { flex-direction: row; align-items: center; gap: 14px; padding: 10px 14px 10px 10px; border-radius: 20px; background: var(--gris); transition: background .2s, box-shadow .2s; }
+  .p5 .card:hover { background: #fff; box-shadow: 0 8px 20px rgba(0,0,0,.10); }
+  .p5 .card img { flex: none; width: 104px; border-radius: 14px; mix-blend-mode: multiply; }
+  .p5 .info { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 8px; }
+  .p5 .row { display: flex; align-items: center; justify-content: space-between; }
+  .p5 .price { color: var(--acento); }
+  .p5 .name { font-size: 13px; }
+
+  @media (max-width: 860px) { .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+</style>
+</head>
+<body>
+<h1>Grid de productos: 5 opciones</h1>
+<p class="lead">Todas arreglan la tipografía: el nombre ocupa siempre 2 líneas de alto (se corta con “…” si es más largo) y el precio queda alineado abajo, con el mismo tamaño y peso. Con tus productos reales. Pasa el mouse sobre las tarjetas para ver el hover.</p>
+<div id="root"></div>
+<script>
+var prods = [
+  ["Felices los 4", "Q210.00", "2024/10/1-DP-FELICES_LOS_4-1200x1200px.jpg"],
+  ["Trío de Clásicas", "Q155.00", "2024/12/2-DP-PROMO-TRIO_DE_CLASICAS-1200x1200px.jpg"],
+  ["Combo – Hamburguesa Swiss Mushroom 1/2 Lb", "Q68.00", "2024/11/7-DP-COMBO-SWISS_MUSHROOM-1200x1200px.jpg"],
+  ["Papas Fritas X 3", "Q25.00", "2024/10/7-DP-PROMO-3_PAPAS_FRITAS-1200x1200px.jpg"],
+  ["La Torito (promo)", "Q41.00", "2024/10/8-DP-HB-TORITO-1200x1200px.jpg"],
+  ["Combo – Hamburguesa Infantil", "Q42.00", "2020/07/8-DP-COMBO-HAMBURGUESA_KIDS-1200x1200px.jpg"],
+  ["Cheesy Poppers", "Q17.00", "2020/07/WEB-Cheese-Poppers-1200x1200px.jpg"],
+  ["Tender Box 24 Unidades", "Q163.00", "2025/03/3-DP-TENDER_BOX-24und-1200x1200px.jpg"]
+];
+function src(p) { return "https://i0.wp.com/dev.delpuente.com.gt/wp-content/uploads/" + p + "?resize=520%2C520&ssl=1"; }
+var opts = [
+  ["p1", "1 · Minimal alineado", "El que ya tienes, con la tipografía regularizada: foto grande con esquinas redondeadas, nombre centrado y precio en rojo alineado abajo.", function (p) {
+    return '<div class="card"><img src="' + src(p[2]) + '" alt=""><h3 class="name">' + p[0] + '</h3><div class="price">' + p[1] + '</div></div>'; }],
+  ["p2", "2 · Foto sobre fondo tinte", "Cada producto en una tarjeta gris muy suave (la foto se funde con el fondo). Nombre a la izquierda y precio en una pastilla blanca a la derecha.", function (p) {
+    return '<div class="card"><img src="' + src(p[2]) + '" alt=""><div class="foot"><h3 class="name">' + p[0] + '</h3><div class="price">' + p[1] + '</div></div></div>'; }],
+  ["p3", "3 · Tarjeta con botón +", "Tarjeta blanca con borde fino y sombra al pasar el mouse. El botón + invita a abrir el modal del producto.", function (p) {
+    return '<div class="card"><img src="' + src(p[2]) + '" alt=""><h3 class="name">' + p[0] + '</h3><div class="foot"><div class="price">' + p[1] + '</div><span class="plus">+</span></div></div>'; }],
+  ["p4", "4 · Precio como etiqueta sobre la foto", "Foto limpia sin caja; el precio es una etiqueta roja sobre la esquina de la foto y el nombre queda debajo, centrado.", function (p) {
+    return '<div class="card"><div class="imgwrap"><img src="' + src(p[2]) + '" alt=""><div class="price">' + p[1] + '</div></div><h3 class="name">' + p[0] + '</h3></div>'; }],
+  ["p5", "5 · Lista compacta (2 columnas)", "Foto pequeña a la izquierda, nombre y precio a la derecha. Muestra más productos de un vistazo; es la mejor para celular.", function (p) {
+    return '<div class="card"><img src="' + src(p[2]) + '" alt=""><div class="info"><h3 class="name">' + p[0] + '</h3><div class="row"><div class="price">' + p[1] + '</div><span class="plus">+</span></div></div></div>'; }]
+];
+var root = document.getElementById("root");
+opts.forEach(function (o) {
+  var wrap = document.createElement("div");
+  wrap.className = "opt " + o[0];
+  var list = o[0] === "p5" ? prods.slice(0, 6) : prods.slice(0, 8);
+  wrap.innerHTML = '<h2>' + o[1] + '</h2><p class="desc">' + o[2] + '</p><div class="grid' + (o[0] === "p5" ? " two" : "") + '">' + list.map(o[3]).join("") + '</div>';
+  root.appendChild(wrap);
+});
+</script>
+</body>
+</html>

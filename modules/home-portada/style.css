@@ -102,3 +102,34 @@ body.dlp-cat--curva .cwp_et_pb_layout_slider_standard .navMenu_slide .swiper-sli
 .dlp-prod--oscuro ul.products li.product .woocommerce-loop-product__title { color: #fff; }
 .dlp-prod--oscuro ul.products li.product .price,
 .dlp-prod--oscuro ul.products li.product .price .amount { color: var(--dlp-acento) !important; font-size: 18px !important; font-weight: 800; }
+
+/* Tarjeta con etiqueta de precio y botón +: tarjeta blanca con borde fino (opción 3), precio como etiqueta roja
+   sobre la foto (opción 4). El + (esquina inferior derecha) es visual: todo el producto abre el modal. */
+body.dlp-prod--etiqueta ul.products li.product { position: relative; background: #fff; border: 1px solid #ececf0; border-radius: 20px; padding: 10px 10px 14px !important; transition: box-shadow .2s, transform .2s, border-color .2s; }
+body.dlp-prod--etiqueta ul.products li.product:hover { box-shadow: 0 12px 26px rgba(0,0,0,.10); transform: translateY(-3px); border-color: transparent; }
+body.dlp-prod--etiqueta ul.products li.product a.woocommerce-LoopProduct-link { display: block; text-align: left; }
+body.dlp-prod--etiqueta ul.products li.product .et_shop_image { display: block; margin: 0; }
+body.dlp-prod--etiqueta ul.products li.product .et_shop_image img { display: block; width: 100%; height: auto; margin: 0; border-radius: 14px; transition: transform .25s; }
+body.dlp-prod--etiqueta ul.products li.product:hover .et_shop_image img { transform: scale(1.03); }
+body.dlp-prod--etiqueta ul.products li.product .et_overlay { display: none !important; }
+body.dlp-prod--etiqueta ul.products li.product .woocommerce-loop-product__title { margin: 12px 52px 0 4px !important; padding: 0 !important; font-size: 14px; line-height: 1.3; font-weight: 700; letter-spacing: .02em; text-transform: uppercase; text-align: left !important; min-height: calc(1.3em * 2); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+body.dlp-prod--etiqueta ul.products li.product .price { position: absolute; left: 20px; top: 20px; z-index: 2; margin: 0 !important; padding: 8px 13px !important; border-radius: 999px; background: var(--dlp-acento); color: #fff !important; font-size: 15px !important; font-weight: 700; line-height: 1; letter-spacing: .01em; font-variant-numeric: tabular-nums; box-shadow: 0 6px 14px rgba(207,30,38,.35); }
+body.dlp-prod--etiqueta ul.products li.product .price .amount, body.dlp-prod--etiqueta ul.products li.product .price bdi, body.dlp-prod--etiqueta ul.products li.product .price .woocommerce-Price-currencySymbol { color: #fff !important; font-size: inherit !important; }
+body.dlp-prod--etiqueta ul.products li.product .price del { opacity: .7; margin-right: 4px; }
+body.dlp-prod--etiqueta ul.products li.product a.woocommerce-LoopProduct-link::after { content: "+"; position: absolute; right: 16px; bottom: 16px; width: 34px; height: 34px; border-radius: 50%; background: #111; color: #fff; display: grid; place-items: center; font-size: 22px; line-height: 1; font-weight: 400; transition: background .2s, transform .2s; }
+body.dlp-prod--etiqueta ul.products li.product:hover a.woocommerce-LoopProduct-link::after { background: var(--dlp-acento); transform: scale(1.08); }
+@media (max-width: 767px) {
+  body.dlp-prod--etiqueta ul.products li.product { padding: 8px 8px 12px !important; border-radius: 16px; }
+  body.dlp-prod--etiqueta ul.products li.product .price { left: 14px; top: 14px; padding: 6px 10px !important; font-size: 13px !important; }
+  body.dlp-prod--etiqueta ul.products li.product .woocommerce-loop-product__title { font-size: 12px; margin-right: 42px !important; }
+  body.dlp-prod--etiqueta ul.products li.product a.woocommerce-LoopProduct-link::after { width: 30px; height: 30px; right: 12px; bottom: 13px; font-size: 20px; }
+}
+/* El módulo Shop de Divi fuerza (con !important) título en Open Sans 13px, precio en Abel delgado y texto centrado;
+   por eso estas reglas llevan el selector largo. Título y precio quedan en la misma tipografía. */
+body.dlp-prod--etiqueta .et_pb_shop .woocommerce ul.products li.product .woocommerce-loop-product__title { font-family: "Open Sans", Helvetica, Arial, sans-serif !important; font-size: 14px !important; font-weight: 700 !important; line-height: 1.3 !important; text-align: left !important; text-transform: uppercase !important; }
+body.dlp-prod--etiqueta .et_pb_shop .woocommerce ul.products li.product .price, body.dlp-prod--etiqueta .et_pb_shop .woocommerce ul.products li.product .price .amount, body.dlp-prod--etiqueta .et_pb_shop .woocommerce ul.products li.product .price bdi, body.dlp-prod--etiqueta .et_pb_shop .woocommerce ul.products li.product .price .woocommerce-Price-currencySymbol { font-family: "Open Sans", Helvetica, Arial, sans-serif !important; font-weight: 700 !important; font-size: 15px !important; color: #fff !important; text-transform: none !important; }
+@media (max-width: 767px) {
+  body.dlp-prod--etiqueta .et_pb_shop .woocommerce ul.products li.product .woocommerce-loop-product__title { font-size: 12px !important; }
+  body.dlp-prod--etiqueta .et_pb_shop .woocommerce ul.products li.product .price, body.dlp-prod--etiqueta .et_pb_shop .woocommerce ul.products li.product .price .amount, body.dlp-prod--etiqueta .et_pb_shop .woocommerce ul.products li.product .price bdi, body.dlp-prod--etiqueta .et_pb_shop .woocommerce ul.products li.product .price .woocommerce-Price-currencySymbol { font-size: 13px !important; }
+}
+

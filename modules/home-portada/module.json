@@ -35,7 +35,8 @@
         "clasico": "Clásico (actual)",
         "tarjeta": "Tarjeta: sombra y precio en cápsula",
         "minimal": "Minimal: foto grande, sin caja",
-        "oscuro": "Oscuro: caja negra, precio en color de acento"
+        "oscuro": "Oscuro: caja negra, precio en color de acento",
+        "etiqueta": "Tarjeta con etiqueta de precio y botón +"
       }
     },
     {
