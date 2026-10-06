@@ -76,7 +76,7 @@ Panel de administración: Apariencia → DLP Frontend (estilo shadcn: `admin/pan
 
 **Páginas/áreas sin rediseñar**
 7. Carrito `/carrito/` (con el carrito lateral casi no se usa: decidir si se estiliza o se redirige), página de gracias (hoy minimalista), detalle del pedido en Mi cuenta (`view-order`), recuperar/restablecer contraseña (formularios de WooCommerce), `/restaurantes/` (Ubicaciones, hecha en Divi), página de producto individual, tienda/categorías fuera del Home, 404, políticas.
-8. Correos de WooCommerce con la marca (plantillas `emails/*` del tema viejo se descartaron).
+8. ~~Correos de WooCommerce~~ → **traspasado a dlp-tiendas** (`PLAN.md` sección 4d), junto con la **disponibilidad de productos por día**. Aquí solo queda consumir el contrato `dlp_tiendas_product_available()` para mostrar "No disponible hoy" en tarjetas y modal cuando exista.
 9. Perfil: NIT y nombre de factura en Mi cuenta; "Pedir de nuevo" en Pedidos.
 
 **Técnico / limpieza**
