@@ -132,3 +132,7 @@ html.dlpqv-lock { overflow: hidden; }
 .dlpqv .dlpqv-grp + .wc-pao-addon-container { margin-top: 0; }
 .dlpqv .dlpqv-step:disabled { opacity: .35; cursor: not-allowed; }
 .dlpqv .dlpqv-foot button.single_add_to_cart_button.dlpqv-wait, .dlpqv .dlpqv-foot button.single_add_to_cart_button:disabled { opacity: .4; cursor: not-allowed; }
+.dlpqv .wc-pao-addon-container:has(input[data-dlpqv-group]) { margin-top: 8px; }
+.dlpqv .wc-pao-addon-container:has(input[data-dlpqv-group]) h2.wc-pao-addon-name { display: none; }
+.dlpqv .dlpqv-grp { position: sticky; top: 0; z-index: 4; margin: 18px -20px 8px; padding: 10px 56px 8px 20px; background: #fff; }
+.dlpqv .dlpqv-grp .dlpqv-grp-c { margin-left: auto; }

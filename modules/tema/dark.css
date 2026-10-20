@@ -133,3 +133,4 @@ body.woocommerce-account .woocommerce-info, body.woocommerce-account .woocommerc
 /* Grupo con total exacto (vista rápida) */
 .dlpqv .dlpqv-grp-c { background: var(--dlp-chip); color: var(--dlp-mut); }
 .dlpqv .dlpqv-grp.done .dlpqv-grp-c { background: var(--dlp-ac); color: #fff; }
+.dlpqv .dlpqv-grp { background: var(--dlp-card); }
