@@ -1,0 +1,9 @@
+{
+  "label": "Extras en grupo con total exacto (ej. elegir 3 bebidas)",
+  "description": "Valida en el servidor que los extras de cantidad marcados con [grupo:Título=N] en su descripción sumen exactamente N antes de agregar al carrito. La pantalla (contador, tope y botón) la maneja la vista rápida del home. Se configura en cada extra de tipo «Cantidad» del plugin de extras.",
+  "section": "home",
+  "boot": true,
+  "php": "module.php",
+  "where": ["all"],
+  "default": true
+}

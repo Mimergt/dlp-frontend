@@ -106,6 +106,31 @@
     $w.data({ min: min, max: max });
   }
 
+  // ---- Grupos con total exacto (ej. 3 bebidas a elegir entre varias) ---------------------------------------
+  function groupInputs($form, t) { return $form.find('input[data-dlpqv-group]').filter(function () { return $(this).attr('data-dlpqv-group') === t; }); }
+  function groupSum($ins) { var s = 0; $ins.each(function () { s += parseInt($(this).val(), 10) || 0; }); return s; }
+  function groupClamp($in) {
+    var $form = $in.closest('form.cart'), t = $in.attr('data-dlpqv-group'), n = parseInt($in.attr('data-dlpqv-n'), 10);
+    var others = groupSum(groupInputs($form, t).not($in));
+    var v = Math.max(0, Math.min(parseInt($in.val(), 10) || 0, n - others));
+    if (String(v) !== $in.val()) $in.val(v);
+  }
+  function groupSync($form) {
+    var wait = false;
+    $form.find('.dlpqv-grp').each(function () {
+      var t = $(this).attr('data-g'), $ins = groupInputs($form, t), n = parseInt($ins.first().attr('data-dlpqv-n'), 10), sum = groupSum($ins);
+      $(this).find('.dlpqv-grp-c').text(sum + ' de ' + n).closest('.dlpqv-grp').toggleClass('done', sum === n);
+      $ins.each(function () {
+        var $w = $(this).closest('.dlpqv-step-wrap');
+        $w.find('.dlpqv-step[data-step="1"]').prop('disabled', sum >= n);
+        $w.closest('.dlpqv-chip').toggleClass('on', (parseInt($(this).val(), 10) || 0) > 0);
+      });
+      if (sum !== n) wait = true;
+    });
+    var $b = $form.find('button.single_add_to_cart_button').first();
+    $b.prop('disabled', wait).toggleClass('dlpqv-wait', wait);
+  }
+
   function enhance() {
     $body.find('img').attr('loading', 'eager');
     var $form = $body.find('form.cart').first();
@@ -129,8 +154,19 @@
       var unit = parseFloat($(this).attr('data-price')) || 0;
       var main = $.trim($desc.text()) || 'Cantidad';
       var parts = [];
-      if (unit && !/c\/u/i.test(main)) parts.push('+' + money(unit) + ' c/u');
-      if (isFinite(r.max) && r.max != null && !/hasta/i.test(main)) parts.push('hasta ' + r.max);
+      // Grupo con total fijo: la descripción trae [grupo:Título=N]; la fila se llama como el extra
+      var gm = /\[grupo:([^=\]]+)=(\d+)\]/i.exec(main), group = null;
+      if (gm) {
+        group = { title: $.trim(gm[1]), n: parseInt(gm[2], 10) };
+        main = $.trim($c.find('h2.wc-pao-addon-name').first().clone().children().remove().end().text());
+        if (unit) parts.push('+' + money(unit));
+        r.max = group.n;
+        $(this).attr('data-dlpqv-group', group.title).attr('data-dlpqv-n', group.n);
+        $(this).closest('.dlpqv-step-wrap').data('max', group.n);
+      } else {
+        if (unit && !/c\/u/i.test(main)) parts.push('+' + money(unit) + ' c/u');
+        if (isFinite(r.max) && r.max != null && !/hasta/i.test(main)) parts.push('hasta ' + r.max);
+      }
       var text = main + (parts.length ? ' (' + parts.join(', ') + ')' : '');
       var $chip = $('<div class="dlpqv-chip"><div class="dlpqv-chip-t"></div></div>');
       $chip.find('.dlpqv-chip-t').text(text);
@@ -140,6 +176,16 @@
       $w.before($chip);
       $chip.append($w);
       $chip.toggleClass('on', parseFloat($(this).val()) > 0);
+    });
+
+    // Grupos con total exacto: cabecera con contador "0 de 3"
+    var seen = {};
+    $form.find('input[data-dlpqv-group]').each(function () {
+      var t = $(this).attr('data-dlpqv-group');
+      if (seen[t]) return;
+      seen[t] = 1;
+      $('<div class="dlpqv-grp" data-g=""><b></b><span class="dlpqv-grp-c"></span></div>').attr('data-g', t).find('b').text(t).end()
+        .insertBefore($(this).closest('.wc-pao-addon-container'));
     });
 
     // Pie fijo: cantidad + botón con el total
@@ -157,6 +203,8 @@
       new MutationObserver(updateTotal).observe($t[0], { childList: true, subtree: true, characterData: true });
     }
     $form.on('change input', 'input, select', function () { setTimeout(updateTotal, 120); });
+    $form.on('change input', 'input[data-dlpqv-group]', function () { groupClamp($(this)); groupSync($form); });
+    groupSync($form);
     setTimeout(updateTotal, 250);
     updateTotal();
   }
@@ -206,6 +254,10 @@
   $(document).on('click', '.dlpqv-step', function () {
     var $w = $(this).closest('.dlpqv-step-wrap'), $in = $w.find('input'), step = parseInt($(this).data('step'), 10);
     var min = $w.data('min'), max = $w.data('max');
+    if ($in.attr('data-dlpqv-group')) {
+      var $f = $in.closest('form.cart');
+      max = Math.min(max, parseInt($in.attr('data-dlpqv-n'), 10) - groupSum(groupInputs($f, $in.attr('data-dlpqv-group')).not($in)));
+    }
     var v = Math.min(max, Math.max(min, (parseFloat($in.val()) || 0) + step));
     $in.val(v).trigger('input').trigger('change');
     $w.closest('.dlpqv-chip').toggleClass('on', v > 0);
