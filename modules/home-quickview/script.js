@@ -120,6 +120,12 @@
     $form.find('.dlpqv-grp').each(function () {
       var t = $(this).attr('data-g'), $ins = groupInputs($form, t), n = parseInt($ins.first().attr('data-dlpqv-n'), 10), sum = groupSum($ins);
       $(this).find('.dlpqv-grp-c').text(sum + ' de ' + n).closest('.dlpqv-grp').toggleClass('done', sum === n);
+      var resumen = [];
+      $ins.each(function () {
+        var q = parseInt($(this).val(), 10) || 0;
+        if (q > 0) resumen.push(q + ' ' + $.trim($(this).closest('.wc-pao-addon-container').find('.dlpqv-chip-t').text()).replace(/\s*\(\+.*\)$/, ''));
+      });
+      $(this).find('.dlpqv-grp-s').text(resumen.length ? resumen.join(', ') : 'Toca para elegir');
       $ins.each(function () {
         var $w = $(this).closest('.dlpqv-step-wrap');
         $w.find('.dlpqv-step[data-step="1"]').prop('disabled', sum >= n);
@@ -184,8 +190,12 @@
       var t = $(this).attr('data-dlpqv-group');
       if (seen[t]) return;
       seen[t] = 1;
-      $('<div class="dlpqv-grp" data-g=""><b></b><span class="dlpqv-grp-c"></span></div>').attr('data-g', t).find('b').text(t).end()
-        .insertBefore($(this).closest('.wc-pao-addon-container'));
+      var $first = $(this).closest('.wc-pao-addon-container');
+      var $h = $('<div class="dlpqv-grp" role="button" tabindex="0" aria-expanded="false" data-g=""><div class="dlpqv-grp-r"><b></b><span class="dlpqv-grp-c"></span><i class="dlpqv-grp-a" aria-hidden="true"></i></div><div class="dlpqv-grp-s"></div></div>')
+        .attr('data-g', t).find('b').text(t).end().insertBefore($first);
+      // las filas del grupo van dentro de un contenedor plegable (cerrado al inicio)
+      var $box = $('<div class="dlpqv-grp-box" hidden></div>').insertAfter($h);
+      groupInputs($form, t).each(function () { $box.append($(this).closest('.wc-pao-addon-container')); });
     });
 
     // Pie fijo: cantidad + botón con el total
@@ -262,6 +272,15 @@
     $in.val(v).trigger('input').trigger('change');
     $w.closest('.dlpqv-chip').toggleClass('on', v > 0);
   });
+
+  // Acordeón de los grupos: cerrado al inicio; el clic o Enter abre/cierra la lista de opciones
+  function grpToggle($g) {
+    var open = $g.attr('aria-expanded') !== 'true';
+    $g.attr('aria-expanded', open ? 'true' : 'false').toggleClass('open', open);
+    $g.next('.dlpqv-grp-box').prop('hidden', !open);
+  }
+  $(document).on('click', '.dlpqv-grp', function () { grpToggle($(this)); });
+  $(document).on('keydown', '.dlpqv-grp', function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); grpToggle($(this)); } });
 
   // Al añadir al carrito, el carrito lateral se abre solo: se cierra el modal.
   $(document.body).on('added_to_cart', close);
