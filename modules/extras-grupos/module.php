@@ -32,7 +32,8 @@ add_filter('woocommerce_add_to_cart_validation', function ($ok, $product_id) {
         if (!isset($grupos[$k])) {
             $grupos[$k] = ['n' => $g['n'], 'suma' => 0];
         }
-        $v = isset($_POST[$a['field_name']]) ? (int) wp_unslash($_POST[$a['field_name']]) : 0; // phpcs:ignore WordPress.Security.NonceVerification
+        $campo = 'addon-' . $a['field_name'];
+        $v = isset($_POST[$campo]) ? (int) wp_unslash($_POST[$campo]) : 0; // phpcs:ignore WordPress.Security.NonceVerification
         $grupos[$k]['suma'] += max(0, $v);
     }
     foreach ($grupos as $titulo => $g) {
