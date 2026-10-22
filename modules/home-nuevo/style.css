@@ -179,3 +179,15 @@ body.dlph-page { overflow-x: clip; }
 .dlph-ct--menu .dlph-ct-ic { width: 64px; height: 64px; fill: none; stroke: #fff; stroke-width: 1.4; stroke-linecap: round; stroke-linejoin: round; }
 .dlph-ct--menu .dlph-ct-row { display: flex; align-items: flex-end; justify-content: space-between; gap: 10px; }
 @media (min-width: 768px) { .dlph-ct--menu .dlph-ct-row b { font-size: 26px; } }
+
+/* ───── Banner: slide simple con fundido (sin scroll interno) ───── */
+.dlph-fade { position: relative; display: grid; margin: 0 14px; overflow: hidden; border-radius: 22px; background: #000; }
+.dlph-fade .dlph-slide { grid-area: 1 / 1; display: block; flex: none; opacity: 0; visibility: hidden; transition: opacity .8s ease, visibility 0s linear .8s; }
+.dlph-fade .dlph-slide.on { opacity: 1; visibility: visible; transition: opacity .8s ease, visibility 0s; z-index: 1; }
+.dlph-fade .dlph-slide picture { display: block; width: 100%; max-width: none; }
+.dlph-fade .dlph-slide img { display: block; width: 100%; height: auto; max-width: none; }
+@media (min-width: 768px) {
+  .dlph--banner .dlph-fade { margin: 0; border-radius: 0; height: var(--dlp-home-nuevo-banner-alto, 600px); }
+  .dlph--banner .dlph-fade .dlph-slide, .dlph--banner .dlph-fade .dlph-slide picture { height: 100%; }
+  .dlph--banner .dlph-fade .dlph-slide img { height: 100%; object-fit: cover; object-position: center; }
+}

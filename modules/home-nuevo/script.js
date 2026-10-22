@@ -9,7 +9,35 @@
   var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   var mqMovil = window.matchMedia('(max-width: 767px)');
 
+  // Banner: slide simple con fundido (sin scroll): una imagen a la vez, puntos, flechas, avance solo y deslizar con el dedo
+  function fade(box) {
+    var slides = [].slice.call(box.querySelectorAll('.dlph-slide')), dots = [].slice.call(box.querySelectorAll('.dlph-dots i'));
+    var prev = box.querySelector('.dlph-prev'), next = box.querySelector('.dlph-next'), i = 0, timer = 0, paused = false;
+    var secs = parseFloat(cfg.autoplay) || 0;
+    function show(n) {
+      i = (n + slides.length) % slides.length;
+      slides.forEach(function (s, k) { s.classList.toggle('on', k === i); });
+      dots.forEach(function (d, k) { d.classList.toggle('on', k === i); });
+    }
+    function restart() { clearInterval(timer); if (secs > 0 && !reduce && slides.length > 1) timer = setInterval(function () { if (!paused && !document.hidden) show(i + 1); }, secs * 1000); }
+    if (prev) prev.addEventListener('click', function () { show(i - 1); restart(); });
+    if (next) next.addEventListener('click', function () { show(i + 1); restart(); });
+    dots.forEach(function (d, k) { d.addEventListener('click', function () { show(k); restart(); }); });
+    box.addEventListener('pointerenter', function () { paused = true; });
+    box.addEventListener('pointerleave', function () { paused = false; });
+    var x0 = null;
+    box.addEventListener('touchstart', function (e) { x0 = e.touches[0].clientX; paused = true; }, { passive: true });
+    box.addEventListener('touchend', function (e) {
+      var dx = e.changedTouches[0].clientX - x0; paused = false;
+      if (x0 !== null && Math.abs(dx) > 40) { show(i + (dx < 0 ? 1 : -1)); restart(); }
+      x0 = null;
+    }, { passive: true });
+    show(0);
+    restart();
+  }
+
   function slider(box) {
+    if (box.classList.contains('is-fade')) { fade(box); return; }
     var track = box.querySelector('.dlph-track');
     if (!track) return;
     var dots = [].slice.call(box.querySelectorAll('.dlph-dots i'));

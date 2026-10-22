@@ -88,14 +88,14 @@ function dlp_fe_hn_banner() {
         }
         $nb++;
         $mov = trim((string) dlp_fe_hn_o('banner' . $i . '_img_movil'));
-        $banners .= '<a class="dlph-slide' . ($mov !== '' ? ' has-m' : '') . '" href="' . esc_url(dlp_fe_hn_url(dlp_fe_hn_o('banner' . $i . '_url'))) . '"><picture>'
+        $banners .= '<a class="dlph-slide' . ($nb === 1 ? ' on' : '') . ($mov !== '' ? ' has-m' : '') . '" href="' . esc_url(dlp_fe_hn_url(dlp_fe_hn_o('banner' . $i . '_url'))) . '"><picture>'
             . ($mov !== '' ? '<source media="(max-width: 767px)" srcset="' . esc_url($mov) . '">' : '')
             . '<img class="dlph-bimg" src="' . esc_url($img) . '" alt="" ' . ($nb > 1 ? 'loading="lazy"' : 'fetchpriority="high"') . '></picture></a>';
     }
     if (!$nb) {
         return '';
     }
-    return dlp_fe_hn_envolver('<section class="dlph-bn">' . dlp_fe_hn_slider('<div class="dlph-track">' . $banners . '</div>', $nb, 'is-banner') . '</section>', 'dlph--banner');
+    return dlp_fe_hn_envolver('<section class="dlph-bn">' . dlp_fe_hn_slider('<div class="dlph-fade">' . $banners . '</div>', $nb, 'is-banner is-fade') . '</section>', 'dlph--banner');
 }
 
 function dlp_fe_hn_promos($a = []) {
