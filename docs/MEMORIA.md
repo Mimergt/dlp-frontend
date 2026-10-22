@@ -134,3 +134,10 @@ Faltan: pedidos con extras de varios días de disponibilidad, cupones, tarjeta (
 - (0.26.4) Banner sin barras: la pista toma el alto de la imagen visible (script `fit()` con transición de 0.35 s) y en escritorio el banner es un bloque centrado de hasta 1440 px (`Ancho máximo del banner`) sobre fondo blanco, sin barras negras laterales ni arriba/abajo. En celular: bloque con esquinas redondeadas, ancho completo menos 14 px por lado. Pendiente: «falta algo» en celular (opciones: sin márgenes laterales, arte propio más alto, botón/texto encima).
 - (0.26.5) Banner de escritorio de borde a borde (100vw, sin tope ni barras); se quitó el ajuste «Ancho máximo». Solo 2 banners activos (los de 1792×750, IDs 158964–158965); el de 2000×669 (158963) quedó en Medios sin usar. Con 1792×750 a 1920 px de pantalla el banner mide ~804 px de alto: para bajarlo hace falta arte más ancho y bajo (3:1 o 4:1).
 - (0.26.6) Banner escritorio: ancho completo y alto FIJO configurable («Altura del banner en escritorio», def. 600 px; la imagen se ajusta al ancho y se recorta arriba/abajo con object-fit cover centrado). Celular intacto (completo, 347×145, esquinas redondeadas). Para que el recorte no se note: arte de escritorio ≈3.2:1 (1920×600).
+- (0.26.7) Cuadro rojo «Ver menú completo» (solo escritorio) con el ícono de hamburguesa del menú inferior.
+
+## Plan próximo (acordado 22 oct 2026)
+- Salida a producción en ~2 semanas (aprobado el 21 oct).
+- Mañana: productos y extras (aplicar el grupo «elige 3 bebidas» a los demás combos con `scripts/extras-bebidas.php`, revisar extras tipo desplegable, etc.).
+- Pasado mañana: tiendas (si llega la información: coordenadas/puntos de las 16 tiendas, horarios).
+- Pendientes abiertos: celular del banner («falta algo»), tipografía Helvetica Neue (licencia/archivos), banners finales 3.2:1 (1920×600), fotos propias, Mi cuenta/detalle del pedido en oscuro con sesión real, emails y disponibilidad por día (dlp-tiendas).
