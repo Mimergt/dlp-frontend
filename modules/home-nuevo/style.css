@@ -174,3 +174,8 @@ body.dlph-page { overflow-x: clip; }
   .dlph--banner .dlph-slide picture { height: 100%; }
   .dlph--banner .dlph-slide img { height: 100%; object-fit: cover; object-position: center; }
 }
+
+/* Cuadro «menú completo»: ícono de hamburguesa (el mismo del menú inferior) */
+.dlph-ct--menu .dlph-ct-ic { width: 64px; height: 64px; fill: none; stroke: #fff; stroke-width: 1.4; stroke-linecap: round; stroke-linejoin: round; }
+.dlph-ct--menu .dlph-ct-row { display: flex; align-items: flex-end; justify-content: space-between; gap: 10px; }
+@media (min-width: 768px) { .dlph-ct--menu .dlph-ct-row b { font-size: 26px; } }

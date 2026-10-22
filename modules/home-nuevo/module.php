@@ -154,7 +154,7 @@ function dlp_fe_hn_categorias($a = []) {
     }
     // Escritorio: si la última fila de 4 queda incompleta, un solo cuadro de «menú completo» ocupa el hueco
     if ($n % 4 !== 0) {
-        $tiles .= '<a class="dlph-ct dlph-ct--menu" href="' . esc_url(dlp_fe_hn_url(dlp_fe_hn_o('url_menu'))) . '"><b class="dlph-h">' . esc_html(dlp_fe_hn_o('texto_menu')) . '</b><i aria-hidden="true">→</i></a>';
+        $tiles .= '<a class="dlph-ct dlph-ct--menu" href="' . esc_url(dlp_fe_hn_url(dlp_fe_hn_o('url_menu'))) . '"><svg class="dlph-ct-ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M4.5 10.5a7.5 5.5 0 0 1 15 0z"/><path d="M3.5 13.5h17"/><path d="M4.5 16.5h15a3 3 0 0 1-3 3h-9a3 3 0 0 1-3-3z"/></svg><span class="dlph-ct-row"><b class="dlph-h">' . esc_html(dlp_fe_hn_o('texto_menu')) . '</b><i aria-hidden="true">→</i></span></a>';
     }
     $rotulo = isset($a['rotulo']) ? $a['rotulo'] : dlp_fe_hn_o('rotulo_cats');
     $titulo = isset($a['titulo']) ? $a['titulo'] : dlp_fe_hn_o('titulo_cats');
