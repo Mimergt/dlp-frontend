@@ -191,3 +191,5 @@ body.dlph-page { overflow-x: clip; }
   .dlph--banner .dlph-fade .dlph-slide, .dlph--banner .dlph-fade .dlph-slide picture { height: 100%; }
   .dlph--banner .dlph-fade .dlph-slide img { height: 100%; object-fit: cover; object-position: center; }
 }
+
+@media (min-width: 768px) { .dlph--banner .dlph-fade { grid-template-rows: 100%; grid-template-columns: 100%; } }
