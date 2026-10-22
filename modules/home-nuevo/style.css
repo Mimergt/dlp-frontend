@@ -1,0 +1,89 @@
+/* Home nuevo. Siempre claro (el cliente no quiere versión oscura aquí): se restablecen las variables del Tema dentro de .dlph. */
+html body.dlph-page.dlph-page, html body.dlph-page.dlph-page #page-container, html body.dlph-page.dlph-page #et-main-area, html body.dlph-page.dlph-page #main-content { background-color: #fff !important; }
+html body.dlph-page.dlph-page .et_pb_section.et_section_regular, html body.dlph-page.dlph-page .et_pb_section.et_pb_fullwidth_section { background-color: #fff !important; padding-top: 0 !important; padding-bottom: 0 !important; }
+body.dlph-page .et_pb_row { padding-top: 0 !important; padding-bottom: 0 !important; width: 100% !important; max-width: none !important; }
+body.dlph-page .et_pb_column { margin: 0 !important; }
+body.dlph-page .et_pb_title_container, body.dlph-page .et_pb_post_title, body.dlph-page h1.entry-title { display: none !important; }
+
+.dlph { --dlp-bg: #fff; --dlp-surface: #f6f6f8; --dlp-card: #fff; --dlp-tx: #111; --dlp-mut: #8d8d96; --dlp-line: #ececf0; --dlp-field: #fcfcfd; --dlp-btn: #111; --dlp-btn-tx: #fff; --dlp-ac: #ED1C24; --dlp-chip: #efeff2;
+  --hn-t: "DLP Titulos", "Helvetica Neue Condensed", "HelveticaNeue-CondensedBold", "Arial Narrow", "Roboto Condensed", Impact, sans-serif;
+  --hn-b: "DLP Texto", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  color-scheme: light; box-sizing: border-box; width: 100vw; margin-left: calc(50% - 50vw); padding-bottom: 36px; background: #fff; color: #231F20; font-family: var(--hn-b); }
+.dlph *, .dlph *::before, .dlph *::after { box-sizing: border-box; }
+.dlph img { display: block; max-width: 100%; height: auto; }
+.dlph a { text-decoration: none; }
+.dlph-h { font-family: var(--hn-t) !important; font-weight: 700 !important; text-transform: uppercase; letter-spacing: -.02em; color: #000; }
+
+/* Slide base: pista con scroll horizontal y puntos/flechas abajo */
+.dlph-track { display: flex; gap: 12px; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
+.dlph-track::-webkit-scrollbar { display: none; }
+.dlph-ind { display: flex; align-items: center; justify-content: space-between; padding: 12px 18px 0; }
+.dlph-dots { display: flex; gap: 7px; }
+.dlph-dots i { display: block; width: 7px; height: 7px; border-radius: 4px; background: #d3d3d8; transition: width .2s, background .2s; }
+.dlph-dots i.on { width: 20px; background: #231F20; }
+.dlph-arr { display: flex; gap: 8px; }
+.dlph-arr button { width: 34px; height: 34px; padding: 0; border: 1.5px solid #231F20; border-radius: 50%; background: #fff; color: #231F20; font: 500 18px/1 var(--hn-b); cursor: pointer; display: grid; place-items: center; }
+.dlph-arr button.dlph-next { background: #231F20; color: #fff; }
+.dlph-arr button:disabled { opacity: .3; cursor: default; }
+
+/* Banner redondeado (sin flechas encima) */
+.dlph-bn { padding-top: 12px; }
+.dlph-bn .dlph-track { gap: 0; margin: 0 14px; border-radius: 22px; }
+.dlph-slide { flex: 0 0 100%; scroll-snap-align: center; display: block; }
+.dlph-slide img { width: 100%; }
+
+/* Secciones */
+.dlph-sec { padding: 30px 0 4px; }
+.dlph-eb { padding: 0 16px; color: #ED1C24; font: 700 11px/1 var(--hn-b); letter-spacing: .14em; text-transform: uppercase; }
+.dlph-sh { display: flex; align-items: flex-end; justify-content: space-between; gap: 10px; padding: 0 16px; margin: 4px 0 14px; }
+.dlph-h { margin: 0; padding: 0; font-size: 34px; line-height: .95; }
+h2.dlph-h { margin: 0; padding: 0; font-size: 34px; line-height: .95; }
+.dlph-pill { flex: none; padding: 9px 16px; border: 1.5px solid #000; border-radius: 99px; color: #000 !important; font: 700 12px/1 var(--hn-b); white-space: nowrap; }
+
+/* Promociones: tarjetas del menú (las pinta el CSS de home-portada) en slide */
+.dlph-cards { padding: 0 16px; gap: 0; }
+.dlph-cards ul.products { display: flex !important; gap: 12px; margin: 0 !important; padding: 0 !important; list-style: none; }
+.dlph-cards ul.products::before, .dlph-cards ul.products::after { display: none !important; }
+.dlph-cards ul.products li.product { flex: 0 0 226px; width: 226px !important; margin: 0 !important; float: none !important; scroll-snap-align: start; }
+.dlph-cards ul.products li.product .et_shop_image { display: block; }
+.dlph-cards ul.products li.product .et_shop_image img { aspect-ratio: 1; object-fit: cover; }
+.dlph-cards ul.products li.product .woocommerce-loop-product__title { color: #000 !important; }
+
+/* Categorías */
+.dlph-cats { padding: 0 16px; }
+.dlph-ct { position: relative; flex: 0 0 150px; height: 200px; border-radius: 20px; overflow: hidden; background: #111; scroll-snap-align: start; }
+.dlph-ct img { width: 100%; height: 100%; object-fit: cover; transition: transform .35s; }
+.dlph-ct::after { content: ""; position: absolute; inset: 0; background: linear-gradient(transparent 45%, rgba(0,0,0,.78)); }
+.dlph-ct b { position: absolute; left: 12px; right: 10px; bottom: 12px; z-index: 2; color: #fff !important; font-size: 21px; line-height: 1; }
+.dlph-ct:hover img { transform: scale(1.05); }
+
+/* Más pedidos: filas */
+.dlph-list { padding: 0 16px; }
+.dlph-li { display: flex; align-items: center; gap: 14px; padding: 12px 0; border-bottom: 1px solid #e3e3e6; color: inherit !important; cursor: pointer; }
+.dlph-li img { flex: none; width: 92px; height: 92px; object-fit: cover; border-radius: 10px; }
+.dlph-li-t { flex: 1; min-width: 0; display: block; }
+.dlph-li-t b { display: block; margin: 0; font-size: 22px; line-height: 1.05; }
+.dlph-li-t em { display: block; margin: 4px 0 0; color: #666; font: 400 12.5px/1.35 var(--hn-b); font-style: normal; }
+.dlph-li-t strong { display: block; margin-top: 4px; color: #231F20; font: 700 16px/1.2 var(--hn-b); }
+.dlph-li-t strong .amount, .dlph-li-t strong bdi { color: inherit; }
+.dlph-li u { flex: none; display: grid; place-items: center; width: 40px; height: 40px; border-radius: 50%; background: #ED1C24; color: #fff; font: 400 26px/1 var(--hn-b); text-decoration: none; }
+.dlph-full { display: flex; align-items: center; justify-content: center; gap: 10px; margin: 20px 16px 0; height: 54px; border-radius: 99px; background: #000; color: #fff !important; font: 700 14px/1 var(--hn-b); letter-spacing: .06em; text-transform: uppercase; }
+
+/* Escritorio */
+@media (min-width: 768px) {
+  .dlph { max-width: 1240px; width: auto; margin-left: auto; margin-right: auto; padding-left: 24px; padding-right: 24px; }
+  .dlph-bn { padding-top: 20px; }
+  .dlph-bn .dlph-track { margin: 0; border-radius: 26px; }
+  .dlph-eb, .dlph-sh, .dlph-cats, .dlph-list, .dlph-cards { padding-left: 0; padding-right: 0; }
+  .dlph-sec { padding-top: 48px; }
+  .dlph-h, h2.dlph-h { font-size: 48px; }
+  .dlph-ind { padding-left: 0; padding-right: 0; }
+  .dlph-cards ul.products { gap: 16px; }
+  .dlph-cards ul.products li.product { flex-basis: calc((100% - 48px) / 4); width: calc((100% - 48px) / 4) !important; }
+  .dlph-cats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; overflow: visible; }
+  .dlph-cats + .dlph-ind, .is-cats .dlph-ind { display: none; }
+  .dlph-ct { flex-basis: auto; height: 260px; }
+  .dlph-list { display: grid; grid-template-columns: 1fr 1fr; column-gap: 40px; }
+  .dlph-full { max-width: 380px; margin-left: auto; margin-right: auto; }
+}
+@media (prefers-reduced-motion: reduce) { .dlph-track { scroll-behavior: auto; } }
