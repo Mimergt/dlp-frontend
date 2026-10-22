@@ -146,3 +146,13 @@ h2.dlph-h { margin: 0; padding: 0; font-size: 34px; line-height: .95; }
 @media (min-width: 768px) {
   .dlph--banner .dlph-bn .dlph-track { background: #000; }
 }
+
+/* Banner sin barras: la pista toma el alto de la imagen que se ve (lo ajusta el script, con transición) y en escritorio
+   el banner es un bloque centrado de hasta el ancho máximo, sobre el fondo blanco de la página. */
+.dlph-bn .dlph-track { align-items: flex-start; background: transparent; transition: height .35s ease; }
+.dlph-slide { align-items: flex-start; background: transparent; }
+@media (min-width: 768px) {
+  .dlph.dlph--banner { width: 100%; max-width: var(--dlp-home-nuevo-banner-ancho-max, 1440px); margin-left: auto; margin-right: auto; padding: 0; }
+  .dlph--banner .dlph-ind { max-width: none; margin: 0; padding: 12px 0 0; }
+  .dlph-slide picture { max-width: none; }
+}

@@ -62,7 +62,20 @@
       }
     }
 
+    // Banner: el alto de la pista = alto de la imagen visible (sin franjas arriba y abajo)
+    function fit() {
+      if (!isBanner) return;
+      var w = Math.max(1, track.clientWidth), idx = Math.round(track.scrollLeft / w), el = parent.children[idx];
+      var im = el && el.querySelector('img');
+      if (im && im.offsetHeight) track.style.height = im.offsetHeight + 'px';
+    }
+    if (isBanner) {
+      [].forEach.call(track.querySelectorAll('img'), function (im) { im.addEventListener('load', fit); });
+      window.addEventListener('load', fit);
+    }
+
     function update() {
+      fit();
       if (!dots.length) return;
       var n = Math.max(1, orig.length), i = 0;
       if (looping && step) { i = Math.round((track.scrollLeft - S) / step); i = ((i % n) + n) % n; }
