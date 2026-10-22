@@ -87,7 +87,10 @@ function dlp_fe_hn_banner() {
             continue;
         }
         $nb++;
-        $banners .= '<a class="dlph-slide" href="' . esc_url(dlp_fe_hn_url(dlp_fe_hn_o('banner' . $i . '_url'))) . '"><img src="' . esc_url($img) . '" alt="" ' . ($nb > 1 ? 'loading="lazy"' : 'fetchpriority="high"') . '></a>';
+        $mov = trim((string) dlp_fe_hn_o('banner' . $i . '_img_movil'));
+        $banners .= '<a class="dlph-slide' . ($mov !== '' ? ' has-m' : '') . '" href="' . esc_url(dlp_fe_hn_url(dlp_fe_hn_o('banner' . $i . '_url'))) . '"><picture>'
+            . ($mov !== '' ? '<source media="(max-width: 767px)" srcset="' . esc_url($mov) . '">' : '')
+            . '<img src="' . esc_url($img) . '" alt="" ' . ($nb > 1 ? 'loading="lazy"' : 'fetchpriority="high"') . '></picture></a>';
     }
     if (!$nb) {
         return '';

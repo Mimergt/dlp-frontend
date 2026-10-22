@@ -168,8 +168,27 @@ class DLP_FE_Admin {
                                 <span class="description"><?php echo esc_html($m['description']); ?></span>
                             </div>
                         </header>
-                        <div class="dlp-fe-body">
-                            <div class="dlp-fe-row">
+                        <?php
+                        $grupos = [];
+                        foreach ($m['schema'] as $f0) {
+                            if ($f0['group'] !== '' && !in_array($f0['group'], $grupos, true)) {
+                                $grupos[] = $f0['group'];
+                            }
+                        }
+                        $conGrupos = !empty($grupos);
+                        if ($conGrupos) {
+                            $grupos[] = 'Avanzado';
+                        }
+                        ?>
+                        <div class="dlp-fe-body<?php echo $conGrupos ? ' has-groups' : ''; ?>">
+                            <?php if ($conGrupos) : ?>
+                                <div class="dlpfe-gtabs" role="tablist">
+                                    <?php foreach ($grupos as $gi => $g) : ?>
+                                        <button type="button" role="tab" class="dlpfe-gtab<?php echo $gi === 0 ? ' on' : ''; ?>" data-g="<?php echo esc_attr($g); ?>"><?php echo esc_html($g); ?></button>
+                                    <?php endforeach; ?>
+                                </div>
+                            <?php endif; ?>
+                            <div class="dlp-fe-row"<?php echo $conGrupos ? ' data-g="Avanzado" hidden' : ''; ?>>
                                 <strong>Dónde se carga</strong>
                                 <div>
                                 <?php if ($m['boot'] && !$m['css'] && !$m['js']) : ?>
@@ -180,7 +199,7 @@ class DLP_FE_Admin {
                                 </div>
                             </div>
                             <?php foreach ($m['schema'] as $key => $f) : ?>
-                                <div class="dlp-fe-row">
+                                <div class="dlp-fe-row"<?php echo $conGrupos ? ' data-g="' . esc_attr($f['group'] !== '' ? $f['group'] : 'Avanzado') . '"' . ($f['group'] === $grupos[0] ? '' : ' hidden') : ''; ?>>
                                     <strong><?php echo esc_html($f['label']); ?></strong>
                                     <div><?php self::field($id, $f, $m['values'][$key]); ?></div>
                                 </div>
@@ -190,6 +209,22 @@ class DLP_FE_Admin {
                 <?php endforeach; ?>
                 <?php submit_button('Guardar ' . $sections[$tab]); ?>
             </form>
+            <script>
+            (function () {
+              document.querySelectorAll('.dlpfe .dlp-fe-body.has-groups').forEach(function (body) {
+                var mod = body.closest('.dlp-fe-mod'), key = 'dlpfe-g-' + ((mod.querySelector('header code') || {}).textContent || '');
+                function show(g) {
+                  body.querySelectorAll('.dlpfe-gtab').forEach(function (t) { t.classList.toggle('on', t.getAttribute('data-g') === g); });
+                  body.querySelectorAll('.dlp-fe-row').forEach(function (r) { r.hidden = r.getAttribute('data-g') !== g; });
+                  try { sessionStorage.setItem(key, g); } catch (e) {}
+                }
+                body.addEventListener('click', function (e) { var t = e.target.closest('.dlpfe-gtab'); if (t) show(t.getAttribute('data-g')); });
+                var saved = null; try { saved = sessionStorage.getItem(key); } catch (e) {}
+                var first = body.querySelector('.dlpfe-gtab');
+                show(saved && body.querySelector('.dlpfe-gtab[data-g="' + saved.replace(/"/g, '') + '"]') ? saved : (first ? first.getAttribute('data-g') : ''));
+              });
+            })();
+            </script>
             <?php endif; ?>
             <?php if ($tab !== 'campos') : ?>
             <details class="dlpfe-help"><summary>Ayuda sobre los módulos</summary><p>            Cada módulo es independiente: si uno falla, desactívalo y el resto del sitio sigue igual.

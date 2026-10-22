@@ -91,3 +91,10 @@
 .dlpfe-help summary { cursor: pointer; font-weight: 600; color: #52525b; }
 .dlpfe-help p { margin: 10px 0 0; line-height: 1.6; }
 .dlpfe-help code { background: #f4f4f5; border-radius: 4px; padding: 1px 5px; }
+
+/* Pestañas por grupo dentro de un módulo */
+.dlpfe .dlpfe-gtabs { display: flex; flex-wrap: wrap; gap: 6px; margin: 4px 0 6px; padding: 10px 0 12px; border-bottom: 1px solid var(--b); }
+.dlpfe .dlpfe-gtab { padding: 7px 14px; border: 1px solid var(--b); border-radius: 999px; background: #fff; color: #52525b; font: 600 12.5px/1 inherit; cursor: pointer; }
+.dlpfe .dlpfe-gtab:hover { background: #f4f4f5; }
+.dlpfe .dlpfe-gtab.on { border-color: var(--pri); background: var(--pri); color: #fff; }
+.dlpfe .dlp-fe-row[hidden] { display: none; }

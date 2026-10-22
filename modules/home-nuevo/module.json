@@ -17,56 +17,100 @@
       "label": "Banner 1: imagen",
       "type": "image",
       "default": "",
-      "css_var": false
+      "css_var": false,
+      "group": "Banner"
+    },
+    {
+      "key": "banner1_img_movil",
+      "label": "Banner 1: imagen para celular (opcional)",
+      "type": "image",
+      "default": "",
+      "css_var": false,
+      "group": "Banner",
+      "help": "Más alta que la de escritorio (por ejemplo 1080×1080 o 1080×1350). Si falta, en celular se recorta la de escritorio."
     },
     {
       "key": "banner1_url",
       "label": "Banner 1: enlace",
       "type": "text",
       "default": "/menu/",
-      "css_var": false
+      "css_var": false,
+      "group": "Banner"
     },
     {
       "key": "banner2_img",
       "label": "Banner 2: imagen",
       "type": "image",
       "default": "",
-      "css_var": false
+      "css_var": false,
+      "group": "Banner"
+    },
+    {
+      "key": "banner2_img_movil",
+      "label": "Banner 2: imagen para celular (opcional)",
+      "type": "image",
+      "default": "",
+      "css_var": false,
+      "group": "Banner",
+      "help": "Más alta que la de escritorio (por ejemplo 1080×1080 o 1080×1350). Si falta, en celular se recorta la de escritorio."
     },
     {
       "key": "banner2_url",
       "label": "Banner 2: enlace",
       "type": "text",
       "default": "/menu/",
-      "css_var": false
+      "css_var": false,
+      "group": "Banner"
     },
     {
       "key": "banner3_img",
       "label": "Banner 3: imagen",
       "type": "image",
       "default": "",
-      "css_var": false
+      "css_var": false,
+      "group": "Banner"
+    },
+    {
+      "key": "banner3_img_movil",
+      "label": "Banner 3: imagen para celular (opcional)",
+      "type": "image",
+      "default": "",
+      "css_var": false,
+      "group": "Banner",
+      "help": "Más alta que la de escritorio (por ejemplo 1080×1080 o 1080×1350). Si falta, en celular se recorta la de escritorio."
     },
     {
       "key": "banner3_url",
       "label": "Banner 3: enlace",
       "type": "text",
       "default": "/menu/",
-      "css_var": false
+      "css_var": false,
+      "group": "Banner"
     },
     {
       "key": "banner4_img",
       "label": "Banner 4: imagen (opcional)",
       "type": "image",
       "default": "",
-      "css_var": false
+      "css_var": false,
+      "group": "Banner"
+    },
+    {
+      "key": "banner4_img_movil",
+      "label": "Banner 4: imagen para celular (opcional)",
+      "type": "image",
+      "default": "",
+      "css_var": false,
+      "group": "Banner",
+      "help": "Más alta que la de escritorio (por ejemplo 1080×1080 o 1080×1350). Si falta, en celular se recorta la de escritorio."
     },
     {
       "key": "banner4_url",
       "label": "Banner 4: enlace",
       "type": "text",
       "default": "/menu/",
-      "css_var": false
+      "css_var": false,
+      "group": "Banner"
     },
     {
       "key": "autoplay",
@@ -74,7 +118,8 @@
       "type": "number",
       "default": 4,
       "css_var": false,
-      "js": true
+      "js": true,
+      "group": "Banner"
     },
     {
       "key": "autoplay_promos",
@@ -82,7 +127,8 @@
       "type": "number",
       "default": 6,
       "css_var": false,
-      "js": true
+      "js": true,
+      "group": "Promociones"
     },
     {
       "key": "autoplay_cats",
@@ -90,56 +136,64 @@
       "type": "number",
       "default": 8,
       "css_var": false,
-      "js": true
+      "js": true,
+      "group": "Categorías"
     },
     {
       "key": "rotulo_promos",
       "label": "Promociones: rótulo",
       "type": "text",
       "default": "Promociones",
-      "css_var": false
+      "css_var": false,
+      "group": "Promociones"
     },
     {
       "key": "titulo_promos",
       "label": "Promociones: título",
       "type": "text",
       "default": "Hoy se come en grande",
-      "css_var": false
+      "css_var": false,
+      "group": "Promociones"
     },
     {
       "key": "promos_cat",
       "label": "Promociones: categoría de WooCommerce (slug)",
       "type": "text",
       "default": "promos",
-      "css_var": false
+      "css_var": false,
+      "group": "Promociones"
     },
     {
       "key": "promos_max",
       "label": "Promociones: máximo de productos",
       "type": "number",
       "default": 8,
-      "css_var": false
+      "css_var": false,
+      "group": "Promociones"
     },
     {
       "key": "texto_ver_todas",
       "label": "Texto del botón «Ver todas»",
       "type": "text",
       "default": "Ver todas",
-      "css_var": false
+      "css_var": false,
+      "group": "Promociones"
     },
     {
       "key": "rotulo_cats",
       "label": "Categorías: rótulo",
       "type": "text",
       "default": "Categorías",
-      "css_var": false
+      "css_var": false,
+      "group": "Categorías"
     },
     {
       "key": "titulo_cats",
       "label": "Categorías: título",
       "type": "text",
       "default": "Elige el nivel de tu hambre",
-      "css_var": false
+      "css_var": false,
+      "group": "Categorías"
     },
     {
       "key": "categorias",
@@ -147,21 +201,24 @@
       "type": "textarea",
       "css_var": false,
       "default": "promos | Promos\ncombos | Combos de res\nopciones-pollo | Combos de pollo\nhamburguesas | Hamburguesas individuales\npara-compartir | Para compartir\nsides | Sides\nbebidas | Bebidas\ndo-it-yourself | Para hacer en casa",
-      "help": "Formato: slug-de-la-categoría | Título que se muestra | URL de la foto (opcional; si falta se usa la imagen de la categoría)."
+      "help": "Formato: slug-de-la-categoría | Título que se muestra | URL de la foto (opcional; si falta se usa la imagen de la categoría).",
+      "group": "Categorías"
     },
     {
       "key": "rotulo_top",
       "label": "Más pedidos: rótulo",
       "type": "text",
       "default": "Los favoritos",
-      "css_var": false
+      "css_var": false,
+      "group": "Más pedidos"
     },
     {
       "key": "titulo_top",
       "label": "Más pedidos: título",
       "type": "text",
       "default": "Los más pedidos",
-      "css_var": false
+      "css_var": false,
+      "group": "Más pedidos"
     },
     {
       "key": "top",
@@ -169,21 +226,24 @@
       "type": "text",
       "default": "2055, 2049, 2053, 2057",
       "css_var": false,
-      "help": "Se muestran en ese orden. El ID está en la lista de productos al pasar el mouse."
+      "help": "Se muestran en ese orden. El ID está en la lista de productos al pasar el mouse.",
+      "group": "Más pedidos"
     },
     {
       "key": "texto_menu",
       "label": "Texto del cuadro «menú completo» (escritorio)",
       "type": "text",
       "default": "Ver menú completo",
-      "css_var": false
+      "css_var": false,
+      "group": "Categorías"
     },
     {
       "key": "url_menu",
       "label": "Enlace del menú completo",
       "type": "text",
       "default": "/menu/",
-      "css_var": false
+      "css_var": false,
+      "group": "Enlaces y tipografía"
     },
     {
       "key": "fuente_titulos",
@@ -191,7 +251,8 @@
       "type": "text",
       "default": "",
       "css_var": false,
-      "help": "Helvetica Neue Condensed Bold. Súbela a Medios y pega la URL. Vacío = la del sistema o una condensada parecida."
+      "help": "Helvetica Neue Condensed Bold. Súbela a Medios y pega la URL. Vacío = la del sistema o una condensada parecida.",
+      "group": "Enlaces y tipografía"
     },
     {
       "key": "fuente_texto",
@@ -199,7 +260,8 @@
       "type": "text",
       "default": "",
       "css_var": false,
-      "help": "Helvetica Neue Roman/Medium. Vacío = la del sistema."
+      "help": "Helvetica Neue Roman/Medium. Vacío = la del sistema.",
+      "group": "Enlaces y tipografía"
     }
   ]
 }

@@ -44,6 +44,7 @@ class DLP_FE_Registry {
                 'default' => $f['default'] ?? ($type === 'checkbox' ? 0 : ''),
                 'options' => $f['options'] ?? [],
                 'help'    => $f['help'] ?? '',
+                'group'   => isset($f['group']) ? (string) $f['group'] : '',
                 'unit'    => $f['unit'] ?? '',
                 'body_class' => isset($f['body_class']) ? sanitize_html_class($f['body_class']) : '',
                 'css_var' => array_key_exists('css_var', $f) ? (bool) $f['css_var'] : in_array($type, ['color', 'number', 'image', 'text', 'select', 'checkbox'], true),
