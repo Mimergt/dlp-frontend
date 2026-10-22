@@ -105,7 +105,7 @@ h2.dlph-h { margin: 0; padding: 0; font-size: 34px; line-height: .95; }
   .dlph--banner .dlph-bn .dlph-track { margin: 0; border-radius: 0; }
   .dlph--banner .dlph-ind { max-width: 1240px; margin: 0 auto; padding: 14px 24px 0; }
 }
-.et_pb_section:last-child > .et_pb_row .dlph, .dlph:only-child { padding-bottom: 36px; }
+.et_pb_section:last-child > .et_pb_row .dlph, .dlph:last-child:not(:first-child) { padding-bottom: 36px; }
 
 /* Cuadro «menú completo» (solo escritorio, rellena el hueco de la última fila) */
 .dlph-ct--menu { display: none; }
@@ -117,4 +117,4 @@ h2.dlph-h { margin: 0; padding: 0; font-size: 34px; line-height: .95; }
   .dlph-ct.dlph-clone { display: none; }
 }
 /* Celular: espacio al final para el menú inferior */
-@media (max-width: 767px) { .et_pb_section:last-child > .et_pb_row .dlph, .dlph:only-child { padding-bottom: calc(120px + env(safe-area-inset-bottom, 0px)); } }
+@media (max-width: 767px) { .et_pb_section:last-child > .et_pb_row .dlph, .dlph:last-child:not(:first-child) { padding-bottom: calc(120px + env(safe-area-inset-bottom, 0px)); } }
