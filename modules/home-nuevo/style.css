@@ -2,7 +2,8 @@
 html body.dlph-page.dlph-page, html body.dlph-page.dlph-page #page-container, html body.dlph-page.dlph-page #et-main-area, html body.dlph-page.dlph-page #main-content { background-color: #fff !important; }
 html body.dlph-page.dlph-page .et_pb_section:not([class*="_tb_header"]):not([class*="_tb_footer"]) { background-color: #fff !important; padding-top: 0 !important; padding-bottom: 0 !important; }
 body.dlph-page .et-l--post .et_pb_row { padding-top: 0 !important; padding-bottom: 0 !important; width: 100% !important; max-width: none !important; }
-body.dlph-page .et-l--post .et_pb_column { margin: 0 !important; }
+body.dlph-page .et-l--post .et_pb_column { margin: 0 !important; float: none !important; width: 100% !important; max-width: none !important; }
+body.dlph-page .et-l--post .et_pb_row::after, body.dlph-page .et-l--post .et_pb_section::after { content: ""; display: table; clear: both; }
 body.dlph-page .et-l--post .et_pb_text, body.dlph-page .et-l--post .et_pb_text_inner { margin: 0 !important; padding: 0 !important; }
 body.dlph-page .et_pb_title_container, body.dlph-page .et_pb_post_title, body.dlph-page h1.entry-title { display: none !important; }
 
@@ -72,7 +73,7 @@ h2.dlph-h { margin: 0; padding: 0; font-size: 34px; line-height: .95; }
 
 /* Escritorio */
 @media (min-width: 768px) {
-  .dlph { max-width: 1240px; width: auto; margin-left: auto; margin-right: auto; padding-left: 24px; padding-right: 24px; }
+  .dlph { max-width: 1240px; width: 100%; margin-left: auto; margin-right: auto; padding-left: 24px; padding-right: 24px; }
   .dlph-bn { padding-top: 20px; }
   .dlph-bn .dlph-track { margin: 0; border-radius: 26px; }
   .dlph-eb, .dlph-sh, .dlph-cats, .dlph-list, .dlph-cards { padding-left: 0; padding-right: 0; }
