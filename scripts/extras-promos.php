@@ -3,9 +3,10 @@
  * Genera los extras (plugin de extras de WooCommerce) de las promos y productos nuevos a partir de la configuración de
  * producción (WooFood) + las convenciones del plugin: grupo «elige N bebidas» ([grupo:...=N]) y acordeón de ingredientes
  * ([acordeon:Quitar ingredientes]). REEMPLAZA los extras del producto (copia en _product_addons_backup_promos).
- * Solo dev. Uso: wp eval-file extras-promos.php [dry]
+ * Solo dev. Uso: wp eval-file extras-promos.php [dry] [id id ...]   (con IDs, solo procesa esos productos)
  */
-$dry = in_array('dry', (array) ($args ?? []), true);
+$dry  = in_array('dry', (array) ($args ?? []), true);
+$solo = array_filter(array_map('intval', (array) ($args ?? [])));   // si se pasan IDs, solo esos productos
 
 $ING = [
     'DP' => ['Queso Americano', 'Tomate', 'Lechuga', 'Cebolla caramelizada', 'Champiñones salteados', 'Tocino'],
@@ -25,7 +26,7 @@ $S = [
     126125 => ['carne' => 3, 'comp' => 3, 'beb' => ['grupo', 3], 'hamb' => [['Del Puente 1: quitar ingredientes', 'DP'], ['Del Puente 2: quitar ingredientes', 'DP'], ['Del Puente 3: quitar ingredientes', 'DP']]],
     126123 => ['carne' => 3, 'comp' => 3, 'beb' => ['grupo', 3], 'hamb' => [['Clásica 1: quitar ingredientes', 'CL'], ['Clásica 2: quitar ingredientes', 'CL'], ['Clásica 3: quitar ingredientes', 'CL']]],
     122461 => ['carne' => 1, 'hamb' => [['Ingredientes', 'TO']]],
-    122470 => ['carne' => 1, 'hamb' => [['Ingredientes', 'CL']]],
+    122470 => ['carne' => 1, 'beb' => ['lista'], 'hamb' => [['Ingredientes', 'CL']]],   // La Clásica + Frezca: elige su bebida como La Carnuda
     122458 => ['beb' => ['grupo', 1]],
     122456 => [],
     108988 => ['comp' => 'combo', 'beb' => ['lista'], 'hamb' => [['Ingredientes', 'CA']]],
@@ -51,6 +52,7 @@ $nuevo = function ($name, $type, $o = []) use (&$k, $base) {
 $opt = function ($label, $precio) { return ['label' => $label, 'price' => $precio ? (string) $precio : '', 'image' => '', 'price_type' => 'quantity_based', 'visibility' => 1]; };
 
 foreach ($S as $pid => $r) {
+    if ($solo && !in_array($pid, $solo, true)) { continue; }
     $post = get_post($pid);
     if (!$post || $post->post_type !== 'product') { echo "$pid: no existe\n"; continue; }
     $a = [];
