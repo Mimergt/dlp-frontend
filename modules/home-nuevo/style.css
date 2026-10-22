@@ -79,7 +79,9 @@ h2.dlph-h { margin: 0; padding: 0; font-size: 34px; line-height: .95; }
   .dlph-h, h2.dlph-h { font-size: 48px; }
   .dlph-ind { padding-left: 0; padding-right: 0; }
   .dlph-cards ul.products { gap: 16px; }
-  .dlph-cards ul.products li.product { flex-basis: calc((100% - 48px) / 4); width: calc((100% - 48px) / 4) !important; }
+  .dlph-cards { container-type: inline-size; }
+  .dlph-cards ul.products { width: max-content; }
+  .dlph-cards ul.products li.product { flex: 0 0 calc((100cqw - 48px) / 4); width: calc((100cqw - 48px) / 4) !important; }
   .dlph-cats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; overflow: visible; }
   .dlph-cats + .dlph-ind, .is-cats .dlph-ind { display: none; }
   .dlph-ct { flex-basis: auto; height: 260px; }
