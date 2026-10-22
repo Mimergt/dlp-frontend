@@ -35,7 +35,9 @@ body.dlph-page .et_pb_title_container, body.dlph-page .et_pb_post_title, body.dl
 .dlph-slide picture { display: block; }
 .dlph-slide img { width: 100%; }
 /* Banners con proporción fija (≈2.4:1): se ve el ancho completo, en celular también. Con imagen propia de celular se respeta la suya. */
-.dlph-slide:not(.has-m) img { aspect-ratio: 2.4 / 1; object-fit: cover; }
+.dlph-slide { background: #000; }
+.dlph-slide:not(.has-m) img { aspect-ratio: 3 / 1; width: 100%; max-height: var(--dlp-home-nuevo-banner-alto-max, 420px); object-fit: contain; object-position: center; background: #000; }
+body.dlph-fit--recortar .dlph-slide:not(.has-m) img { object-fit: cover; }
 @media (max-width: 767px) { .dlph-bn { padding-top: 10px; } .dlph-slide.has-m img { aspect-ratio: auto; } }
 
 /* Secciones */
