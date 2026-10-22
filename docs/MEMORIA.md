@@ -118,3 +118,11 @@ Faltan: pedidos con extras de varios días de disponibilidad, cupones, tarjeta (
 - Mockup con 3 opciones: `preview/home-nuevo.html` (A fiel a la referencia, B oscura tipo app, C editorial). Falta elegir.
 - Página `/menu/` (id 158945, duplicado del home de Divi): los módulos del home (`home-portada`, `home-quickview`) ahora aplican también a `page:menu` (0.21.0). El botón «Menú» del menú inferior lleva a /menu/ con ícono de hamburguesa; producto y categorías redirigen a /menu/ (`#producto-slug` abre el modal). Cuando el nuevo home esté listo, quitar `home` del alcance de esos módulos.
 - `/tienda/` redirige a `/` por una regla del plugin Redirection (no es nuestra).
+
+## Home nuevo en producción de dev (0.22–0.23)
+- Módulo `home-nuevo`: códigos cortos para Divi (módulo Texto/Código): `[dlp_banner]`, `[dlp_promos]`, `[dlp_categorias]`, `[dlp_mas_pedidos]`, `[dlp_home]` (todo junto). Atributos opcionales: `[dlp_promos categoria="combos" max="6" titulo=".." rotulo=".."]`, `[dlp_mas_pedidos ids="2055,2049,2053,2057"]`, `[dlp_categorias lista="slug|Título|URL/slug2|Título2"]`. Textos, banners (4), categorías (slug | título | foto), IDs de más pedidos, fuentes y enlaces: panel DLP Frontend → Home / Portada.
+- La página Home (id 12282) tiene 4 secciones Divi (Banner, Promociones, Categorías, Más pedidos) con un código cada una; copia del contenido anterior en el meta `_dlp_home_backup`.
+- Tarjetas de promos = mismo marcado que el menú (`ul.products li.product`), así se ven iguales y abren la vista rápida; más pedidos son filas que abren el modal con `#producto-slug`. Banner: a todo el ancho y sin redondeo en escritorio; redondeado en celular. Home siempre claro (variables del Tema restablecidas en `.dlph`).
+- Fuentes: `fuente_titulos` y `fuente_texto` (URL del archivo en Medios) → @font-face; sin URL usa Helvetica Neue del sistema (Apple) o Arial Narrow/Impact. Licencia pendiente.
+- Fotos de prueba del sitio de referencia importadas a Medios (IDs 158947–158953).
+- Categorías enlazan a `/menu/#categoria-<slug>` (el script activa la pestaña). Pendiente verificar ese salto con sesión real y quitar `home` del alcance de `home-portada`/`home-quickview` cuando ya no hagan falta en el inicio (la vista rápida sí hace falta).
