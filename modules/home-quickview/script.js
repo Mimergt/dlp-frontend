@@ -117,7 +117,7 @@
   }
   function groupSync($form) {
     var wait = false;
-    $form.find('.dlpqv-grp').each(function () {
+    $form.find('.dlpqv-grp:not(.dlpqv-acc)').each(function () {
       var t = $(this).attr('data-g'), $ins = groupInputs($form, t), n = parseInt($ins.first().attr('data-dlpqv-n'), 10), sum = groupSum($ins);
       $(this).find('.dlpqv-grp-c').text(sum + ' de ' + n).closest('.dlpqv-grp').toggleClass('done', sum === n);
       var resumen = [];
@@ -135,6 +135,49 @@
     });
     var $b = $form.find('button.single_add_to_cart_button').first();
     $b.prop('disabled', wait).toggleClass('dlpqv-wait', wait);
+  }
+
+  // ---- Acordeón para add-ons de casillas: [acordeon:Título] en la descripción --------------------------------
+  // Los add-ons consecutivos con el mismo título se envuelven en un solo acordeón cerrado al inicio. Es solo presentación:
+  // los campos siguen dentro del formulario (cerrado también se envían) y no se toca ningún precio.
+  var ACC_RE = /\[acordeon:([^\]]+)\]/i;
+  function accName($c) { return $.trim($c.find('.wc-pao-addon-name').first().clone().children().remove().end().text()); }
+  function accSync($form) {
+    $form.find('.dlpqv-acc').each(function () {
+      var $box = $(this).next('.dlpqv-grp-box'), partes = [], alguno = false;
+      $box.children('.wc-pao-addon-container').each(function () {
+        var $c = $(this), marcadas = [];
+        $c.find('input.wc-pao-addon-checkbox:checked').each(function () {
+          var $l = $c.find('label[for="' + this.id + '"]').first();
+          if (!$l.length) $l = $(this).siblings('label').first();
+          var t = $.trim($l.clone().children().remove().end().text());
+          if (t) marcadas.push(t);
+        });
+        if (marcadas.length) alguno = true;
+        partes.push(accName($c).split(':')[0] + ': ' + (marcadas.length ? marcadas.join(', ') : 'ninguno'));
+      });
+      $(this).find('.dlpqv-grp-s').text(alguno ? partes.join(' · ') : 'Toca para elegir');
+      $(this).toggleClass('done', alguno);
+    });
+  }
+  function accordions($form) {
+    var $box = null, title = null;
+    $form.find('.wc-pao-addon-container').each(function () {
+      var $c = $(this), $d = $c.find('.wc-pao-addon-description').first(), m = ACC_RE.exec($d.text());
+      if (!m) { $box = null; title = null; return; }
+      var t = $.trim(m[1]);
+      $d.html($d.html().replace(/\[acordeon:[^\]]+\]/ig, ''));
+      if (!$.trim($d.text())) $d.hide();
+      if (!($box && t === title && $c.prev().is($box))) {
+        var $h = $('<div class="dlpqv-grp dlpqv-acc" role="button" tabindex="0" aria-expanded="false"><div class="dlpqv-grp-r"><b></b><i class="dlpqv-grp-a" aria-hidden="true"></i></div><div class="dlpqv-grp-s"></div></div>');
+        $h.find('b').text(t);
+        $h.insertBefore($c);
+        $box = $('<div class="dlpqv-grp-box" hidden></div>').insertAfter($h);
+        title = t;
+      }
+      $box.append($c);
+    });
+    accSync($form);
   }
 
   function enhance() {
@@ -198,6 +241,8 @@
       groupInputs($form, t).each(function () { $box.append($(this).closest('.wc-pao-addon-container')); });
     });
 
+    accordions($form);
+
     // Pie fijo: cantidad + botón con el total
     var $btn = $form.find('button.single_add_to_cart_button').first();
     var label = $.trim($btn.text()) || 'Añadir al carrito';
@@ -214,6 +259,7 @@
     }
     $form.on('change input', 'input, select', function () { setTimeout(updateTotal, 120); });
     $form.on('change input', 'input[data-dlpqv-group]', function () { groupClamp($(this)); groupSync($form); });
+    $form.on('change', '.dlpqv-grp-box input.wc-pao-addon-checkbox', function () { accSync($form); });
     groupSync($form);
     setTimeout(updateTotal, 250);
     updateTotal();
