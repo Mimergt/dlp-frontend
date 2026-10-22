@@ -9,7 +9,7 @@ if (!defined('ABSPATH')) {
  * abran la vista rápida en el lugar. Los más pedidos son filas y abren la vista rápida cambiando el hash (#producto-slug).
  */
 function dlp_fe_hn_codigos() {
-    return ['dlp_home', 'dlp_banner', 'dlp_promos', 'dlp_categorias', 'dlp_mas_pedidos'];
+    return ['dlp_home', 'dlp_banner', 'dlp_promos', 'dlp_categorias', 'dlp_mas_pedidos', 'dlp_footer'];
 }
 
 /** ¿La página actual usa alguno de los códigos? (entonces se aplica el fondo blanco y se cargan los estilos). */
@@ -183,12 +183,41 @@ function dlp_fe_hn_mas_pedidos($a = []) {
     return dlp_fe_hn_envolver($h);
 }
 
+function dlp_fe_hn_footer($a = []) {
+    $fotos = '';
+    $n     = 0;
+    for ($i = 1; $i <= 4; $i++) {
+        $img = trim((string) dlp_fe_hn_o('footer_img' . $i));
+        if ($img === '') {
+            continue;
+        }
+        $fotos .= '<div class="dlph-fs' . ($n === 0 ? ' on' : '') . '" style="background-image:url(' . esc_url($img) . ')"></div>';
+        $n++;
+    }
+    $titulo = isset($a['titulo']) ? $a['titulo'] : dlp_fe_hn_o('footer_titulo');
+    $boton  = isset($a['boton']) ? $a['boton'] : dlp_fe_hn_o('footer_boton');
+    $tel    = isset($a['tel']) ? $a['tel'] : dlp_fe_hn_o('footer_tel');
+    $h      = '<section class="dlph-ft"><div class="dlph-fslides" data-n="' . (int) $n . '">' . $fotos . '</div><div class="dlph-fshade"></div><div class="dlph-fbody">';
+    if ($titulo !== '') {
+        $h .= '<h2 class="dlph-h">' . esc_html($titulo) . '</h2>';
+    }
+    if ($boton !== '') {
+        $h .= '<a class="dlph-fbtn" href="' . esc_url(dlp_fe_hn_url(dlp_fe_hn_o('footer_url'))) . '">' . esc_html($boton) . '</a>';
+    }
+    if ($tel !== '') {
+        $h .= '<p class="dlph-ftel">Llámanos <a href="tel:' . esc_attr(preg_replace('/[^0-9+]/', '', $tel)) . '">' . esc_html($tel) . '</a></p>';
+    }
+    $h .= '</div></section>';
+    return dlp_fe_hn_envolver($h, 'dlph--footer');
+}
+
 // Códigos para pegar en Divi (módulo Texto o Código), uno por sección
 add_shortcode('dlp_banner', function () { return dlp_fe_hn_banner(); });
 add_shortcode('dlp_promos', function ($a) { return dlp_fe_hn_promos((array) $a); });
 add_shortcode('dlp_categorias', function ($a) { return dlp_fe_hn_categorias((array) $a); });
 add_shortcode('dlp_mas_pedidos', function ($a) { return dlp_fe_hn_mas_pedidos((array) $a); });
-add_shortcode('dlp_home', function () { return dlp_fe_hn_banner() . dlp_fe_hn_promos() . dlp_fe_hn_categorias() . dlp_fe_hn_mas_pedidos(); });
+add_shortcode('dlp_footer', function ($a) { return dlp_fe_hn_footer((array) $a); });
+add_shortcode('dlp_home', function () { return dlp_fe_hn_banner() . dlp_fe_hn_promos() . dlp_fe_hn_categorias() . dlp_fe_hn_mas_pedidos() . dlp_fe_hn_footer(); });
 
 // Tipografías propias (si se pegó la URL del archivo en los ajustes)
 add_action('wp_head', function () {

@@ -34,8 +34,9 @@ body.dlph-page .et_pb_title_container, body.dlph-page .et_pb_post_title, body.dl
 .dlph-slide { flex: 0 0 100%; scroll-snap-align: center; display: block; }
 .dlph-slide picture { display: block; }
 .dlph-slide img { width: 100%; }
-/* Celular: banner más alto (sin arte propio se recorta al centro) */
-@media (max-width: 767px) { .dlph-slide:not(.has-m) img { aspect-ratio: 2 / 1; object-fit: cover; } .dlph-bn { padding-top: 10px; } }
+/* Banners con proporción fija (≈2.4:1): se ve el ancho completo, en celular también. Con imagen propia de celular se respeta la suya. */
+.dlph-slide:not(.has-m) img { aspect-ratio: 2.4 / 1; object-fit: cover; }
+@media (max-width: 767px) { .dlph-bn { padding-top: 10px; } .dlph-slide.has-m img { aspect-ratio: auto; } }
 
 /* Secciones */
 .dlph-sec { padding: 22px 0 2px; }
@@ -105,7 +106,7 @@ h2.dlph-h { margin: 0; padding: 0; font-size: 34px; line-height: .95; }
   .dlph--banner .dlph-bn .dlph-track { margin: 0; border-radius: 0; }
   .dlph--banner .dlph-ind { max-width: 1240px; margin: 0 auto; padding: 14px 24px 0; }
 }
-.et_pb_section:last-child > .et_pb_row .dlph, .dlph:last-child:not(:first-child) { padding-bottom: 36px; }
+.et_pb_section:last-child > .et_pb_row .dlph:not(.dlph--footer), .dlph:last-child:not(:first-child):not(.dlph--footer) { padding-bottom: 36px; }
 
 /* Cuadro «menú completo» (solo escritorio, rellena el hueco de la última fila) */
 .dlph-ct--menu { display: none; }
@@ -117,4 +118,20 @@ h2.dlph-h { margin: 0; padding: 0; font-size: 34px; line-height: .95; }
   .dlph-ct.dlph-clone { display: none; }
 }
 /* Celular: espacio al final para el menú inferior */
-@media (max-width: 767px) { .et_pb_section:last-child > .et_pb_row .dlph, .dlph:last-child:not(:first-child) { padding-bottom: calc(120px + env(safe-area-inset-bottom, 0px)); } }
+@media (max-width: 767px) { .et_pb_section:last-child > .et_pb_row .dlph:not(.dlph--footer), .dlph:last-child:not(:first-child):not(.dlph--footer) { padding-bottom: calc(120px + env(safe-area-inset-bottom, 0px)); } }
+
+/* Footer oscuro con fotos que cambian solas (sin controles) */
+.dlph.dlph--footer { margin-top: 36px; background: #000; padding-bottom: 0; }
+.dlph-ft { position: relative; min-height: 380px; display: grid; place-items: center; overflow: hidden; background: #000; }
+.dlph-fslides, .dlph-fslides .dlph-fs { position: absolute; inset: 0; }
+.dlph-fs { background-size: cover; background-position: center; opacity: 0; transition: opacity 1.4s ease; }
+.dlph-fs.on { opacity: 1; }
+.dlph-fshade { position: absolute; inset: 0; background: linear-gradient(rgba(0,0,0,.55), rgba(0,0,0,.78)); }
+.dlph-fbody { position: relative; z-index: 2; max-width: 760px; padding: 56px 24px; text-align: center; }
+.dlph-fbody .dlph-h, .dlph-fbody h2.dlph-h { margin: 0 0 22px; color: #fff !important; font-size: 40px; line-height: .98; }
+.dlph-fbtn { display: inline-flex; align-items: center; justify-content: center; height: 52px; padding: 0 30px; border-radius: 99px; background: #ED1C24; color: #fff !important; font: 700 14px/1 var(--hn-b); letter-spacing: .06em; text-transform: uppercase; }
+.dlph-ftel { margin: 18px 0 0; color: #d6d6da; font: 400 14px/1.4 var(--hn-b); }
+.dlph-ftel a { color: #fff !important; font-weight: 700; }
+@media (min-width: 768px) { .dlph-ft { min-height: 460px; } .dlph-fbody .dlph-h, .dlph-fbody h2.dlph-h { font-size: 60px; } .dlph.dlph--footer { max-width: none; width: 100vw; margin-left: calc(50% - 50vw); padding: 0; margin-top: 44px; } }
+/* Celular: el menú inferior no tapa el final del footer */
+@media (max-width: 767px) { .dlph-ft { padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); } }

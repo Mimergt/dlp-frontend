@@ -107,6 +107,16 @@
   }
   [].forEach.call(document.querySelectorAll('.dlph-slider'), slider);
 
+  // Footer: las fotos cambian solas con fundido, sin controles
+  [].forEach.call(document.querySelectorAll('.dlph-fslides'), function (box) {
+    var fs = [].slice.call(box.querySelectorAll('.dlph-fs')), secs = parseFloat(cfg.footer_autoplay) || 0, i = 0;
+    if (fs.length < 2 || secs <= 0 || reduce) return;
+    setInterval(function () {
+      if (document.hidden) return;
+      fs[i].classList.remove('on'); i = (i + 1) % fs.length; fs[i].classList.add('on');
+    }, secs * 1000);
+  });
+
   // Más pedidos: abre la vista rápida (ya escucha el hash #producto-<slug>)
   document.addEventListener('click', function (e) {
     var a = e.target.closest('.dlph-li');
