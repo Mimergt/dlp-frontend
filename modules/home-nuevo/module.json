@@ -1,39 +1,189 @@
 {
   "label": "Home nuevo (slide, promos, categorías, más pedidos)",
-  "description": "Reemplaza el contenido de la página de inicio con el diseño nuevo: slide de banners, promociones en slide, categorías (slide en celular, cuadrícula en escritorio), los más pedidos y un botón de menú completo. Usa los productos y categorías reales de WooCommerce; las tarjetas abren la vista rápida. El header y el footer siguen siendo los de Divi. Si apagas este módulo vuelve el contenido que tenga la página en Divi.",
+  "description": "Diseño nuevo del Home, en secciones que se colocan en Divi con códigos cortos (módulo Texto o Código): [dlp_banner] slide de banners, [dlp_promos] promociones en slide, [dlp_categorias] categorías (slide en celular, cuadrícula en escritorio), [dlp_mas_pedidos] los más pedidos con el botón de menú completo; [dlp_home] pone todo junto. Cada uno acepta ajustes opcionales, por ejemplo [dlp_promos categoria=\"combos\" max=\"6\" titulo=\"Otro título\"] o [dlp_mas_pedidos ids=\"2055,2049,2053,2057\"]. Textos, banners, categorías y productos se cambian abajo. Las tarjetas abren la vista rápida. El header y el footer son los de Divi.",
   "section": "home",
   "boot": true,
   "php": "module.php",
-  "where": ["home", "page:menu"],
+  "where": [
+    "home",
+    "page:menu"
+  ],
   "default": true,
   "css": "style.css",
   "js": "script.js",
   "settings": [
-    { "key": "banner1_img", "label": "Banner 1: imagen", "type": "image", "default": "", "css_var": false },
-    { "key": "banner1_url", "label": "Banner 1: enlace", "type": "text", "default": "/menu/", "css_var": false },
-    { "key": "banner2_img", "label": "Banner 2: imagen", "type": "image", "default": "", "css_var": false },
-    { "key": "banner2_url", "label": "Banner 2: enlace", "type": "text", "default": "/menu/", "css_var": false },
-    { "key": "banner3_img", "label": "Banner 3: imagen", "type": "image", "default": "", "css_var": false },
-    { "key": "banner3_url", "label": "Banner 3: enlace", "type": "text", "default": "/menu/", "css_var": false },
-    { "key": "banner4_img", "label": "Banner 4: imagen (opcional)", "type": "image", "default": "", "css_var": false },
-    { "key": "banner4_url", "label": "Banner 4: enlace", "type": "text", "default": "/menu/", "css_var": false },
-    { "key": "autoplay", "label": "Cambiar banner solo cada (segundos, 0 = no)", "type": "number", "default": 5, "css_var": false, "js": true },
-    { "key": "rotulo_promos", "label": "Promociones: rótulo", "type": "text", "default": "Promociones", "css_var": false },
-    { "key": "titulo_promos", "label": "Promociones: título", "type": "text", "default": "Hoy se come en grande", "css_var": false },
-    { "key": "promos_cat", "label": "Promociones: categoría de WooCommerce (slug)", "type": "text", "default": "promos", "css_var": false },
-    { "key": "promos_max", "label": "Promociones: máximo de productos", "type": "number", "default": 8, "css_var": false },
-    { "key": "texto_ver_todas", "label": "Texto del botón «Ver todas»", "type": "text", "default": "Ver todas", "css_var": false },
-    { "key": "rotulo_cats", "label": "Categorías: rótulo", "type": "text", "default": "Categorías", "css_var": false },
-    { "key": "titulo_cats", "label": "Categorías: título", "type": "text", "default": "Elige el nivel de tu hambre", "css_var": false },
-    { "key": "categorias", "label": "Categorías (una por línea)", "type": "textarea", "css_var": false,
+    {
+      "key": "banner1_img",
+      "label": "Banner 1: imagen",
+      "type": "image",
+      "default": "",
+      "css_var": false
+    },
+    {
+      "key": "banner1_url",
+      "label": "Banner 1: enlace",
+      "type": "text",
+      "default": "/menu/",
+      "css_var": false
+    },
+    {
+      "key": "banner2_img",
+      "label": "Banner 2: imagen",
+      "type": "image",
+      "default": "",
+      "css_var": false
+    },
+    {
+      "key": "banner2_url",
+      "label": "Banner 2: enlace",
+      "type": "text",
+      "default": "/menu/",
+      "css_var": false
+    },
+    {
+      "key": "banner3_img",
+      "label": "Banner 3: imagen",
+      "type": "image",
+      "default": "",
+      "css_var": false
+    },
+    {
+      "key": "banner3_url",
+      "label": "Banner 3: enlace",
+      "type": "text",
+      "default": "/menu/",
+      "css_var": false
+    },
+    {
+      "key": "banner4_img",
+      "label": "Banner 4: imagen (opcional)",
+      "type": "image",
+      "default": "",
+      "css_var": false
+    },
+    {
+      "key": "banner4_url",
+      "label": "Banner 4: enlace",
+      "type": "text",
+      "default": "/menu/",
+      "css_var": false
+    },
+    {
+      "key": "autoplay",
+      "label": "Cambiar banner solo cada (segundos, 0 = no)",
+      "type": "number",
+      "default": 5,
+      "css_var": false,
+      "js": true
+    },
+    {
+      "key": "rotulo_promos",
+      "label": "Promociones: rótulo",
+      "type": "text",
+      "default": "Promociones",
+      "css_var": false
+    },
+    {
+      "key": "titulo_promos",
+      "label": "Promociones: título",
+      "type": "text",
+      "default": "Hoy se come en grande",
+      "css_var": false
+    },
+    {
+      "key": "promos_cat",
+      "label": "Promociones: categoría de WooCommerce (slug)",
+      "type": "text",
+      "default": "promos",
+      "css_var": false
+    },
+    {
+      "key": "promos_max",
+      "label": "Promociones: máximo de productos",
+      "type": "number",
+      "default": 8,
+      "css_var": false
+    },
+    {
+      "key": "texto_ver_todas",
+      "label": "Texto del botón «Ver todas»",
+      "type": "text",
+      "default": "Ver todas",
+      "css_var": false
+    },
+    {
+      "key": "rotulo_cats",
+      "label": "Categorías: rótulo",
+      "type": "text",
+      "default": "Categorías",
+      "css_var": false
+    },
+    {
+      "key": "titulo_cats",
+      "label": "Categorías: título",
+      "type": "text",
+      "default": "Elige el nivel de tu hambre",
+      "css_var": false
+    },
+    {
+      "key": "categorias",
+      "label": "Categorías (una por línea)",
+      "type": "textarea",
+      "css_var": false,
       "default": "promos | Promos\ncombos | Combos de res\nopciones-pollo | Combos de pollo\nhamburguesas | Hamburguesas individuales\npara-compartir | Para compartir\nsides | Sides\nbebidas | Bebidas\ndo-it-yourself | Para hacer en casa",
-      "help": "Formato: slug-de-la-categoría | Título que se muestra | URL de la foto (opcional; si falta se usa la imagen de la categoría)." },
-    { "key": "rotulo_top", "label": "Más pedidos: rótulo", "type": "text", "default": "Los favoritos", "css_var": false },
-    { "key": "titulo_top", "label": "Más pedidos: título", "type": "text", "default": "Los más pedidos", "css_var": false },
-    { "key": "top", "label": "Más pedidos: IDs de producto (separados por coma)", "type": "text", "default": "2055, 2049, 2053, 2057", "css_var": false, "help": "Se muestran en ese orden. El ID está en la lista de productos al pasar el mouse." },
-    { "key": "texto_menu", "label": "Texto del botón de menú completo", "type": "text", "default": "Ver menú completo", "css_var": false },
-    { "key": "url_menu", "label": "Enlace del menú completo", "type": "text", "default": "/menu/", "css_var": false },
-    { "key": "fuente_titulos", "label": "Tipografía de títulos: archivo (URL .woff2/.ttf)", "type": "text", "default": "", "css_var": false, "help": "Helvetica Neue Condensed Bold. Súbela a Medios y pega la URL. Vacío = la del sistema o una condensada parecida." },
-    { "key": "fuente_texto", "label": "Tipografía de textos: archivo (URL .woff2/.ttf)", "type": "text", "default": "", "css_var": false, "help": "Helvetica Neue Roman/Medium. Vacío = la del sistema." }
+      "help": "Formato: slug-de-la-categoría | Título que se muestra | URL de la foto (opcional; si falta se usa la imagen de la categoría)."
+    },
+    {
+      "key": "rotulo_top",
+      "label": "Más pedidos: rótulo",
+      "type": "text",
+      "default": "Los favoritos",
+      "css_var": false
+    },
+    {
+      "key": "titulo_top",
+      "label": "Más pedidos: título",
+      "type": "text",
+      "default": "Los más pedidos",
+      "css_var": false
+    },
+    {
+      "key": "top",
+      "label": "Más pedidos: IDs de producto (separados por coma)",
+      "type": "text",
+      "default": "2055, 2049, 2053, 2057",
+      "css_var": false,
+      "help": "Se muestran en ese orden. El ID está en la lista de productos al pasar el mouse."
+    },
+    {
+      "key": "texto_menu",
+      "label": "Texto del botón de menú completo",
+      "type": "text",
+      "default": "Ver menú completo",
+      "css_var": false
+    },
+    {
+      "key": "url_menu",
+      "label": "Enlace del menú completo",
+      "type": "text",
+      "default": "/menu/",
+      "css_var": false
+    },
+    {
+      "key": "fuente_titulos",
+      "label": "Tipografía de títulos: archivo (URL .woff2/.ttf)",
+      "type": "text",
+      "default": "",
+      "css_var": false,
+      "help": "Helvetica Neue Condensed Bold. Súbela a Medios y pega la URL. Vacío = la del sistema o una condensada parecida."
+    },
+    {
+      "key": "fuente_texto",
+      "label": "Tipografía de textos: archivo (URL .woff2/.ttf)",
+      "type": "text",
+      "default": "",
+      "css_var": false,
+      "help": "Helvetica Neue Roman/Medium. Vacío = la del sistema."
+    }
   ]
 }

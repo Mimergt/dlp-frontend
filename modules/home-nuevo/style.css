@@ -1,14 +1,15 @@
 /* Home nuevo. Siempre claro (el cliente no quiere versión oscura aquí): se restablecen las variables del Tema dentro de .dlph. */
 html body.dlph-page.dlph-page, html body.dlph-page.dlph-page #page-container, html body.dlph-page.dlph-page #et-main-area, html body.dlph-page.dlph-page #main-content { background-color: #fff !important; }
-html body.dlph-page.dlph-page .et_pb_section.et_section_regular, html body.dlph-page.dlph-page .et_pb_section.et_pb_fullwidth_section { background-color: #fff !important; padding-top: 0 !important; padding-bottom: 0 !important; }
-body.dlph-page .et_pb_row { padding-top: 0 !important; padding-bottom: 0 !important; width: 100% !important; max-width: none !important; }
-body.dlph-page .et_pb_column { margin: 0 !important; }
+html body.dlph-page.dlph-page .et_pb_section:not([class*="_tb_header"]):not([class*="_tb_footer"]) { background-color: #fff !important; padding-top: 0 !important; padding-bottom: 0 !important; }
+body.dlph-page .et-l--post .et_pb_row { padding-top: 0 !important; padding-bottom: 0 !important; width: 100% !important; max-width: none !important; }
+body.dlph-page .et-l--post .et_pb_column { margin: 0 !important; }
+body.dlph-page .et-l--post .et_pb_text, body.dlph-page .et-l--post .et_pb_text_inner { margin: 0 !important; padding: 0 !important; }
 body.dlph-page .et_pb_title_container, body.dlph-page .et_pb_post_title, body.dlph-page h1.entry-title { display: none !important; }
 
 .dlph { --dlp-bg: #fff; --dlp-surface: #f6f6f8; --dlp-card: #fff; --dlp-tx: #111; --dlp-mut: #8d8d96; --dlp-line: #ececf0; --dlp-field: #fcfcfd; --dlp-btn: #111; --dlp-btn-tx: #fff; --dlp-ac: #ED1C24; --dlp-chip: #efeff2;
   --hn-t: "DLP Titulos", "Helvetica Neue Condensed", "HelveticaNeue-CondensedBold", "Arial Narrow", "Roboto Condensed", Impact, sans-serif;
   --hn-b: "DLP Texto", "Helvetica Neue", Helvetica, Arial, sans-serif;
-  color-scheme: light; box-sizing: border-box; width: 100vw; margin-left: calc(50% - 50vw); padding-bottom: 36px; background: #fff; color: #231F20; font-family: var(--hn-b); }
+  color-scheme: light; box-sizing: border-box; width: 100vw; margin-left: calc(50% - 50vw); background: #fff; color: #231F20; font-family: var(--hn-b); }
 .dlph *, .dlph *::before, .dlph *::after { box-sizing: border-box; }
 .dlph img { display: block; max-width: 100%; height: auto; }
 .dlph a { text-decoration: none; }
@@ -91,3 +92,13 @@ h2.dlph-h { margin: 0; padding: 0; font-size: 34px; line-height: .95; }
 @media (prefers-reduced-motion: reduce) { .dlph-track { scroll-behavior: auto; } }
 .dlph-cats, .dlph-cards { scroll-padding-left: 16px; scroll-padding-right: 16px; }
 @media (min-width: 768px) { .dlph-cats, .dlph-cards { scroll-padding-left: 0; scroll-padding-right: 0; } }
+
+/* Banner a todo el ancho (en escritorio sin bordes redondeados; en celular redondeado) */
+.dlph--banner { padding-left: 0; padding-right: 0; }
+@media (min-width: 768px) {
+  .dlph.dlph--banner { width: 100vw; max-width: none; margin-left: calc(50% - 50vw); margin-right: 0; padding: 0; }
+  .dlph--banner .dlph-bn { padding-top: 0; }
+  .dlph--banner .dlph-bn .dlph-track { margin: 0; border-radius: 0; }
+  .dlph--banner .dlph-ind { max-width: 1240px; margin: 0 auto; padding: 14px 24px 0; }
+}
+.dlph:last-child { padding-bottom: 36px; }
