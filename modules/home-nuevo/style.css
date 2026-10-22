@@ -17,7 +17,7 @@ body.dlph-page .et_pb_title_container, body.dlph-page .et_pb_post_title, body.dl
 .dlph-h { font-family: var(--hn-t) !important; font-weight: 700 !important; text-transform: uppercase; letter-spacing: -.02em; color: #000; }
 
 /* Slide base: pista con scroll horizontal y puntos/flechas abajo */
-.dlph-track { display: flex; gap: 12px; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
+.dlph-track { position: relative; display: flex; gap: 12px; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
 .dlph-track::-webkit-scrollbar { display: none; }
 .dlph-ind { display: flex; align-items: center; justify-content: space-between; padding: 12px 18px 0; }
 .dlph-dots { display: flex; gap: 7px; }
@@ -103,3 +103,15 @@ h2.dlph-h { margin: 0; padding: 0; font-size: 34px; line-height: .95; }
   .dlph--banner .dlph-ind { max-width: 1240px; margin: 0 auto; padding: 14px 24px 0; }
 }
 .dlph:last-child { padding-bottom: 36px; }
+
+/* Cuadro «menú completo» (solo escritorio, rellena el hueco de la última fila) */
+.dlph-ct--menu { display: none; }
+@media (min-width: 768px) {
+  .dlph-ct--menu { display: flex; flex-direction: column; justify-content: space-between; padding: 18px; background: #ED1C24; }
+  .dlph-ct--menu::after { display: none; }
+  .dlph-ct--menu b { position: static; color: #fff !important; font-size: 28px; }
+  .dlph-ct--menu i { color: #fff; font: 400 40px/1 var(--hn-b); font-style: normal; }
+  .dlph-ct.dlph-clone { display: none; }
+}
+/* Celular: espacio al final para el menú inferior */
+@media (max-width: 767px) { .dlph:last-child { padding-bottom: calc(120px + env(safe-area-inset-bottom, 0px)); } }

@@ -3,48 +3,107 @@
 (function () {
   'use strict';
 
+  // Slides infinitos y automáticos. Cada uno avanza a su ritmo (el banner es el más rápido). Se duplican los elementos
+  // a cada lado y, cuando el scroll queda quieto, se salta de vuelta al conjunto original sin que se note.
+  var cfg = (window.dlpFE && window.dlpFE['home-nuevo']) || {};
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var mqMovil = window.matchMedia('(max-width: 767px)');
+
   function slider(box) {
     var track = box.querySelector('.dlph-track');
+    if (!track) return;
     var dots = [].slice.call(box.querySelectorAll('.dlph-dots i'));
     var prev = box.querySelector('.dlph-prev'), next = box.querySelector('.dlph-next');
-    if (!track) return;
-    function items() { return [].slice.call(track.querySelectorAll(':scope > a, :scope > ul > li, :scope > .dlph-slide')); }
-    function step() {
-      var it = items()[0];
-      if (!it) return track.clientWidth;
-      var gap = parseFloat(getComputedStyle(it.parentNode).columnGap) || parseFloat(getComputedStyle(track).columnGap) || 0;
-      return it.getBoundingClientRect().width + gap;
-    }
-    function update() {
-      var s = step(), i = Math.round(track.scrollLeft / Math.max(1, s));
-      var max = Math.max(0, Math.round((track.scrollWidth - track.clientWidth) / Math.max(1, s)));
-      i = Math.min(i, max);
-      dots.forEach(function (d, k) { d.classList.toggle('on', k === Math.min(i, dots.length - 1)); });
-      if (prev) prev.disabled = track.scrollLeft <= 2;
-      if (next) next.disabled = track.scrollLeft >= track.scrollWidth - track.clientWidth - 2;
-      var cont = box.querySelector('.dlph-ind');
-      if (cont) cont.style.visibility = track.scrollWidth - track.clientWidth > 4 || box.classList.contains('is-banner') ? '' : 'hidden';
-    }
-    function go(dir) {
-      var atEnd = track.scrollLeft >= track.scrollWidth - track.clientWidth - 2;
-      if (dir > 0 && atEnd && box.classList.contains('is-banner')) { track.scrollTo({ left: 0, behavior: 'smooth' }); return; }
-      track.scrollBy({ left: dir * step(), behavior: 'smooth' });
-    }
-    if (prev) prev.addEventListener('click', function () { go(-1); });
-    if (next) next.addEventListener('click', function () { go(1); });
-    dots.forEach(function (d, k) { d.addEventListener('click', function () { track.scrollTo({ left: k * step(), behavior: 'smooth' }); }); });
-    track.addEventListener('scroll', function () { window.requestAnimationFrame(update); }, { passive: true });
-    window.addEventListener('resize', update);
-    update();
+    var isBanner = box.classList.contains('is-banner'), isCats = box.classList.contains('is-cats'), isCards = box.classList.contains('is-cards');
+    var secs = parseFloat(isBanner ? cfg.autoplay : isCards ? cfg.autoplay_promos : cfg.autoplay_cats) || 0;
+    var parent = isCards ? track.querySelector('ul') : track;
+    var orig = [], afters = [], S = 0, setW = 0, step = 0, looping = false, idle = 0, paused = false, timer = 0;
 
-    var cfg = (window.dlpFE && window.dlpFE['home-nuevo']) || {};
-    var secs = parseFloat(cfg.autoplay) || 0;
-    if (box.classList.contains('is-banner') && secs > 0) {
-      var paused = false;
-      ['pointerdown', 'touchstart', 'mouseenter'].forEach(function (ev) { box.addEventListener(ev, function () { paused = true; }, { passive: true }); });
-      box.addEventListener('mouseleave', function () { paused = false; });
-      setInterval(function () { if (!paused && !document.hidden) go(1); }, secs * 1000);
+    function nonClones() { return [].slice.call(parent.children).filter(function (e) { return !e.classList.contains('dlph-clone') && !e.classList.contains('dlph-ct--menu'); }); }
+    function clearClones() { [].slice.call(parent.querySelectorAll('.dlph-clone')).forEach(function (c) { c.remove(); }); }
+
+    function setup() {
+      clearClones();
+      orig = nonClones();
+      afters = [];
+      looping = false;
+      var scrollable = track.scrollWidth > track.clientWidth + 4;
+      if (isCats && !mqMovil.matches) scrollable = false;
+      if (orig.length < 2 || (!scrollable && !isBanner)) { update(); return; }
+      var first = parent.firstElementChild;
+      orig.slice().reverse().forEach(function (e) { var c = e.cloneNode(true); c.classList.add('dlph-clone'); c.setAttribute('aria-hidden', 'true'); c.setAttribute('tabindex', '-1'); parent.insertBefore(c, first); first = c; });
+      orig.forEach(function (e) { var c = e.cloneNode(true); c.classList.add('dlph-clone'); c.setAttribute('aria-hidden', 'true'); c.setAttribute('tabindex', '-1'); parent.appendChild(c); afters.push(c); });
+      looping = true;
+      measure();
+      track.style.scrollBehavior = 'auto';
+      track.scrollLeft = S;
+      track.style.scrollBehavior = '';
+      update();
     }
+
+    function measure() {
+      var firstOrig = orig[0], firstAfter = afters[0];
+      if (!firstOrig || !firstAfter) return;
+      S = firstOrig.offsetLeft - (parseFloat(getComputedStyle(track).scrollPaddingLeft) || 0);
+      setW = firstAfter.offsetLeft - firstOrig.offsetLeft;
+      step = orig.length > 1 ? orig[1].offsetLeft - orig[0].offsetLeft : track.clientWidth;
+    }
+
+    function normalize() {
+      if (!looping || !setW) return;
+      var pos = track.scrollLeft - S;
+      var np = pos;
+      if (pos < -2) np = pos + setW;
+      else if (pos >= setW - 2) np = pos - setW;
+      if (np !== pos) {
+        track.style.scrollBehavior = 'auto';
+        track.scrollLeft = S + np;
+        track.style.scrollBehavior = '';
+      }
+    }
+
+    function update() {
+      if (!dots.length) return;
+      var n = Math.max(1, orig.length), i = 0;
+      if (looping && step) { i = Math.round((track.scrollLeft - S) / step); i = ((i % n) + n) % n; }
+      else if (step || track.clientWidth) { var st = (orig[1] && orig[0]) ? orig[1].offsetLeft - orig[0].offsetLeft : track.clientWidth; i = Math.min(n - 1, Math.round(track.scrollLeft / Math.max(1, st))); }
+      dots.forEach(function (d, k) { d.classList.toggle('on', k === i); });
+    }
+
+    function go(dir) {
+      if (!looping) {
+        var st = (orig[1] && orig[0]) ? orig[1].offsetLeft - orig[0].offsetLeft : track.clientWidth;
+        track.scrollBy({ left: dir * st, behavior: 'smooth' });
+        return;
+      }
+      normalize();
+      track.scrollBy({ left: dir * step, behavior: 'smooth' });
+    }
+
+    if (prev) prev.addEventListener('click', function () { go(-1); restart(); });
+    if (next) next.addEventListener('click', function () { go(1); restart(); });
+    dots.forEach(function (d, k) { d.addEventListener('click', function () { if (looping) { normalize(); track.scrollTo({ left: S + k * step, behavior: 'smooth' }); } else { track.scrollTo({ left: k * (orig[1] ? orig[1].offsetLeft - orig[0].offsetLeft : track.clientWidth), behavior: 'smooth' }); } restart(); }); });
+    track.addEventListener('scroll', function () {
+      window.requestAnimationFrame(update);
+      clearTimeout(idle);
+      idle = setTimeout(normalize, 110);
+    }, { passive: true });
+
+    function tick() { if (!paused && !document.hidden && secs > 0 && !reduce) go(1); }
+    function restart() { clearInterval(timer); if (secs > 0 && !reduce) timer = setInterval(tick, secs * 1000); }
+    ['pointerenter', 'focusin'].forEach(function (ev) { box.addEventListener(ev, function () { paused = true; }); });
+    ['pointerleave', 'focusout'].forEach(function (ev) { box.addEventListener(ev, function () { paused = false; }); });
+    box.addEventListener('touchstart', function () { paused = true; }, { passive: true });
+    box.addEventListener('touchend', function () { setTimeout(function () { paused = false; }, 3000); }, { passive: true });
+
+    var lastMovil = mqMovil.matches, rz = 0;
+    window.addEventListener('resize', function () {
+      clearTimeout(rz);
+      rz = setTimeout(function () { if (isCats && mqMovil.matches !== lastMovil) { lastMovil = mqMovil.matches; setup(); } else { measure(); } update(); }, 150);
+    });
+    window.addEventListener('load', function () { setup(); });
+    setup();
+    restart();
   }
   [].forEach.call(document.querySelectorAll('.dlph-slider'), slider);
 

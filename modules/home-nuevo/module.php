@@ -149,6 +149,10 @@ function dlp_fe_hn_categorias($a = []) {
     if ($tiles === '') {
         return '';
     }
+    // Escritorio: si la última fila de 4 queda incompleta, un solo cuadro de «menú completo» ocupa el hueco
+    if ($n % 4 !== 0) {
+        $tiles .= '<a class="dlph-ct dlph-ct--menu" href="' . esc_url(dlp_fe_hn_url(dlp_fe_hn_o('url_menu'))) . '"><b class="dlph-h">' . esc_html(dlp_fe_hn_o('texto_menu')) . '</b><i aria-hidden="true">→</i></a>';
+    }
     $rotulo = isset($a['rotulo']) ? $a['rotulo'] : dlp_fe_hn_o('rotulo_cats');
     $titulo = isset($a['titulo']) ? $a['titulo'] : dlp_fe_hn_o('titulo_cats');
     return dlp_fe_hn_envolver('<section class="dlph-sec"><div class="dlph-eb">' . esc_html($rotulo) . '</div><div class="dlph-sh"><h2 class="dlph-h">' . esc_html($titulo) . '</h2></div>' . dlp_fe_hn_slider('<div class="dlph-track dlph-cats">' . $tiles . '</div>', $n, 'is-cats') . '</section>');
@@ -172,7 +176,7 @@ function dlp_fe_hn_mas_pedidos($a = []) {
     $rotulo = isset($a['rotulo']) ? $a['rotulo'] : dlp_fe_hn_o('rotulo_top');
     $titulo = isset($a['titulo']) ? $a['titulo'] : dlp_fe_hn_o('titulo_top');
     $h      = '<section class="dlph-sec"><div class="dlph-eb">' . esc_html($rotulo) . '</div><div class="dlph-sh"><h2 class="dlph-h">' . esc_html($titulo) . '</h2></div><div class="dlph-list">' . $filas . '</div>';
-    $h     .= '<a class="dlph-full" href="' . esc_url(dlp_fe_hn_url(dlp_fe_hn_o('url_menu'))) . '">' . esc_html(dlp_fe_hn_o('texto_menu')) . ' <span aria-hidden="true">→</span></a></section>';
+    $h     .= '</section>';
     return dlp_fe_hn_envolver($h);
 }
 
