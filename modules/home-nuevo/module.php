@@ -33,7 +33,7 @@ function dlp_fe_hn_tarjeta($p) {
     ?>
     <li class="product type-product post-<?php echo (int) $p->get_id(); ?> status-publish">
         <a href="<?php echo esc_url(get_permalink($p->get_id())); ?>" class="woocommerce-LoopProduct-link woocommerce-loop-product__link">
-            <span class="et_shop_image"><?php if ($img) : ?><img src="<?php echo esc_url($img); ?>" alt="<?php echo esc_attr($p->get_name()); ?>" loading="lazy"><?php endif; ?><span class="et_overlay"></span></span>
+            <span class="et_shop_image"><?php if ($img) : ?><img src="<?php echo esc_url($img); ?>" alt="<?php echo esc_attr($p->get_name()); ?>" loading="eager" decoding="async"><?php endif; ?><span class="et_overlay"></span></span>
             <h2 class="woocommerce-loop-product__title"><?php echo esc_html($p->get_name()); ?></h2>
             <span class="price"><?php echo wp_kses_post($p->get_price_html()); ?></span>
         </a>
@@ -118,7 +118,7 @@ function dlp_fe_hn_render() {
             $tid = (int) get_term_meta($term->term_id, 'thumbnail_id', true);
             $img = $tid ? wp_get_attachment_image_url($tid, 'large') : '';
         }
-        $tiles .= '<a class="dlph-ct" href="' . esc_url(dlp_fe_hn_url($o('url_menu')) . '#categoria-' . $term->slug) . '">' . ($img ? '<img src="' . esc_url($img) . '" alt="" loading="lazy">' : '') . '<b class="dlph-h">' . esc_html($titulo) . '</b></a>';
+        $tiles .= '<a class="dlph-ct" href="' . esc_url(dlp_fe_hn_url($o('url_menu')) . '#categoria-' . $term->slug) . '">' . ($img ? '<img src="' . esc_url($img) . '" alt="" loading="eager" decoding="async">' : '') . '<b class="dlph-h">' . esc_html($titulo) . '</b></a>';
     }
     if ($tiles !== '') {
         echo '<section class="dlph-sec"><div class="dlph-eb">' . esc_html($o('rotulo_cats')) . '</div><div class="dlph-sh"><h2 class="dlph-h">' . esc_html($o('titulo_cats')) . '</h2></div>';
