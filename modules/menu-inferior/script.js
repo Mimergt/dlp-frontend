@@ -26,7 +26,9 @@
       if (!document.querySelector('.xoo-wsc-container')) window.location.href = (window.wc_cart_params && wc_cart_params.cart_url) || '/carrito/';
     } else if (k === 'menu') {
       var tabs = document.querySelector('.navMenu_slide');
-      if (tabs && document.body.classList.contains('home')) {
+      var mismo = false;
+      try { mismo = new URL(b.href, location.href).pathname === location.pathname; } catch (er) {}
+      if (tabs && mismo) {
         e.preventDefault();
         window.scrollTo({ top: tabs.getBoundingClientRect().top + window.pageYOffset - 70, behavior: 'smooth' });
       }

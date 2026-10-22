@@ -21,7 +21,7 @@
       "label": "Enlace del botón Menú",
       "type": "url",
       "default": "",
-      "help": "Vacío = página de inicio. En el inicio, el botón sube a las categorías."
+      "help": "Vacío = la página «Menú» (/menu/) si existe, y si no el inicio. En esa página, el botón sube a las categorías."
     },
     {
       "key": "texto_ubicaciones",

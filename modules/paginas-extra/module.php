@@ -39,7 +39,13 @@ add_filter('template_include', function ($tpl) {
     return $tpl;
 }, 99);
 
-// Producto y categorías llevan al inicio (el menú vive ahí). ?dlp_native=1 las deja ver tal cual.
+/** Dónde vive el menú de productos: la página /menu/ si existe, y si no el inicio. */
+function dlp_fe_px_menu_url() {
+    $p = get_page_by_path('menu');
+    return $p ? get_permalink($p) : home_url('/');
+}
+
+// Producto y categorías llevan al menú (la vista rápida vive ahí). ?dlp_native=1 las deja ver tal cual.
 add_action('template_redirect', function () {
     if (is_admin() || !function_exists('is_product') || (isset($_GET['dlp_native']) && $_GET['dlp_native']) || (isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] !== 'GET')) {
         return;
@@ -50,12 +56,12 @@ add_action('template_redirect', function () {
     if (is_product() && DLP_FE_Registry::setting('paginas-extra', 'redir_producto')) {
         $p = get_queried_object();
         if ($p && !empty($p->post_name)) {
-            wp_safe_redirect(home_url('/#producto-' . $p->post_name), 301);
+            wp_safe_redirect(dlp_fe_px_menu_url() . '#producto-' . $p->post_name, 301);
             exit;
         }
     }
     if ((is_product_category() || is_product_tag() || is_shop()) && DLP_FE_Registry::setting('paginas-extra', 'redir_categoria')) {
-        wp_safe_redirect(home_url('/'), 301);
+        wp_safe_redirect(dlp_fe_px_menu_url(), 301);
         exit;
     }
 }, 6);

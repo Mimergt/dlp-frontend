@@ -7,7 +7,8 @@
   "where": [
     "home",
     "shop",
-    "category"
+    "category",
+    "page:menu"
   ],
   "default": true,
   "css": "style.css",

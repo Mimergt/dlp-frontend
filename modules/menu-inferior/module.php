@@ -15,23 +15,24 @@ add_action('wp_footer', function () {
     $o = function ($k) {
         return DLP_FE_Registry::setting('menu-inferior', $k);
     };
-    $menu_url = $o('url_menu') ?: home_url('/');
+    $menu_pg  = get_page_by_path('menu');
+    $menu_url = $o('url_menu') ?: ($menu_pg ? get_permalink($menu_pg) : home_url('/'));
     $count    = WC()->cart ? (int) WC()->cart->get_cart_contents_count() : 0;
     $loc_page = get_page_by_path('restaurantes');
     $loc_url  = $o('url_ubicaciones') ?: ($loc_page ? get_permalink($loc_page) : home_url('/'));
     $is_loc   = $loc_page && is_page($loc_page->ID);
     $account  = wc_get_page_permalink('myaccount');
     $is_acct  = is_account_page();
-    $is_home  = is_front_page();
+    $is_menu  = $menu_pg ? is_page($menu_pg->ID) : is_front_page();
     $icons    = [
-        'menu' => '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 11.5 12 4l8 7.5"/><path d="M6 10v9.5h12V10"/><path d="M10 19.5v-5h4v5"/></svg>',
+        'menu' => '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4.5 10.5a7.5 5.5 0 0 1 15 0z"/><path d="M3.5 13.5h17"/><path d="M4.5 16.5h15a3 3 0 0 1-3 3h-9a3 3 0 0 1-3-3z"/></svg>',
         'pin'  => '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-6.5-5.6-6.5-11a6.5 6.5 0 0 1 13 0c0 5.4-6.5 11-6.5 11Z"/><circle cx="12" cy="10" r="2.4"/></svg>',
         'user' => '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8.2" r="3.7"/><path d="M4.8 20c.6-3.7 3.6-5.8 7.2-5.8s6.6 2.1 7.2 5.8"/></svg>',
         'cart' => '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 4h2.4l2.2 10.2h10.1L19.6 7H6.3"/><circle cx="9.3" cy="18.6" r="1.4"/><circle cx="17" cy="18.6" r="1.4"/></svg>',
     ];
     ?>
     <nav class="dlpmi" aria-label="Menú inferior">
-        <a class="dlpmi-it<?php echo $is_home ? ' is-on' : ''; ?>" href="<?php echo esc_url($menu_url); ?>" data-dlpmi="menu">
+        <a class="dlpmi-it<?php echo $is_menu ? ' is-on' : ''; ?>" href="<?php echo esc_url($menu_url); ?>" data-dlpmi="menu">
             <?php echo $icons['menu']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
             <span><?php echo esc_html($o('texto_menu')); ?></span>
         </a>

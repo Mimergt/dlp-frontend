@@ -26,19 +26,19 @@
     },
     {
       "key": "redir_producto",
-      "label": "Producto → inicio con la vista rápida abierta",
+      "label": "Producto → Menú con la vista rápida abierta",
       "type": "checkbox",
       "default": 1,
       "css_var": false,
-      "help": "La página de cada producto lleva al inicio y abre su ventana (#producto-slug). Los enlaces compartidos siguen funcionando."
+      "help": "La página de cada producto lleva a /menu/ y abre su ventana (#producto-slug)."
     },
     {
       "key": "redir_categoria",
-      "label": "Categorías y tienda → inicio",
+      "label": "Categorías y tienda → Menú",
       "type": "checkbox",
       "default": 1,
       "css_var": false,
-      "help": "Las páginas de categoría y /tienda/ llevan al inicio. Con ?dlp_native=1 se ven sin redirigir (para revisar)."
+      "help": "Las páginas de categoría y /tienda/ llevan a /menu/. Con ?dlp_native=1 se ven sin redirigir (para revisar)."
     }
   ]
 }
