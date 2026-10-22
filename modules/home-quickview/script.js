@@ -154,7 +154,7 @@
           if (t) marcadas.push(t);
         });
         if (marcadas.length) alguno = true;
-        partes.push(accName($c).split(':')[0] + ': ' + (marcadas.length ? marcadas.join(', ') : 'ninguno'));
+        partes.push($box.children('.wc-pao-addon-container').length === 1 ? marcadas.join(', ') : accName($c).split(':')[0] + ': ' + (marcadas.length ? marcadas.join(', ') : 'ninguno'));
       });
       $(this).find('.dlpqv-grp-s').text(alguno ? partes.join(' · ') : 'Toca para elegir');
       $(this).toggleClass('done', alguno);
@@ -177,6 +177,7 @@
       }
       $box.append($c);
     });
+    $form.find('.dlpqv-acc').each(function () { var $b = $(this).next('.dlpqv-grp-box'); if ($b.children('.wc-pao-addon-container').length === 1) $b.addClass('dlpqv-grp-box--solo'); });
     accSync($form);
   }
 

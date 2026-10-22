@@ -145,3 +145,7 @@ html.dlpqv-lock { overflow: hidden; }
 .dlpqv .dlpqv-grp-box { margin: 0 0 8px; }
 .dlpqv .dlpqv-grp-box[hidden] { display: none; }
 .dlpqv .wc-pao-addon-container:has(input[data-dlpqv-group]) label.wc-pao-addon-name { display: none; }
+
+/* Acordeón con un solo extra: se oculta su título (ya lo dice la cabecera) */
+.dlpqv .dlpqv-grp-box--solo .wc-pao-addon-name { display: none; }
+.dlpqv .dlpqv-grp-box--solo .wc-pao-addon-container { margin-top: 4px; }
