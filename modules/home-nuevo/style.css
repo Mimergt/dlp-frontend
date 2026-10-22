@@ -156,3 +156,13 @@ h2.dlph-h { margin: 0; padding: 0; font-size: 34px; line-height: .95; }
   .dlph--banner .dlph-ind { max-width: none; margin: 0; padding: 12px 0 0; }
   .dlph-slide picture { max-width: none; }
 }
+
+/* Escritorio: banner a todo el ancho de la pantalla (de borde a borde), sin tope ni barras. */
+@media (min-width: 768px) {
+  .dlph.dlph--banner { width: 100vw; max-width: none; margin-left: calc(50% - 50vw); margin-right: 0; padding: 0; }
+  .dlph--banner .dlph-bn { padding-top: 0; }
+  .dlph--banner .dlph-bn .dlph-track { margin: 0; border-radius: 0; }
+  .dlph--banner .dlph-ind { max-width: 1240px; margin: 0 auto; padding: 12px 24px 0; }
+  .dlph-slide picture, .dlph-slide img { max-width: none; width: 100%; }
+}
+body.dlph-page { overflow-x: clip; }
