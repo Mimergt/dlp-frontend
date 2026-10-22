@@ -14,6 +14,9 @@ $ING = [
     'TO' => ['Queso Americano', 'Tomate', 'Lechuga', 'Cebolla', 'Tocino', 'Huevo'],
     'TJ' => ['Queso Americano', 'Lechuga', 'Onion tanglers', 'Jalapeños', 'BBQ'],
     'CA' => ['Tomate', 'Lechuga', 'Cebolla', 'Salsa'],
+    'BC' => ['Queso Cheddar', 'Tocino'],
+    'SM' => ['Queso Suizo', 'Champiñones salteados'],
+    'INF' => ['Queso Americano', 'Lechuga'],
     'SCL' => ['Queso Americano', 'Tomate', 'Lechuga', 'Lascas de cebolla salteadas', 'Salsa'],
     'SLG' => ['Lascas de cebolla salteadas', 'Lascas de jalapeño salteadas', 'Salsa Legendaria', 'Queso Americano'],
     'SJP' => ['Queso Americano', 'Lascas de cebolla salteadas', 'Lascas de jalapeño salteadas', 'Jalea de frambuesa', 'Queso crema'],
@@ -38,6 +41,16 @@ $S = [
     159004 => ['carne' => 1, 'hamb' => [['Ingredientes', 'SLG']]],                            // Legendaria Smash individual
     159008 => [],                                                                              // Tenders infantil individual
     159010 => ['comp' => 'combo', 'beb' => ['lista']],                                        // Combo Tenders infantil
+    // Combos de res clásicos (carne favorita + bebida + complemento + ingredientes)
+    2057   => ['carne' => 1, 'comp' => 'combo', 'beb' => ['lista'], 'hamb' => [['Ingredientes', 'CL']]],
+    2049   => ['carne' => 1, 'comp' => 'combo', 'beb' => ['lista'], 'hamb' => [['Ingredientes', 'DP']]],
+    2055   => ['carne' => 1, 'comp' => 'combo', 'beb' => ['lista'], 'hamb' => [['Ingredientes', 'TJ']]],
+    2053   => ['carne' => 1, 'comp' => 'combo', 'beb' => ['lista'], 'hamb' => [['Ingredientes', 'TO']]],
+    2059   => ['carne' => 1, 'comp' => 'combo', 'beb' => ['lista'], 'hamb' => [['Ingredientes', 'INF']]],
+    // Combos sin elección de carne
+    124430 => ['comp' => 'combo', 'beb' => ['lista'], 'hamb' => [['Ingredientes', 'BC']]],
+    124435 => ['comp' => 'combo', 'beb' => ['lista'], 'hamb' => [['Ingredientes', 'SM']]],
+    2061   => ['comp' => 'combo', 'beb' => ['lista']],                                        // Combo Derretido
 ];
 
 $base = (int) (microtime(true) * 10) % 1000000000;
