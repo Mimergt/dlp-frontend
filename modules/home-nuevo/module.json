@@ -122,26 +122,13 @@
       "group": "Banner"
     },
     {
-      "key": "banner_alto_max",
-      "label": "Altura máxima del banner (px)",
+      "key": "banner_ancho_max",
+      "label": "Ancho máximo del banner en escritorio (px)",
       "type": "number",
-      "default": 420,
+      "default": 1440,
       "unit": "px",
       "group": "Banner",
-      "help": "Limita qué tan alto se ve el banner en pantallas anchas. La proporción base es 3:1."
-    },
-    {
-      "key": "banner_ajuste",
-      "label": "Ajuste de la imagen",
-      "type": "select",
-      "default": "completo",
-      "css_var": false,
-      "body_class": "dlph-fit",
-      "group": "Banner",
-      "options": {
-        "completo": "Mostrar completa (barras negras si sobra espacio)",
-        "recortar": "Llenar el espacio (puede recortar los bordes)"
-      }
+      "help": "El banner se ve completo, sin recortes: su alto depende de su ancho. En pantallas más anchas que esto, la imagen deja de crecer y los lados quedan en negro. Bájalo (por ejemplo a 1200) para un banner menos alto."
     },
     {
       "key": "autoplay_promos",
