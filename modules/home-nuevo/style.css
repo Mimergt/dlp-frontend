@@ -141,7 +141,8 @@ h2.dlph-h { margin: 0; padding: 0; font-size: 34px; line-height: .95; }
    se ajusta en el panel (los lados quedan en negro, que es el fondo de los banners). */
 .dlph-bn .dlph-track { background: #000; align-items: stretch; }
 .dlph-slide { display: flex; align-items: center; justify-content: center; background: #000; }
-.dlph-slide img { width: 100%; height: auto; max-width: var(--dlp-home-nuevo-banner-ancho-max, 1440px); aspect-ratio: auto; object-fit: initial; }
+.dlph-slide picture { display: block; flex: 1 1 100%; width: 100%; max-width: var(--dlp-home-nuevo-banner-ancho-max, 1440px); }
+.dlph-slide img { display: block; width: 100%; height: auto; max-width: none; aspect-ratio: auto; object-fit: initial; }
 @media (min-width: 768px) {
   .dlph--banner .dlph-bn .dlph-track { background: #000; }
 }

@@ -90,7 +90,7 @@ function dlp_fe_hn_banner() {
         $mov = trim((string) dlp_fe_hn_o('banner' . $i . '_img_movil'));
         $banners .= '<a class="dlph-slide' . ($mov !== '' ? ' has-m' : '') . '" href="' . esc_url(dlp_fe_hn_url(dlp_fe_hn_o('banner' . $i . '_url'))) . '"><picture>'
             . ($mov !== '' ? '<source media="(max-width: 767px)" srcset="' . esc_url($mov) . '">' : '')
-            . '<img src="' . esc_url($img) . '" alt="" ' . ($nb > 1 ? 'loading="lazy"' : 'fetchpriority="high"') . '></picture></a>';
+            . '<img class="dlph-bimg" src="' . esc_url($img) . '" alt="" ' . ($nb > 1 ? 'loading="lazy"' : 'fetchpriority="high"') . '></picture></a>';
     }
     if (!$nb) {
         return '';
@@ -235,3 +235,10 @@ add_action('wp_head', function () {
         echo '<style id="dlph-fonts">' . $css . '</style>' . "\n"; // phpcs:ignore
     }
 }, 8);
+
+// Los banners se sirven con su tamaño original: el CDN de imágenes de Jetpack los reducía a 1080 px de ancho.
+foreach (['jetpack_photon_skip_image', 'jetpack_image_cdn_skip_image'] as $hook) {
+    add_filter($hook, function ($skip, $src = '', $tag = '') {
+        return (is_string($tag) && strpos($tag, 'dlph-bimg') !== false) ? true : $skip;
+    }, 10, 3);
+}
