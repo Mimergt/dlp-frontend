@@ -122,6 +122,15 @@
       "group": "Banner"
     },
     {
+      "key": "banner_alto",
+      "label": "Altura del banner en escritorio (px)",
+      "type": "number",
+      "default": 600,
+      "unit": "px",
+      "group": "Banner",
+      "help": "Fija en escritorio (ancho completo). La imagen se ajusta al ancho y se recorta un poco arriba y abajo si hace falta. En celular no aplica: ahí el banner se ve completo."
+    },
+    {
       "key": "autoplay_promos",
       "label": "Promociones: avanzan solas cada (segundos, 0 = no)",
       "type": "number",

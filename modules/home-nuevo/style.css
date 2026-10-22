@@ -166,3 +166,11 @@ h2.dlph-h { margin: 0; padding: 0; font-size: 34px; line-height: .95; }
   .dlph-slide picture, .dlph-slide img { max-width: none; width: 100%; }
 }
 body.dlph-page { overflow-x: clip; }
+
+/* Escritorio: alto fijo del banner (ancho completo; la imagen se ajusta y puede recortarse arriba/abajo). El celular no cambia. */
+@media (min-width: 768px) {
+  .dlph--banner .dlph-bn .dlph-track { height: var(--dlp-home-nuevo-banner-alto, 600px) !important; }
+  .dlph--banner .dlph-slide { align-items: stretch; }
+  .dlph--banner .dlph-slide picture { height: 100%; }
+  .dlph--banner .dlph-slide img { height: 100%; object-fit: cover; object-position: center; }
+}
