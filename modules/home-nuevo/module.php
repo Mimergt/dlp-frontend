@@ -95,7 +95,17 @@ function dlp_fe_hn_banner() {
     if (!$nb) {
         return '';
     }
-    return dlp_fe_hn_envolver('<section class="dlph-bn">' . dlp_fe_hn_slider('<div class="dlph-fade">' . $banners . '</div>', $nb, 'is-banner is-fade') . '</section>', 'dlph--banner');
+    // Proporción de la primera imagen (ancho/alto) para que en escritorio el alto siga a la imagen y 500/600 px sea solo el máximo
+    $ratio = '';
+    $primero = trim((string) dlp_fe_hn_o('banner1_img'));
+    if ($primero !== '') {
+        $aid  = attachment_url_to_postid($primero);
+        $meta = $aid ? wp_get_attachment_metadata($aid) : false;
+        if (!empty($meta['width']) && !empty($meta['height'])) {
+            $ratio = ' style="--dlph-r:' . round($meta['width'] / $meta['height'], 3) . '"';
+        }
+    }
+    return dlp_fe_hn_envolver('<section class="dlph-bn">' . dlp_fe_hn_slider('<div class="dlph-fade"' . $ratio . '>' . $banners . '</div>', $nb, 'is-banner is-fade') . '</section>', 'dlph--banner');
 }
 
 function dlp_fe_hn_promos($a = []) {

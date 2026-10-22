@@ -123,12 +123,12 @@
     },
     {
       "key": "banner_alto",
-      "label": "Altura del banner en escritorio (px)",
+      "label": "Altura máxima del banner en escritorio (px)",
       "type": "number",
       "default": 600,
       "unit": "px",
       "group": "Banner",
-      "help": "Fija en escritorio (ancho completo). La imagen se ajusta al ancho y se recorta un poco arriba y abajo si hace falta. En celular no aplica: ahí el banner se ve completo."
+      "help": "En escritorio el banner ocupa todo el ancho y su alto sigue la proporción de la imagen. Esta es la altura máxima: si la imagen en pantalla grande la pasa, se recorta un poco arriba y abajo (centrado). En celular no aplica."
     },
     {
       "key": "autoplay_promos",

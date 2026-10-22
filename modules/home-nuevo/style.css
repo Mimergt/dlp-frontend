@@ -193,3 +193,8 @@ body.dlph-page { overflow-x: clip; }
 }
 
 @media (min-width: 768px) { .dlph--banner .dlph-fade { grid-template-rows: 100%; grid-template-columns: 100%; } }
+
+/* Escritorio: el alto sigue la proporción de la imagen (sin recortar) y «Altura del banner» es el máximo; solo si se pasa, se recorta centrado. */
+@media (min-width: 768px) {
+  .dlph--banner .dlph-fade { height: min(var(--dlp-home-nuevo-banner-alto, 600px), calc(100vw / var(--dlph-r, 2.4))); }
+}
