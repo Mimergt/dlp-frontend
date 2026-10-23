@@ -198,3 +198,4 @@ Faltan: pedidos con extras de varios días de disponibilidad, cupones, tarjeta (
 - Límite de productos por pestaña: cada pestaña del menú es un layout Divi (120361, 1833, 138171, 1964, 1977, 1985, 2002, 2011) con un módulo Tienda sin «número de productos» (Divi usa 12). Se fijó `postsNumber` = 50 en los 8 (backup en meta `_dlp_backup_posts`). Para producción hay que repetirlo.
 - Kits: «Añade tus bebidas» = 9 extras de cantidad (sin tope) agrupados con la nueva marca `[grupo:Título=*]` (grupo libre: acordeón con contador «N elegidas», sin total exacto ni bloqueo del botón). 0.29.2.
 - Grupos con total exacto (`[grupo:Título=N]`, ej. «Felices los 4»): etiqueta roja «Obligatorio» junto al contador «0 de N» (0.29.4). Los grupos libres `=*` no la llevan (son opcionales).
+- Checkout: NIT vacío → «C/F» y nombre de factura vacío → «Consumidor Final», en el servidor (módulo `checkout-campos`, 0.29.5). Sustituye el JS «nit22» de Custom CSS & JS.

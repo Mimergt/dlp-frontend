@@ -17,6 +17,18 @@ add_filter('woocommerce_billing_fields', function ($fields) {
     return $fields;
 });
 
+// Factura: si no escriben NIT ni nombre se guarda «C/F» y «Consumidor Final» (antes lo hacía un JS en «Custom CSS & JS»;
+// aquí es en el servidor, así también aplica a pedidos que no vienen del navegador).
+add_filter('woocommerce_checkout_posted_data', function ($data) {
+    if (isset($data['billing_nit']) && trim((string) $data['billing_nit']) === '') {
+        $data['billing_nit'] = 'C/F';
+    }
+    if (isset($data['billing_nitname']) && trim((string) $data['billing_nitname']) === '') {
+        $data['billing_nitname'] = 'Consumidor Final';
+    }
+    return $data;
+}, 5);
+
 // Dirección no obligatoria.
 add_filter('woocommerce_default_address_fields', function ($fields) {
     $fields['address_1']['required'] = false;
