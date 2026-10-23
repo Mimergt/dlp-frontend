@@ -12,8 +12,19 @@ Regla: dev primero; **desactivar → probar → borrar**; respaldo antes de borr
 
 Pruebas de humo usadas: `/`, `/menu/`, `/finalizar-compra/`, `/mi-cuenta/`, `/carrito/`, `/orders/`, `/tienda/`, `/wp-login.php` (código HTTP y avisos PHP) + un pedido de delivery de prueba de extremo a extremo (se borra).
 
+## Decisión del usuario (2026-10-23)
+**Los plugins se dejan para el final**: hay que ver cuáles se pueden reemplazar y cuáles conviene conservar. Los de WooFood sí se van. Mientras tanto, lo importante es que los activos no interfieran.
+
+## Auditoría de interferencia de los plugins activos (dev, solo lectura)
+- Sin errores nuevos: PHP sin avisos en las páginas clave; `WP_DEBUG` apagado; el `error_log` no tiene nada reciente.
+- **Ningún plugin de WooFood carga nada** (no hay scripts/estilos ni hooks suyos en home, menú, checkout, Mi cuenta ni panel).
+- Hooks cruzados vigentes: `woocommerce_checkout_fields`/`billing_fields` los toca dlp-frontend **y** dlp-tiendas (conviven, probado con 23 pedidos de prueba); `woocommerce_add_to_cart_validation` lo comparten dlp-frontend (`extras-grupos`) y Product Add-Ons (conviven).
+- `peters-login-redirect` engancha `login_redirect` pero sin reglas configuradas (solo `rul_settings`): hoy no hace nada; `user-blocker` engancha `authenticate` (bloquea usuarios por rol/fecha; sin tabla ni reglas visibles).
+- Pasarelas activas en dev: solo `cod` (contra entrega).
+- **Costo sin necesidad** (candidatos para cuando se decida): `anythingslider-divi` carga en TODAS las páginas (checkout, Mi cuenta, panel) aunque solo se usa en el menú; Product Add-Ons carga en Mi cuenta y panel; `handl-utm-grabber` en todas; **Jetpack tiene 15 módulos activos** (stats, woocommerce-analytics, notes, monitor, blaze, ai, subscriptions, activity-log, backup, account-protection…) y solo hace falta Photon/CDN. Se pueden recortar **sin quitar plugins** (apagar módulos de Jetpack o desencolar assets por página desde dlp-frontend).
+
 ## Pendiente (en este orden)
-1. Plugins inactivos (ver lista en `ARQUITECTURA.md` §5.2), de a pocos con prueba después de cada grupo.
+1. (AL FINAL, por decisión del usuario) Plugins inactivos (ver lista en `ARQUITECTURA.md` §5.2) y los activos que se puedan reemplazar, de a pocos con prueba después de cada grupo.
 2. Opciones huérfanas autoload (`wpnotif_gateway_customer_notifications` 1,3 MB, `berocket_ee`, `brainstrom_bundled_products`) y tareas cron de plugins inexistentes.
 3. Drop-in `object-cache.php` (LiteSpeed, plugin inactivo).
 4. Revisar los 29 fragmentos `custom-css-js` antes de borrarlos.
