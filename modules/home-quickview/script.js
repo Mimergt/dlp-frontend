@@ -345,7 +345,7 @@
   $(document).on('click', '.dlpqv-step', function () {
     var $w = $(this).closest('.dlpqv-step-wrap'), $in = $w.find('input'), step = parseInt($(this).data('step'), 10);
     var min = $w.data('min'), max = $w.data('max');
-    if ($in.attr('data-dlpqv-group')) {
+    if ($in.attr('data-dlpqv-group') && !isNaN(parseInt($in.attr('data-dlpqv-n'), 10))) {
       var $f = $in.closest('form.cart');
       max = Math.min(max, parseInt($in.attr('data-dlpqv-n'), 10) - groupSum(groupInputs($f, $in.attr('data-dlpqv-group')).not($in)));
     }
