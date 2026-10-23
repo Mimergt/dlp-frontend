@@ -144,7 +144,7 @@ class DLP_FE_Loader {
         if (is_admin() || !current_user_can('manage_options')) {
             return;
         }
-        $bar->add_node(['id' => 'dlp-fe', 'title' => 'DLP FE (' . count(self::$loaded) . ')', 'href' => DLP_FE_Admin::url('home')]);
+        $bar->add_node(['id' => 'dlp-fe', 'title' => 'DLP FE (' . count(self::$loaded) . ')', 'href' => admin_url('admin.php?page=dlp-config')]);
         foreach (self::$loaded as $id) {
             $bar->add_node([
                 'id' => 'dlp-fe-' . $id, 'parent' => 'dlp-fe',
