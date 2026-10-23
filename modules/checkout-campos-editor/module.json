@@ -1,8 +1,10 @@
 {
   "label": "Checkout: editor de campos",
-  "description": "Reemplaza al plugin «Checkout Field Editor». Etiquetas, textos de ayuda, obligatoriedad, orden, ancho y sección de cada campo del formulario de pago, más campos nuevos. Se edita en Herramientas → DLP Config → Campos del checkout.",
-  "section": "general",
+  "description": "Reemplaza al plugin «Checkout Field Editor». Etiquetas, textos de ayuda, obligatoriedad, orden, ancho y sección de cada campo del formulario de pago, más campos nuevos. Se edita en DLP Config → Checkout y pedidos → Editor de campos.",
+  "section": "checkout",
   "boot": true,
   "php": "module.php",
-  "default": true
+  "default": true,
+  "tab": "Editor de campos",
+  "order": 4
 }

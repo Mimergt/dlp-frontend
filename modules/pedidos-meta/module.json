@@ -1,6 +1,9 @@
 {
   "label": "Pedidos: tiempo total y dispositivo",
   "description": "Guarda tiempo_total al completar un pedido y el dispositivo (Android / IOS / MWeb) en cada pedido.",
+  "section": "checkout",
+  "tab": "Datos del pedido",
+  "order": 9,
   "boot": true,
   "php": "module.php"
 }

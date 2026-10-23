@@ -2,6 +2,8 @@
   "label": "Producto en modal (vista rápida)",
   "description": "Al tocar un producto del listado se abre en una ventana sin ir a su página. Reemplaza la vista rápida de WooFood. Usa los Add-Ons de WooCommerce y el carrito lateral.",
   "section": "home",
+  "tab": "Vista rápida",
+  "order": 3,
   "boot": true,
   "php": "module.php",
   "where": [

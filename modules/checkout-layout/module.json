@@ -1,6 +1,9 @@
 {
   "label": "Checkout: orden de secciones",
   "description": "Selector de entrega/recoger (dlp-tiendas) arriba del formulario y métodos de pago debajo de las notas del pedido. Reemplaza el override de form-checkout.php del tema.",
+  "section": "checkout",
+  "tab": "Orden de secciones",
+  "order": 2,
   "boot": true,
   "php": "module.php"
 }

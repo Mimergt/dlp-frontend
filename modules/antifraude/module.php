@@ -262,7 +262,7 @@ add_action('admin_post_dlp_fe_af', function () {
         [$tipo, $valor] = array_pad(explode(':', $k, 2), 2, '');
         dlp_fe_af_unblock([$tipo => $valor]);
     }
-    wp_safe_redirect(admin_url('tools.php?page=dlp-frontend&tab=bloqueos&saved=1'));
+    wp_safe_redirect(DLP_FE_Admin::url('antifraude', 'bloqueos') . '&saved=1');
     exit;
 });
 
@@ -270,7 +270,7 @@ function dlp_fe_af_render_admin() {
     $act  = dlp_fe_af_active();
     $tipos = ['email' => 'Correo', 'tel' => 'Teléfono', 'user' => 'Cuenta (ID, usuario o correo)', 'ip' => 'IP'];
     echo '<h2>Bloqueos y antifraude</h2>';
-    echo '<p class="description">Los clientes bloqueados no pueden crear pedidos (aunque compren sin cuenta). Las reglas automáticas se ajustan en la pestaña <strong>General</strong> → «Antifraude y bloqueo de clientes». Desde el panel de pedidos, «Bloquear cliente» agrega aquí su correo, teléfono y cuenta.</p>';
+    echo '<p class="description">Los clientes bloqueados no pueden crear pedidos (aunque compren sin cuenta). Las reglas automáticas se ajustan en la pestaña <strong>Reglas</strong>. Desde el panel de pedidos, «Bloquear cliente» agrega aquí su correo, teléfono y cuenta.</p>';
     echo '<h3>Bloqueados ahora (' . count($act) . ')</h3>';
     if (!$act) {
         echo '<p><em>Nadie está bloqueado.</em></p>';

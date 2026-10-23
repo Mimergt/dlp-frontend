@@ -1,6 +1,9 @@
 {
   "label": "Mi cuenta: teléfono y avisos de contraseña",
   "description": "Campo Teléfono obligatorio en Editar cuenta y avisos tras recuperar/cambiar contraseña.",
+  "section": "cuenta",
+  "tab": "Teléfono y avisos",
+  "order": 3,
   "boot": true,
   "php": "module.php"
 }

@@ -1,7 +1,9 @@
 {
   "label": "Menú inferior (celular)",
   "description": "Barra flotante abajo, solo en celular, con Menú, Ubicaciones, Cuenta y Carrito. El botón Carrito abre el carrito lateral (Xootix) y muestra la cantidad; el botón flotante original se oculta en celular. No se muestra en el checkout.",
-  "section": "general",
+  "section": "apariencia",
+  "tab": "Menú inferior",
+  "order": 4,
   "where": [
     "all"
   ],

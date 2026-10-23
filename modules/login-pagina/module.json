@@ -1,7 +1,9 @@
 {
   "label": "Ingresar: página de login propia",
   "description": "Reemplaza el contenido de la página /ingresar/ (y a Theme My Login) con un formulario propio: correo y contraseña, «Continuar como invitado» y recuperar contraseña. Sin registro. Entra por Ajax, con límite de intentos. El contenido de Divi de esa página se conserva pero no se muestra.",
-  "section": "general",
+  "section": "cuenta",
+  "tab": "Ingresar",
+  "order": 1,
   "boot": true,
   "php": "module.php",
   "where": [

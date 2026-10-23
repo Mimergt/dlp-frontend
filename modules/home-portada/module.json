@@ -2,6 +2,8 @@
   "label": "Home: portada",
   "description": "Estilo de las categorías (carrusel con foto) y de los productos del Home. \"Clásico\" deja el diseño actual sin cambios.",
   "section": "home",
+  "tab": "Portada",
+  "order": 2,
   "where": [
     "home",
     "shop",

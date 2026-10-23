@@ -1,7 +1,9 @@
 {
   "label": "Tema: modo claro y oscuro",
   "description": "Define los colores del sitio (variables --dlp-*) en versión clara y oscura. En automático sigue al teléfono: si el iPhone está en modo oscuro, el sitio también. Los demás módulos usan estas variables; lo que aún no se migró se queda en claro. El cliente puede forzar claro u oscuro con window.dlpTema.set('claro'|'oscuro'|'auto').",
-  "section": "tema",
+  "section": "apariencia",
+  "tab": "Tema claro/oscuro",
+  "order": 1,
   "boot": true,
   "php": "module.php",
   "where": [

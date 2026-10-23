@@ -12,13 +12,15 @@ class DLP_FE_Registry {
 
     private static $modules = null;
 
-    /** Secciones del panel (pestañas). Orden de aparición. Un módulo declara "section" en su module.json. */
+    /** Páginas del menú «DLP Config» (cada una es un submenú con pestañas). Un módulo declara "section", "tab" y "order" en su module.json. */
     public static function sections() {
         return [
-            'home'    => 'Home / Portada',
-            'general' => 'General',
-            'tema'    => 'Tema oscuro',
-            'sistema' => 'Sistema',
+            'home'       => ['Inicio y catálogo', 'Home, portada y vista rápida de productos'],
+            'checkout'   => ['Checkout y pedidos', 'Finalizar compra, carrito y pedidos'],
+            'cuenta'     => ['Cuenta y acceso', 'Ingresar, Mi cuenta y páginas sueltas'],
+            'apariencia' => ['Apariencia', 'Tema, header, menú inferior y splash'],
+            'antifraude' => ['Antifraude', 'Reglas automáticas y clientes bloqueados'],
+            'sistema'    => ['Sistema', 'Plantillas y utilidades internas'],
         ];
     }
 
@@ -73,14 +75,16 @@ class DLP_FE_Registry {
                 ? array_filter(array_map('trim', explode(',', $saved['where'])))
                 : (array) ($meta['where'] ?? ['all']);
             [$schema, $values] = self::normalize_settings($meta['settings'] ?? [], isset($saved['settings']) && is_array($saved['settings']) ? $saved['settings'] : []);
-            $section = $meta['section'] ?? (!empty($meta['boot']) ? 'sistema' : 'general');
+            $section = $meta['section'] ?? 'sistema';
             self::$modules[$id] = [
-                'section'     => isset(self::sections()[$section]) ? $section : 'general',
+                'section'     => isset(self::sections()[$section]) ? $section : 'sistema',
                 'schema'      => $schema,
                 'values'      => $values,
                 'id'          => $id,
                 'dir'         => dirname($file),
                 'label'       => $meta['label'] ?? $id,
+                'tab'         => $meta['tab'] ?? ($meta['label'] ?? $id),
+                'order'       => (int) ($meta['order'] ?? 50),
                 'description' => $meta['description'] ?? '',
                 'css'         => $meta['css'] ?? '',
                 'js'          => $meta['js'] ?? '',
@@ -92,7 +96,9 @@ class DLP_FE_Registry {
                 'enabled'     => array_key_exists('enabled', $saved) ? (bool) $saved['enabled'] : (bool) ($meta['default'] ?? true),
             ];
         }
-        ksort(self::$modules);
+        uasort(self::$modules, function ($a, $b) {
+            return [$a['order'], $a['id']] <=> [$b['order'], $b['id']];
+        });
         return self::$modules;
     }
 

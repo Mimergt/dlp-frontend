@@ -1,17 +1,66 @@
 {
   "label": "Antifraude y bloqueo de clientes",
-  "description": "Impide crear pedidos a clientes bloqueados (con o sin cuenta). Bloquea solo tras varios pagos con tarjeta fallidos y cuando alguien intenta un segundo pedido en menos de un minuto. La lista se gestiona en Herramientas → DLP Config → Bloqueos y antifraude y desde el panel de pedidos.",
-  "section": "general",
+  "description": "Impide crear pedidos a clientes bloqueados (con o sin cuenta). Bloquea solo tras varios pagos con tarjeta fallidos y cuando alguien intenta un segundo pedido en menos de un minuto. La lista se gestiona en DLP Config → Antifraude → Bloqueos y actividad y desde el panel de pedidos.",
+  "section": "antifraude",
+  "tab": "Reglas",
+  "order": 1,
   "boot": true,
   "php": "module.php",
   "default": true,
   "settings": [
-    {"key": "fallos_max", "label": "Pagos fallidos para bloquear", "type": "number", "default": 3, "help": "Con tarjeta rechazada N veces dentro de la ventana, se bloquea. 0 = desactivado.", "group": "Tarjeta"},
-    {"key": "fallos_ventana", "label": "Ventana de fallos (minutos)", "type": "number", "default": 60, "group": "Tarjeta"},
-    {"key": "fallos_bloqueo", "label": "Duración del bloqueo (horas)", "type": "number", "default": 24, "help": "0 = permanente hasta que lo quiten a mano.", "group": "Tarjeta"},
-    {"key": "rapido_seg", "label": "Segundo pedido en menos de (segundos)", "type": "number", "default": 60, "help": "Si alguien con un pedido reciente intenta otro dentro de este tiempo se rechaza. 0 = desactivado.", "group": "Pedidos seguidos"},
-    {"key": "rapido_bloqueo", "label": "Bloquear además por (minutos)", "type": "number", "default": 30, "help": "0 = solo rechazar ese intento, sin bloquear.", "group": "Pedidos seguidos"},
-    {"key": "por_ip", "label": "Contar y bloquear también por IP", "type": "checkbox", "default": 0, "help": "Ojo: en datos móviles muchas personas comparten IP. Por defecto solo se usa correo, teléfono y cuenta.", "group": "General"},
-    {"key": "mensaje", "label": "Mensaje al cliente", "type": "textarea", "default": "No pudimos procesar tu pedido en este momento. Comunícate con la tienda para ayudarte.", "group": "General"}
+    {
+      "key": "fallos_max",
+      "label": "Pagos fallidos para bloquear",
+      "type": "number",
+      "default": 3,
+      "help": "Con tarjeta rechazada N veces dentro de la ventana, se bloquea. 0 = desactivado.",
+      "group": "Tarjeta"
+    },
+    {
+      "key": "fallos_ventana",
+      "label": "Ventana de fallos (minutos)",
+      "type": "number",
+      "default": 60,
+      "group": "Tarjeta"
+    },
+    {
+      "key": "fallos_bloqueo",
+      "label": "Duración del bloqueo (horas)",
+      "type": "number",
+      "default": 24,
+      "help": "0 = permanente hasta que lo quiten a mano.",
+      "group": "Tarjeta"
+    },
+    {
+      "key": "rapido_seg",
+      "label": "Segundo pedido en menos de (segundos)",
+      "type": "number",
+      "default": 60,
+      "help": "Si alguien con un pedido reciente intenta otro dentro de este tiempo se rechaza. 0 = desactivado.",
+      "group": "Pedidos seguidos"
+    },
+    {
+      "key": "rapido_bloqueo",
+      "label": "Bloquear además por (minutos)",
+      "type": "number",
+      "default": 30,
+      "help": "0 = solo rechazar ese intento, sin bloquear.",
+      "group": "Pedidos seguidos"
+    },
+    {
+      "key": "por_ip",
+      "label": "Contar y bloquear también por IP",
+      "type": "checkbox",
+      "default": 0,
+      "help": "Ojo: en datos móviles muchas personas comparten IP. Por defecto solo se usa correo, teléfono y cuenta.",
+      "group": "General"
+    },
+    {
+      "key": "mensaje",
+      "label": "Mensaje al cliente",
+      "type": "textarea",
+      "default": "No pudimos procesar tu pedido en este momento. Comunícate con la tienda para ayudarte.",
+      "group": "General"
+    }
   ]
 }

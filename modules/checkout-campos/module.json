@@ -1,6 +1,9 @@
 {
   "label": "Checkout: campos y cuenta de invitado",
   "description": "Quita campos (cumpleaños, código postal), dirección no obligatoria, y asigna pedidos de invitados a su cuenta por correo.",
+  "section": "checkout",
+  "tab": "Campos y NIT",
+  "order": 3,
   "boot": true,
   "php": "module.php"
 }

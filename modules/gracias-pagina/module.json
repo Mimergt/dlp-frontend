@@ -1,10 +1,14 @@
 {
   "label": "Pedido recibido: página de gracias",
   "description": "Rediseña la página que ve el cliente al terminar su pedido: fondo negro con una hamburguesa que se arma, hoja blanca con la barra de estados (Recibido, Preparando, En camino/Listo, Entregado) que se actualiza sola cada 20 segundos, total, forma de pago y botones. No incluye rastreo.",
-  "section": "general",
+  "section": "checkout",
+  "tab": "Pedido recibido",
+  "order": 7,
   "boot": true,
   "php": "module.php",
-  "where": ["checkout"],
+  "where": [
+    "checkout"
+  ],
   "default": true,
   "css": "style.css",
   "js": "script.js",

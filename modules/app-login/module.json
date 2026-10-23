@@ -1,6 +1,9 @@
 {
   "label": "Login desde la app (Android/iOS)",
   "description": "Registro, login y autologin de la app. Copia fiel del tema dlp: NO modificar sin coordinar con la app.",
+  "section": "cuenta",
+  "tab": "Login desde la app",
+  "order": 4,
   "boot": true,
   "php": "module.php"
 }

@@ -1,7 +1,9 @@
 {
   "label": "Mi cuenta: página personalizada",
   "description": "Mi cuenta con solo Pedidos, Direcciones, Perfil y Cerrar sesión. Pestañas con ícono arriba (celular y escritorio), pedidos en tarjetas, libreta de direcciones propia (hasta 3, con mapa) y perfil con el mismo estilo del checkout.",
-  "section": "general",
+  "section": "cuenta",
+  "tab": "Mi cuenta",
+  "order": 2,
   "boot": true,
   "php": "module.php",
   "where": [

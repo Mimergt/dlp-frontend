@@ -1,7 +1,9 @@
 {
   "label": "Carrito lateral: estilo",
   "description": "Estiliza el panel del carrito lateral (Xootix): esquinas redondeadas, botones tipo píldora y opción de ocultar «Ver carro». Solo CSS; no toca la lógica del carrito.",
-  "section": "general",
+  "section": "checkout",
+  "tab": "Carrito lateral",
+  "order": 6,
   "where": [
     "all"
   ],
