@@ -199,3 +199,4 @@ Faltan: pedidos con extras de varios días de disponibilidad, cupones, tarjeta (
 - Kits: «Añade tus bebidas» = 9 extras de cantidad (sin tope) agrupados con la nueva marca `[grupo:Título=*]` (grupo libre: acordeón con contador «N elegidas», sin total exacto ni bloqueo del botón). 0.29.2.
 - Grupos con total exacto (`[grupo:Título=N]`, ej. «Felices los 4»): etiqueta roja «Obligatorio» junto al contador «0 de N» (0.29.4). Los grupos libres `=*` no la llevan (son opcionales).
 - Checkout: NIT vacío → «C/F» y nombre de factura vacío → «Consumidor Final», en el servidor (módulo `checkout-campos`, 0.29.5). Sustituye el JS «nit22» de Custom CSS & JS.
+- Checkout: además de `_billing_nit`/`_billing_nitname`/`_billing_address_name` (WooCommerce) se guardan SIN guion bajo, que es lo que lee el panel (`rest.php`, `history.php`) y lo que dejaba el plugin viejo de campos (0.29.6). Sin esto el panel mostraba NIT vacío en pedidos nuevos.

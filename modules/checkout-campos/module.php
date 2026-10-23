@@ -29,6 +29,22 @@ add_filter('woocommerce_checkout_posted_data', function ($data) {
     return $data;
 }, 5);
 
+// Compatibilidad: el panel de pedidos, el historial y los reportes leen NIT, nombre de factura y nombre de la dirección SIN guion
+// bajo (`billing_nit`...), como los guardaba el plugin anterior de campos; WooCommerce guarda `_billing_nit`. Se escriben las dos.
+add_action('woocommerce_checkout_create_order', function ($order) {
+    foreach (['billing_nit', 'billing_nitname', 'billing_address_name'] as $k) {
+        $v = $order->get_meta('_' . $k);
+        if ($v === '' || $v === null) {
+            $v = isset($_POST[$k]) ? wc_clean(wp_unslash($_POST[$k])) : ''; // phpcs:ignore WordPress.Security.NonceVerification
+            if ($k === 'billing_nit' && $v === '') { $v = 'C/F'; }
+            if ($k === 'billing_nitname' && $v === '') { $v = 'Consumidor Final'; }
+        }
+        if ($v !== '') {
+            $order->update_meta_data($k, $v);
+        }
+    }
+}, 30);
+
 // Dirección no obligatoria.
 add_filter('woocommerce_default_address_fields', function ($fields) {
     $fields['address_1']['required'] = false;
