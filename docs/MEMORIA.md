@@ -37,7 +37,7 @@ Documento de retoma: léelo completo al empezar una sesión nueva. Última actua
 | `carrito-lateral` | Estilo del panel Xootix: esquinas redondeadas, botones píldora, "Ver carro" oculto. `/carrito/` redirige a `/#carrito` y el script abre el carrito lateral. | all |
 | `splash-transicion` | Solo celular: splash con logo (palpita + barra) al abrir y entre páginas; se quita sola a los 4 s. | all |
 | `checkout-estilo` | Checkout en tarjetas con íconos (Entrega, Tus datos, Factura y notas, Tu pedido, Pago); botón "Realizar pedido · total" fijo en celular; dos columnas en escritorio; botón "Seguir pidiendo"; en Pickup oculta dirección y referencia. | checkout |
-| `checkout-campos-editor` | **Reemplaza** a Checkout Field Editor. Opción `dlp_fe_checkout_fields`; claves compatibles (`billing_nit`, `billing_nitname`, `billing_address_name`). Se edita en Apariencia → DLP Frontend → Campos del checkout. | siempre |
+| `checkout-campos-editor` | **Reemplaza** a Checkout Field Editor. Opción `dlp_fe_checkout_fields`; claves compatibles (`billing_nit`, `billing_nitname`, `billing_address_name`). Se edita en Herramientas → DLP Config → Campos del checkout. | siempre |
 | `checkout-libreta` | **Reemplaza** a Fr Address Book. Meta de usuario `dlp_fe_addresses` (id, nombre, dirección, referencia, lat, lng), **máximo 3**; tarjetas con tienda y estado (Abierta/Cerrada); las cerradas no se pueden elegir. Usa el puente `fabfw_address_billing_id` + `window.fabfw_select_address` hacia dlp-tiendas (que pone el pin y valida). | checkout |
 | `cuenta-pagina` | Mi cuenta propia: saludo + pestañas con ícono (Pedidos, Direcciones, Perfil), "Cerrar sesión" al final, pedidos en tarjetas, libreta de direcciones con mapa (hasta 3), perfil con estilo del checkout. `/mi-cuenta/` → Pedidos; sin sesión → `/ingresar/`. Endpoint de direcciones `edit-address` (antes `tsm-addresses`, corregido en el ajuste de WooCommerce). | account |
 | `login-pagina` | Ingreso propio (concepto "app": fondo oscuro + hoja blanca) pintado sobre la página existente `/ingresar/` (id 4082; su contenido de Divi se conserva pero no se muestra). Entra por Ajax (`wp_signon`, límite de intentos por IP y cuenta), "Continuar como invitado" → `/`, recuperar contraseña → WooCommerce. Sin registro. `wp-login.php` redirige aquí; atajo de emergencia `wp-login.php?dlp_native=1`. | page:ingresar |
@@ -48,7 +48,7 @@ Documento de retoma: léelo completo al empezar una sesión nueva. Última actua
 | `pedidos-meta` | `tiempo_total` y dispositivo (Android / IOS / MWeb) en cada pedido. | siempre |
 | `cuenta-cliente` | Teléfono en Editar cuenta y avisos de contraseña. | siempre |
 
-Panel de administración: Apariencia → DLP Frontend (estilo shadcn: `admin/panel.css`). Cada módulo se activa/desactiva y se acota por página; los ajustes se exponen como `var(--dlp-<modulo>-<clave>)` y `window.dlpFE["<modulo>"]`. Estructura de un módulo: `module.json` (label, description, section, where, default, css, js, php, boot, settings) + archivos.
+Panel de administración: Herramientas → DLP Config (estilo shadcn: `admin/panel.css`). Cada módulo se activa/desactiva y se acota por página; los ajustes se exponen como `var(--dlp-<modulo>-<clave>)` y `window.dlpFE["<modulo>"]`. Estructura de un módulo: `module.json` (label, description, section, where, default, css, js, php, boot, settings) + archivos.
 
 ## 4. Decisiones tomadas
 

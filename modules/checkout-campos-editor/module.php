@@ -192,7 +192,7 @@ add_action('admin_post_dlp_fe_save_campos', function () {
     if ($out) {
         update_option(DLP_FE_CF_OPTION, $out, false);
     }
-    wp_safe_redirect(admin_url('themes.php?page=dlp-frontend&tab=campos&saved=1'));
+    wp_safe_redirect(admin_url('tools.php?page=dlp-frontend&tab=campos&saved=1'));
     exit;
 });
 

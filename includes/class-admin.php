@@ -4,24 +4,24 @@ if (!defined('ABSPATH')) {
 }
 
 /**
- * Apariencia → DLP Frontend. Una pestaña por sección (Home / Portada, General, Sistema).
+ * Herramientas → DLP Config. Una pestaña por sección (Home / Portada, General, Sistema).
  * En cada una: módulos (activar, dónde se carga) y los ajustes que cada módulo declare en su module.json.
  */
 class DLP_FE_Admin {
-    const HOOK = 'appearance_page_dlp-frontend';
+    const HOOK = 'tools_page_dlp-frontend';
 
     public static function init() {
         add_action('admin_menu', [__CLASS__, 'menu']);
         add_action('admin_post_dlp_fe_save', [__CLASS__, 'save']);
         add_action('admin_enqueue_scripts', [__CLASS__, 'assets']);
         add_filter('plugin_action_links_' . plugin_basename(DLP_FE_FILE), function ($links) {
-            array_unshift($links, '<a href="' . esc_url(admin_url('themes.php?page=dlp-frontend')) . '">Panel</a>');
+            array_unshift($links, '<a href="' . esc_url(admin_url('tools.php?page=dlp-frontend')) . '">Panel</a>');
             return $links;
         });
     }
 
     public static function menu() {
-        add_theme_page('DLP Frontend', 'DLP Frontend', 'manage_options', 'dlp-frontend', [__CLASS__, 'render']);
+        add_management_page('DLP Config', 'DLP Config', 'manage_options', 'dlp-frontend', [__CLASS__, 'render']);
     }
 
     public static function assets($hook) {
@@ -40,6 +40,9 @@ class DLP_FE_Admin {
         $tab = isset($_REQUEST['tab']) ? sanitize_key(wp_unslash($_REQUEST['tab'])) : 'home';
         if ($tab === 'campos' && function_exists('dlp_fe_cf_render_admin')) {
             return 'campos';
+        }
+        if ($tab === 'bloqueos' && function_exists('dlp_fe_af_render_admin')) {
+            return 'bloqueos';
         }
         return isset(DLP_FE_Registry::sections()[$tab]) ? $tab : 'home';
     }
@@ -83,7 +86,7 @@ class DLP_FE_Admin {
             ];
         }
         update_option(DLP_FE_Registry::OPTION, $state);
-        wp_safe_redirect(admin_url('themes.php?page=dlp-frontend&tab=' . $tab . '&saved=1'));
+        wp_safe_redirect(admin_url('tools.php?page=dlp-frontend&tab=' . $tab . '&saved=1'));
         exit;
     }
 
@@ -127,19 +130,22 @@ class DLP_FE_Admin {
     public static function render() {
         $tab      = self::tab();
         $sections = DLP_FE_Registry::sections();
-        $mods     = $tab === 'campos' ? [] : array_filter(DLP_FE_Registry::all(), function ($m) use ($tab) {
+        $mods     = in_array($tab, ['campos', 'bloqueos'], true) ? [] : array_filter(DLP_FE_Registry::all(), function ($m) use ($tab) {
             return $m['section'] === $tab;
         });
         ?>
         <div class="wrap dlpfe">
-            <div class="dlpfe-top"><h1>DLP Frontend</h1><small>v<?php echo esc_html(DLP_FE_VERSION); ?></small></div>
+            <div class="dlpfe-top"><h1>DLP Config</h1><small>v<?php echo esc_html(DLP_FE_VERSION); ?></small></div>
             <div class="dlpfe-layout">
             <nav class="dlpfe-nav">
                 <?php foreach ($sections as $slug => $label) : ?>
-                    <a class="<?php echo $slug === $tab ? 'on' : ''; ?>" href="<?php echo esc_url(admin_url('themes.php?page=dlp-frontend&tab=' . $slug)); ?>"><?php echo esc_html($label); ?></a>
+                    <a class="<?php echo $slug === $tab ? 'on' : ''; ?>" href="<?php echo esc_url(admin_url('tools.php?page=dlp-frontend&tab=' . $slug)); ?>"><?php echo esc_html($label); ?></a>
                 <?php endforeach; ?>
                 <?php if (function_exists('dlp_fe_cf_render_admin')) : ?>
-                    <hr><a class="<?php echo $tab === 'campos' ? 'on' : ''; ?>" href="<?php echo esc_url(admin_url('themes.php?page=dlp-frontend&tab=campos')); ?>">Campos del checkout</a>
+                    <hr><a class="<?php echo $tab === 'campos' ? 'on' : ''; ?>" href="<?php echo esc_url(admin_url('tools.php?page=dlp-frontend&tab=campos')); ?>">Campos del checkout</a>
+                <?php endif; ?>
+                <?php if (function_exists('dlp_fe_af_render_admin')) : ?>
+                    <a class="<?php echo $tab === 'bloqueos' ? 'on' : ''; ?>" href="<?php echo esc_url(admin_url('tools.php?page=dlp-frontend&tab=bloqueos')); ?>">Bloqueos y antifraude</a>
                 <?php endif; ?>
             </nav>
             <div class="dlpfe-main">
@@ -152,7 +158,7 @@ class DLP_FE_Admin {
 
 
 
-            <?php if ($tab === 'campos') : dlp_fe_cf_render_admin(); elseif (!$mods) : ?>
+            <?php if ($tab === 'campos') : dlp_fe_cf_render_admin(); elseif ($tab === 'bloqueos') : dlp_fe_af_render_admin(); elseif (!$mods) : ?>
                 <p><em>Todavía no hay módulos en esta sección.</em></p>
             <?php else : ?>
             <form method="post" action="<?php echo esc_url(admin_url('admin-post.php')); ?>">
@@ -226,7 +232,7 @@ class DLP_FE_Admin {
             })();
             </script>
             <?php endif; ?>
-            <?php if ($tab !== 'campos') : ?>
+            <?php if (!in_array($tab, ['campos', 'bloqueos'], true)) : ?>
             <details class="dlpfe-help"><summary>Ayuda sobre los módulos</summary><p>            Cada módulo es independiente: si uno falla, desactívalo y el resto del sitio sigue igual.
                 Dónde se carga: <code>all, home, shop, product, cart, checkout, account, category, page:slug, post_type:tipo</code> (separados por coma; vacío = valor por defecto del módulo).
                 Los ajustes de cada módulo quedan disponibles en CSS como <code>var(--dlp-modulo-clave)</code> y en JS como <code>window.dlpFE["modulo"]</code>.</p></details>
