@@ -1,0 +1,14 @@
+{
+  "label": "Disponibilidad de productos (días y tiendas)",
+  "description": "Un producto puede venderse solo ciertos días de la semana (se oculta y no se puede comprar los demás días) y puede quitarse de tiendas concretas (se valida en el checkout, cuando ya se sabe qué tienda atiende el pedido). Se configura en cada producto («Disponibilidad») o por tienda en la pestaña «Disponibilidad por tienda».",
+  "section": "home",
+  "tab": "Disponibilidad: textos",
+  "order": 6,
+  "boot": true,
+  "php": "module.php",
+  "default": true,
+  "settings": [
+    {"key": "msg_dia", "label": "Mensaje fuera de día", "type": "text", "default": "Disponible solo: {dias}.", "help": "Se muestra en la página del producto. {dias} se reemplaza por los días."},
+    {"key": "msg_tienda", "label": "Mensaje en el checkout", "type": "textarea", "default": "«{producto}» no está disponible en la tienda que atenderá tu pedido ({tienda}). Quítalo del carrito para continuar.", "help": "Usa {producto} y {tienda}."}
+  ]
+}
