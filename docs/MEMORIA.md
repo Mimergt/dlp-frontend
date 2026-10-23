@@ -190,3 +190,8 @@ Faltan: pedidos con extras de varios días de disponibilidad, cupones, tarjeta (
 
 ## Sides (23 oct 2026)
 - Producción `#sides` (3, sin extras): Cheesy Poppers 2233 (Q20), Aros de cebolla 2235 (Q20), Papas individuales 117093 (Q15). Dev idéntico (mismo orden, precio, categoría, foto, sin extras): no hubo cambios. En la categoría `sides` de dev hay 7 productos más pero en BORRADOR (Jalapeño Poppers, Onion Rings, Curly Fries, Cheesy Fries, Chicken Fries, Jalapeño Bacon Fries, Pétalos de Cebolla): no están en producción. Probado: los 3 se agregan al carrito sin extras.
+
+## Para hacer en casa (22 oct)
+- Producción: 35 productos en la categoría «Do it yourself» (27 publicados, 8 en borrador: 2199, 2579, 2634, 2972, 2974 oculto, 2976, 2978, 3002); ninguno lleva extras. Dev tiene los mismos 35.
+- Orden de dev ajustado a la columna Posición del CSV de producción: kits, pan, torta, papas, poppers, queso, tocino, cebolla, champiñones, vegetales, salsas, sobrecitos (menu_order 610…870); borradores al final (880…960).
+- Solo datos (wp eval), sin cambios de plugin.
