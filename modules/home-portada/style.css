@@ -147,3 +147,11 @@ body.dlp-prod--etiqueta .et_pb_shop .woocommerce ul.products li.product .price, 
   body.dlp-prod--etiqueta .et_pb_shop .woocommerce ul.products li.product .price, body.dlp-prod--etiqueta .et_pb_shop .woocommerce ul.products li.product .price .amount, body.dlp-prod--etiqueta .et_pb_shop .woocommerce ul.products li.product .price bdi, body.dlp-prod--etiqueta .et_pb_shop .woocommerce ul.products li.product .price .woocommerce-Price-currencySymbol { font-size: 13px !important; }
 }
 
+
+/* Escritorio (estilo curva): todas las categorías caben en la misma pantalla, repartidas por igual (sin deslizar).
+   Swiper reparte N pestañas visibles; aquí se anula para mostrar todas, sea cual sea su número. */
+@media (min-width: 900px) {
+  body.dlp-cat--curva .cwp_et_pb_layout_slider_standard .navMenu_slide .swiper-wrapper { display: flex; justify-content: center; gap: 8px; width: 100% !important; transform: none !important; }
+  body.dlp-cat--curva .cwp_et_pb_layout_slider_standard .navMenu_slide .swiper-slide { flex: 1 1 0 !important; width: auto !important; min-width: 0; max-width: 190px; margin-right: 0 !important; }
+  body.dlp-cat--curva .cwp_et_pb_layout_slider_standard .navMenu_slide .swiper-slide span.navMenu_label { font-size: 11px; }
+}
