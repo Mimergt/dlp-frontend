@@ -205,3 +205,13 @@ Faltan: pedidos con extras de varios días de disponibilidad, cupones, tarjeta (
 - «Frezca» → «Frezka» en el nombre de 'La Clásica + Frezka' (id 122470; el slug se dejó igual para no romper enlaces) y en un borrador. Carnuda Lovers: se deja con Complemento 1 y 2.
 - Checkout (0.29.8, módulo `checkout-estilo`): el cupón ahora se escribe en una **ventana emergente** (el enlace «¿Tienes un cupón?» la abre; se aplica con el mismo endpoint de WooCommerce y el resultado —error o éxito— se ve dentro de la ventana; Esc/clic afuera/× cierran). Avisos y errores rediseñados: tarjeta clara con ícono y barra de color (rojo error, verde éxito, gris info), texto oscuro de 14 px; cada error con campo se puede tocar («· Corregir») para ir al campo; los campos con error se marcan en rojo. Con tema oscuro en `dark.css`.
 - Feedback cliente (0.29.10): «Fries» → «Papas fritas» en nombres, descripciones y extras (`scripts/papas-fritas-y-complementos.php`); en Felices los 4, Trío de Clásicas, Trío Del Puente y Las Favoritas el acompañamiento pasa de un desplegable («4 Fries / 4 Cheese poppers / 4 Aros») a un grupo `[grupo:Elige tus N complementos=N]` para repartirlo (p. ej. 1 papa + 3 aros): Papas fritas incluida, Cheese poppers y Aros +Q10 c/u (respaldo `_product_addons_backup_complementos`). «Toca para elegir» reemplaza el «Elige una opción…» de los desplegables (filtro gettext en `extras-grupos`). ATENCIÓN: `DLP_FE_VERSION` (define en dlp-frontend.php) debe subirse junto con `Version:`; se había quedado en 0.29.1 (sirve de `?ver=` de CSS/JS).
+
+
+## 0.30.0 — Menú y antifraude
+- El panel pasó de Apariencia a **Herramientas → DLP Config** (slug `dlp-frontend`, URL `tools.php?page=dlp-frontend`). El plugin ya no es solo front-end.
+- Módulo `antifraude` (boot): lista de bloqueos por correo / teléfono (últimos 8 dígitos) / cuenta / IP (opcional), también para invitados. Opciones `dlp_fe_af_bloqueos` y `dlp_fe_af_eventos`.
+  - Rechaza en `woocommerce_after_checkout_validation` (no se crea el pedido) y quita pasarelas en `order-pay`.
+  - Regla tarjeta: N fallos (`woocommerce_order_status_failed`, no `cod`) en la ventana → bloqueo temporal. Defecto 3 en 60 min, 24 h.
+  - Regla pedidos seguidos: segundo pedido en < 60 s → rechazo + bloqueo de 30 min. Un pedido fallido no cuenta como reciente.
+  - API: `dlp_fe_af_block/unblock/order_blocked/order_set`. dlp-panel3 1.14.0 la usa en «Bloquear cliente» (cae a `is_active` de User Blocker si el módulo no está). Bloqueo permanente de cuenta también marca `is_active=n`.
+  - Límite: errores de validación de tarjeta del plugin (número inválido) no crean pedido, no cuentan.
