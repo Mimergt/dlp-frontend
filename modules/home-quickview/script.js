@@ -269,6 +269,8 @@
       var $first = $(this).closest('.wc-pao-addon-container');
       var $h = $('<div class="dlpqv-grp" role="button" tabindex="0" aria-expanded="false" data-g=""><div class="dlpqv-grp-r"><b></b><span class="dlpqv-grp-c"></span><i class="dlpqv-grp-a" aria-hidden="true"></i></div><div class="dlpqv-grp-s"></div></div>')
         .attr('data-g', t).find('b').text(t).end().insertBefore($first);
+      // grupo con total exacto = obligatorio: etiqueta roja junto al contador (los grupos libres «=*» son opcionales)
+      if (!isNaN(parseInt($(this).attr('data-dlpqv-n'), 10))) $h.find('.dlpqv-grp-c').before('<span class="dlpqv-grp-req">Obligatorio</span>');
       // las filas del grupo van dentro de un contenedor plegable (cerrado al inicio)
       var $box = $('<div class="dlpqv-grp-box" hidden></div>').insertAfter($h);
       groupInputs($form, t).each(function () { $box.append($(this).closest('.wc-pao-addon-container')); });

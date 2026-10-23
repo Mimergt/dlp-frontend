@@ -138,6 +138,7 @@ html.dlpqv-lock { overflow: hidden; }
 .dlpqv .dlpqv-grp.open { border-color: var(--q-tinta); }
 .dlpqv .dlpqv-grp-r { display: flex; align-items: center; gap: 10px; }
 .dlpqv .dlpqv-grp-r b { flex: 1; }
+.dlpqv .dlpqv-grp-req { flex: none; padding: 3px 8px; border-radius: 999px; background: var(--q-acento); color: #fff; font-size: 11px; font-weight: 700; line-height: 1.2; letter-spacing: 0; white-space: nowrap; }
 .dlpqv .dlpqv-grp-a { flex: none; width: 9px; height: 9px; margin: 0 4px 3px 2px; border-right: 2px solid var(--q-tinta); border-bottom: 2px solid var(--q-tinta); transform: rotate(45deg); transition: transform .2s; }
 .dlpqv .dlpqv-grp.open .dlpqv-grp-a { margin-bottom: -3px; transform: rotate(-135deg); }
 .dlpqv .dlpqv-grp-s { margin-top: 4px; color: #777; font-size: 12.5px; font-weight: 600; line-height: 1.35; }
