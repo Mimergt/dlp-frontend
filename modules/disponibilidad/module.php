@@ -200,7 +200,7 @@ add_action('admin_post_dlp_fe_disp', function () {
             $e ? update_post_meta($pid, '_dlp_tiendas_excluidas', $e) : delete_post_meta($pid, '_dlp_tiendas_excluidas');
         }
     }
-    wp_safe_redirect(DLP_FE_Admin::url('home', 'disponibilidad') . '&tienda=' . $store . '&saved=1');
+    wp_safe_redirect(DLP_FE_Admin::url('home', 'por-tienda') . '&tienda=' . $store . '&saved=1');
     exit;
 });
 
@@ -208,7 +208,7 @@ function dlp_fe_disp_render_admin() {
     $tiendas = dlp_fe_disp_tiendas();
     $sel     = isset($_GET['tienda']) ? absint($_GET['tienda']) : ($tiendas ? $tiendas[0]->ID : 0);
     echo '<h2>Disponibilidad por tienda</h2><p class="description">Quita los productos que la tienda elegida NO vende. Se aplica en el checkout, cuando se sabe qué tienda atiende el pedido. Para vender un producto solo ciertos días, abre el producto y usa la caja «Disponibilidad (DLP)».</p>';
-    echo '<form method="get" action="' . esc_url(admin_url('admin.php')) . '" style="margin:12px 0"><input type="hidden" name="page" value="dlp-config"><input type="hidden" name="tab" value="disponibilidad"><select name="tienda" onchange="this.form.submit()">';
+    echo '<form method="get" action="' . esc_url(admin_url('admin.php')) . '" style="margin:12px 0"><input type="hidden" name="page" value="dlp-config"><input type="hidden" name="tab" value="por-tienda"><select name="tienda" onchange="this.form.submit()">';
     foreach ($tiendas as $s) {
         echo '<option value="' . (int) $s->ID . '" ' . selected($sel, $s->ID, false) . '>' . esc_html($s->post_title) . '</option>';
     }

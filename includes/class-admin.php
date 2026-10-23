@@ -69,7 +69,7 @@ class DLP_FE_Admin {
             $tabs[$id] = $m['tab'];
         }
         if ($section === 'home' && function_exists('dlp_fe_disp_render_admin')) {
-            $tabs['disponibilidad'] = 'Disponibilidad por tienda';
+            $tabs['por-tienda'] = 'Disponibilidad por tienda';
         }
         if ($section === 'antifraude' && function_exists('dlp_fe_af_render_admin')) {
             $tabs['bloqueos'] = 'Bloqueos y actividad';
@@ -186,7 +186,7 @@ class DLP_FE_Admin {
             <?php
             if ($tab === 'bloqueos') {
                 dlp_fe_af_render_admin();
-            } elseif ($tab === 'disponibilidad') {
+            } elseif ($tab === 'por-tienda') {
                 dlp_fe_disp_render_admin();
             } elseif ($tab === 'checkout-campos-editor' && $m && $m['enabled'] && function_exists('dlp_fe_cf_render_admin')) {
                 dlp_fe_cf_render_admin();
