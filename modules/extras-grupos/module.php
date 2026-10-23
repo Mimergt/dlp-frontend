@@ -58,3 +58,12 @@ add_filter('woocommerce_add_to_cart_validation', function ($ok, $product_id) {
     }
     return $ok;
 }, 30, 2);
+
+// Un solo texto para elegir en todos los extras: el marcador de los desplegables de Product Add-Ons («Elige una opción…»)
+// pasa a «Toca para elegir», igual que los acordeones.
+add_filter('gettext', function ($translated, $text, $domain) {
+    if ($domain === 'woocommerce-product-addons' && $text === 'Select an option...') {
+        return 'Toca para elegir';
+    }
+    return $translated;
+}, 10, 3);
