@@ -49,8 +49,8 @@ $S = [
     2053   => ['carne' => 1, 'comp' => 'combo', 'beb' => ['lista'], 'hamb' => [['Ingredientes', 'TO']]],
     2059   => ['carne' => 1, 'comp' => 'combo', 'beb' => ['lista'], 'hamb' => [['Ingredientes', 'INF']]],
     // Para compartir: Tender Box (aderezos a elegir) y Box de 6 hamburguesas (carne favorita + bebida extra opcional)
-    134490 => ['aderezos' => [2, 3]],   // Tender Box 24 (en producción: mínimo 2, máximo 3)
-    134482 => ['aderezos' => [2, 2]],   // Tender Box 14
+    134490 => ['aderezos' => 3],   // Tender Box 24: 3 aderezos por cantidad (se pueden repetir)
+    134482 => ['aderezos' => 2],   // Tender Box 14: 2 aderezos por cantidad
     2068   => ['carne' => 6, 'bebextra' => true],   // Box Del Puente
     2145   => ['carne' => 6, 'bebextra' => true],   // Box Clásica
     2147   => ['carne' => 6, 'bebextra' => true],   // Box Tejana
@@ -99,13 +99,16 @@ foreach ($S as $pid => $r) {
         $a[] = $nuevo('Elige tu carne favorita', 'multiple_choice', ['required' => 1, 'options' => [$opt('Premium Blend', 0), $opt($lab, 12 * $n)]]);
     }
     if (!empty($r['aderezos'])) {
-        $mn = $r['aderezos'][0]; $mx = $r['aderezos'][1];
-        $a[] = $nuevo('Elige tus aderezos (' . ($mn === $mx ? $mn : "$mn a $mx") . ')', 'checkbox', ['required' => 1, 'description_enable' => 1, 'description' => '[elegir:' . ($mn === $mx ? $mn : "$mn-$mx") . ']',
-            'options' => [$opt('Honey Mustard', 0), $opt('Ranch', 0), $opt('Búfalo', 0)]]);
+        $N = (int) $r['aderezos'];
+        $titulo = "Elige tus aderezos ($N)";
+        foreach (['Honey Mustard', 'Ranch', 'Búfalo'] as $ad) {
+            $a[] = $nuevo($ad, 'input_multiplier', ['description_enable' => 1, 'description' => "[grupo:$titulo=$N]", 'restrictions' => 1,
+                'price_type' => 'quantity_based', 'min' => 0, 'max' => $N, 'default' => 0]);
+        }
     }
     if (!empty($r['bebextra'])) {
         $a[] = $nuevo('Añade bebida extra', 'multiple_choice', ['required' => 0, 'options' => [
-            $opt('6 Frezkas Jamaica', 65), $opt('6 Frezkas Tamarindo', 65), $opt('6 Frezkas (2 Jamaica, 2 Tamarindo, 2 Sandía Limón Maracuyá)', 65)]]);
+            $opt('6 Frezkas Jamaica', 65), $opt('6 Frezkas Tamarindo', 65), $opt('6 Frezkas Sandía Limón & Maracuyá', 65), $opt('6 Frezkas (2 Jamaica, 2 Tamarindo, 2 Sandía Limón Maracuyá)', 65)]]);
     }
     $bloques = ['comp' => function () use (&$a, $r, $nuevo, $opt) {
         if (!empty($r['comp'])) {
