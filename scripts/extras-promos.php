@@ -48,6 +48,17 @@ $S = [
     2055   => ['carne' => 1, 'comp' => 'combo', 'beb' => ['lista'], 'hamb' => [['Ingredientes', 'TJ']]],
     2053   => ['carne' => 1, 'comp' => 'combo', 'beb' => ['lista'], 'hamb' => [['Ingredientes', 'TO']]],
     2059   => ['carne' => 1, 'comp' => 'combo', 'beb' => ['lista'], 'hamb' => [['Ingredientes', 'INF']]],
+    // Hamburguesas individuales (carne favorita si aplica + ingredientes; sin bebida ni complemento)
+    2131   => ['carne' => 1, 'hamb' => [['Ingredientes', 'DP']]],
+    2139   => ['carne' => 1, 'hamb' => [['Ingredientes', 'CL']]],
+    2135   => ['carne' => 1, 'hamb' => [['Ingredientes', 'TO']]],
+    2137   => ['carne' => 1, 'hamb' => [['Ingredientes', 'TJ']]],
+    2141   => ['carne' => 1, 'hamb' => [['Ingredientes', 'INF']]],
+    124437 => ['hamb' => [['Ingredientes', 'BC']]],
+    124441 => ['hamb' => [['Ingredientes', 'SM']]],
+    101946 => ['hamb' => [['Ingredientes', 'PO']]],   // Chicken Honey Mustard individual
+    101942 => ['hamb' => [['Ingredientes', 'PO']]],   // Chicken Ranch individual
+    101950 => ['hamb' => [['Ingredientes', 'PO']]],   // Chicken Chipotle individual
     // Combos de pollo (bebida + complemento; los de pechuga con pepinillos/lechuga/salsa para quitar)
     101944 => ['comp' => 'combo', 'beb' => ['lista'], 'hamb' => [['Ingredientes', 'PO']]],   // Honey Mustard
     101940 => ['comp' => 'combo', 'beb' => ['lista'], 'hamb' => [['Ingredientes', 'PO']]],   // Ranch
