@@ -178,7 +178,11 @@
     var cands = [want].concat(names[want] || []);
     for (var i = 0; i < slides.length; i++) {
       var l = slides[i].querySelector('.navMenu_label');
-      if (l && cands.indexOf(norm(l.textContent)) !== -1) { slides[i].click(); return true; }
+      if (l && cands.indexOf(norm(l.textContent)) !== -1) {
+        var main = document.querySelector('.main_slider');
+        if (main && main.swiper) { main.swiper.slideTo(i); } else { slides[i].click(); }
+        return true;
+      }
     }
     return false;
   }
