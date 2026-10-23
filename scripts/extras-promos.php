@@ -17,6 +17,7 @@ $ING = [
     'BC' => ['Queso Cheddar', 'Tocino'],
     'SM' => ['Queso Suizo', 'Champiñones salteados'],
     'INF' => ['Queso Americano', 'Lechuga'],
+    'PO' => ['Pepinillos', 'Lechuga', 'Salsa'],
     'SCL' => ['Queso Americano', 'Tomate', 'Lechuga', 'Lascas de cebolla salteadas', 'Salsa'],
     'SLG' => ['Lascas de cebolla salteadas', 'Lascas de jalapeño salteadas', 'Salsa Legendaria', 'Queso Americano'],
     'SJP' => ['Queso Americano', 'Lascas de cebolla salteadas', 'Lascas de jalapeño salteadas', 'Jalea de frambuesa', 'Queso crema'],
@@ -47,6 +48,11 @@ $S = [
     2055   => ['carne' => 1, 'comp' => 'combo', 'beb' => ['lista'], 'hamb' => [['Ingredientes', 'TJ']]],
     2053   => ['carne' => 1, 'comp' => 'combo', 'beb' => ['lista'], 'hamb' => [['Ingredientes', 'TO']]],
     2059   => ['carne' => 1, 'comp' => 'combo', 'beb' => ['lista'], 'hamb' => [['Ingredientes', 'INF']]],
+    // Combos de pollo (bebida + complemento; los de pechuga con pepinillos/lechuga/salsa para quitar)
+    101944 => ['comp' => 'combo', 'beb' => ['lista'], 'hamb' => [['Ingredientes', 'PO']]],   // Honey Mustard
+    101940 => ['comp' => 'combo', 'beb' => ['lista'], 'hamb' => [['Ingredientes', 'PO']]],   // Ranch
+    101954 => ['comp' => 'combo', 'beb' => ['lista'], 'hamb' => [['Ingredientes', 'PO']]],   // Chipotle
+    101958 => ['comp' => 'combo', 'beb' => ['lista']],                                        // Tenders
     // Combos sin elección de carne
     124430 => ['comp' => 'combo', 'beb' => ['lista'], 'hamb' => [['Ingredientes', 'BC']]],
     124435 => ['comp' => 'combo', 'beb' => ['lista'], 'hamb' => [['Ingredientes', 'SM']]],
