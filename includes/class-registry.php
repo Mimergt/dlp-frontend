@@ -96,9 +96,7 @@ class DLP_FE_Registry {
                 'enabled'     => array_key_exists('enabled', $saved) ? (bool) $saved['enabled'] : (bool) ($meta['default'] ?? true),
             ];
         }
-        uasort(self::$modules, function ($a, $b) {
-            return [$a['order'], $a['id']] <=> [$b['order'], $b['id']];
-        });
+        ksort(self::$modules); // el orden de carga (CSS/JS) es alfabético; el orden de las pestañas va aparte (ver tabs())
         return self::$modules;
     }
 

@@ -58,11 +58,15 @@ class DLP_FE_Admin {
 
     /** Pestañas de una sección: [clave => etiqueta]. Una por módulo, más las especiales. */
     private static function tabs($section) {
+        $mods = array_filter(DLP_FE_Registry::all(), function ($m) use ($section) {
+            return $m['section'] === $section;
+        });
+        uasort($mods, function ($a, $b) {
+            return [$a['order'], $a['id']] <=> [$b['order'], $b['id']];
+        });
         $tabs = [];
-        foreach (DLP_FE_Registry::all() as $id => $m) {
-            if ($m['section'] === $section) {
-                $tabs[$id] = $m['tab'];
-            }
+        foreach ($mods as $id => $m) {
+            $tabs[$id] = $m['tab'];
         }
         if ($section === 'antifraude' && function_exists('dlp_fe_af_render_admin')) {
             $tabs['bloqueos'] = 'Bloqueos y actividad';
