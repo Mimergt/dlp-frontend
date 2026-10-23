@@ -111,6 +111,7 @@
   function groupSum($ins) { var s = 0; $ins.each(function () { s += parseInt($(this).val(), 10) || 0; }); return s; }
   function groupClamp($in) {
     var $form = $in.closest('form.cart'), t = $in.attr('data-dlpqv-group'), n = parseInt($in.attr('data-dlpqv-n'), 10);
+    if (isNaN(n)) return; // grupo libre ([grupo:Título=*]): sin total que respetar
     var others = groupSum(groupInputs($form, t).not($in));
     var v = Math.max(0, Math.min(parseInt($in.val(), 10) || 0, n - others));
     if (String(v) !== $in.val()) $in.val(v);
@@ -118,8 +119,8 @@
   function groupSync($form) {
     var wait = false;
     $form.find('.dlpqv-grp:not(.dlpqv-acc)').each(function () {
-      var t = $(this).attr('data-g'), $ins = groupInputs($form, t), n = parseInt($ins.first().attr('data-dlpqv-n'), 10), sum = groupSum($ins);
-      $(this).find('.dlpqv-grp-c').text(sum + ' de ' + n).closest('.dlpqv-grp').toggleClass('done', sum === n);
+      var t = $(this).attr('data-g'), $ins = groupInputs($form, t), n = parseInt($ins.first().attr('data-dlpqv-n'), 10), sum = groupSum($ins), libre = isNaN(n);
+      $(this).find('.dlpqv-grp-c').text(libre ? (sum ? sum + (sum === 1 ? ' elegida' : ' elegidas') : 'Opcional') : sum + ' de ' + n).closest('.dlpqv-grp').toggleClass('done', libre ? sum > 0 : sum === n);
       var resumen = [];
       $ins.each(function () {
         var q = parseInt($(this).val(), 10) || 0;
@@ -128,10 +129,10 @@
       $(this).find('.dlpqv-grp-s').text(resumen.length ? resumen.join(', ') : 'Toca para elegir');
       $ins.each(function () {
         var $w = $(this).closest('.dlpqv-step-wrap');
-        $w.find('.dlpqv-step[data-step="1"]').prop('disabled', sum >= n);
+        $w.find('.dlpqv-step[data-step="1"]').prop('disabled', !libre && sum >= n);
         $w.closest('.dlpqv-chip').toggleClass('on', (parseInt($(this).val(), 10) || 0) > 0);
       });
-      if (sum !== n) wait = true;
+      if (!libre && sum !== n) wait = true;
     });
     $form.data('dlpGrupoEspera', wait);
     btnSync($form);
@@ -236,13 +237,13 @@
       var main = $.trim($desc.text()) || 'Cantidad';
       var parts = [];
       // Grupo con total fijo: la descripción trae [grupo:Título=N]; la fila se llama como el extra
-      var gm = /\[grupo:([^=\]]+)=(\d+)\]/i.exec(main), group = null;
+      var gm = /\[grupo:([^=\]]+)=(\d+|\*)\]/i.exec(main), group = null;
       if (gm) {
-        group = { title: $.trim(gm[1]), n: parseInt(gm[2], 10) };
+        group = { title: $.trim(gm[1]), n: gm[2] === '*' ? Infinity : parseInt(gm[2], 10) };
         main = $.trim($c.find('h2.wc-pao-addon-name').first().clone().children().remove().end().text());
         if (unit) parts.push('+' + money(unit));
         r.max = group.n;
-        $(this).attr('data-dlpqv-group', group.title).attr('data-dlpqv-n', group.n);
+        $(this).attr('data-dlpqv-group', group.title).attr('data-dlpqv-n', isFinite(group.n) ? group.n : '*');
         $(this).closest('.dlpqv-step-wrap').data('max', group.n);
       } else {
         if (unit && !/c\/u/i.test(main)) parts.push('+' + money(unit) + ' c/u');

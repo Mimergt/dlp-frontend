@@ -195,3 +195,5 @@ Faltan: pedidos con extras de varios días de disponibilidad, cupones, tarjeta (
 - Producción: 35 productos en la categoría «Do it yourself» (27 publicados, 8 en borrador: 2199, 2579, 2634, 2972, 2974 oculto, 2976, 2978, 3002); ninguno lleva extras. Dev tiene los mismos 35.
 - Orden de dev ajustado a la columna Posición del CSV de producción: kits, pan, torta, papas, poppers, queso, tocino, cebolla, champiñones, vegetales, salsas, sobrecitos (menu_order 610…870); borradores al final (880…960).
 - Solo datos (wp eval), sin cambios de plugin.
+- Límite de productos por pestaña: cada pestaña del menú es un layout Divi (120361, 1833, 138171, 1964, 1977, 1985, 2002, 2011) con un módulo Tienda sin «número de productos» (Divi usa 12). Se fijó `postsNumber` = 50 en los 8 (backup en meta `_dlp_backup_posts`). Para producción hay que repetirlo.
+- Kits: «Añade tus bebidas» = 9 extras de cantidad (sin tope) agrupados con la nueva marca `[grupo:Título=*]` (grupo libre: acordeón con contador «N elegidas», sin total exacto ni bloqueo del botón). 0.29.2.
