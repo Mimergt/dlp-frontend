@@ -220,3 +220,9 @@ Faltan: pedidos con extras de varios días de disponibilidad, cupones, tarjeta (
 - Menú de primer nivel **DLP Config** (`admin.php?page=dlp-config[-seccion]`) con 6 submenús: Inicio y catálogo, Checkout y pedidos, Cuenta y acceso, Apariencia, Antifraude, Sistema (ver `DLP_FE_Registry::sections()`).
 - Cada módulo declara en su `module.json`: `section`, `tab` (nombre corto) y `order`. Una pestaña por módulo; se guarda solo el módulo de la pestaña abierta. Pestañas especiales: Editor de campos (módulo `checkout-campos-editor`) y Bloqueos y actividad (antifraude).
 - URL helper: `DLP_FE_Admin::url($seccion, $pestaña)`. Un módulo nuevo sin `section` cae en Sistema.
+
+## 0.32.0 — Disponibilidad de productos
+- Módulo `disponibilidad`. Metas de producto: `_dlp_dias` (0=domingo…6=sábado; ausente = todos) y `_dlp_tiendas_excluidas` (IDs `extra_store`).
+- Días: el producto sale de las listas (`pre_get_posts`), no es comprable y la página muestra «Disponible solo: …». Se queda publicado. Caché `dlp_fe_disp_prog` (se limpia al guardar el producto). Día según `wp_date` (zona del sitio).
+- Tiendas: se valida en `woocommerce_after_checkout_validation` (prioridad 25) usando `dlp_tiendas_resolve_checkout()`; la tienda solo se conoce en el checkout (antes no hay ubicación), por eso no se oculta del menú.
+- UI: caja «Disponibilidad (DLP)» en el producto, columna en la lista de productos y DLP Config → Inicio y catálogo → «Disponibilidad por tienda» (marcar/desmarcar productos de una tienda).
