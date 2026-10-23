@@ -215,3 +215,8 @@ Faltan: pedidos con extras de varios días de disponibilidad, cupones, tarjeta (
   - Regla pedidos seguidos: segundo pedido en < 60 s → rechazo + bloqueo de 30 min. Un pedido fallido no cuenta como reciente.
   - API: `dlp_fe_af_block/unblock/order_blocked/order_set`. dlp-panel3 1.14.0 la usa en «Bloquear cliente» (cae a `is_active` de User Blocker si el módulo no está). Bloqueo permanente de cuenta también marca `is_active=n`.
   - Límite: errores de validación de tarjeta del plugin (número inválido) no crean pedido, no cuentan.
+
+## 0.31.0 — Menú único con submenús
+- Menú de primer nivel **DLP Config** (`admin.php?page=dlp-config[-seccion]`) con 6 submenús: Inicio y catálogo, Checkout y pedidos, Cuenta y acceso, Apariencia, Antifraude, Sistema (ver `DLP_FE_Registry::sections()`).
+- Cada módulo declara en su `module.json`: `section`, `tab` (nombre corto) y `order`. Una pestaña por módulo; se guarda solo el módulo de la pestaña abierta. Pestañas especiales: Editor de campos (módulo `checkout-campos-editor`) y Bloqueos y actividad (antifraude).
+- URL helper: `DLP_FE_Admin::url($seccion, $pestaña)`. Un módulo nuevo sin `section` cae en Sistema.
