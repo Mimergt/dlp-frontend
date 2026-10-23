@@ -133,8 +133,39 @@
       });
       if (sum !== n) wait = true;
     });
-    var $b = $form.find('button.single_add_to_cart_button').first();
-    $b.prop('disabled', wait).toggleClass('dlpqv-wait', wait);
+    $form.data('dlpGrupoEspera', wait);
+    btnSync($form);
+  }
+  function btnSync($form) {
+    var espera = !!($form.data('dlpGrupoEspera') || $form.data('dlpEligeEspera'));
+    $form.find('button.single_add_to_cart_button').first().prop('disabled', espera).toggleClass('dlpqv-wait', espera);
+  }
+
+  // ---- Elegir entre N y M casillas: [elegir:2] o [elegir:2-3] en la descripción de un extra de casillas ----------
+  // Cuenta lo marcado, bloquea las sobrantes al llegar al máximo y no deja añadir hasta llegar al mínimo.
+  var ELIGE_RE = /\[elegir:(\d+)(?:\s*-\s*(\d+))?\]/i;
+  function choosers($form) {
+    $form.find('.wc-pao-addon-container').each(function () {
+      var $c = $(this), $d = $c.find('.wc-pao-addon-description').first(), m = ELIGE_RE.exec($d.text());
+      if (!m || !$c.find('input.wc-pao-addon-checkbox').length) return;
+      var mn = parseInt(m[1], 10), mx = m[2] ? parseInt(m[2], 10) : mn;
+      $d.html($d.html().replace(/\[elegir:[^\]]+\]/ig, ''));
+      if (!$.trim($d.text())) $d.hide();
+      $c.attr('data-dlpqv-min', mn).attr('data-dlpqv-max', mx).addClass('dlpqv-elige');
+      $('<div class="dlpqv-choose"></div>').prependTo($c.find('.wc-pao-addon-wrap').first());
+    });
+    chooseSync($form);
+  }
+  function chooseSync($form) {
+    var espera = false;
+    $form.find('.dlpqv-elige').each(function () {
+      var $c = $(this), mn = +$c.attr('data-dlpqv-min'), mx = +$c.attr('data-dlpqv-max'), $in = $c.find('input.wc-pao-addon-checkbox'), n = $in.filter(':checked').length;
+      $c.find('.dlpqv-choose').text('Elige ' + (mn === mx ? mn : mn + ' a ' + mx) + ' · Marcadas: ' + n).toggleClass('done', n >= mn && n <= mx);
+      $in.each(function () { if (!this.checked) $(this).prop('disabled', n >= mx); });
+      if (n < mn) espera = true;
+    });
+    $form.data('dlpEligeEspera', espera);
+    btnSync($form);
   }
 
   // ---- Acordeón para add-ons de casillas: [acordeon:Título] en la descripción --------------------------------
@@ -243,6 +274,7 @@
     });
 
     accordions($form);
+    choosers($form);
 
     // Pie fijo: cantidad + botón con el total
     var $btn = $form.find('button.single_add_to_cart_button').first();
@@ -261,6 +293,7 @@
     $form.on('change input', 'input, select', function () { setTimeout(updateTotal, 120); });
     $form.on('change input', 'input[data-dlpqv-group]', function () { groupClamp($(this)); groupSync($form); });
     $form.on('change', '.dlpqv-grp-box input.wc-pao-addon-checkbox', function () { accSync($form); });
+    $form.on('change', '.dlpqv-elige input.wc-pao-addon-checkbox', function () { chooseSync($form); });
     groupSync($form);
     setTimeout(updateTotal, 250);
     updateTotal();

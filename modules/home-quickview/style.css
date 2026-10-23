@@ -149,3 +149,8 @@ html.dlpqv-lock { overflow: hidden; }
 /* Acordeón con un solo extra: se oculta su título (ya lo dice la cabecera) */
 .dlpqv .dlpqv-grp-box--solo .wc-pao-addon-name { display: none; }
 .dlpqv .dlpqv-grp-box--solo .wc-pao-addon-container { margin-top: 4px; }
+
+/* Elegir entre N y M casillas */
+.dlpqv .dlpqv-choose { margin: 0 0 8px; color: #777; font-size: 12.5px; font-weight: 700; }
+.dlpqv .dlpqv-choose.done { color: var(--q-tinta); }
+.dlpqv input.wc-pao-addon-checkbox:disabled + label { opacity: .4; cursor: not-allowed; }
