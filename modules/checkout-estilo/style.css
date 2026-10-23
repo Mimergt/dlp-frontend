@@ -156,3 +156,4 @@ body.dlpck-cp-open { overflow: hidden; }
 .dlpck-cp-msg .woocommerce-error, .dlpck-cp-msg .woocommerce-message { margin: 0 !important; }
 .dlpck-cp form p.form-row { float: none !important; width: auto !important; margin: 0 !important; padding: 0 !important; }
 .dlpck-cp form .clear, .dlpck-cp form label.screen-reader-text + br { display: none; }
+.dlpck-cp form.checkout_coupon { display: block !important; height: auto !important; }
