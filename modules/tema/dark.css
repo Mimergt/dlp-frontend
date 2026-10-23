@@ -136,3 +136,19 @@ body.woocommerce-account .woocommerce-info, body.woocommerce-account .woocommerc
 .dlpqv .dlpqv-grp { background: var(--dlp-field); }
 .dlpqv .dlpqv-grp-s { color: var(--dlp-mut); }
 .dlpqv .dlpqv-grp.done .dlpqv-grp-s { color: var(--dlp-tx); }
+
+/* Checkout: avisos y ventana del cupón */
+body.dlpck-on ul.woocommerce-error, body.dlpck-on .woocommerce-message, body.dlpck-on :not(.woocommerce-form-coupon-toggle):not(.woocommerce-form-login-toggle) > .woocommerce-info, body.dlpck-on ul.woocommerce-error li, body.dlpck-on .woocommerce-message li { color: var(--dlp-tx) !important; }
+body.dlpck-on ul.woocommerce-error { --nt-bg: rgba(217,48,37,.16); --nt-line: rgba(217,48,37,.5); --nt-st: #ff9a92; }
+body.dlpck-on .woocommerce-message { --nt-bg: rgba(30,142,62,.16); --nt-line: rgba(30,142,62,.5); --nt-st: #7fdc9a; }
+body.dlpck-on :not(.woocommerce-form-coupon-toggle):not(.woocommerce-form-login-toggle) > .woocommerce-info { --nt: var(--dlp-tx); --nt-bg: var(--dlp-chip); --nt-line: var(--dlp-line); --nt-st: var(--dlp-tx); }
+body.dlpck-on :not(.woocommerce-form-coupon-toggle):not(.woocommerce-form-login-toggle) > .woocommerce-info::before { color: var(--dlp-bg); }
+body.dlpck-on .dlpck p.form-row.woocommerce-invalid input.input-text, body.dlpck-on .dlpck p.form-row.woocommerce-invalid textarea, body.dlpck-on .dlpck p.form-row.woocommerce-invalid select { background: rgba(217,48,37,.14) !important; }
+body.dlpck-on .dlpck p.form-row.woocommerce-invalid > label { color: #ff9a92 !important; }
+.dlpck-cp { background: var(--dlp-card); }
+.dlpck-cp h3 { color: var(--dlp-tx); }
+.dlpck-cp > p { color: var(--dlp-mut); }
+.dlpck-cp-x { background: var(--dlp-chip); color: var(--dlp-tx); }
+.dlpck-cp form input.input-text { background: var(--dlp-field) !important; border-color: var(--dlp-line) !important; color: var(--dlp-tx); }
+.dlpck-cp form input.input-text:focus { border-color: var(--dlp-tx) !important; }
+.dlpck-cp form button.button { background: var(--dlp-btn) !important; color: var(--dlp-btn-tx) !important; }

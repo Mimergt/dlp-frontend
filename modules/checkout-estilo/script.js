@@ -107,4 +107,58 @@
   tune();
   if (window.jQuery) jQuery(document.body).on('updated_checkout', function () { setTimeout(tune, 30); });
   [600, 1500, 3000].forEach(function (ms) { setTimeout(tune, ms); });
+
+  // ---- Avisos: tocar un error lleva al campo que hay que corregir -----------------------------------------------------------
+  document.addEventListener('click', function (e) {
+    var li = e.target.closest && e.target.closest('ul.woocommerce-error li[data-id]');
+    if (!li) return;
+    var id = li.getAttribute('data-id'), f = document.getElementById(id) || document.getElementById(id + '_field');
+    if (!f) return;
+    e.preventDefault();
+    f.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    var inp = f.matches('input,select,textarea') ? f : f.querySelector('input,select,textarea');
+    if (inp) setTimeout(function () { try { inp.focus({ preventScroll: true }); } catch (x) { inp.focus(); } }, 350);
+  });
+
+  // ---- Cupón en ventana emergente -------------------------------------------------------------------------------------------
+  var cform = $('form.checkout_coupon'), cLink = $('.woocommerce-form-coupon-toggle .showcoupon');
+  if (cform && cLink && window.jQuery) {
+    var $j = window.jQuery;
+    var backdrop = el('div', 'dlpck-cp-back'), box = el('div', 'dlpck-cp');
+    box.setAttribute('role', 'dialog'); box.setAttribute('aria-modal', 'true'); box.setAttribute('aria-label', 'Código de cupón');
+    box.innerHTML = '<button type="button" class="dlpck-cp-x" aria-label="Cerrar">×</button><h3>Código de cupón</h3><p>Escribe tu código y toca aplicar.</p><div class="dlpck-cp-msg" aria-live="polite"></div>';
+    box.appendChild(cform);
+    backdrop.appendChild(box);
+    document.body.appendChild(backdrop);
+    cform.style.display = 'block';
+    var input = cform.querySelector('input[name="coupon_code"]'), msg = box.querySelector('.dlpck-cp-msg');
+    function openCp() { msg.innerHTML = ''; backdrop.classList.add('on', 'dlpck-back-on'); document.body.classList.add('dlpck-cp-open'); cLink.setAttribute('aria-expanded', 'true'); setTimeout(function () { input && input.focus(); }, 60); }
+    function closeCp() { backdrop.classList.remove('on', 'dlpck-back-on'); document.body.classList.remove('dlpck-cp-open'); cLink.setAttribute('aria-expanded', 'false'); }
+    // Se adelanta al manejador de WooCommerce (que desplegaba el formulario en la página)
+    document.addEventListener('click', function (e) {
+      if (e.target.closest && e.target.closest('a.showcoupon')) { e.preventDefault(); e.stopImmediatePropagation(); openCp(); }
+    }, true);
+    box.querySelector('.dlpck-cp-x').addEventListener('click', closeCp);
+    backdrop.addEventListener('mousedown', function (e) { if (e.target === backdrop) closeCp(); });
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && backdrop.classList.contains('on')) closeCp(); });
+    // Aplicar el cupón con el mismo endpoint de WooCommerce, pero mostrando el resultado dentro de la ventana
+    box.addEventListener('submit', function (e) {
+      e.preventDefault(); e.stopPropagation();
+      var P = window.wc_checkout_params, code = (input.value || '').trim(), btn = cform.querySelector('button[type=submit]');
+      if (!P || !code) { input.focus(); return; }
+      btn.disabled = true; msg.innerHTML = '';
+      $j.ajax({
+        type: 'POST', dataType: 'html', url: P.wc_ajax_url.toString().replace('%%endpoint%%', 'apply_coupon'),
+        data: { security: P.apply_coupon_nonce, coupon_code: code, billing_email: ($('form.checkout #billing_email') || {}).value || '' }
+      }).done(function (html) {
+        msg.innerHTML = html;
+        if (/woocommerce-message/.test(html)) {
+          input.value = '';
+          $j(document.body).trigger('applied_coupon_in_checkout', [code]).trigger('update_checkout', { update_shipping_method: false });
+          setTimeout(closeCp, 1100);
+        }
+      }).fail(function () { msg.innerHTML = '<div class="woocommerce-error">No se pudo aplicar el cupón. Intenta de nuevo.</div>'; })
+        .always(function () { btn.disabled = false; });
+    }, true);
+  }
 })();

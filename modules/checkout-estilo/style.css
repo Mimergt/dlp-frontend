@@ -108,3 +108,51 @@ body.dlpck-pickup .dlpck-card:first-child .dlpck-fields { display: none; }
 /* Menos aire entre el header y el botón de regresar (Divi pone 50px de sección + 30px de fila) */
 body.dlpck-on .et_pb_section:has(.dlpck-head) { padding-top: 12px !important; }
 body.dlpck-on .et_pb_row:has(.dlpck-head) { padding-top: 0 !important; }
+
+/* ---- Avisos y errores legibles (el tema los pintaba como un bloque rojo con letra blanca condensada) ------------------------ */
+body.dlpck-on ul.woocommerce-error, body.dlpck-on .woocommerce-message, body.dlpck-on .woocommerce-error:not(ul),
+body.dlpck-on :not(.woocommerce-form-coupon-toggle):not(.woocommerce-form-login-toggle) > .woocommerce-info {
+  --nt: #d93025; --nt-bg: #fff4f3; --nt-line: #f3c9c5; --nt-st: #b3261e;
+  position: relative; display: block; box-sizing: border-box; max-width: 1100px; margin: 0 auto 14px !important; padding: 14px 16px 14px 52px !important; list-style: none !important;
+  border: 1px solid var(--nt-line) !important; border-left: 5px solid var(--nt) !important; border-radius: 14px !important; background: var(--nt-bg) !important; box-shadow: 0 2px 10px rgba(0,0,0,.05);
+  color: #111 !important; font: 600 14px/1.5 "Open Sans", system-ui, sans-serif !important; text-align: left;
+}
+body.dlpck-on .woocommerce-message { --nt: #1e8e3e; --nt-bg: #f1faf3; --nt-line: #cfe8d6; --nt-st: #146c2e; }
+body.dlpck-on :not(.woocommerce-form-coupon-toggle):not(.woocommerce-form-login-toggle) > .woocommerce-info { --nt: #111; --nt-bg: #f6f6f8; --nt-line: #e9e9ee; --nt-st: #111; }
+body.dlpck-on ul.woocommerce-error::before, body.dlpck-on .woocommerce-message::before, body.dlpck-on :not(.woocommerce-form-coupon-toggle):not(.woocommerce-form-login-toggle) > .woocommerce-info::before {
+  position: absolute; left: 15px; top: 14px; display: grid !important; place-items: center; width: 24px; height: 24px; margin: 0; border-radius: 50%; background: var(--nt); color: #fff;
+  font: 800 14px/1 "Open Sans", system-ui, sans-serif !important; content: "!";
+}
+body.dlpck-on .woocommerce-message::before { content: "✓"; }
+body.dlpck-on :not(.woocommerce-form-coupon-toggle):not(.woocommerce-form-login-toggle) > .woocommerce-info::before { content: "i"; }
+body.dlpck-on ul.woocommerce-error li, body.dlpck-on .woocommerce-message li { margin: 0 0 6px; padding: 0 !important; list-style: none !important; color: #111 !important; font: 600 14px/1.5 "Open Sans", system-ui, sans-serif !important; }
+body.dlpck-on ul.woocommerce-error li:last-child { margin-bottom: 0; }
+body.dlpck-on ul.woocommerce-error li[data-id] { cursor: pointer; }
+body.dlpck-on ul.woocommerce-error li[data-id]::after { content: " · Corregir"; color: var(--nt-st); font-weight: 700; text-decoration: underline; text-underline-offset: 3px; white-space: nowrap; }
+body.dlpck-on .woocommerce-error strong, body.dlpck-on .woocommerce-message strong { color: var(--nt-st); font-weight: 800; }
+body.dlpck-on .woocommerce-message a.button, body.dlpck-on .woocommerce-info a.button { float: none; margin-left: 8px; }
+/* Campos con error: borde y fondo rojos suaves */
+body.dlpck-on .dlpck p.form-row.woocommerce-invalid input.input-text, body.dlpck-on .dlpck p.form-row.woocommerce-invalid textarea, body.dlpck-on .dlpck p.form-row.woocommerce-invalid select { border-color: #d93025 !important; background: #fff6f5 !important; box-shadow: 0 0 0 3px rgba(217,48,37,.12); }
+body.dlpck-on .dlpck p.form-row.woocommerce-invalid > label { color: #b3261e !important; }
+
+/* ---- Cupón en ventana emergente -------------------------------------------------------------------------------------------- */
+body.dlpck-cp-open { overflow: hidden; }
+.dlpck-cp-back { position: fixed; inset: 0; z-index: 100000; display: none; align-items: center; justify-content: center; padding: 16px; background: rgba(0,0,0,.55); -webkit-backdrop-filter: blur(2px); backdrop-filter: blur(2px); }
+.dlpck-cp-back.on { display: flex; animation: dlpck-cp-in .18s ease-out; }
+@keyframes dlpck-cp-in { from { opacity: 0; } to { opacity: 1; } }
+.dlpck-cp { position: relative; box-sizing: border-box; width: min(100%, 420px); padding: 24px 22px 22px; border-radius: 22px; background: #fff; box-shadow: 0 18px 50px rgba(0,0,0,.3); font-family: "Open Sans", system-ui, sans-serif; }
+.dlpck-back-on .dlpck-cp { animation: dlpck-cp-up .2s ease-out; }
+@keyframes dlpck-cp-up { from { transform: translateY(14px); } to { transform: none; } }
+.dlpck-cp h3 { margin: 0 0 4px; padding: 0; font: 800 15px/1.2 "Open Sans", system-ui, sans-serif; letter-spacing: .06em; text-transform: uppercase; color: #111; }
+.dlpck-cp > p { margin: 0 0 14px; font-size: 13px; color: #6b6b75; }
+.dlpck-cp-x { position: absolute; top: 10px; right: 10px; display: grid; place-items: center; width: 34px; height: 34px; padding: 0; border: 0; border-radius: 50%; background: #f1f1f4; color: #111; font: 400 22px/1 system-ui, sans-serif; cursor: pointer; }
+.dlpck-cp form { margin: 0; padding: 0; border: 0; }
+.dlpck-cp form input.input-text { box-sizing: border-box; width: 100%; min-height: 48px; margin: 0 0 10px; padding: 10px 14px; border: 1px solid #e9e9ee !important; border-radius: 12px !important; background: #fcfcfd !important; font: 600 15px/1.3 "Open Sans", system-ui, sans-serif; color: #111; text-transform: uppercase; letter-spacing: .04em; }
+.dlpck-cp form input.input-text:focus { outline: 0; border-color: #111 !important; background: #fff !important; }
+.dlpck-cp form button.button { display: block; width: 100%; height: 48px; margin: 0; padding: 0; border: 0 !important; border-radius: 999px !important; background: #111 !important; color: #fff !important; font: 800 13px/1 "Open Sans", system-ui, sans-serif !important; letter-spacing: .08em; text-transform: uppercase; cursor: pointer; }
+.dlpck-cp form button.button[disabled] { opacity: .5; }
+.dlpck-cp-msg:empty { display: none; }
+.dlpck-cp-msg { margin: 0 0 12px; }
+.dlpck-cp-msg .woocommerce-error, .dlpck-cp-msg .woocommerce-message { margin: 0 !important; }
+.dlpck-cp form p.form-row { float: none !important; width: auto !important; margin: 0 !important; padding: 0 !important; }
+.dlpck-cp form .clear, .dlpck-cp form label.screen-reader-text + br { display: none; }
