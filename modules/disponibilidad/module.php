@@ -135,15 +135,21 @@ function dlp_fe_disp_metabox($post) {
     $dias = is_array($dias) && $dias ? array_map('intval', $dias) : range(0, 6);
     $exc  = dlp_fe_disp_excluidas($post->ID);
     wp_nonce_field('dlp_disp', 'dlp_disp_nonce');
-    echo '<p><strong>Días en que se vende</strong><br><span class="description">Si marcas todos, se vende siempre.</span></p><p>';
-    foreach (DLP_FE_DISP_DIAS as $i => $n) {
-        echo '<label style="display:inline-block;width:48%"><input type="checkbox" name="dlp_dias[]" value="' . $i . '" ' . checked(in_array($i, $dias, true), true, false) . '> ' . esc_html($n) . '</label>';
+    $orden = [1 => 'Lun', 2 => 'Mar', 3 => 'Mié', 4 => 'Jue', 5 => 'Vie', 6 => 'Sáb', 0 => 'Dom'];
+    echo '<div class="dlpd dlpd-prod">';
+    echo '<div class="dlpd-sec"><div class="dlpd-h"><strong>Días en que se vende</strong></div><div class="dlpd-quick">'
+        . '<button type="button" data-set="all">Todos</button><button type="button" data-set="week">Entre semana</button><button type="button" data-set="weekend">Vie–Dom</button></div>'
+        . '<div class="dlpd-pills dlpd-days">';
+    foreach ($orden as $i => $n) {
+        echo '<label class="dlpd-pill"><input type="checkbox" name="dlp_dias[]" value="' . $i . '" ' . checked(in_array($i, $dias, true), true, false) . '><span>' . esc_html($n) . '</span></label>';
     }
-    echo '</p><p><strong>Tiendas donde NO se vende</strong></p><div style="max-height:180px;overflow:auto;border:1px solid #dcdcde;padding:6px">';
+    echo '</div></div>';
+    echo '<div class="dlpd-sec"><div class="dlpd-h"><strong>Tiendas donde NO se vende</strong><button type="button" class="dlpd-link" data-set="stores-none">Ninguna</button></div>'
+        . '<input type="search" class="dlpd-find" placeholder="Buscar tienda…"><div class="dlpd-box"><div class="dlpd-pills dlpd-stores">';
     foreach (dlp_fe_disp_tiendas() as $s) {
-        echo '<label style="display:block"><input type="checkbox" name="dlp_excl[]" value="' . (int) $s->ID . '" ' . checked(in_array($s->ID, $exc, true), true, false) . '> ' . esc_html($s->post_title) . '</label>';
+        echo '<label class="dlpd-pill"><input type="checkbox" name="dlp_excl[]" value="' . (int) $s->ID . '" data-n="' . esc_attr($s->post_title) . '" ' . checked(in_array($s->ID, $exc, true), true, false) . '><span>' . esc_html($s->post_title) . '</span></label>';
     }
-    echo '</div>';
+    echo '</div></div></div><div class="dlpd-sum"></div></div>';
 }
 
 add_action('save_post_product', function ($id) {
@@ -207,14 +213,9 @@ add_action('admin_post_dlp_fe_disp', function () {
 function dlp_fe_disp_render_admin() {
     $tiendas = dlp_fe_disp_tiendas();
     $sel     = isset($_GET['tienda']) ? absint($_GET['tienda']) : ($tiendas ? $tiendas[0]->ID : 0);
-    echo '<h2>Disponibilidad por tienda</h2><p class="description">Quita los productos que la tienda elegida NO vende. Se aplica en el checkout, cuando se sabe qué tienda atiende el pedido. Para vender un producto solo ciertos días, abre el producto y usa la caja «Disponibilidad (DLP)».</p>';
-    echo '<form method="get" action="' . esc_url(admin_url('admin.php')) . '" style="margin:12px 0"><input type="hidden" name="page" value="dlp-config"><input type="hidden" name="tab" value="por-tienda"><select name="tienda" onchange="this.form.submit()">';
-    foreach ($tiendas as $s) {
-        echo '<option value="' . (int) $s->ID . '" ' . selected($sel, $s->ID, false) . '>' . esc_html($s->post_title) . '</option>';
-    }
-    echo '</select></form>';
+    echo '<div class="dlpd dlpd-page"><div class="dlpfe-head"><div><h2>Disponibilidad por tienda</h2><p>Elige una tienda y desmarca los productos que NO vende. Se valida en el checkout, cuando ya se sabe qué tienda atiende el pedido. Para vender un producto solo ciertos días, abre el producto y usa la caja «Disponibilidad (DLP)».</p></div></div>';
     if (!$sel) {
-        echo '<p><em>No hay tiendas.</em></p>';
+        echo '<p><em>No hay tiendas.</em></p></div>';
         return;
     }
     $prods = get_posts(['post_type' => 'product', 'post_status' => 'publish', 'numberposts' => -1, 'orderby' => 'title', 'order' => 'ASC', 'suppress_filters' => true, 'no_found_rows' => true]);
@@ -225,18 +226,36 @@ function dlp_fe_disp_render_admin() {
         $grupos[$g][] = $p;
     }
     ksort($grupos);
-    echo '<form method="post" action="' . esc_url(admin_url('admin-post.php')) . '">';
+    echo '<form method="post" action="' . esc_url(admin_url('admin-post.php')) . '" class="dlpd-form">';
     wp_nonce_field('dlp_fe_disp');
-    echo '<input type="hidden" name="action" value="dlp_fe_disp"><input type="hidden" name="tienda" value="' . (int) $sel . '">';
-    echo '<p><input type="search" id="dlpd-q" placeholder="Buscar producto…" class="regular-text"> <span class="description">Marcado = se vende en esta tienda.</span></p>';
+    echo '<input type="hidden" name="action" value="dlp_fe_disp">';
+    echo '<div class="dlpd-bar"><select name="tienda" aria-label="Tienda" onchange="if(!document.querySelector(\'.dlpd-dirty\').textContent||confirm(\'Hay cambios sin guardar. ¿Cambiar de tienda?\')){location.href=\'' . esc_url(admin_url('admin.php?page=dlp-config&tab=por-tienda&tienda=')) . '\'+this.value}">';
+    foreach ($tiendas as $s) {
+        echo '<option value="' . (int) $s->ID . '" ' . selected($sel, $s->ID, false) . '>' . esc_html($s->post_title) . '</option>';
+    }
+    echo '</select><input type="search" class="dlpd-q" placeholder="Buscar producto…"><span class="dlpd-count"></span></div>';
     foreach ($grupos as $g => $lista) {
-        echo '<details open class="dlpd-g" style="margin:0 0 10px"><summary style="font-weight:600;cursor:pointer">' . esc_html($g) . ' (' . count($lista) . ')</summary><div style="columns:2;padding:6px 0 0 18px">';
+        echo '<details open class="dlpd-cat"><summary>' . esc_html($g) . ' <em></em><span class="dlpd-acts"><button type="button" class="dlpd-link" data-cat="on">Vender todo</button><button type="button" class="dlpd-link" data-cat="off">Quitar todo</button></span></summary><div class="dlpd-grid">';
         foreach ($lista as $p) {
             $off = in_array($sel, dlp_fe_disp_excluidas($p->ID), true);
-            echo '<label class="dlpd-p" style="display:block"><input type="hidden" name="todos[]" value="' . (int) $p->ID . '"><input type="checkbox" name="on[]" value="' . (int) $p->ID . '" ' . checked(!$off, true, false) . '> ' . esc_html($p->post_title) . ($off ? ' <em style="color:#b32d2e">(quitado)</em>' : '') . '</label>';
+            echo '<label class="dlpd-item"><input type="hidden" name="todos[]" value="' . (int) $p->ID . '"><input type="checkbox" name="on[]" value="' . (int) $p->ID . '" ' . checked(!$off, true, false) . '><span>' . esc_html($p->post_title) . '</span></label>';
         }
         echo '</div></details>';
     }
-    submit_button('Guardar tienda');
-    echo '</form><script>document.getElementById("dlpd-q").addEventListener("input",function(){var q=this.value.toLowerCase();document.querySelectorAll(".dlpd-p").forEach(function(l){l.style.display=l.textContent.toLowerCase().indexOf(q)>-1?"block":"none"})});</script>';
+    echo '<div class="dlpd-save"><button type="submit" class="button button-primary">Guardar tienda</button><span class="dlpd-dirty"></span></div></form></div>';
 }
+
+/* Estilos y scripts solo donde se usan */
+add_action('admin_enqueue_scripts', function ($hook) {
+    $screen = function_exists('get_current_screen') ? get_current_screen() : null;
+    $esProducto = $screen && $screen->post_type === 'product' && in_array($hook, ['post.php', 'post-new.php'], true);
+    $esPagina = isset($_GET['page'], $_GET['tab']) && $_GET['page'] === 'dlp-config' && $_GET['tab'] === 'por-tienda';
+    if (!$esProducto && !$esPagina) {
+        return;
+    }
+    if ($esPagina) {
+        wp_enqueue_style('dlpfe-panel', DLP_FE_URL . 'admin/panel.css', [], filemtime(DLP_FE_DIR . 'admin/panel.css'));
+    }
+    wp_enqueue_style('dlpfe-disp', DLP_FE_URL . 'admin/disp.css', [], filemtime(DLP_FE_DIR . 'admin/disp.css'));
+    wp_enqueue_script('dlpfe-disp', DLP_FE_URL . 'admin/disp.js', [], filemtime(DLP_FE_DIR . 'admin/disp.js'), true);
+});

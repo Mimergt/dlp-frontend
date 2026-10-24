@@ -1,0 +1,58 @@
+/* Disponibilidad (DLP): caja del producto y pestaña «por tienda». Mismo estilo zinc que el panel. */
+.dlpd { --b: #e4e4e7; --fg: #18181b; --mut: #71717a; --ok: #15803d; --okbg: #f0fdf4; --okb: #bbf7d0; --no: #b91c1c; --nobg: #fef2f2; --nob: #fecaca; color: var(--fg); font-size: 13px; }
+.dlpd * { box-sizing: border-box; }
+.dlpd-sec { margin: 0 0 16px; }
+.dlpd-sec:last-child { margin-bottom: 0; }
+.dlpd-h { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; margin: 0 0 8px; }
+.dlpd-h strong { font-size: 13px; font-weight: 600; }
+.dlpd-h small { color: var(--mut); font-size: 12px; }
+.dlpd-quick { display: flex; flex-wrap: wrap; gap: 6px; margin: 0 0 8px; }
+.dlpd-quick button, .dlpd-link { appearance: none; border: 1px solid var(--b); background: #fff; color: #52525b; border-radius: 999px; padding: 3px 10px; font: 500 12px/1.6 inherit; cursor: pointer; }
+.dlpd-quick button:hover, .dlpd-link:hover { background: #f4f4f5; color: var(--fg); }
+/* Casillas como botones */
+.dlpd-pills { display: flex; flex-wrap: wrap; gap: 6px; }
+.dlpd-pill { position: relative; margin: 0; }
+.dlpd-pill input { position: absolute; opacity: 0; pointer-events: none; }
+.dlpd-pill span { display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; border: 1px solid var(--b); border-radius: 8px; background: #fff; color: var(--mut); font-weight: 500; cursor: pointer; user-select: none; transition: background .12s, border-color .12s, color .12s; }
+.dlpd-pill:hover span { border-color: #a1a1aa; }
+.dlpd-pill input:focus-visible + span { outline: 2px solid #2271b1; outline-offset: 1px; }
+/* Días: marcado = se vende */
+.dlpd-days .dlpd-pill span { min-width: 44px; justify-content: center; }
+.dlpd-days .dlpd-pill input:checked + span { background: var(--fg); border-color: var(--fg); color: #fff; }
+/* Tiendas: marcado = NO se vende (rojo) */
+.dlpd-stores .dlpd-pill input:checked + span { background: var(--nobg); border-color: var(--nob); color: var(--no); text-decoration: line-through; }
+.dlpd-stores .dlpd-pill input:checked + span::before { content: "✕"; text-decoration: none; font-size: 10px; }
+.dlpd-box { max-height: 210px; overflow: auto; padding: 2px; }
+.dlpd-find { width: 100%; margin: 0 0 8px; }
+.dlpd-sum { margin: 12px 0 0; padding: 8px 10px; border-radius: 8px; background: #f4f4f5; color: #52525b; font-size: 12px; }
+.dlpd-sum b { color: var(--fg); }
+
+/* Página por tienda */
+.dlpd-bar { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin: 0 0 14px; padding: 12px 14px; background: #fff; border: 1px solid var(--b); border-radius: 12px; }
+.dlpd-bar select, .dlpd-bar input[type=search] { min-height: 36px; border: 1px solid var(--b); border-radius: 8px; padding: 0 10px; }
+.dlpd-bar select { min-width: 220px; font-weight: 600; }
+.dlpd-bar input[type=search] { flex: 1; min-width: 180px; }
+.dlpd-count { margin-left: auto; color: var(--mut); }
+.dlpd-count b { color: var(--fg); }
+.dlpd-count .out { color: var(--no); }
+.dlpd-cat { margin: 0 0 12px; background: #fff; border: 1px solid var(--b); border-radius: 12px; overflow: hidden; }
+.dlpd-cat > summary { display: flex; align-items: center; gap: 10px; padding: 11px 16px; cursor: pointer; font-weight: 600; list-style: none; }
+.dlpd-cat > summary::-webkit-details-marker { display: none; }
+.dlpd-cat > summary::before { content: "▸"; color: var(--mut); transition: transform .12s; }
+.dlpd-cat[open] > summary::before { transform: rotate(90deg); }
+.dlpd-cat > summary em { margin-left: 2px; color: var(--mut); font-style: normal; font-weight: 400; }
+.dlpd-cat > summary .dlpd-acts { margin-left: auto; display: flex; gap: 6px; }
+.dlpd-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 8px; padding: 4px 16px 16px; border-top: 1px solid #f4f4f5; }
+.dlpd-grid { padding-top: 14px; }
+.dlpd-item { position: relative; margin: 0; }
+.dlpd-item input[type=checkbox] { position: absolute; opacity: 0; pointer-events: none; }
+.dlpd-item span { display: flex; align-items: center; gap: 8px; padding: 9px 12px; border: 1px solid var(--okb); border-radius: 10px; background: var(--okbg); color: #14532d; font-weight: 500; line-height: 1.3; cursor: pointer; transition: background .12s, border-color .12s; }
+.dlpd-item span::before { content: "✓"; flex: none; display: grid; place-items: center; width: 18px; height: 18px; border-radius: 50%; background: var(--ok); color: #fff; font-size: 11px; }
+.dlpd-item input:not(:checked) + span { border-color: var(--nob); background: var(--nobg); color: var(--no); text-decoration: line-through; }
+.dlpd-item input:not(:checked) + span::before { content: "✕"; background: var(--no); }
+.dlpd-item input:focus-visible + span { outline: 2px solid #2271b1; outline-offset: 1px; }
+.dlpd-item.chg span { box-shadow: 0 0 0 2px #fde68a; }
+.dlpd-save { position: sticky; bottom: 0; z-index: 5; display: flex; align-items: center; gap: 12px; margin: 16px 0 0; padding: 12px 16px; background: rgba(255,255,255,.96); backdrop-filter: blur(4px); border: 1px solid var(--b); border-radius: 12px; box-shadow: 0 -2px 12px rgba(0,0,0,.06); }
+.dlpd-save .dlpd-dirty { color: #a16207; font-weight: 600; }
+.dlpd-empty { padding: 24px; text-align: center; color: var(--mut); }
+@media (max-width: 782px) { .dlpd-bar select, .dlpd-bar input[type=search] { width: 100%; } .dlpd-count { margin-left: 0; } }
