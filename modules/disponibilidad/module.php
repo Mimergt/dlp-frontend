@@ -235,7 +235,7 @@ function dlp_fe_disp_render_admin() {
     }
     echo '</select><input type="search" class="dlpd-q" placeholder="Buscar producto…"><span class="dlpd-count"></span></div>';
     foreach ($grupos as $g => $lista) {
-        echo '<details open class="dlpd-cat"><summary>' . esc_html($g) . ' <em></em><span class="dlpd-acts"><button type="button" class="dlpd-link" data-cat="on">Vender todo</button><button type="button" class="dlpd-link" data-cat="off">Quitar todo</button></span></summary><div class="dlpd-grid">';
+        echo '<details class="dlpd-cat"><summary>' . esc_html($g) . ' <em></em><span class="dlpd-acts"><button type="button" class="dlpd-link" data-cat="on">Vender todo</button><button type="button" class="dlpd-link" data-cat="off">Quitar todo</button></span></summary><div class="dlpd-grid">';
         foreach ($lista as $p) {
             $off = in_array($sel, dlp_fe_disp_excluidas($p->ID), true);
             echo '<label class="dlpd-item"><input type="hidden" name="todos[]" value="' . (int) $p->ID . '"><input type="checkbox" name="on[]" value="' . (int) $p->ID . '" ' . checked(!$off, true, false) . '><span>' . esc_html($p->post_title) . '</span></label>';
