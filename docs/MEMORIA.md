@@ -226,3 +226,10 @@ Faltan: pedidos con extras de varios días de disponibilidad, cupones, tarjeta (
 - Días: el producto sale de las listas (`pre_get_posts`), no es comprable y la página muestra «Disponible solo: …». Se queda publicado. Caché `dlp_fe_disp_prog` (se limpia al guardar el producto). Día según `wp_date` (zona del sitio).
 - Tiendas: se valida en `woocommerce_after_checkout_validation` (prioridad 25) usando `dlp_tiendas_resolve_checkout()`; la tienda solo se conoce en el checkout (antes no hay ubicación), por eso no se oculta del menú.
 - UI: caja «Disponibilidad (DLP)» en el producto, columna en la lista de productos y DLP Config → Inicio y catálogo → «Disponibilidad por tienda» (marcar/desmarcar productos de una tienda).
+
+## 0.33.x — Todo el front en español
+- Barrido de textos en inglés (páginas públicas, checkout con errores, carrito lateral, vista rápida, Mi cuenta, gracias, login). Solo había: pasarela de tarjeta (SkyVerge/Cybersource), selector Delivery/Pickup (dlp-tiendas), menú «Home», título de la página duplicada «Checkout» (ID 13) y tooltips.
+- Módulo `traducciones`: mapa exacto inglés→español por `gettext` (dominios `woocommerce-plugin-framework` y `woocommerce-gateway-cybersource`) con formulario, validaciones, rechazos de tarjeta y Mi cuenta → Tarjetas. Para sumar un texto: añadir al arreglo de `modules/traducciones/module.php`. Su `script.js` traduce tooltips (`required`, iframes de pago).
+- dlp-tiendas 0.14.1: el selector dice «A domicilio» / «Recoger en tienda» y los mensajes de servicio ya no dicen delivery/pickup. Los valores internos (`delivery`, `pickup`, `woofood_*`) no cambian.
+- BD dev: menú «Home»→«Inicio»; página 13 «Checkout»→«Finalizar compra» (sigue duplicada, quitar al migrar); título del logo en el header (respaldo en `~/dlp-backups/header-layout-158753-antes-titulo-logo.txt`).
+- Pendiente de revisar a mano: correos (desactivados en dev), URLs en inglés (`/mi-cuenta/orders/`, `/edit-account/`, `/payment-methods/`), `title="empty"` de un iframe invisible de la pasarela.
