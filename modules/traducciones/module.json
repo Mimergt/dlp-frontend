@@ -1,0 +1,10 @@
+{
+  "label": "Traducciones al español",
+  "description": "Traduce al español los textos en inglés de plugins que no traen su traducción (pasarela de tarjeta y mensajes de pago). Para agregar uno nuevo, añade «texto original» => «traducción» en modules/traducciones/module.php.",
+  "section": "sistema",
+  "tab": "Traducciones",
+  "order": 2,
+  "boot": true,
+  "php": "module.php",
+  "default": true
+}
