@@ -6,5 +6,10 @@
   "order": 2,
   "boot": true,
   "php": "module.php",
-  "default": true
+  "default": true,
+  "where": [
+    "checkout",
+    "account"
+  ],
+  "js": "script.js"
 }

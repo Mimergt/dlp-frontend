@@ -73,6 +73,7 @@ function dlp_fe_tr_mapa() {
         'Oops, adding your new payment method failed: %s' => 'No se pudo agregar tu método de pago: %s',
         '%1$s ending in %2$s' => '%1$s terminada en %2$s',
         '(expires %s)' => '(vence %s)',
+        'Default' => 'Predeterminada',
         'Use a new bank account' => 'Usar una cuenta bancaria nueva',
         'Manage Payment Methods' => 'Administrar métodos de pago',
     ];
