@@ -49,7 +49,7 @@
       cnt.innerHTML = '<b>' + inn + '</b> se venden · <b class="out">' + out + '</b> quitados';
       dirty.textContent = chg ? chg + (chg === 1 ? ' cambio sin guardar' : ' cambios sin guardar') : '';
       $all('.dlpd-cat', page).forEach(function (d) {
-        var cs = $all('.dlpd-item input', d), q = cs.filter(function (i) { return !i.checked; }).length;
+        var cs = $all('.dlpd-item input[type=checkbox]', d), q = cs.filter(function (i) { return !i.checked; }).length;
         d.querySelector('summary em').textContent = '(' + cs.length + (q ? ' · ' + q + ' quitados' : '') + ')';
       });
     }
@@ -57,7 +57,7 @@
     page.addEventListener('click', function (e) {
       var b = e.target.closest('[data-cat]'); if (!b) return; e.preventDefault();
       var on = b.getAttribute('data-cat') === 'on';
-      $all('.dlpd-item', b.closest('.dlpd-cat')).forEach(function (it) { if (it.style.display !== 'none') it.querySelector('input').checked = on; });
+      $all('.dlpd-item', b.closest('.dlpd-cat')).forEach(function (it) { if (it.style.display !== 'none') it.querySelector('input[type=checkbox]').checked = on; });
       recount();
     });
     var q = page.querySelector('.dlpd-q');
