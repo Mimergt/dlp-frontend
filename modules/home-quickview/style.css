@@ -158,3 +158,5 @@ html.dlpqv-lock { overflow: hidden; }
 
 /* Grupo de listas (Complemento 1, 2…): sin línea de resumen bajo el título; lo elegido se ve al abrir */
 .dlpqv .dlpqv-acc-sel .dlpqv-grp-s { display: none; }
+
+.dlpqv .dlpqv-editing { margin: -4px 0 10px; color: var(--q-acento); font-size: 12.5px; font-weight: 700; letter-spacing: .02em; }

@@ -9,7 +9,8 @@
 (function ($) {
   'use strict';
   var cfg = window.dlpQV || {};
-  var HASH_RE = /^#producto-(.+)$/;
+  var HASH_RE = /^#(?:producto|editar)-(.+)$/;
+  var EDIT_RE = /^#editar-(.+)$/;
   var $modal, $body, lastFocus = null, token = 0, current = '', pushed = false;
 
   function build() {
@@ -318,6 +319,37 @@
     updateTotal();
   }
 
+  // ---- Editar un producto del carrito: se rellena el formulario con lo que se envió la vez anterior -----------------
+  function prefill(ed) {
+    var $form = $body.find('form.cart').first();
+    if (!$form.length) return;
+    $.each(ed.post || {}, function (name, val) {
+      var vals = $.isArray(val) ? val : [val];
+      var $f = $form.find('[name="' + name.replace(/"/g, '') + '"]');
+      $f.each(function () {
+        var $e = $(this), t = (this.type || '').toLowerCase();
+        if (t === 'checkbox' || t === 'radio') { this.checked = vals.indexOf($e.val()) > -1; }
+        else { $e.val(vals[0]); }
+      });
+    });
+    if (ed.nota) $form.find('textarea[name="dlp_nota"]').val(ed.nota);
+    if (ed.qty) $form.find('input.qty').val(ed.qty);
+    $form.append($('<input type="hidden" name="dlp_edit_key">').val(ed.key));
+    $form.find('.dlpqv-lbl-l, .dlpqv-lbl-s').text('Actualizar');
+    $body.find('.dlpqv-title').after('<p class="dlpqv-editing">Editando tu pedido</p>');
+    $form.find('input.wc-pao-addon-input-multiplier').each(function () { $(this).closest('.dlpqv-chip').toggleClass('on', (parseFloat($(this).val()) || 0) > 0); });
+    $form.find('input, select, textarea').trigger('input').trigger('change');
+    $form.find('.dlpqv-grp-box select').trigger('change');
+  }
+
+  function openEdit(key) {
+    $.get(cfg.wcajax, { key: key }).done(function (r) {
+      if (!r || !r.success || !r.data.slug) { hide(); history.replaceState(null, '', location.pathname + location.search); return; }
+      open(r.data.slug, '', { fromHash: true, edit: r.data });
+      current = 'editar-' + key;
+    }).fail(function () { history.replaceState(null, '', location.pathname + location.search); });
+  }
+
   /** key: slug o id. fallbackHref: si falla, ir a la página del producto (solo clics desde tarjeta). */
   function open(key, fallbackHref, opts) {
     opts = opts || {};
@@ -334,6 +366,7 @@
         if (!r || !r.success) { failed(fallbackHref); return; }
         $body.html(r.data.html);
         enhance();
+        if (opts.edit) prefill(opts.edit);
         if (!opts.fromHash) setHash(r.data.slug || current);
       })
       .fail(function () { if (my === token) failed(fallbackHref); });
@@ -384,8 +417,23 @@
   // Al añadir al carrito, el carrito lateral se abre solo: se cierra el modal.
   $(document.body).on('added_to_cart', close);
 
+  // «Editar» del carrito lateral: con la vista rápida en la página no hace falta ir a /menu/.
+  $(document).on('click', 'a.dlp-edit', function (e) {
+    if (e.which > 1 || e.metaKey || e.ctrlKey || e.shiftKey) return;
+    e.preventDefault();
+    var h = '#editar-' + $(this).attr('data-key');
+    if (location.hash === h) fromHash(); else { history.pushState(null, '', h); pushed = true; fromHash(); }
+  });
+
   // Enlaces directos y botón Atrás.
   function fromHash() {
+    var e = EDIT_RE.exec(location.hash);
+    if (e) {
+      var ek = decodeURIComponent(e[1]);
+      $('.xoo-wsc-close').first().trigger('click'); // cierra el carrito lateral
+      if (!isOpen() || current !== 'editar-' + ek) { current = 'editar-' + ek; openEdit(ek); }
+      return;
+    }
     var m = HASH_RE.exec(location.hash);
     if (m) {
       var key = decodeURIComponent(m[1]);

@@ -119,7 +119,7 @@ add_action('wp_enqueue_scripts', function () {
         }
         wp_enqueue_script('wc-jquery-tiptip', WC()->plugin_url() . '/assets/js/jquery-tiptip/jquery.tipTip.min.js', $deps, WC_VERSION, true);
     }
-    wp_localize_script('dlp-fe-home-quickview', 'dlpQV', ['ajaxurl' => admin_url('admin-ajax.php')]);
+    wp_localize_script('dlp-fe-home-quickview', 'dlpQV', ['ajaxurl' => admin_url('admin-ajax.php'), 'wcajax' => add_query_arg('wc-ajax', 'dlp_fe_edit_data', home_url('/'))]);
 }, 30);
 
 /*
@@ -130,3 +130,58 @@ add_action('wp_enqueue_scripts', function () {
 add_action('wc_ajax_xoo_wsc_add_to_cart', function () {
     add_action('shutdown', 'wc_clear_notices', 5);
 }, 0);
+
+
+/*
+ * Editar un producto del carrito. Al añadir se guarda en el ítem lo que se envió en el formulario de extras (addon-*) para poder
+ * volver a abrir la vista rápida con esas opciones marcadas. Al guardar de nuevo el formulario manda dlp_edit_key y el ítem viejo
+ * se quita justo antes de añadir el nuevo (cuando ya pasaron todas las validaciones).
+ */
+add_filter('woocommerce_add_cart_item_data', function ($data) {
+    $post = [];
+    foreach ($_POST as $k => $v) { // phpcs:ignore WordPress.Security.NonceVerification
+        if (strpos((string) $k, 'addon-') === 0) {
+            $post[$k] = is_array($v) ? array_map('wc_clean', wp_unslash($v)) : wc_clean(wp_unslash($v));
+        }
+    }
+    if ($post) {
+        $data['dlp_edit'] = ['post' => $post];
+    }
+    return $data;
+}, 20);
+
+add_action('wc_ajax_dlp_fe_edit_data', function () {
+    $key = isset($_REQUEST['key']) ? sanitize_text_field(wp_unslash($_REQUEST['key'])) : '';
+    $ci  = ($key !== '' && WC()->cart) ? WC()->cart->get_cart_item($key) : null;
+    if (!$ci || empty($ci['dlp_edit']['post'])) {
+        wp_send_json_error('no editable', 404);
+    }
+    $p = get_post((int) $ci['product_id']);
+    wp_send_json_success([
+        'slug' => $p ? $p->post_name : '',
+        'post' => $ci['dlp_edit']['post'],
+        'qty'  => (int) $ci['quantity'],
+        'nota' => isset($ci['dlp_nota']) ? $ci['dlp_nota'] : '',
+        'key'  => $key,
+    ]);
+});
+
+add_filter('woocommerce_add_to_cart_validation', function ($ok) {
+    if ($ok && !empty($_POST['dlp_edit_key']) && WC()->cart) { // phpcs:ignore WordPress.Security.NonceVerification
+        $old = sanitize_text_field(wp_unslash($_POST['dlp_edit_key']));
+        if (WC()->cart->get_cart_item($old)) {
+            WC()->cart->remove_cart_item($old);
+        }
+    }
+    return $ok;
+}, 999);
+
+// Botón «Editar» en cada producto del carrito lateral (solo si se guardó su selección). Sin la vista rápida en la página,
+// el enlace lleva a /menu/ y allí se abre la edición.
+add_action('xoo_wsc_product_summary_col_end', function ($product, $key) {
+    $ci = WC()->cart ? WC()->cart->get_cart_item($key) : null;
+    if (!$ci || empty($ci['dlp_edit']['post'])) {
+        return;
+    }
+    echo '<a class="dlp-edit" href="' . esc_url(home_url('/menu/#editar-' . $key)) . '" data-key="' . esc_attr($key) . '">Editar</a>';
+}, 20, 2);
