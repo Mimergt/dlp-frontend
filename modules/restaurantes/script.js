@@ -180,7 +180,8 @@
   /* ---------- Arranque del mapa ---------- */
   function initMap() {
     if (!C.tilesUrl) { root.querySelector('.dlprs-map').innerHTML = '<p class="dlprs-empty">No se pudo cargar el mapa.</p>'; return; }
-    map = L.map('dlprs-map', { center: C.center, zoom: 8, minZoom: C.minZoom, maxZoom: C.maxZoom, maxBounds: C.bounds, maxBoundsViscosity: 1, zoomSnap: 0.5, scrollWheelZoom: false });
+    map = L.map('dlprs-map', { center: C.center, zoom: 8, minZoom: C.minZoom, maxZoom: C.maxZoom, maxBounds: C.bounds, maxBoundsViscosity: 1, zoomSnap: 0.5, scrollWheelZoom: false, zoomControl: false });
+    L.control.zoom({ position: 'topright', zoomInTitle: 'Acercar', zoomOutTitle: 'Alejar' }).addTo(map);
     try {
       protomapsL.leafletLayer({ url: C.tilesUrl, flavor: 'light', lang: 'es', attribution: '<a href="https://epic.gt" target="_blank" rel="noopener">EPIC.GT</a> · <a href="https://protomaps.com" target="_blank" rel="noopener">Protomaps</a> © <a href="https://openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a>' }).addTo(map);
     } catch (e) { say('No se pudo cargar el mapa base.'); }
@@ -189,7 +190,11 @@
     map.on('click', function (e) { if (st.picking) setPoint(e.latlng.lat, e.latlng.lng, 'Punto elegido'); });
     map.on('focus', function () { map.scrollWheelZoom.enable(); });
     map.on('blur', function () { map.scrollWheelZoom.disable(); });
-    apply(); fitAll();
+    apply();
+    var el = document.getElementById('dlprs-map'), first = true;
+    function resize() { map.invalidateSize(); if (first && el.offsetHeight > 50) { first = false; fitAll(); } }
+    if (window.ResizeObserver) new ResizeObserver(resize).observe(el); else setTimeout(resize, 300);
+    setTimeout(resize, 150);
   }
   (function wait(n) {
     if (window.L && window.protomapsL) return initMap();

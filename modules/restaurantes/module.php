@@ -48,7 +48,7 @@ function dlp_fe_rs_region_defecto($titulo) {
 }
 
 function dlp_fe_rs_hora($hm) {
-    return $hm ? strtolower(wp_date('g:i a', strtotime('2000-01-01 ' . $hm))) : '';
+    return $hm ? strtolower(gmdate('g:i a', strtotime('2000-01-01 ' . $hm . ' UTC'))) : '';
 }
 
 /** Tiendas habilitadas con los datos que usa la página. */
