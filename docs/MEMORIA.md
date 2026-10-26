@@ -265,3 +265,4 @@ Faltan: pedidos con extras de varios días de disponibilidad, cupones, tarjeta (
 
 ## 0.38.1 — /menu/ en blanco en desktop
 - Divi 5 (modo compatibilidad con módulos Divi 4) regeneró su CSS y la columna del carrusel de categorías quedó como `float:left; width:auto`: el carrusel (Swiper, anchos en px según su contenedor) la estiraba a ~725 000 px y la página se veía en blanco en escritorio. `home-nuevo/style.css` fija esa columna a 100% con `:has(.navMenu_slide), :has(.main_slider)`, sin depender del CSS de Divi. Si pasa algo parecido en otra página con Swiper, revisar primero el ancho de la columna padre (`getBoundingClientRect`) y la regla `.et_block_row .et_pb_column { float:left }`.
+- Bebida dentro de cada combo (promo-estandar.php): solo las 3 Frezkas van incluidas; Coca Cola, Coca Cola Zero, Orange Crush, Tiky y Canada Dry +Q11; Agua pura +Q9 (mismos precios que como extra).

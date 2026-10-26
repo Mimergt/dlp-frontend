@@ -34,7 +34,8 @@ if (count($comp) !== count($burgers) || array_diff($burgers, array_keys($quitar)
 
 $base = (int) (microtime(true) * 10) % 1000000000; $k = 0;
 $ANGUS = 12; // +Q12 por hamburguesa (antes +Q48 en 4, +Q36 en 3)
-$bebNombres = ['Frezka Tamarindo', 'Frezka Rosa de Jamaica', 'Frezka Sandía Limón & Maracuyá', 'Coca Cola', 'Coca Cola Zero', 'Orange Crush', 'Tiky', 'Canada Dry Ginger Ale', 'Agua pura'];
+// Bebida dentro del combo: solo las Frezkas van incluidas; las demás se cobran (mismo precio que como extra: agua Q9, resto Q11)
+$bebNombres = ['Frezka Tamarindo' => 0, 'Frezka Rosa de Jamaica' => 0, 'Frezka Sandía Limón & Maracuyá' => 0, 'Coca Cola' => 11, 'Coca Cola Zero' => 11, 'Orange Crush' => 11, 'Tiky' => 11, 'Canada Dry Ginger Ale' => 11, 'Agua pura' => 9];
 $lista = function ($nombre, $acord, $opciones, $default) use (&$k, $base) {
     return ['name' => $nombre, 'title_format' => 'heading', 'description_enable' => 1, 'description' => "[acordeon:$acord]", 'placeholder_enable' => 0, 'placeholder' => '',
         'type' => 'multiple_choice', 'display' => 'select', 'position' => 0, 'required' => 1, 'restrictions' => 0, 'restrictions_type' => 'any_text',
@@ -49,7 +50,7 @@ foreach ($burgers as $i => $b) {
     $q['description_enable'] = 1; $q['description'] = "Marca lo que NO quieres. [acordeon:$b]";
     $nuevo[] = $lista("$b: carne", $b, [$op('Premium Blend'), $op('Tortas Angus', $ANGUS)], 0);
     $nuevo[] = $c;
-    $nuevo[] = $lista("$b: bebida", $b, array_map(function ($n) use ($op) { return $op($n); }, $bebNombres), '');
+    $nuevo[] = $lista("$b: bebida", $b, array_map(function ($n, $pr) use ($op) { return $op($n, $pr ?: ''); }, array_keys($bebNombres), array_values($bebNombres)), '');
     $nuevo[] = $q;
 }
 $precios = ['Frezka' => 17, 'Agua pura' => 9];
