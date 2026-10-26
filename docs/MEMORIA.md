@@ -241,3 +241,9 @@ Faltan: pedidos con extras de varios días de disponibilidad, cupones, tarjeta (
 
 ## 0.34.3 — Carrito lateral asomándose (iPhone/Android)
 - El panel del carrito (Xootix) cerrado solo se escondía con `right:-350px`; en teléfonos reales se veía una franja al cargar y al cambiar de categoría (no reproducible en el emulador del navegador). Ahora cerrado queda `visibility:hidden` (carrito-lateral/style.css) y se muestra al abrir; la animación se conserva.
+
+## 0.35.x — Editar productos del carrito lateral
+- Al añadir, `woocommerce_add_cart_item_data` guarda en el ítem lo enviado en los campos `addon-*` (`dlp_edit`). `xoo_wsc_product_summary_col_end` pinta el botón «Editar» (`a.dlp-edit`, href `/menu/#editar-<cart_key>`) solo en ítems con esa selección: los que ya estaban en un carrito antes de 0.35 no lo tienen.
+- JS (home-quickview): `#editar-<key>` cierra el carrito lateral, pide los datos por `?wc-ajax=dlp_fe_edit_data`, abre la vista rápida del producto, rellena el formulario (`prefill`), pone «Editando tu pedido» y el botón «Actualizar» y manda `dlp_edit_key`. En el servidor, `woocommerce_add_to_cart_validation` (prioridad 999, ya pasadas las demás validaciones) quita el ítem viejo y se añade el nuevo (queda al final).
+- La vista rápida solo carga en home, tienda, categorías y /menu/; en las demás páginas el enlace lleva a /menu/ y allí abre la edición.
+- Nota de pruebas: el navegador integrado deja de pintar si la pestaña no está al frente (`document.hidden`); comprobar el DOM.
