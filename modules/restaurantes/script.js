@@ -9,11 +9,13 @@
   (C.tiendas || []).forEach(function (t) { data[t.id] = t; });
   cards.forEach(function (c, i) { c.setAttribute('data-i', i); byId[c.getAttribute('data-id')] = c; });
 
-  var st = { srv: '', open: false, region: '', q: '', pt: null, label: '', picking: false, sel: 0 };
-  var map = null, group = null, me = null;
+  var st = { srv: '', open: false, region: '', q: '', pt: null, label: '', sel: 0 };
+  var map = null, group = null, me = null, closedAt = 0;
+  var HINT = 'Toca el mapa para marcar dónde estás, o usa «Cerca de mí».';
+  var ATTR = '<a href="https://epic.gt" target="_blank" rel="noopener"><svg xmlns="http://www.w3.org/2000/svg" width="15" height="10" viewBox="0 0 15 10" role="img" aria-label="Guatemala" style="vertical-align:-1px;margin-right:3px;border:1px solid #cbd5e1"><rect width="5" height="10" fill="#4997D0"/><rect x="5" width="5" height="10" fill="#fff"/><rect x="10" width="5" height="10" fill="#4997D0"/><circle cx="7.5" cy="5" r="1.5" fill="#4d8a3a"/></svg>EPIC.GT</a> · <a href="https://protomaps.com" target="_blank" rel="noopener">Protomaps</a> © <a href="https://openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a>';
   var bar = root.querySelector('.dlprs-bar-t'), barX = root.querySelector('.dlprs-bar-x');
   var empty = root.querySelector('.dlprs-empty'), msg = root.querySelector('.dlprs-msg');
-  var pickBtn = root.querySelector('.dlprs-pickbtn'), nearBtn = root.querySelector('.dlprs-near');
+  var nearBtn = root.querySelector('.dlprs-near');
 
   function norm(s) { return (s || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, ''); }
   function km(a, b) {
@@ -22,7 +24,7 @@
     return 2 * R * Math.asin(Math.sqrt(x));
   }
   function fmt(d) { return d < 10 ? d.toFixed(1) + ' km' : Math.round(d) + ' km'; }
-  function say(t) { msg.textContent = t || ''; }
+  function say(t) { msg.textContent = t || HINT; }
 
   /* ---------- Filtros, orden y lista ---------- */
   function ok(c) {
@@ -54,7 +56,8 @@
       return a.getAttribute('data-i') - b.getAttribute('data-i');
     }).forEach(function (c) { list.appendChild(c); });
     var firstVisible = [].slice.call(list.children).filter(function (c) { return !c.hidden; })[0];
-    if (firstVisible) firstVisible.classList.add('top');
+    var selOk = st.sel && byId[st.sel] && !byId[st.sel].hidden;
+    if (firstVisible && !selOk) firstVisible.classList.add('top');
     empty.hidden = vis.length > 0;
     if (st.pt) { bar.innerHTML = '<b>Ordenado por cercanía</b> · ' + st.label; barX.hidden = false; }
     else { bar.innerHTML = '<b>' + vis.length + (vis.length === 1 ? ' restaurante' : ' restaurantes') + '</b>'; barX.hidden = true; }
@@ -65,7 +68,8 @@
   function visibleStores() {
     return cards.filter(function (c) { return !c.hidden; }).map(function (c) { return data[c.getAttribute('data-id')]; }).filter(function (t) { return t && t.lat !== null; });
   }
-  function pinIcon(act) { return L.divIcon({ className: '', html: '<div class="dlprs-pin' + (act ? ' act' : '') + '"></div>', iconSize: [0, 0] }); }
+  var SHOP = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 9l1.5-5h15L21 9v1a3 3 0 01-6 0 3 3 0 01-6 0 3 3 0 01-6 0V9z"/><path d="M5 12.5V20h14v-7.5"/><path d="M10 20v-4h4v4"/></svg>';
+  function pinIcon(act) { return L.divIcon({ className: '', html: '<div class="dlprs-pin' + (act ? ' act' : '') + '">' + SHOP + '</div>', iconSize: [0, 0] }); }
   function drawMarkers() {
     if (!map) return;
     group.clearLayers();
@@ -105,9 +109,10 @@
     }
     if (map && t && t.lat !== null) {
       if (!fromMap) map.setView([t.lat, t.lng], Math.max(map.getZoom(), 15), { animate: true });
-      L.popup({ offset: [0, -8], closeButton: false }).setLatLng([t.lat, t.lng]).setContent('<b></b><span></span>').openOn(map);
-      var el = map.getContainer().querySelector('.leaflet-popup-content');
-      el.querySelector('b').textContent = t.n; el.querySelector('span').textContent = t.a;
+      var box = document.createElement('div'); box.className = 'dlprs-pop';
+      var b = document.createElement('b'); b.textContent = t.n; box.appendChild(b);
+      var ico = c && c.querySelector('.dlprs-ico'); if (ico) box.appendChild(ico.cloneNode(true));
+      L.popup({ offset: [0, -34], closeButton: false, autoPanPadding: [30, 30] }).setLatLng([t.lat, t.lng]).setContent(box).openOn(map);
     }
     drawMarkers();
   }
@@ -115,7 +120,6 @@
   /* ---------- Punto del cliente ---------- */
   function setPoint(lat, lng, label) {
     st.pt = [lat, lng]; st.label = label; st.picking = false;
-    pickBtn.classList.remove('on'); pickBtn.textContent = 'Elegir un punto en el mapa'; root.querySelector('.dlprs-map').classList.remove('picking');
     if (map) {
       if (!me) {
         me = L.marker([lat, lng], { draggable: true, icon: L.divIcon({ className: '', html: '<div class="dlprs-me"></div>', iconSize: [0, 0] }), zIndexOffset: 1000, title: 'Tu punto' }).addTo(map);
@@ -137,13 +141,6 @@
     st.pt = null; if (me && map) { map.removeLayer(me); me = null; }
     apply(); fitAll();
   }
-  function startPick(on) {
-    st.picking = on; pickBtn.classList.toggle('on', on);
-    pickBtn.textContent = on ? 'Toca el mapa…' : 'Elegir un punto en el mapa';
-    root.querySelector('.dlprs-map').classList.toggle('picking', on);
-    if (on) say('Toca el lugar donde estás o a donde quieres pedir.');
-  }
-
   /* ---------- Eventos ---------- */
   root.querySelector('.dlprs-chips').addEventListener('click', function (e) {
     var b = e.target.closest('button'); if (!b) return;
@@ -166,14 +163,13 @@
     var c = e.target.closest('.dlprs-card'); if (c) select(+c.getAttribute('data-id'), false);
   });
   barX.addEventListener('click', clearPoint);
-  pickBtn.addEventListener('click', function () { startPick(!st.picking); });
   nearBtn.addEventListener('click', function () {
-    if (!navigator.geolocation) { say('Tu navegador no permite obtener la ubicación. Elige un punto en el mapa.'); startPick(true); return; }
+    if (!navigator.geolocation) { say('Tu navegador no permite obtener la ubicación. Toca el mapa para elegir un punto.'); return; }
     nearBtn.classList.add('busy'); say('Buscando tu ubicación…');
     navigator.geolocation.getCurrentPosition(function (p) {
       nearBtn.classList.remove('busy'); setPoint(p.coords.latitude, p.coords.longitude, 'Tu ubicación');
     }, function () {
-      nearBtn.classList.remove('busy'); say('No pudimos obtener tu ubicación. Elige un punto en el mapa.'); startPick(true);
+      nearBtn.classList.remove('busy'); say('No pudimos obtener tu ubicación. Toca el mapa para elegir un punto.');
     }, { enableHighAccuracy: true, timeout: 10000, maximumAge: 60000 });
   });
 
@@ -183,11 +179,15 @@
     map = L.map('dlprs-map', { center: C.center, zoom: 8, minZoom: C.minZoom, maxZoom: C.maxZoom, maxBounds: C.bounds, maxBoundsViscosity: 1, zoomSnap: 0.5, scrollWheelZoom: false, zoomControl: false });
     L.control.zoom({ position: 'topright', zoomInTitle: 'Acercar', zoomOutTitle: 'Alejar' }).addTo(map);
     try {
-      protomapsL.leafletLayer({ url: C.tilesUrl, flavor: 'light', lang: 'es', attribution: '<a href="https://epic.gt" target="_blank" rel="noopener">EPIC.GT</a> · <a href="https://protomaps.com" target="_blank" rel="noopener">Protomaps</a> © <a href="https://openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a>' }).addTo(map);
+      protomapsL.leafletLayer({ url: C.tilesUrl, flavor: 'light', lang: 'es', attribution: ATTR }).addTo(map);
     } catch (e) { say('No se pudo cargar el mapa base.'); }
     group = L.layerGroup().addTo(map);
     map.on('zoomend', drawMarkers);
-    map.on('click', function (e) { if (st.picking) setPoint(e.latlng.lat, e.latlng.lng, 'Punto elegido'); });
+    map.on('popupclose', function () { closedAt = Date.now(); });
+    map.on('click', function (e) {
+      if (Date.now() - closedAt < 150) return; // el primer toque solo cierra la burbuja
+      setPoint(e.latlng.lat, e.latlng.lng, 'Punto elegido');
+    });
     map.on('focus', function () { map.scrollWheelZoom.enable(); });
     map.on('blur', function () { map.scrollWheelZoom.disable(); });
     apply();

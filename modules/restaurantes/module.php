@@ -208,7 +208,7 @@ add_filter('the_content', function ($content) {
             </section>
             <div class="dlprs-map">
                 <div id="dlprs-map" role="region" aria-label="Mapa de restaurantes"></div>
-                <div class="dlprs-pick"><button type="button" class="dlprs-pickbtn">Elegir un punto en el mapa</button><span class="dlprs-msg" role="status" aria-live="polite"></span></div>
+                <div class="dlprs-pick"><span class="dlprs-msg" role="status" aria-live="polite">Toca el mapa para marcar dónde estás, o usa «Cerca de mí».</span></div>
                 <div class="dlprs-leg"><span><i class="p"></i>Restaurante</span><span><i class="c"></i>Varias tiendas (toca para acercar)</span></div>
             </div>
         </div>
@@ -226,7 +226,7 @@ add_action('wp_enqueue_scripts', function () {
     wp_enqueue_script('dlp-leaflet', $u . 'leaflet.js', [], '1.9.4', true);
     wp_enqueue_script('dlp-protomaps', $u . 'protomaps-leaflet.js', ['dlp-leaflet'], '5.1.0', true);
     $datos = array_map(function ($t) {
-        return ['id' => $t['id'], 'n' => $t['nombre'], 'a' => $t['direccion'], 'lat' => $t['lat'], 'lng' => $t['lng'], 'r' => $t['region']];
+        return ['id' => $t['id'], 'n' => $t['nombre'], 'lat' => $t['lat'], 'lng' => $t['lng'], 'r' => $t['region']];
     }, dlp_fe_rs_tiendas());
     wp_localize_script('dlp-fe-restaurantes', 'dlpRs', array_merge(dlp_tiendas_map_config(), ['tiendas' => $datos]));
 }, 20);

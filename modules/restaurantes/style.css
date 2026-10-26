@@ -58,30 +58,36 @@ body.dlprs-page #sidebar { display: none !important; }
 .dlprs-full a:hover { border-color: #111; }
 .dlprs-card.top { background: #fafafa; padding-bottom: 18px; }
 .dlprs-card.top h2 { font-size: 17px !important; }
-.dlprs-card.top .dlprs-full { display: flex; }
-.dlprs-card.top .dlprs-ico { display: none; }
+.dlprs-card.top .dlprs-full, .dlprs-card.act .dlprs-full { display: flex; }
+.dlprs-card.top .dlprs-ico, .dlprs-card.act .dlprs-ico { display: none; }
+.dlprs-card.act h2 { font-size: 17px !important; }
 .dlprs-empty { margin: 0; padding: 28px 20px; text-align: center; color: #71717a; font-size: 14px; }
 
 .dlprs-map { flex: 1.4 1 520px; position: relative; min-height: 760px; border: 1px solid #e4e4e7; border-radius: 16px; overflow: hidden; background: #f7f7f8; }
 #dlprs-map { position: absolute; inset: 0; z-index: 1; }
 .dlprs-pick { position: absolute; left: 16px; top: 16px; z-index: 500; display: flex; flex-direction: column; gap: 6px; align-items: flex-start; max-width: calc(100% - 90px); }
-.dlprs-pickbtn { display: inline-flex; align-items: center; height: 40px; padding: 0 16px; border: 1px solid #d4d4d8; border-radius: 999px; background: #fff; box-shadow: 0 2px 8px rgba(0,0,0,.08); font: 600 13px/1 var(--rs-b); cursor: pointer; }
-.dlprs-pickbtn.on { background: #111; border-color: #111; color: #fff; }
-.dlprs-msg { padding: 0 6px; font-size: 12px; color: #52525b; text-shadow: 0 0 4px #fff, 0 0 4px #fff; }
+.dlprs-msg { display: inline-block; padding: 8px 14px; border: 1px solid #e4e4e7; border-radius: 999px; background: rgba(255,255,255,.95); box-shadow: 0 2px 8px rgba(0,0,0,.08); font-size: 12.5px; line-height: 1.35; color: #3f3f46; }
 .dlprs-leg { position: absolute; left: 16px; bottom: 16px; z-index: 500; display: flex; flex-wrap: wrap; gap: 6px 16px; align-items: center; padding: 10px 14px; background: #fff; border: 1px solid #e4e4e7; border-radius: 10px; font-size: 12px; color: #52525b; }
 .dlprs-leg span { display: inline-flex; align-items: center; gap: 6px; }
 .dlprs-leg i { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
-.dlprs-leg i.p { background: var(--rs-ac); }
+.dlprs-leg i.p { background: var(--rs-ac); border-radius: 4px 4px 50% 50%; }
 .dlprs-leg i.c { background: #111; }
-.dlprs-map.picking #dlprs-map { cursor: crosshair; }
+.dlprs-map #dlprs-map { cursor: crosshair; }
+.dlprs-map #dlprs-map .leaflet-marker-icon, .dlprs-map #dlprs-map .leaflet-interactive { cursor: pointer; }
 
-/* Pines */
-.dlprs-pin { width: 16px; height: 16px; margin: -8px 0 0 -8px; border-radius: 50%; background: var(--dlp-restaurantes-color, #ED1C24); border: 2.5px solid #fff; box-shadow: 0 1px 4px rgba(0,0,0,.35); transition: transform .12s; }
-.dlprs-pin.act { transform: scale(1.5); background: #111; }
+/* Pines de tienda */
+.dlprs-pin { position: relative; display: grid; place-items: center; width: 34px; height: 34px; margin: -42px 0 0 -17px; border-radius: 50%; background: var(--dlp-restaurantes-color, #ED1C24); border: 2.5px solid #fff; box-shadow: 0 2px 6px rgba(0,0,0,.35); transition: transform .12s, background .12s; }
+.dlprs-pin::after { content: ""; position: absolute; left: 50%; bottom: -9px; margin-left: -6px; border: 6px solid transparent; border-top: 8px solid var(--dlp-restaurantes-color, #ED1C24); border-bottom: 0; }
+.dlprs-pin.act { transform: scale(1.18); background: #111; }
+.dlprs-pin.act::after { border-top-color: #111; }
 .dlprs-cl { display: grid; place-items: center; width: 36px; height: 36px; margin: -18px 0 0 -18px; border-radius: 50%; background: #111; border: 3px solid #fff; box-shadow: 0 1px 6px rgba(0,0,0,.35); color: #fff; font: 700 13px/1 "Helvetica Neue", Arial, sans-serif; }
 .dlprs-me { width: 18px; height: 18px; margin: -9px 0 0 -9px; border-radius: 50%; background: #2563eb; border: 3px solid #fff; box-shadow: 0 0 0 8px rgba(37,99,235,.18); }
-.dlprs .leaflet-popup-content { margin: 12px 14px; font: 13px/1.4 "Helvetica Neue", Arial, sans-serif; }
-.dlprs .leaflet-popup-content b { display: block; font-size: 14px; }
+.dlprs .leaflet-popup-content-wrapper { border-radius: 14px; }
+.dlprs .leaflet-popup-content { margin: 10px 12px; width: auto !important; }
+.dlprs-pop { display: flex; align-items: center; gap: 12px; white-space: nowrap; font: 14px/1.2 "Helvetica Neue", Arial, sans-serif; }
+.dlprs-pop b { font-weight: 700; }
+.dlprs-pop .dlprs-ico { margin: 0; display: inline-flex !important; }
+.dlprs-pop .dlprs-ico a { width: 32px; height: 32px; }
 
 @media (max-width: 900px) {
   .dlprs { padding: 28px 16px 40px; gap: 16px; }
