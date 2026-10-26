@@ -77,6 +77,8 @@ body.dlprs-page #sidebar { display: none !important; }
 .dlprs-me { width: 18px; height: 18px; cursor: grab; border-radius: 50%; background: #2563eb; border: 3px solid #fff; box-shadow: 0 0 0 8px rgba(37,99,235,.18); }
 .dlprs-pinbox { cursor: pointer; }
 .dlprs-pinbox:focus-visible { outline: 2px solid #111; outline-offset: 2px; border-radius: 8px; }
+.dlprs .leaflet-popup-content-wrapper { border-radius: 14px; }
+.dlprs .leaflet-popup-content { margin: 10px 12px; width: auto !important; }
 .dlprs .dlprs-popup { z-index: 5; }
 .dlprs .dlprs-popup .maplibregl-popup-content { padding: 10px 12px; border-radius: 14px; box-shadow: 0 6px 20px rgba(0,0,0,.18); }
 .dlprs-pop { display: flex; align-items: center; gap: 12px; white-space: nowrap; font: 14px/1.2 "Helvetica Neue", Arial, sans-serif; }
@@ -87,7 +89,17 @@ body.dlprs-page #sidebar { display: none !important; }
 .dlprs .maplibregl-ctrl-attrib a { color: #52525b; }
 .dlprs .maplibregl-ctrl-group { border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,.12); }
 
+/* Pantalla completa del mapa (solo celular) */
+.dlprs-fs { display: none; position: absolute; right: 10px; top: 118px; z-index: 1100; align-items: center; justify-content: center; gap: 6px; min-width: 40px; height: 40px; padding: 0 10px; border: 1px solid #d4d4d8; border-radius: 10px; background: #fff; box-shadow: 0 2px 8px rgba(0,0,0,.12); font: 600 13px/1 var(--rs-b); color: #111; cursor: pointer; }
+.dlprs-fs span:empty { display: none; }
+html.dlprs-lock, html.dlprs-lock body { overflow: hidden !important; }
+.dlprs-map.full { position: fixed !important; inset: 0 !important; z-index: 2147483000; width: auto !important; height: auto !important; min-height: 0 !important; border: 0; border-radius: 0; }
+.dlprs-map.full .dlprs-leg { display: none; }
+.dlprs-map.full .dlprs-pick { top: calc(env(safe-area-inset-top, 0px) + 14px); }
+.dlprs-map.full .dlprs-fs { top: calc(env(safe-area-inset-top, 0px) + 118px); }
+
 @media (max-width: 900px) {
+  .dlprs-fs { display: inline-flex; }
   .dlprs { padding: 28px 16px 40px; gap: 16px; }
   .dlprs-ti h1 { font-size: 44px; }
   .dlprs-q { min-width: 0; flex: 1 1 100%; }
@@ -95,7 +107,7 @@ body.dlprs-page #sidebar { display: none !important; }
   .dlprs-chips { flex-wrap: nowrap; overflow-x: auto; margin: 0 -16px; padding: 0 16px 4px; scrollbar-width: none; }
   .dlprs-chips button { white-space: nowrap; flex: none; }
   .dlprs-body { flex-direction: column; }
-  .dlprs-map { order: 1; flex: none; width: 100%; min-height: 0; height: 340px; }
+  .dlprs-map { order: 1; flex: none; width: 100%; min-height: 380px; height: 70vh; height: 70svh; }
   .dlprs-list { order: 2; flex: none; max-width: none; width: 100%; height: auto; }
   .dlprs-items { overflow: visible; }
 }

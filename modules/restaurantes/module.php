@@ -208,6 +208,7 @@ add_filter('the_content', function ($content) {
             </section>
             <div class="dlprs-map">
                 <div id="dlprs-map" role="region" aria-label="Mapa de restaurantes"></div>
+                <button type="button" class="dlprs-fs" aria-label="Pantalla completa" aria-pressed="false"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#111" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg><span></span></button>
                 <div class="dlprs-pick"><span class="dlprs-msg" role="status" aria-live="polite">Toca el mapa para marcar dónde estás, o usa «Cerca de mí».</span></div>
                 <div class="dlprs-leg"><span><i class="p"></i>Restaurante</span><span><i class="c"></i>Varias tiendas (toca para acercar)</span></div>
             </div>
@@ -221,16 +222,23 @@ add_action('wp_enqueue_scripts', function () {
     if (!dlp_fe_rs_is_page() || !defined('DLP_TIENDAS_URL') || !function_exists('dlp_tiendas_map_config') || !wp_script_is('dlp-fe-restaurantes', 'enqueued')) {
         return;
     }
-    // Mapa 3D: MapLibre GL + PMTiles (propios del módulo) y el estilo/pines compartidos de dlp-tiendas.
-    $m = DLP_FE_URL . 'modules/restaurantes/mapa/';
-    wp_enqueue_style('dlprs-maplibre', $m . 'vendor/maplibre-gl.css', [], '5.24.0');
-    wp_enqueue_script('dlprs-maplibre', $m . 'vendor/maplibre-gl.js', [], '5.24.0', true);
-    wp_enqueue_script('dlprs-pmtiles', $m . 'vendor/pmtiles.js', [], '4.5.0', true);
+    // Estilo y pines compartidos de dlp-tiendas (pequeño). Las librerías de mapa pesadas las carga el script
+    // solo cuando el mapa se ve: MapLibre GL (3D) o, sin WebGL, Leaflet plano.
     wp_enqueue_script('dlp-map-style', DLP_TIENDAS_URL . 'assets/js/map-style.js', [], defined('DLP_TIENDAS_VERSION') ? DLP_TIENDAS_VERSION : '1', true);
+    $m = DLP_FE_URL . 'modules/restaurantes/mapa/';
+    $t = DLP_TIENDAS_URL . 'assets/vendor/';
+    $libs = [
+        'glcss' => $m . 'vendor/maplibre-gl.css?ver=5.24.0',
+        'gljs'  => $m . 'vendor/maplibre-gl.js?ver=5.24.0',
+        'pmjs'  => $m . 'vendor/pmtiles.js?ver=4.5.0',
+        'lcss'  => $t . 'leaflet.css?ver=1.9.4',
+        'ljs'   => $t . 'leaflet.js?ver=1.9.4',
+        'lpm'   => $t . 'protomaps-leaflet.js?ver=5.1.0',
+    ];
     $datos = array_map(function ($t) {
         return ['id' => $t['id'], 'n' => $t['nombre'], 'lat' => $t['lat'], 'lng' => $t['lng'], 'r' => $t['region']];
     }, dlp_fe_rs_tiendas());
-    wp_localize_script('dlp-fe-restaurantes', 'dlpRs', array_merge(dlp_tiendas_map_config(), ['tiendas' => $datos, 'color' => dlp_fe_rs_cfg('color'), 'mapaUrl' => $m, 'ver' => DLP_FE_VERSION]));
+    wp_localize_script('dlp-fe-restaurantes', 'dlpRs', array_merge(dlp_tiendas_map_config(), ['tiendas' => $datos, 'color' => dlp_fe_rs_cfg('color'), 'mapaUrl' => $m, 'ver' => DLP_FE_VERSION, 'libs' => $libs]));
 }, 20);
 
 /* Caja en la tienda: región y ocultar de la página */
