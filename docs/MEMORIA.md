@@ -233,3 +233,8 @@ Faltan: pedidos con extras de varios días de disponibilidad, cupones, tarjeta (
 - **Delivery / Pickup se quedan en inglés** (decisión del cliente: así los identifican siempre). Se probó traducirlos y se revirtió en dlp-tiendas.
 - BD dev: menú «Home»→«Inicio»; página duplicada 13 «Checkout» (solo el shortcode, no era la de WooCommerce, ID 8) borrada; respaldo en `~/dlp-backups/pagina-13-checkout-duplicada.json`; título del logo en el header (respaldo en `~/dlp-backups/header-layout-158753-antes-titulo-logo.txt`).
 - Pendiente de revisar a mano: correos (desactivados en dev), URLs en inglés (`/mi-cuenta/orders/`, `/edit-account/`, `/payment-methods/`), `title="empty"` de un iframe invisible de la pasarela.
+
+## 0.34.x — Complementos en listas agrupadas (feedback 2026-10-26)
+- El cliente no quiere los botones − / + para los complementos. Felices los 4 (4), Trío de Clásicas (3), Trío Del Puente (3) y Las Favoritas (4) pasan a N listas «Complemento 1…N» (Papas fritas incluida, Cheese poppers y Aros de cebolla +Q10) dentro de un acordeón `[acordeon:Elige tus N complementos]` con contador «0 de N» + «Obligatorio». Carnuda Lovers agrupa «Complemento 1/2» igual.
+- JS: `accSync`/`accordions` de home-quickview cuentan las listas del acordeón y resumen solo lo elegido. Script de datos: `scripts/complementos-en-lista.php` (copia previa en `_product_addons_backup_cantidades`; la anterior de cantidades en `_product_addons_backup_complementos`).
+- Los bebidas siguen como grupo de cantidad (`[grupo:…=N]`). Los combos con un solo complemento no cambian.
