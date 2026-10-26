@@ -191,7 +191,8 @@
           if ($(this).val()) { selLlenos++; marcadas.push($.trim($(this).find('option:selected').text().replace(/\s*\(\+?[^)]*\)\s*$/, ''))); }
         });
         if (marcadas.length) alguno = true;
-        partes.push(n === 1 ? marcadas.join(', ') : accName($c).split(':')[0] + ': ' + (marcadas.length ? marcadas.join(', ') : ($sel.length ? 'falta elegir' : 'ninguno')));
+        if ($sel.length) partes.push(marcadas.length ? marcadas.join(', ') : '—'); // listas: solo lo elegido, en orden (Complemento 1, 2…)
+        else partes.push(n === 1 ? marcadas.join(', ') : accName($c).split(':')[0] + ': ' + (marcadas.length ? marcadas.join(', ') : 'ninguno'));
       });
       $(this).find('.dlpqv-grp-s').text(alguno ? partes.join(' · ') : 'Toca para elegir');
       var $c = $(this).find('.dlpqv-grp-c');
