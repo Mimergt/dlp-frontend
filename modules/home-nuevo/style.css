@@ -198,3 +198,7 @@ body.dlph-page { overflow-x: clip; }
 @media (min-width: 768px) {
   .dlph--banner .dlph-fade { height: min(var(--dlp-home-nuevo-banner-alto, 600px), calc(100vw / var(--dlph-r, 2.4))); }
 }
+
+/* Página /menu/: la columna que contiene el carrusel de categorías no puede depender del CSS que genera Divi (al regenerarse su caché
+   la columna quedaba como flotante de ancho «según el contenido» y el carrusel la estiraba a cientos de miles de píxeles → página en blanco). */
+.et-l--post .et_pb_column:has(.navMenu_slide), .et-l--post .et_pb_column:has(.main_slider) { float: none !important; width: 100% !important; max-width: 100% !important; margin: 0 !important; }
