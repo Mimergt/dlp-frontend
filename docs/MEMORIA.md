@@ -273,3 +273,11 @@ Faltan: pedidos con extras de varios días de disponibilidad, cupones, tarjeta (
 
 ## 2026-10-26 — SMASH sin Angus
 - `scripts/quitar-angus-smash.php`: quita «Elige tu carne favorita» (Premium Blend / Tortas Angus) de las SMASH que lo tenían: Legendaria Individual (159004) y Jalapeño Popper Individual (159002); los combos SMASH y la Clásica SMASH Individual ya no lo tenían. Copia previa en `_product_addons_backup_angus`.
+
+## 0.38.3 — Página Restaurantes (opción A)
+- Módulo `restaurantes` pinta `/restaurantes/` (ID 2253) sobre la página existente; su contenido de Divi (34 botones a páginas de tienda) se conserva sin mostrarse. Slug, textos y color en DLP Config → Inicio y catálogo → Restaurantes.
+- Datos de dlp-tiendas: tiendas `extra_store` habilitadas (`dlp_tiendas_store_flags`), punto `dlp_tiendas_store_point` (si no, `extra_store_lat/lng`), dirección `extra_store_address`, teléfono `extra_store_phone`, abierto/cerrado con `dlp_tiendas_service_status` y el horario de hoy (el HTML se pinta en cada visita, no se cachea).
+- Mapa: Leaflet 1.9.4 + Protomaps de dlp-tiendas (`DLP_TIENDAS_URL . assets/vendor`, config `dlp_tiendas_map_config()`); pines con agrupación propia a 36 px.
+- Región de cada tienda: meta `_dlp_region` (guatemala, centro, occidente, costa, oriente); sin valor se deduce del nombre (`dlp_fe_rs_region_defecto`). Caja «Página Restaurantes» en la tienda para cambiarla u ocultarla (`_dlp_ocultar_web`).
+- Acciones: «Abrir mapa» (Google Maps por coordenadas), «Cómo llegar» (Waze) y teléfono (`tel:+502…`). Sin coordenadas usan la dirección escrita. «Cerca de mí» usa la geolocalización del navegador o un punto elegido tocando el mapa; distancia en línea recta.
+- Lo que no hay en esta versión: «Pedir aquí» (descartado), horario completo por día, ficha por tienda.
