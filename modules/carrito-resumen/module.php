@@ -47,6 +47,27 @@ add_filter('woocommerce_get_item_data', function ($data, $cart_item) {
     if (empty($cart_item['addons']) || !is_array($data)) {
         return $data;
     }
+    // Filas con el mismo título (p. ej. «Ingredientes» una vez por ingrediente quitado) → una sola con los valores juntos
+    $uni = [];
+    foreach ($data as $row) {
+        $k = dlp_fe_cr_txt($row['key'] ?? ($row['name'] ?? ''));
+        $v = dlp_fe_cr_txt(!empty($row['display']) ? $row['display'] : ($row['value'] ?? ''));
+        if ($k !== '' && !preg_match('/^(Complemento \d+|.+:\s*(complemento|carne|bebida|quitar ingredientes))$/iu', $k) && isset($uni[$k])) {
+            $uni[$k]['_v'][] = $v;
+            continue;
+        }
+        $row['_v'] = [$v];
+        $uni[$k !== '' ? $k : count($uni) . '#'] = $row;
+    }
+    $data = [];
+    foreach ($uni as $row) {
+        $vs = $row['_v']; unset($row['_v']);
+        if (count($vs) > 1) {
+            $t = implode(', ', $vs);
+            $row['value'] = $t; $row['display'] = esc_html($t);
+        }
+        $data[] = $row;
+    }
     // Pocas líneas: se deja como está, salvo en promos por producto («Carnuda 1: complemento»), que siempre van resumidas
     $porProducto = false;
     foreach ($data as $row) {
