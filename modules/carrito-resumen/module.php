@@ -29,8 +29,16 @@ function dlp_fe_cr_grupos($product_id) {
 }
 
 add_filter('woocommerce_get_item_data', function ($data, $cart_item) {
-    if (empty($cart_item['addons']) || !is_array($data) || count($data) < 6) {
-        return $data; // pocas líneas: se deja como está
+    if (empty($cart_item['addons']) || !is_array($data)) {
+        return $data;
+    }
+    // Pocas líneas: se deja como está, salvo en promos por producto («Carnuda 1: complemento»), que siempre van resumidas
+    $porProducto = false;
+    foreach ($data as $row) {
+        if (preg_match('/:\s*complemento$/iu', dlp_fe_cr_txt($row['key'] ?? ($row['name'] ?? '')))) { $porProducto = true; break; }
+    }
+    if (count($data) < 6 && !$porProducto) {
+        return $data;
     }
     $grupos = dlp_fe_cr_grupos((int) $cart_item['product_id']);
     $compl  = [];   // etiqueta => cantidad
