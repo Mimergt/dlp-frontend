@@ -21,7 +21,7 @@ function dlp_fe_cr_grupos($product_id) {
     }
     foreach ((array) WC_Product_Addons_Helper::get_product_addons($product_id) as $a) {
         if (($a['type'] ?? '') === 'input_multiplier' && function_exists('dlp_fe_xg_marca') && ($g = dlp_fe_xg_marca($a['description'] ?? ''))) {
-            $t = preg_replace('/^Elige tus? \d+\s+/iu', '', $g['titulo']);
+            $t = preg_replace(['/^Elige tus? \d+\s+/iu', '/^Añade\s+/iu'], '', $g['titulo']);
             $mapa[dlp_fe_cr_txt($a['name'])] = mb_strtoupper(mb_substr($t, 0, 1)) . mb_substr($t, 1);
         }
     }
@@ -60,7 +60,7 @@ add_filter('woocommerce_get_item_data', function ($data, $cart_item) {
         }
         if (isset($grupos[$k]) && ctype_digit($v)) {
             if ((int) $v > 0) {
-                $cant[$grupos[$k]][$k] = (int) $v;
+                $cant[$grupos[$k]][preg_replace('/^Extra · /u', '', $k)] = (int) $v;
             }
             if (!isset($posG[$grupos[$k]])) { $posG[$grupos[$k]] = count($out); $out[] = null; }
             continue;
@@ -115,3 +115,12 @@ add_filter('woocommerce_get_item_data', function ($data, $cart_item) {
     }
     return array_values(array_filter($out));
 }, 999, 2);
+
+/*
+ * WooCommerce y el carrito lateral guardan en el navegador (sessionStorage) el HTML del carrito y solo lo piden de nuevo cuando
+ * cambia el «hash» del carrito. Al publicar una versión nueva, quien ya tenía productos veía el formato viejo hasta tocar su carrito;
+ * incluir la versión del plugin en el hash fuerza a refrescar una vez.
+ */
+add_filter('woocommerce_cart_hash', function ($hash) {
+    return $hash ? md5($hash . DLP_FE_VERSION) : $hash;
+});

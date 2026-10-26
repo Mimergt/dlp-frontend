@@ -250,3 +250,10 @@ Faltan: pedidos con extras de varios días de disponibilidad, cupones, tarjeta (
 
 ## 0.36.x — Resumen corto de opciones en el carrito
 - Módulo `carrito-resumen` (filtro `woocommerce_get_item_data`, prioridad 999; los Add-Ons usan `name` y `display` puede venir vacío): junta «Complemento 1…N», las cantidades de grupos `[grupo:…]` y «<hamburguesa>: quitar ingredientes» en 3 líneas («Complementos», «Bebidas», «Sin ingredientes»). Solo cambia lo que ve el cliente; el pedido y el panel guardan cada opción igual. El precio extra de cada opción ya no se lista (sigue en el subtotal).
+
+## 0.37.x — Promos por producto
+- Estándar: un acordeón por hamburguesa (`[acordeon:<Producto N>]`) con su complemento («<Producto N>: complemento», obligatorio) y «<Producto N>: quitar ingredientes»; después las bebidas incluidas (`[grupo:Elige tus N bebidas=N]`, sin precio) y «Añade bebida extra» (`[grupo:Añade bebida extra=*]`, filas «Extra · <bebida>» con precio: Frezka Q17, Agua Q9, resto Q11). La carne favorita queda arriba.
+- Hecho: Carnuda Lovers (`scripts/promo-carnuda-estandar.php`) y Felices los 4 (`scripts/promo-estandar.php 122472`). Pendiente: 126123 Trío de Clásicas, 126125 Trío Del Puente, 143397 Las Favoritas (ya configuradas en el script). Copia previa en `_product_addons_backup_estandar`.
+- Quickview: el nombre «<Título>: …» pierde el prefijo dentro del acordeón; el resumen del acordeón con lista + casillas es «Papas fritas · Sin Queso»; «Obligatorio» en el acordeón con una lista requerida hasta elegir.
+- Carrito (`carrito-resumen`): una línea por producto («Del Puente 2: Papas fritas · Sin Queso Americano»), «Bebidas» y «Bebida extra» agrupadas. El hash del carrito incluye `DLP_FE_VERSION` para que el navegador vuelva a pedir el HTML del carrito tras cada versión (sessionStorage lo guardaba y mostraba el formato anterior).
+- `scripts/deploy-dev.sh`: sube el plugin a dev por rsync (sin GitHub) para iterar rápido.

@@ -270,6 +270,7 @@
       if (gm) {
         group = { title: $.trim(gm[1]), n: gm[2] === '*' ? Infinity : parseInt(gm[2], 10) };
         main = $.trim($c.find('h2.wc-pao-addon-name').first().clone().children().remove().end().text());
+        main = main.replace(/^Extra · /, ''); // «Extra · Coca Cola»: en el grupo «Añade bebida extra» solo se muestra el nombre de la bebida
         if (unit) parts.push('+' + money(unit));
         r.max = group.n;
         $(this).attr('data-dlpqv-group', group.title).attr('data-dlpqv-n', isFinite(group.n) ? group.n : '*');
