@@ -18,7 +18,7 @@
   function validate() { $save.prop('disabled', !(point && $.trim($('#dlpac-name').val()))); }
 
   function place(ll) {
-    if (!pin) { pin = L.marker(ll, { draggable: true }).addTo(map); pin.on('dragend', function () { place(pin.getLatLng()); }); }
+    if (!pin) { pin = L.marker(ll, { draggable: true, icon: window.DLP && DLP.pinIcon ? DLP.pinIcon({ tipo: 'punto' }) : new L.Icon.Default() }).addTo(map); pin.on('dragend', function () { place(pin.getLatLng()); }); }
     else { pin.setLatLng(ll); }
     point = null; validate(); setCov('wait', 'Verificando cobertura...');
     var my = ++seq; clearTimeout(timer);
@@ -38,7 +38,7 @@
     if (!map && window.L && A.map) {
       var C = A.map;
       map = L.map('dlpac-map', { center: C.center, zoom: C.zoom, minZoom: C.minZoom, maxZoom: C.maxZoom, maxBounds: C.bounds, maxBoundsViscosity: 1 });
-      try { protomapsL.leafletLayer({ url: C.tilesUrl, flavor: 'light', lang: 'es', attribution: 'EPIC.GT · Protomaps © OpenStreetMap' }).addTo(map); } catch (e) {}
+      try { (window.DLP && DLP.baseLayer ? DLP.baseLayer(C.tilesUrl) : protomapsL.leafletLayer({ url: C.tilesUrl, flavor: 'light', lang: 'es', attribution: 'EPIC.GT · Protomaps © OpenStreetMap' })).addTo(map); } catch (e) {}
       map.on('click', function (e) { place(e.latlng); });
       if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(function (p) { map.setView([p.coords.latitude, p.coords.longitude], 16); }, function () {}, { timeout: 6000, maximumAge: 60000 });

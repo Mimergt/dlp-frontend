@@ -129,6 +129,7 @@ add_action('wp_enqueue_scripts', function () {
         wp_enqueue_style('dlp-leaflet', $u . 'vendor/leaflet.css', [], '1.9.4');
         wp_enqueue_script('dlp-leaflet', $u . 'vendor/leaflet.js', [], '1.9.4', true);
         wp_enqueue_script('dlp-protomaps', $u . 'vendor/protomaps-leaflet.js', ['dlp-leaflet'], '5.1.0', true);
+        wp_enqueue_script('dlp-map-style', $u . 'js/map-style.js', ['dlp-leaflet', 'dlp-protomaps'], defined('DLP_TIENDAS_VERSION') ? DLP_TIENDAS_VERSION : '1', true);
         $data['map']      = dlp_tiendas_map_config();
         $data['covNonce'] = wp_create_nonce('dlp_tiendas_checkout');
     }
