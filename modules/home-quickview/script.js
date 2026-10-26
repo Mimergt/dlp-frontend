@@ -430,7 +430,8 @@
     var e = EDIT_RE.exec(location.hash);
     if (e) {
       var ek = decodeURIComponent(e[1]);
-      $('.xoo-wsc-close').first().trigger('click'); // cierra el carrito lateral
+      $('.xoo-wsch-close').first().trigger('click'); // cierra el carrito lateral
+      $('.xoo-wsc-modal, body').removeClass('xoo-wsc-cart-active');
       if (!isOpen() || current !== 'editar-' + ek) { current = 'editar-' + ek; openEdit(ek); }
       return;
     }
