@@ -176,20 +176,27 @@
   function accName($c) { return $.trim($c.find('.wc-pao-addon-name').first().clone().children().remove().end().text()); }
   function accSync($form) {
     $form.find('.dlpqv-acc').each(function () {
-      var $box = $(this).next('.dlpqv-grp-box'), partes = [], alguno = false;
+      var $box = $(this).next('.dlpqv-grp-box'), partes = [], alguno = false, selTotal = 0, selLlenos = 0, n = $box.children('.wc-pao-addon-container').length;
       $box.children('.wc-pao-addon-container').each(function () {
-        var $c = $(this), marcadas = [];
+        var $c = $(this), marcadas = [], $sel = $c.find('select.wc-pao-addon-field');
         $c.find('input.wc-pao-addon-checkbox:checked').each(function () {
           var $l = $c.find('label[for="' + this.id + '"]').first();
           if (!$l.length) $l = $(this).siblings('label').first();
           var t = $.trim($l.clone().children().remove().end().text());
           if (t) marcadas.push(t);
         });
+        // Listas desplegables: la opción elegida (sin el precio entre paréntesis)
+        $sel.each(function () {
+          selTotal++;
+          if ($(this).val()) { selLlenos++; marcadas.push($.trim($(this).find('option:selected').text().replace(/\s*\(\+?[^)]*\)\s*$/, ''))); }
+        });
         if (marcadas.length) alguno = true;
-        partes.push($box.children('.wc-pao-addon-container').length === 1 ? marcadas.join(', ') : accName($c).split(':')[0] + ': ' + (marcadas.length ? marcadas.join(', ') : 'ninguno'));
+        partes.push(n === 1 ? marcadas.join(', ') : accName($c).split(':')[0] + ': ' + (marcadas.length ? marcadas.join(', ') : ($sel.length ? 'falta elegir' : 'ninguno')));
       });
       $(this).find('.dlpqv-grp-s').text(alguno ? partes.join(' · ') : 'Toca para elegir');
-      $(this).toggleClass('done', alguno);
+      var $c = $(this).find('.dlpqv-grp-c');
+      if ($c.length) $c.text(selLlenos + ' de ' + selTotal);
+      $(this).toggleClass('done', $c.length ? selLlenos === selTotal : alguno);
     });
   }
   function accordions($form) {
@@ -209,7 +216,15 @@
       }
       $box.append($c);
     });
-    $form.find('.dlpqv-acc').each(function () { var $b = $(this).next('.dlpqv-grp-box'); if ($b.children('.wc-pao-addon-container').length === 1) $b.addClass('dlpqv-grp-box--solo'); });
+    $form.find('.dlpqv-acc').each(function () {
+      var $b = $(this).next('.dlpqv-grp-box'), $sels = $b.find('select.wc-pao-addon-field');
+      if ($b.children('.wc-pao-addon-container').length === 1) $b.addClass('dlpqv-grp-box--solo');
+      // Varias listas en un grupo («Complemento 1», «Complemento 2»…): contador «0 de N» y etiqueta Obligatorio, como los grupos de cantidad
+      if ($sels.length > 1 && !$(this).find('.dlpqv-grp-c').length) {
+        $(this).find('b').first().after('<span class="dlpqv-grp-c"></span>');
+        if ($sels.filter('[required], [data-required]').length || $b.find('.wc-pao-addon-container.wc-pao-required-addon, .required-field').length) $(this).find('.dlpqv-grp-c').after('<span class="dlpqv-grp-req">Obligatorio</span>');
+      }
+    });
     accSync($form);
   }
 
@@ -295,7 +310,7 @@
     }
     $form.on('change input', 'input, select', function () { setTimeout(updateTotal, 120); });
     $form.on('change input', 'input[data-dlpqv-group]', function () { groupClamp($(this)); groupSync($form); });
-    $form.on('change', '.dlpqv-grp-box input.wc-pao-addon-checkbox', function () { accSync($form); });
+    $form.on('change', '.dlpqv-grp-box input.wc-pao-addon-checkbox, .dlpqv-grp-box select.wc-pao-addon-field', function () { accSync($form); });
     $form.on('change', '.dlpqv-elige input.wc-pao-addon-checkbox', function () { chooseSync($form); });
     groupSync($form);
     setTimeout(updateTotal, 250);
