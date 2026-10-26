@@ -41,7 +41,7 @@ add_filter('woocommerce_get_item_data', function ($data, $cart_item) {
     $posG   = [];
     foreach ($data as $row) {
         $k = dlp_fe_cr_txt($row['key'] ?? ($row['name'] ?? '')); // los Add-Ons usan «name», WooCommerce acepta «key» o «name»
-        $v = dlp_fe_cr_txt($row['display'] ?? ($row['value'] ?? ''));
+        $v = dlp_fe_cr_txt(!empty($row['display']) ? $row['display'] : ($row['value'] ?? '')); // «display» puede venir vacío
         if (preg_match('/^Complemento \d+$/iu', $k)) {
             $base = trim(preg_replace('/\s*\(\+.*\)\s*$/u', '', $v));
             $compl[$base] = ($compl[$base] ?? 0) + 1;
