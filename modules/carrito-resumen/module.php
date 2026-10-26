@@ -40,7 +40,7 @@ add_filter('woocommerce_get_item_data', function ($data, $cart_item) {
     $pos    = ['compl' => null, 'quitar' => null];
     $posG   = [];
     foreach ($data as $row) {
-        $k = dlp_fe_cr_txt($row['key'] ?? '');
+        $k = dlp_fe_cr_txt($row['key'] ?? ($row['name'] ?? '')); // los Add-Ons usan «name», WooCommerce acepta «key» o «name»
         $v = dlp_fe_cr_txt($row['display'] ?? ($row['value'] ?? ''));
         if (preg_match('/^Complemento \d+$/iu', $k)) {
             $base = trim(preg_replace('/\s*\(\+.*\)\s*$/u', '', $v));
@@ -65,18 +65,18 @@ add_filter('woocommerce_get_item_data', function ($data, $cart_item) {
     if ($pos['compl'] !== null) {
         $partes = [];
         foreach ($compl as $b => $n) { $partes[] = $n . ' ' . $b; }
-        $out[$pos['compl']] = ['key' => 'Complementos', 'value' => implode(', ', $partes), 'display' => esc_html(implode(', ', $partes))];
+        $out[$pos['compl']] = ['key' => 'Complementos', 'name' => 'Complementos', 'value' => implode(', ', $partes), 'display' => esc_html(implode(', ', $partes))];
     }
     foreach ($posG as $titulo => $i) {
         $partes = [];
         foreach ($cant[$titulo] ?? [] as $b => $n) { $partes[] = $n . ' ' . $b; }
-        $out[$i] = ['key' => $titulo, 'value' => implode(', ', $partes), 'display' => esc_html(implode(', ', $partes))];
+        $out[$i] = ['key' => $titulo, 'name' => $titulo, 'value' => implode(', ', $partes), 'display' => esc_html(implode(', ', $partes))];
     }
     if ($pos['quitar'] !== null) {
         $lineas = [];
         foreach ($quitar as $h => $ing) { $lineas[] = '<b>' . esc_html($h) . ':</b> ' . esc_html(implode(', ', $ing)); }
         $total = array_sum(array_map('count', $quitar));
-        $out[$pos['quitar']] = ['key' => 'Sin ingredientes', 'value' => $total . ' quitados',
+        $out[$pos['quitar']] = ['key' => 'Sin ingredientes', 'name' => 'Sin ingredientes', 'value' => $total . ' quitados',
             'display' => '<span class="dlp-cr-det">' . implode('<br>', $lineas) . '</span>'];
     }
     return array_values(array_filter($out));
