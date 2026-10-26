@@ -1,0 +1,22 @@
+{
+  "label": "Restaurantes: mapa y listado de tiendas",
+  "description": "Pinta la página /restaurantes/ con el mapa de Guatemala (el mismo de dlp-tiendas) y la lista de tiendas habilitadas: dirección, teléfono, si están abiertas, «Abrir mapa» (Google Maps), «Cómo llegar» (Waze) y «Cerca de mí». Los datos salen de dlp-tiendas; la región de cada tienda y ocultarla de esta página se cambian en la tienda (caja «Página Restaurantes»). El contenido de Divi de esa página se conserva pero no se muestra.",
+  "section": "home",
+  "tab": "Restaurantes",
+  "order": 7,
+  "boot": true,
+  "php": "module.php",
+  "where": [
+    "page:restaurantes"
+  ],
+  "default": true,
+  "css": "style.css",
+  "js": "script.js",
+  "settings": [
+    {"key": "slug", "label": "Página (slug)", "type": "text", "default": "restaurantes", "css_var": false},
+    {"key": "eyebrow", "label": "Texto pequeño sobre el título", "type": "text", "default": "NUESTRAS TIENDAS", "css_var": false},
+    {"key": "titulo", "label": "Título", "type": "text", "default": "Restaurantes", "css_var": false},
+    {"key": "subtitulo", "label": "Subtítulo", "type": "text", "default": "Encuentra el Del Puente más cercano a ti, en toda Guatemala.", "css_var": false},
+    {"key": "color", "label": "Color de pines y acentos", "type": "color", "default": "#ED1C24"}
+  ]
+}
