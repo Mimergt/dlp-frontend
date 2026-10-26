@@ -1,0 +1,12 @@
+{
+  "label": "Carrito: resumen corto de las opciones",
+  "description": "En el carrito lateral, el carrito y el checkout junta las opciones repetidas de un producto (complementos, bebidas, ingredientes quitados de cada hamburguesa) en pocas líneas. No cambia el pedido ni lo que ve el panel: solo cómo se muestra al cliente.",
+  "section": "checkout",
+  "tab": "Resumen del carrito",
+  "order": 6,
+  "boot": true,
+  "php": "module.php",
+  "default": true,
+  "css": "style.css",
+  "where": ["all"]
+}
