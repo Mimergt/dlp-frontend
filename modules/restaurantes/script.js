@@ -145,6 +145,7 @@
       var b = new maplibregl.LngLatBounds([lng, lat], [lng, lat]);
       near.forEach(function (c) { var t = data[c.getAttribute('data-id')]; b.extend([t.lng, t.lat]); });
       map.fitBounds(b, { padding: 70, maxZoom: 14.5, pitch: 0, bearing: 0 });
+      map.once('moveend', function () { if (map.getZoom() >= 13.5) map.easeTo({ pitch: 45, duration: 700 }); });
     }
     list.scrollTop = 0;
   }
