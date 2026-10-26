@@ -11,15 +11,14 @@
     $.post(A.ajaxurl, { action: 'dlp_fe_lib_delete', nonce: A.nonce, id: $c.data('id') }).done(function () { window.location.reload(); });
   });
 
-  var $modal = $('.dlpac-modal'), map, pin, seq = 0, timer, point = null;
+  var $modal = $('.dlpac-modal'), map = null, mapP = null, seq = 0, timer, point = null;
   var $cov = $modal.find('.dlpac-cov'), $save = $modal.find('.dlpac-save');
 
   function setCov(cls, txt) { $cov.attr('class', 'dlpac-cov ' + cls).text(txt || ''); }
   function validate() { $save.prop('disabled', !(point && $.trim($('#dlpac-name').val()))); }
 
   function place(ll) {
-    if (!pin) { pin = L.marker(ll, { draggable: true, icon: window.DLP && DLP.pinIcon ? DLP.pinIcon({ tipo: 'punto' }) : new L.Icon.Default() }).addTo(map); pin.on('dragend', function () { place(pin.getLatLng()); }); }
-    else { pin.setLatLng(ll); }
+    if (mapP) mapP.then(function (api) { api.setPin(ll.lat, ll.lng); }, function () {});
     point = null; validate(); setCov('wait', 'Verificando cobertura...');
     var my = ++seq; clearTimeout(timer);
     timer = setTimeout(function () {
@@ -35,16 +34,22 @@
 
   function open() {
     $modal.prop('hidden', false); $('html').addClass('dlpac-lock');
-    if (!map && window.L && A.map) {
-      var C = A.map;
-      map = L.map('dlpac-map', { center: C.center, zoom: C.zoom, minZoom: C.minZoom, maxZoom: C.maxZoom, maxBounds: C.bounds, maxBoundsViscosity: 1 });
-      try { (window.DLP && DLP.baseLayer ? DLP.baseLayer(C.tilesUrl) : protomapsL.leafletLayer({ url: C.tilesUrl, flavor: 'light', lang: 'es', attribution: 'EPIC.GT · Protomaps © OpenStreetMap' })).addTo(map); } catch (e) {}
-      map.on('click', function (e) { place(e.latlng); });
-      if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(function (p) { map.setView([p.coords.latitude, p.coords.longitude], 16); }, function () {}, { timeout: 6000, maximumAge: 60000 });
-      }
+    if (!mapP && window.DLP && DLP.pinMapa && A.map) {
+      // Mapa 3D (o plano de respaldo) de dlp-tiendas; se crea al abrir la ventana por primera vez.
+      mapP = DLP.pinMapa({
+        el: 'dlpac-map', cfg: A.map,
+        onTap: function (la, lo) { place({ lat: la, lng: lo }, 'pin'); },
+        onDrag: function (la, lo) { place({ lat: la, lng: lo }, 'pin'); }
+      }).then(function (api) {
+        map = api;
+        if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(function (p) { api.setView(p.coords.latitude, p.coords.longitude, 16); }, function () {}, { timeout: 6000, maximumAge: 60000 });
+        }
+        return api;
+      });
+      mapP.catch(function () { setCov('no', 'No pudimos cargar el mapa. Intenta de nuevo.'); });
     }
-    setTimeout(function () { if (map) map.invalidateSize(); }, 80);
+    setTimeout(function () { if (map) map.resize(); }, 80);
   }
   function close() { $modal.prop('hidden', true); $('html').removeClass('dlpac-lock'); }
 

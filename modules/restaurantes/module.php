@@ -222,23 +222,15 @@ add_action('wp_enqueue_scripts', function () {
     if (!dlp_fe_rs_is_page() || !defined('DLP_TIENDAS_URL') || !function_exists('dlp_tiendas_map_config') || !wp_script_is('dlp-fe-restaurantes', 'enqueued')) {
         return;
     }
-    // Estilo y pines compartidos de dlp-tiendas (pequeño). Las librerías de mapa pesadas las carga el script
-    // solo cuando el mapa se ve: MapLibre GL (3D) o, sin WebGL, Leaflet plano.
-    wp_enqueue_script('dlp-map-style', DLP_TIENDAS_URL . 'assets/js/map-style.js', [], defined('DLP_TIENDAS_VERSION') ? DLP_TIENDAS_VERSION : '1', true);
-    $m = DLP_FE_URL . 'modules/restaurantes/mapa/';
-    $t = DLP_TIENDAS_URL . 'assets/vendor/';
-    $libs = [
-        'glcss' => $m . 'vendor/maplibre-gl.css?ver=5.24.0',
-        'gljs'  => $m . 'vendor/maplibre-gl.js?ver=5.24.0',
-        'pmjs'  => $m . 'vendor/pmtiles.js?ver=4.5.0',
-        'lcss'  => $t . 'leaflet.css?ver=1.9.4',
-        'ljs'   => $t . 'leaflet.js?ver=1.9.4',
-        'lpm'   => $t . 'protomaps-leaflet.js?ver=5.1.0',
-    ];
+    // Estilo, pines y cargador de mapas (3D con respaldo plano) de dlp-tiendas; las librerías pesadas se piden solo al ver el mapa.
+    $u = DLP_TIENDAS_URL . 'assets/js/';
+    $v = defined('DLP_TIENDAS_VERSION') ? DLP_TIENDAS_VERSION : '1';
+    wp_enqueue_script('dlp-map-style', $u . 'map-style.js', [], $v, true);
+    wp_enqueue_script('dlp-map-3d', $u . 'map-3d.js', ['dlp-map-style'], $v, true);
     $datos = array_map(function ($t) {
         return ['id' => $t['id'], 'n' => $t['nombre'], 'lat' => $t['lat'], 'lng' => $t['lng'], 'r' => $t['region']];
     }, dlp_fe_rs_tiendas());
-    wp_localize_script('dlp-fe-restaurantes', 'dlpRs', array_merge(dlp_tiendas_map_config(), ['tiendas' => $datos, 'color' => dlp_fe_rs_cfg('color'), 'mapaUrl' => $m, 'ver' => DLP_FE_VERSION, 'libs' => $libs]));
+    wp_localize_script('dlp-fe-restaurantes', 'dlpRs', array_merge(dlp_tiendas_map_config(), ['tiendas' => $datos, 'color' => dlp_fe_rs_cfg('color')]));
 }, 20);
 
 /* Caja en la tienda: región y ocultar de la página */

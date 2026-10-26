@@ -144,20 +144,12 @@
     var map, mks = [], me = null, pop = null, SEL_ZOOM = 15.5, TILT = 55;
     var a = {
       init: function (style, done) {
-        style.glyphs = C.mapaUrl + 'fonts/{fontstack}/{range}.pbf';
-        style.sources.protomaps.url = 'pmtiles://' + C.tilesUrl;
         var b = C.bounds; // [[lat, lng], [lat, lng]]
-        maplibregl.addProtocol('pmtiles', new pmtiles.Protocol().tile);
         map = new maplibregl.Map({
           container: 'dlprs-map', style: style, center: [C.center[1], C.center[0]], zoom: 7.5,
           minZoom: Math.max(5, C.minZoom - 1.5), maxZoom: 18, maxPitch: 70, maxBounds: [[b[0][1], b[0][0]], [b[1][1], b[1][0]]],
           attributionControl: false, cooperativeGestures: true, pitchWithRotate: true, dragRotate: true,
-          locale: {
-            'CooperativeGesturesHandler.WindowsHelpText': 'Usa Ctrl + scroll para acercar el mapa',
-            'CooperativeGesturesHandler.MacHelpText': 'Usa ⌘ + scroll para acercar el mapa',
-            'CooperativeGesturesHandler.MobileHelpText': 'Usa dos dedos para mover el mapa',
-            'NavigationControl.ZoomIn': 'Acercar', 'NavigationControl.ZoomOut': 'Alejar', 'NavigationControl.ResetBearing': 'Orientar al norte'
-          }
+          locale: DLP.LOCALE_GL
         });
         map.addControl(new maplibregl.NavigationControl({ visualizePitch: true }), 'top-right');
         map.addControl(new maplibregl.AttributionControl({ customAttribution: DLP.ATTRIBUTION_CLARO }), 'bottom-right');
@@ -296,29 +288,20 @@
 
   /* ---------- Carga perezosa y arranque ---------- */
   var mapEl = root.querySelector('.dlprs-map');
-  function loadCss(u) { return new Promise(function (ok, no) { var l = document.createElement('link'); l.rel = 'stylesheet'; l.href = u; l.onload = ok; l.onerror = no; document.head.appendChild(l); }); }
-  function loadJs(u) { return new Promise(function (ok, no) { var s = document.createElement('script'); s.src = u; s.onload = ok; s.onerror = no; document.head.appendChild(s); }); }
-  function webgl() {
-    try { var c = document.createElement('canvas'); return !!(window.WebGLRenderingContext && (c.getContext('webgl2') || c.getContext('webgl'))); } catch (e) { return false; }
-  }
-  function lenta() { var n = navigator.connection; return !!(n && (n.saveData || /(^|-)2g|3g/.test(n.effectiveType || ''))); }
   function ready(adapter, style) {
     M = adapter;
     adapter.init(style, function () { apply(); adapter.fitAll(); });
   }
+  // Las librerías, el estilo y la decisión 3D/plano vienen de dlp-tiendas (assets/js/map-3d.js).
   function conLeaflet() {
-    var L_ = C.libs;
-    return Promise.all([loadCss(L_.lcss), loadJs(L_.ljs).then(function () { return loadJs(L_.lpm); })]).then(function () { ready(adapterLeaflet(), null); });
+    return DLP.cargarMapa(C, 'leaflet').then(function () { ready(adapterLeaflet(), null); });
   }
   function conGL() {
-    var L_ = C.libs;
-    return Promise.all([loadCss(L_.glcss), loadJs(L_.gljs).then(function () { return loadJs(L_.pmjs); }), fetch(C.mapaUrl + 'style.json?v=' + (C.ver || '1')).then(function (r) { return r.json(); })])
-      .then(function (r) { ready(adapterGL(), r[2]); });
+    return DLP.cargarMapa(C, 'gl').then(function () { return DLP.estiloGL(C); }).then(function (style) { ready(adapterGL(), style); });
   }
   function arranque() {
-    if (!C.tilesUrl || !C.libs) { say('No se pudo cargar el mapa.'); return; }
-    var plano = /[?&]mapa=plano\b/.test(location.search); // ?mapa=plano fuerza el mapa de respaldo (pruebas)
-    var go = (webgl() && !lenta() && !plano) ? conGL : conLeaflet;
+    if (!C.tilesUrl || !C.libs || !window.DLP || !DLP.cargarMapa) { say('No se pudo cargar el mapa.'); return; }
+    var go = DLP.motorMapa() === 'gl' ? conGL : conLeaflet;
     go().catch(function () {
       // El mapa 3D falló: se deja el mapa plano.
       M = null;
