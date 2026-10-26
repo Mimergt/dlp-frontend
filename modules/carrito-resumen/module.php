@@ -13,6 +13,21 @@ function dlp_fe_cr_txt($v) {
     return trim(preg_replace('/\s+/', ' ', html_entity_decode(wp_strip_all_tags((string) $v), ENT_QUOTES, 'UTF-8')));
 }
 
+/** «Q10.00» (con el símbolo de la tienda) a partir de un número. */
+function dlp_fe_cr_q($n) {
+    return get_woocommerce_currency_symbol() . number_format((float) $n, 2, '.', ',');
+}
+
+/** Precio extra que trae el texto de una opción: «Aros de cebolla (+ Q10.00)» → [«Aros de cebolla», 10.0]. */
+function dlp_fe_cr_precio($v) {
+    $base = trim(preg_replace('/\s*\(\+.*\)\s*$/u', '', $v));
+    $n = 0.0;
+    if (preg_match('/\(\+\s*([^)]*)\)\s*$/u', $v, $m)) {
+        $n = (float) str_replace(',', '', preg_replace('/[^0-9.,]/', '', $m[1]));
+    }
+    return [$base, $n];
+}
+
 /** nombre del extra de cantidad → título del grupo (sin «Elige tus N »). */
 function dlp_fe_cr_grupos($product_id) {
     $mapa = [];
@@ -22,7 +37,7 @@ function dlp_fe_cr_grupos($product_id) {
     foreach ((array) WC_Product_Addons_Helper::get_product_addons($product_id) as $a) {
         if (($a['type'] ?? '') === 'input_multiplier' && function_exists('dlp_fe_xg_marca') && ($g = dlp_fe_xg_marca($a['description'] ?? ''))) {
             $t = preg_replace(['/^Elige tus? \d+\s+/iu', '/^Añade\s+/iu'], '', $g['titulo']);
-            $mapa[dlp_fe_cr_txt($a['name'])] = mb_strtoupper(mb_substr($t, 0, 1)) . mb_substr($t, 1);
+            $mapa[dlp_fe_cr_txt($a['name'])] = ['t' => mb_strtoupper(mb_substr($t, 0, 1)) . mb_substr($t, 1), 'p' => !empty($a['adjust_price']) ? (float) $a['price'] : 0.0];
         }
     }
     return $mapa;
@@ -53,21 +68,24 @@ add_filter('woocommerce_get_item_data', function ($data, $cart_item) {
         $k = dlp_fe_cr_txt($row['key'] ?? ($row['name'] ?? '')); // los Add-Ons usan «name», WooCommerce acepta «key» o «name»
         $v = dlp_fe_cr_txt(!empty($row['display']) ? $row['display'] : ($row['value'] ?? '')); // «display» puede venir vacío
         if (preg_match('/^Complemento \d+$/iu', $k)) {
-            $base = trim(preg_replace('/\s*\(\+.*\)\s*$/u', '', $v));
-            $compl[$base] = ($compl[$base] ?? 0) + 1;
+            [$base, $pr] = dlp_fe_cr_precio($v);
+            $compl[$base][0] = ($compl[$base][0] ?? 0) + 1;
+            $compl[$base][1] = ($compl[$base][1] ?? 0) + $pr;
             if ($pos['compl'] === null) { $pos['compl'] = count($out); $out[] = null; }
             continue;
         }
         if (isset($grupos[$k]) && ctype_digit($v)) {
+            $gt = $grupos[$k]['t'];
             if ((int) $v > 0) {
-                $cant[$grupos[$k]][preg_replace('/^Extra · /u', '', $k)] = (int) $v;
+                $cant[$gt][preg_replace('/^Extra · /u', '', $k)] = [(int) $v, $grupos[$k]['p'] * (int) $v];
             }
-            if (!isset($posG[$grupos[$k]])) { $posG[$grupos[$k]] = count($out); $out[] = null; }
+            if (!isset($posG[$gt])) { $posG[$gt] = count($out); $out[] = null; }
             continue;
         }
         if (preg_match('/^(.+?):\s*complemento$/iu', $k, $m)) {
             $h = trim($m[1]);
-            $porProd[$h]['c'][] = trim(preg_replace('/\s*\(\+.*\)\s*$/u', '', $v));
+            [$cb, $cp] = dlp_fe_cr_precio($v);
+            $porProd[$h]['c'][] = $cb . ($cp > 0 ? ' (+' . dlp_fe_cr_q($cp) . ')' : '');
             if (!isset($posProd[$h])) { $posProd[$h] = count($out); $out[] = null; }
             continue;
         }
@@ -84,12 +102,12 @@ add_filter('woocommerce_get_item_data', function ($data, $cart_item) {
     }
     if ($pos['compl'] !== null) {
         $partes = [];
-        foreach ($compl as $b => $n) { $partes[] = $n . ' ' . $b; }
+        foreach ($compl as $b => [$n, $pt]) { $partes[] = $n . ' ' . $b . ($pt > 0 ? ' (+' . dlp_fe_cr_q($pt) . ')' : ''); }
         $out[$pos['compl']] = ['key' => 'Complementos', 'name' => 'Complementos', 'value' => implode(', ', $partes), 'display' => esc_html(implode(', ', $partes))];
     }
     foreach ($posG as $titulo => $i) {
         $partes = [];
-        foreach ($cant[$titulo] ?? [] as $b => $n) { $partes[] = $n . ' ' . $b; }
+        foreach ($cant[$titulo] ?? [] as $b => [$n, $pt]) { $partes[] = $n . ' ' . $b . ($pt > 0 ? ' (+' . dlp_fe_cr_q($pt) . ')' : ''); }
         $out[$i] = ['key' => $titulo, 'name' => $titulo, 'value' => implode(', ', $partes), 'display' => esc_html(implode(', ', $partes))];
     }
     // Si hay «<Producto>: complemento», se muestra una línea por producto con su complemento y lo que se le quitó
