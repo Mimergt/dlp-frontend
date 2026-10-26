@@ -50,7 +50,7 @@ add_filter('woocommerce_get_item_data', function ($data, $cart_item) {
     // Pocas líneas: se deja como está, salvo en promos por producto («Carnuda 1: complemento»), que siempre van resumidas
     $porProducto = false;
     foreach ($data as $row) {
-        if (preg_match('/:\s*complemento$/iu', dlp_fe_cr_txt($row['key'] ?? ($row['name'] ?? '')))) { $porProducto = true; break; }
+        if (preg_match('/:\s*(complemento|carne|bebida)$/iu', dlp_fe_cr_txt($row['key'] ?? ($row['name'] ?? '')))) { $porProducto = true; break; }
     }
     if (count($data) < 6 && !$porProducto) {
         return $data;
@@ -82,10 +82,10 @@ add_filter('woocommerce_get_item_data', function ($data, $cart_item) {
             if (!isset($posG[$gt])) { $posG[$gt] = count($out); $out[] = null; }
             continue;
         }
-        if (preg_match('/^(.+?):\s*complemento$/iu', $k, $m)) {
+        if (preg_match('/^(.+?):\s*(complemento|carne|bebida)$/iu', $k, $m)) {
             $h = trim($m[1]);
             [$cb, $cp] = dlp_fe_cr_precio($v);
-            $porProd[$h]['c'][] = $cb . ($cp > 0 ? ' (+' . dlp_fe_cr_q($cp) . ')' : '');
+            $porProd[$h][strtolower($m[2]) === 'complemento' ? 'c' : (strtolower($m[2]) === 'carne' ? 'm' : 'b')][] = $cb . ($cp > 0 ? ' (+' . dlp_fe_cr_q($cp) . ')' : '');
             if (!isset($posProd[$h])) { $posProd[$h] = count($out); $out[] = null; }
             continue;
         }
@@ -112,12 +112,13 @@ add_filter('woocommerce_get_item_data', function ($data, $cart_item) {
     }
     // Si hay «<Producto>: complemento», se muestra una línea por producto con su complemento y lo que se le quitó
     $hayComp = false;
-    foreach ($porProd as $pp) { if (!empty($pp['c'])) { $hayComp = true; } }
+    foreach ($porProd as $pp) { if (!empty($pp['c']) || !empty($pp['b']) || !empty($pp['m'])) { $hayComp = true; } }
     if ($hayComp) {
         foreach ($posProd as $h => $i) {
             $c = $porProd[$h]['c'] ?? [];
             $sn = $porProd[$h]['s'] ?? [];
-            $t = ($c ? implode(', ', $c) : '—') . ($sn ? ' · Sin ' . implode(', ', $sn) : '');
+            $partes = array_filter([implode(', ', $porProd[$h]['m'] ?? []), $c ? implode(', ', $c) : '—', implode(', ', $porProd[$h]['b'] ?? [])]);
+            $t = implode(' · ', $partes) . ($sn ? ' · Sin ' . implode(', ', $sn) : '');
             $out[$i] = ['key' => $h, 'name' => $h, 'value' => $t, 'display' => esc_html($t)];
         }
         $pos['quitar'] = null;

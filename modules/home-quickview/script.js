@@ -228,15 +228,17 @@
       $box.append($c);
     });
     $form.find('.dlpqv-acc').each(function () {
-      var $b = $(this).next('.dlpqv-grp-box'), $sels = $b.find('select.wc-pao-addon-field');
+      var $b = $(this).next('.dlpqv-grp-box'), $sels = $b.find('select.wc-pao-addon-field'), titulo = $.trim($(this).find('b').first().text());
+      var requerido = $sels.filter('[required], [data-required]').length || $b.find('.wc-pao-addon-container.wc-pao-required-addon, .required-field').length;
       if ($b.children('.wc-pao-addon-container').length === 1) $b.addClass('dlpqv-grp-box--solo');
-      // Varias listas en un grupo («Complemento 1», «Complemento 2»…): contador «0 de N» y etiqueta Obligatorio, como los grupos de cantidad
-      if ($sels.length === 1 && !$(this).find('.dlpqv-grp-req').length && ($sels.filter('[required], [data-required]').length || $b.find('.wc-pao-addon-container.wc-pao-required-addon, .required-field').length)) {
-        $(this).addClass('dlpqv-acc-one').find('b').first().after('<span class="dlpqv-grp-req">Obligatorio</span>');
-      }
-      if ($sels.length > 1 && !$(this).find('.dlpqv-grp-c').length) {
+      if ($(this).find('.dlpqv-grp-c, .dlpqv-grp-req').length) return;
+      if ($sels.length > 1 && /^Elige tus?\s+\d+/i.test(titulo)) {
+        // «Elige tus 4 complementos» (listas Complemento 1…N): contador «0 de N» y etiqueta Obligatorio, como los grupos de cantidad
         $(this).addClass('dlpqv-acc-sel').find('b').first().after('<span class="dlpqv-grp-c"></span>');
-        if ($sels.filter('[required], [data-required]').length || $b.find('.wc-pao-addon-container.wc-pao-required-addon, .required-field').length) $(this).find('.dlpqv-grp-c').after('<span class="dlpqv-grp-req">Obligatorio</span>');
+        if (requerido) $(this).find('.dlpqv-grp-c').after('<span class="dlpqv-grp-req">Obligatorio</span>');
+      } else if ($sels.length && requerido) {
+        // Un producto de la promo («Del Puente 1»): «Obligatorio» hasta que todas sus listas estén elegidas
+        $(this).addClass('dlpqv-acc-one').find('b').first().after('<span class="dlpqv-grp-req">Obligatorio</span>');
       }
     });
     accSync($form);

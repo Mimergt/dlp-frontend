@@ -163,3 +163,8 @@ html.dlpqv-lock { overflow: hidden; }
 
 /* Producto con una sola lista obligatoria: la etiqueta se va al elegir */
 .dlpqv .dlpqv-acc-one.done .dlpqv-grp-req { display: none; }
+
+/* Grupo abierto: encabezado y opciones forman una sola tarjeta y se separa del grupo siguiente */
+.dlpqv .dlpqv-grp.open { margin-bottom: 0; border-bottom-left-radius: 0; border-bottom-right-radius: 0; border-bottom-color: var(--q-linea); }
+.dlpqv .dlpqv-grp.open + .dlpqv-grp-box { margin: 0 0 24px; padding: 2px 14px 14px; border: 1.5px solid var(--q-tinta); border-top: 0; border-radius: 0 0 12px 12px; background: #fff; }
+.dlpqv .dlpqv-grp.open + .dlpqv-grp-box > .wc-pao-addon-container:first-child { margin-top: 6px; }

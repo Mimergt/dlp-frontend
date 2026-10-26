@@ -15,7 +15,8 @@ $config = [
     143397 => ['burgers' => ['La Clásica', 'Del Puente', 'Carnuda', 'Tejana']],
 ];
 if (!isset($config[$pid])) { echo "producto no configurado\n"; return; }
-$a = get_post_meta($pid, '_product_addons', true);
+// Siempre se parte de la estructura original (la copia previa, si ya se había convertido antes)
+$a = get_post_meta($pid, '_product_addons_backup_estandar', true) ?: get_post_meta($pid, '_product_addons', true);
 $a = is_array($a) ? $a : [];
 $comp = []; $quitar = []; $otros = []; $beb = [];
 foreach ($a as $x) {
@@ -23,24 +24,34 @@ foreach ($a as $x) {
     if (preg_match('/^Complemento (\d+)$/u', $n, $m) && ($x['type'] ?? '') === 'multiple_choice') { $comp[(int) $m[1]] = $x; continue; }
     if (preg_match('/^(.+): quitar ingredientes$/u', $n, $m) && ($x['type'] ?? '') === 'checkbox') { $quitar[$m[1]] = $x; continue; }
     if (($x['type'] ?? '') === 'input_multiplier' && preg_match('/\[grupo:([^=\]]+)=/u', (string) $x['description'], $g)) {
-        if (strpos($g[1], 'extra') !== false) { echo "$pid: ya tiene «Añade bebida extra» (ya convertido)\n"; return; }
-        $beb[] = $x; continue;
+        $beb[] = $x; continue; // el grupo de bebidas incluidas se reemplaza por una bebida por producto
     }
+    if (($x['type'] ?? '') === 'multiple_choice' && preg_match('/carne/iu', $n)) { continue; } // la carne pasa a cada producto
     $otros[] = $x;
 }
 $burgers = $config[$pid]['burgers'];
 if (count($comp) !== count($burgers) || array_diff($burgers, array_keys($quitar))) { echo "$pid: la estructura no coincide (complementos " . count($comp) . ", hamburguesas " . count($burgers) . "); se omite\n"; return; }
 
 $base = (int) (microtime(true) * 10) % 1000000000; $k = 0;
-$nuevo = $otros; // Carne favorita y demás, arriba
+$ANGUS = 12; // +Q12 por hamburguesa (antes +Q48 en 4, +Q36 en 3)
+$bebNombres = ['Frezka Tamarindo', 'Frezka Rosa de Jamaica', 'Frezka Sandía Limón & Maracuyá', 'Coca Cola', 'Coca Cola Zero', 'Orange Crush', 'Tiky', 'Canada Dry Ginger Ale', 'Agua pura'];
+$lista = function ($nombre, $acord, $opciones, $default) use (&$k, $base) {
+    return ['name' => $nombre, 'title_format' => 'heading', 'description_enable' => 1, 'description' => "[acordeon:$acord]", 'placeholder_enable' => 0, 'placeholder' => '',
+        'type' => 'multiple_choice', 'display' => 'select', 'position' => 0, 'required' => 1, 'restrictions' => 0, 'restrictions_type' => 'any_text',
+        'adjust_price' => 0, 'price_type' => 'flat_fee', 'price' => '', 'id' => (string) ($base + $k++), 'min' => 0, 'max' => 0, 'default' => $default, 'options' => $opciones];
+};
+$op = function ($l, $p = '') { return ['label' => $l, 'price' => (string) $p, 'image' => '', 'price_type' => 'flat_fee', 'visibility' => 1]; };
+$nuevo = $otros; // lo que no es carne, complemento, ingredientes ni bebida
 foreach ($burgers as $i => $b) {
     $c = $comp[$i + 1];
     $c['name'] = "$b: complemento"; $c['description_enable'] = 1; $c['description'] = "[acordeon:$b]"; $c['required'] = 1;
     $q = $quitar[$b];
     $q['description_enable'] = 1; $q['description'] = "Marca lo que NO quieres. [acordeon:$b]";
-    $nuevo[] = $c; $nuevo[] = $q;
+    $nuevo[] = $lista("$b: carne", $b, [$op('Premium Blend'), $op('Tortas Angus', $ANGUS)], 0);
+    $nuevo[] = $c;
+    $nuevo[] = $lista("$b: bebida", $b, array_map(function ($n) use ($op) { return $op($n); }, $bebNombres), '');
+    $nuevo[] = $q;
 }
-foreach ($beb as $x) { $nuevo[] = $x; } // bebidas incluidas (N de N, sin precio)
 $precios = ['Frezka' => 17, 'Agua pura' => 9];
 foreach ([['Frezka Tamarindo', 17], ['Frezka Rosa de Jamaica', 17], ['Frezka Sandía Limón & Maracuyá', 17], ['Agua pura', 9], ['Orange Crush', 11], ['Tiky', 11], ['Canada Dry Ginger Ale', 11], ['Coca Cola', 11], ['Coca Cola Zero', 11]] as [$nombre, $precio]) {
     $nuevo[] = ['name' => "Extra · $nombre", 'title_format' => 'heading', 'description_enable' => 1, 'description' => '[grupo:Añade bebida extra=*]', 'placeholder_enable' => 0, 'placeholder' => '',
@@ -48,7 +59,7 @@ foreach ([['Frezka Tamarindo', 17], ['Frezka Rosa de Jamaica', 17], ['Frezka San
         'adjust_price' => 1, 'price_type' => 'quantity_based', 'price' => (string) $precio, 'id' => (string) ($base + $k++), 'min' => 0, 'max' => 0, 'default' => 0, 'options' => []];
 }
 foreach ($nuevo as $i => $x) { $nuevo[$i]['position'] = $i; }
-echo "$pid " . html_entity_decode(get_the_title($pid)) . ': ' . count($a) . ' → ' . count($nuevo) . " extras (" . count($burgers) . " productos con complemento + ingredientes, bebidas incluidas, bebida extra con precio)\n";
+echo "$pid " . html_entity_decode(get_the_title($pid)) . ': ' . count($a) . ' → ' . count($nuevo) . " extras (" . count($burgers) . " productos con carne, complemento, bebida e ingredientes, más bebida extra con precio)\n";
 if ($dry) { return; }
 if (!get_post_meta($pid, '_product_addons_backup_estandar', true)) { update_post_meta($pid, '_product_addons_backup_estandar', $a); }
 update_post_meta($pid, '_product_addons', $nuevo);
