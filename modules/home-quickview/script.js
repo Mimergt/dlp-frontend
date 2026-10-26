@@ -178,27 +178,31 @@
   function accSync($form) {
     $form.find('.dlpqv-acc').each(function () {
       var $box = $(this).next('.dlpqv-grp-box'), partes = [], alguno = false, selTotal = 0, selLlenos = 0, n = $box.children('.wc-pao-addon-container').length;
+      var valores = [], quitados = [];
       $box.children('.wc-pao-addon-container').each(function () {
         var $c = $(this), marcadas = [], $sel = $c.find('select.wc-pao-addon-field');
         $c.find('input.wc-pao-addon-checkbox:checked').each(function () {
           var $l = $c.find('label[for="' + this.id + '"]').first();
           if (!$l.length) $l = $(this).siblings('label').first();
           var t = $.trim($l.clone().children().remove().end().text());
-          if (t) marcadas.push(t);
+          if (t) { marcadas.push(t); quitados.push(t); }
         });
         // Listas desplegables: la opción elegida (sin el precio entre paréntesis)
         $sel.each(function () {
           selTotal++;
-          if ($(this).val()) { selLlenos++; marcadas.push($.trim($(this).find('option:selected').text().replace(/\s*\(\+?[^)]*\)\s*$/, ''))); }
+          if ($(this).val()) { var v = $.trim($(this).find('option:selected').text().replace(/\s*\(\+?[^)]*\)\s*$/, '')); selLlenos++; marcadas.push(v); valores.push(v); }
         });
         if (marcadas.length) alguno = true;
-        if ($sel.length) partes.push(marcadas.length ? marcadas.join(', ') : '—'); // listas: solo lo elegido, en orden (Complemento 1, 2…)
+        if ($sel.length) partes.push(marcadas.length ? marcadas.join(', ') : '—');
         else partes.push(n === 1 ? marcadas.join(', ') : accName($c).split(':')[0] + ': ' + (marcadas.length ? marcadas.join(', ') : 'ninguno'));
       });
-      $(this).find('.dlpqv-grp-s').text(alguno ? partes.join(' · ') : 'Toca para elegir');
+      // Producto con lista + casillas («Carnuda 1»: complemento y quitar ingredientes): «Papas fritas · Sin Queso, Tomate»
+      var txt = alguno ? partes.join(' · ') : 'Toca para elegir';
+      if (selTotal && $box.find('input.wc-pao-addon-checkbox').length) txt = (valores.join(', ') || '—') + (quitados.length ? ' · ' + quitados.join(', ') : '');
+      $(this).find('.dlpqv-grp-s').text(txt);
       var $c = $(this).find('.dlpqv-grp-c');
       if ($c.length) $c.text(selLlenos + ' de ' + selTotal);
-      $(this).toggleClass('done', $c.length ? selLlenos === selTotal : alguno);
+      $(this).toggleClass('done', selTotal ? selLlenos === selTotal : alguno);
     });
   }
   function accordions($form) {
@@ -216,12 +220,20 @@
         $box = $('<div class="dlpqv-grp-box" hidden></div>').insertAfter($h);
         title = t;
       }
+      // El nombre del extra puede empezar con el título del acordeón («Carnuda 1: complemento»): dentro ya se sabe de cuál es
+      var $nm = $c.find('.wc-pao-addon-name').first(), re = new RegExp('^\\s*' + t.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '\\s*:\\s*', 'i');
+      $nm.contents().filter(function () { return this.nodeType === 3; }).first().each(function () {
+        var tx = this.nodeValue.replace(re, ''); this.nodeValue = tx.charAt(0).toUpperCase() + tx.slice(1);
+      });
       $box.append($c);
     });
     $form.find('.dlpqv-acc').each(function () {
       var $b = $(this).next('.dlpqv-grp-box'), $sels = $b.find('select.wc-pao-addon-field');
       if ($b.children('.wc-pao-addon-container').length === 1) $b.addClass('dlpqv-grp-box--solo');
       // Varias listas en un grupo («Complemento 1», «Complemento 2»…): contador «0 de N» y etiqueta Obligatorio, como los grupos de cantidad
+      if ($sels.length === 1 && !$(this).find('.dlpqv-grp-req').length && ($sels.filter('[required], [data-required]').length || $b.find('.wc-pao-addon-container.wc-pao-required-addon, .required-field').length)) {
+        $(this).addClass('dlpqv-acc-one').find('b').first().after('<span class="dlpqv-grp-req">Obligatorio</span>');
+      }
       if ($sels.length > 1 && !$(this).find('.dlpqv-grp-c').length) {
         $(this).addClass('dlpqv-acc-sel').find('b').first().after('<span class="dlpqv-grp-c"></span>');
         if ($sels.filter('[required], [data-required]').length || $b.find('.wc-pao-addon-container.wc-pao-required-addon, .required-field').length) $(this).find('.dlpqv-grp-c').after('<span class="dlpqv-grp-req">Obligatorio</span>');

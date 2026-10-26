@@ -39,6 +39,8 @@ add_filter('woocommerce_get_item_data', function ($data, $cart_item) {
     $out    = [];
     $pos    = ['compl' => null, 'quitar' => null];
     $posG   = [];
+    $porProd = []; // producto (Carnuda 1, Del Puente 2…) => ['c' => complemento, 's' => ingredientes quitados]
+    $posProd = [];
     foreach ($data as $row) {
         $k = dlp_fe_cr_txt($row['key'] ?? ($row['name'] ?? '')); // los Add-Ons usan «name», WooCommerce acepta «key» o «name»
         $v = dlp_fe_cr_txt(!empty($row['display']) ? $row['display'] : ($row['value'] ?? '')); // «display» puede venir vacío
@@ -55,8 +57,18 @@ add_filter('woocommerce_get_item_data', function ($data, $cart_item) {
             if (!isset($posG[$grupos[$k]])) { $posG[$grupos[$k]] = count($out); $out[] = null; }
             continue;
         }
+        if (preg_match('/^(.+?):\s*complemento$/iu', $k, $m)) {
+            $h = trim($m[1]);
+            $porProd[$h]['c'][] = trim(preg_replace('/\s*\(\+.*\)\s*$/u', '', $v));
+            if (!isset($posProd[$h])) { $posProd[$h] = count($out); $out[] = null; }
+            continue;
+        }
         if (preg_match('/^(.+?):\s*quitar ingredientes$/iu', $k, $m)) {
-            $quitar[trim($m[1])][] = trim(preg_replace('/^Sin\s+/iu', '', $v));
+            $h = trim($m[1]);
+            $ing = trim(preg_replace('/^Sin\s+/iu', '', $v));
+            $quitar[$h][] = $ing;
+            $porProd[$h]['s'][] = $ing;
+            if (!isset($posProd[$h])) { $posProd[$h] = count($out); $out[] = null; }
             if ($pos['quitar'] === null) { $pos['quitar'] = count($out); $out[] = null; }
             continue;
         }
@@ -72,7 +84,21 @@ add_filter('woocommerce_get_item_data', function ($data, $cart_item) {
         foreach ($cant[$titulo] ?? [] as $b => $n) { $partes[] = $n . ' ' . $b; }
         $out[$i] = ['key' => $titulo, 'name' => $titulo, 'value' => implode(', ', $partes), 'display' => esc_html(implode(', ', $partes))];
     }
-    if ($pos['quitar'] !== null) {
+    // Si hay «<Producto>: complemento», se muestra una línea por producto con su complemento y lo que se le quitó
+    $hayComp = false;
+    foreach ($porProd as $pp) { if (!empty($pp['c'])) { $hayComp = true; } }
+    if ($hayComp) {
+        foreach ($posProd as $h => $i) {
+            $c = $porProd[$h]['c'] ?? [];
+            $sn = $porProd[$h]['s'] ?? [];
+            $t = ($c ? implode(', ', $c) : '—') . ($sn ? ' · Sin ' . implode(', ', $sn) : '');
+            $out[$i] = ['key' => $h, 'name' => $h, 'value' => $t, 'display' => esc_html($t)];
+        }
+        $pos['quitar'] = null;
+    } else {
+        foreach ($posProd as $i) { $out[$i] = null; }
+    }
+    if ($pos['quitar'] !== null && !$hayComp) {
         $lineas = [];
         foreach ($quitar as $h => $ing) { $lineas[] = '<b>' . esc_html($h) . ':</b> ' . esc_html(implode(', ', $ing)); }
         $total = array_sum(array_map('count', $quitar));
