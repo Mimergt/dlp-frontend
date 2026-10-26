@@ -11,3 +11,9 @@ body .xoo-wsc-ft-buttons-cont .xoo-wsc-ft-btn-continue:hover { background: var(-
 body .xoo-wsc-ft-buttons-cont .xoo-wsc-ft-btn-checkout { background: var(--dlp-sc-pay, var(--dlp-carrito-lateral-color-pagar, #111)); border-color: var(--dlp-sc-pay, var(--dlp-carrito-lateral-color-pagar, #111)); color: var(--dlp-btn-tx, #fff); }
 body.dlp-sc-vercarro--ocultar .xoo-wsc-ft-btn-cart { display: none !important; }
 @media (max-width: 480px) { body .xoo-wsc-container { max-width: 92vw; } }
+
+/* Cerrado, el panel queda realmente oculto (no solo fuera de pantalla con right negativo): en iPhone y Android a veces se asomaba
+   una franja al cargar o al cambiar de categoría. Se muestra al abrir y se oculta al terminar la animación al cerrar. */
+body .xoo-wsc-modal:not(.xoo-wsc-cart-active) .xoo-wsc-container { visibility: hidden; pointer-events: none; box-shadow: none; }
+body .xoo-wsc-modal .xoo-wsc-container { transition: right .5s, visibility 0s linear .5s; }
+body .xoo-wsc-modal.xoo-wsc-cart-active .xoo-wsc-container { visibility: visible; transition: right .5s, visibility 0s; }
