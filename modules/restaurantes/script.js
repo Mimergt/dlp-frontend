@@ -68,8 +68,17 @@
   function visibleStores() {
     return cards.filter(function (c) { return !c.hidden; }).map(function (c) { return data[c.getAttribute('data-id')]; }).filter(function (t) { return t && t.lat !== null; });
   }
-  var SHOP = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 9l1.5-5h15L21 9v1a3 3 0 01-6 0 3 3 0 01-6 0 3 3 0 01-6 0V9z"/><path d="M5 12.5V20h14v-7.5"/><path d="M10 20v-4h4v4"/></svg>';
-  function pinIcon(act) { return L.divIcon({ className: '', html: '<div class="dlprs-pin' + (act ? ' act' : '') + '">' + SHOP + '</div>', iconSize: [0, 0] }); }
+  /* Estilo del mapa: base clara de Protomaps con paleta suave (suelo gris cálido, parques menta, agua celeste,
+     calles blancas, edificios con borde fino, textos grises). Es un tema propio; las rutas de tiles no cambian. */
+  var BASE = {background:"#f5f4f1",earth:"#f6f5f3",park_a:"#cdf0e0",park_b:"#b7ecd6",hospital:"#f1e6e5",industrial:"#eeeeee",school:"#f1efec",wood_a:"#cdf0e0",wood_b:"#b7ecd6",pedestrian:"#f6f5f3",scrub_a:"#d8f1e5",scrub_b:"#c6ecdb",glacier:"#f3f3f3",sand:"#f3f0e6",beach:"#f6f1e0",aerodrome:"#ecedef",runway:"#e4e4e8",water:"#c3e8fb",zoo:"#d6eee5",military:"#ebebeb",tunnel_other_casing:"#e8e8e8",tunnel_minor_casing:"#e8e8e8",tunnel_link_casing:"#e8e8e8",tunnel_major_casing:"#e8e8e8",tunnel_highway_casing:"#e8e8e8",tunnel_other:"#f0f0f0",tunnel_minor:"#f0f0f0",tunnel_link:"#f0f0f0",tunnel_major:"#f0f0f0",tunnel_highway:"#f0f0f0",pier:"#e8e8e8",buildings:"#ececec",minor_service_casing:"#e9e8e5",minor_casing:"#e9e8e5",link_casing:"#e6e5e2",major_casing_late:"#e3e2de",highway_casing_late:"#dedcd7",other:"#fbfbfa",minor_service:"#fbfbfa",minor_a:"#fcfcfb",minor_b:"#ffffff",link:"#ffffff",major_casing_early:"#e3e2de",major:"#ffffff",highway_casing_early:"#dedcd7",highway:"#ffffff",railway:"#c7cacc",boundaries:"#c4c4cc",bridges_other_casing:"#e6e5e2",bridges_minor_casing:"#e6e5e2",bridges_link_casing:"#e6e5e2",bridges_major_casing:"#e3e2de",bridges_highway_casing:"#dedcd7",bridges_other:"#fbfbfa",bridges_minor:"#ffffff",bridges_link:"#ffffff",bridges_major:"#ffffff",bridges_highway:"#ffffff",roads_label_minor:"#7a7a80",roads_label_minor_halo:"#ffffff",roads_label_major:"#6b6b72",roads_label_major_halo:"#ffffff",ocean_label:"#6fa9d6",subplace_label:"#7a7a80",subplace_label_halo:"#ffffff",city_label:"#3f3f46",city_label_halo:"#ffffff",state_label:"#a1a1aa",state_label_halo:"#ffffff",country_label:"#a1a1aa",address_label:"#8a8a90",address_label_halo:"#ffffff",pois:{blue:"#8f9096",green:"#8f9096",lapis:"#8f9096",pink:"#8f9096",red:"#8f9096",slategray:"#8f9096",tangerine:"#8f9096",turquoise:"#8f9096"},landcover:{grassland:"rgba(217,243,230,1)",barren:"rgba(244,241,234,1)",urban_area:"rgba(242,241,238,1)",farmland:"rgba(238,244,232,1)",glacier:"rgba(255,255,255,1)",scrub:"rgba(216,242,229,1)",forest:"rgba(205,240,224,1)"}};
+  function baseLayer() {
+    var paint = protomapsL.paintRules(BASE).map(function (r) {
+      return r.dataLayer === 'buildings' ? { dataLayer: 'buildings', symbolizer: new protomapsL.PolygonSymbolizer({ fill: '#ececec', stroke: '#d2d2d6', width: 0.6 }) } : r;
+    });
+    return protomapsL.leafletLayer({ url: C.tilesUrl, paintRules: paint, labelRules: protomapsL.labelRules(BASE, 'es'), backgroundColor: BASE.background, attribution: ATTR });
+  }
+  var PIN = '<svg class="dlprs-pinsvg" width="36" height="46" viewBox="0 0 36 46" aria-hidden="true"><defs><linearGradient id="dlprsG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3a3a3e"/><stop offset="1" stop-color="#000"/></linearGradient></defs><path d="M18 1C8.6 1 1 8.4 1 17.6 1 29.5 18 45 18 45s17-15.5 17-27.4C35 8.4 27.4 1 18 1z" fill="url(#dlprsG)"/><circle cx="18" cy="17.5" r="10.5" fill="#ebe8e1"/><g transform="translate(10.5 10) scale(.62)" fill="none" stroke="#111" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l1.5-5h15L21 9v1a3 3 0 01-6 0 3 3 0 01-6 0 3 3 0 01-6 0V9z"/><path d="M5 12.5V20h14v-7.5"/><path d="M10 20v-4h4v4"/></g></svg>';
+  function pinIcon(act) { return L.divIcon({ className: '', html: '<div class="dlprs-pin' + (act ? ' act' : '') + '">' + PIN + '</div>', iconSize: [0, 0] }); }
   function drawMarkers() {
     if (!map) return;
     group.clearLayers();
@@ -112,7 +121,7 @@
       var box = document.createElement('div'); box.className = 'dlprs-pop';
       var b = document.createElement('b'); b.textContent = t.n; box.appendChild(b);
       var ico = c && c.querySelector('.dlprs-ico'); if (ico) box.appendChild(ico.cloneNode(true));
-      L.popup({ offset: [0, -34], closeButton: false, autoPanPadding: [30, 30] }).setLatLng([t.lat, t.lng]).setContent(box).openOn(map);
+      L.popup({ offset: [0, -48], closeButton: false, autoPanPadding: [30, 30] }).setLatLng([t.lat, t.lng]).setContent(box).openOn(map);
     }
     drawMarkers();
   }
@@ -178,9 +187,7 @@
     if (!C.tilesUrl) { root.querySelector('.dlprs-map').innerHTML = '<p class="dlprs-empty">No se pudo cargar el mapa.</p>'; return; }
     map = L.map('dlprs-map', { center: C.center, zoom: 8, minZoom: C.minZoom, maxZoom: C.maxZoom, maxBounds: C.bounds, maxBoundsViscosity: 1, zoomSnap: 0.5, scrollWheelZoom: false, zoomControl: false });
     L.control.zoom({ position: 'topright', zoomInTitle: 'Acercar', zoomOutTitle: 'Alejar' }).addTo(map);
-    try {
-      protomapsL.leafletLayer({ url: C.tilesUrl, flavor: 'light', lang: 'es', attribution: ATTR }).addTo(map);
-    } catch (e) { say('No se pudo cargar el mapa base.'); }
+    try { baseLayer().addTo(map); } catch (e) { say('No se pudo cargar el mapa base.'); }
     group = L.layerGroup().addTo(map);
     map.on('zoomend', drawMarkers);
     map.on('popupclose', function () { closedAt = Date.now(); });
