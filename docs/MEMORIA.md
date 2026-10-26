@@ -270,3 +270,6 @@ Faltan: pedidos con extras de varios días de disponibilidad, cupones, tarjeta (
 ## 2026-10-26 — «papas fritas» y «Frezka natural» en todos los productos
 - `scripts/papas-frezkas-textos.php` (dev, idempotente, copia en `_dlp_textos_backup_papasfrezka` con título/corta/larga/extras): «papa(s)» → «papa frita / papas fritas»; «Frezka(s)» → «Frezka natural / Frezkas naturales» (no si ya dice natural, si sigue el sabor —Tamarindo, Jamaica…— ni «Frezka Té frío»; «palitos de papa» no se toca). Solo texto: no HTML, shortcodes ni URLs. 35 productos / 46 textos en dev (incluye títulos como «La Clásica + Frezka natural», «Papas fritas individuales» y las opciones de extras).
 - Para producción: correr el script ahí (primero con `dry`), o replicar el resultado al migrar. Los nombres de bebida como extras («Frezka Tamarindo») NO cambian.
+
+## 2026-10-26 — SMASH sin Angus
+- `scripts/quitar-angus-smash.php`: quita «Elige tu carne favorita» (Premium Blend / Tortas Angus) de las SMASH que lo tenían: Legendaria Individual (159004) y Jalapeño Popper Individual (159002); los combos SMASH y la Clásica SMASH Individual ya no lo tenían. Copia previa en `_product_addons_backup_angus`.
