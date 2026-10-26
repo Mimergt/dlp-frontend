@@ -325,7 +325,8 @@
     if (!$form.length) return;
     $.each(ed.post || {}, function (name, val) {
       var vals = $.isArray(val) ? val : [val];
-      var $f = $form.find('[name="' + name.replace(/"/g, '') + '"]');
+      var n = name.replace(/"/g, '');
+      var $f = $form.find('[name="' + n + '"], [name="' + n + '[]"]'); // las casillas se envían como addon-xxx[] y PHP las guarda sin los corchetes
       $f.each(function () {
         var $e = $(this), t = (this.type || '').toLowerCase();
         if (t === 'checkbox' || t === 'radio') { this.checked = vals.indexOf($e.val()) > -1; }
