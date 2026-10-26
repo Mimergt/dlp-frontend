@@ -100,6 +100,7 @@ html.dlprs-lock, html.dlprs-lock body { overflow: hidden !important; }
 
 @media (max-width: 900px) {
   .dlprs-fs { display: inline-flex; }
+  .dlprs-leg { display: none; }
   .dlprs { padding: 28px 16px 40px; gap: 16px; }
   .dlprs-ti h1 { font-size: 44px; }
   .dlprs-q { min-width: 0; flex: 1 1 100%; }
