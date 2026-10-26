@@ -222,7 +222,7 @@
       if ($b.children('.wc-pao-addon-container').length === 1) $b.addClass('dlpqv-grp-box--solo');
       // Varias listas en un grupo («Complemento 1», «Complemento 2»…): contador «0 de N» y etiqueta Obligatorio, como los grupos de cantidad
       if ($sels.length > 1 && !$(this).find('.dlpqv-grp-c').length) {
-        $(this).find('b').first().after('<span class="dlpqv-grp-c"></span>');
+        $(this).addClass('dlpqv-acc-sel').find('b').first().after('<span class="dlpqv-grp-c"></span>');
         if ($sels.filter('[required], [data-required]').length || $b.find('.wc-pao-addon-container.wc-pao-required-addon, .required-field').length) $(this).find('.dlpqv-grp-c').after('<span class="dlpqv-grp-req">Obligatorio</span>');
       }
     });
