@@ -259,7 +259,7 @@ Faltan: pedidos con extras de varios días de disponibilidad, cupones, tarjeta (
 - `scripts/deploy-dev.sh`: sube el plugin a dev por rsync (sin GitHub) para iterar rápido.
 
 ## 0.38.0 — Felices los 4: carne y bebida por combo
-- Cada hamburguesa trae en su acordeón: carne (Premium Blend / Tortas Angus +Q12; Angus = +Q48 entre 4 o +Q36 entre 3), complemento, bebida (una, obligatoria, sin precio) y quitar ingredientes. Se quitan la carne general y el grupo «Elige tus N bebidas». «Añade bebida extra» se queda. `scripts/promo-estandar.php <id>` parte siempre de la copia `_product_addons_backup_estandar`; Hechos: Felices (122472) y Trío de Clásicas (126123); pendientes 126125, 143397.
+- Cada hamburguesa trae en su acordeón: carne (Premium Blend / Tortas Angus +Q12; Angus = +Q48 entre 4 o +Q36 entre 3), complemento, bebida (una, obligatoria, sin precio) y quitar ingredientes. Se quitan la carne general y el grupo «Elige tus N bebidas». «Añade bebida extra» se queda. `scripts/promo-estandar.php <id>` parte siempre de la copia `_product_addons_backup_estandar`; Hechos: Felices (122472), Trío de Clásicas (126123) y Trío Del Puente (126125); pendiente 143397 (Las Favoritas).
 - Quickview: grupo abierto = una sola tarjeta con borde y 24 px de separación del siguiente; «Obligatorio» en el acordeón hasta que todas sus listas estén elegidas (el contador «N de M» queda solo para «Elige tus N …»).
 - Carrito: «Del Puente 1: Premium Blend · Papas fritas · Frezka Tamarindo · Sin Queso» (carne/complemento/bebida por producto).
 
