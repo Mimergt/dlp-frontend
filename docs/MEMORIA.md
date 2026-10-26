@@ -238,3 +238,6 @@ Faltan: pedidos con extras de varios días de disponibilidad, cupones, tarjeta (
 - El cliente no quiere los botones − / + para los complementos. Felices los 4 (4), Trío de Clásicas (3), Trío Del Puente (3) y Las Favoritas (4) pasan a N listas «Complemento 1…N» (Papas fritas incluida, Cheese poppers y Aros de cebolla +Q10) dentro de un acordeón `[acordeon:Elige tus N complementos]` con contador «0 de N» + «Obligatorio». Carnuda Lovers agrupa «Complemento 1/2» igual.
 - JS: `accSync`/`accordions` de home-quickview cuentan las listas del acordeón y resumen solo lo elegido. Script de datos: `scripts/complementos-en-lista.php` (copia previa en `_product_addons_backup_cantidades`; la anterior de cantidades en `_product_addons_backup_complementos`).
 - Los bebidas siguen como grupo de cantidad (`[grupo:…=N]`). Los combos con un solo complemento no cambian.
+
+## 0.34.3 — Carrito lateral asomándose (iPhone/Android)
+- El panel del carrito (Xootix) cerrado solo se escondía con `right:-350px`; en teléfonos reales se veía una franja al cargar y al cambiar de categoría (no reproducible en el emulador del navegador). Ahora cerrado queda `visibility:hidden` (carrito-lateral/style.css) y se muestra al abrir; la animación se conserva.
