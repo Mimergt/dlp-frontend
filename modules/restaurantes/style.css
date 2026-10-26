@@ -72,17 +72,20 @@ body.dlprs-page #sidebar { display: none !important; }
 .dlprs-leg i { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
 .dlprs-leg i.p { background: #111; border-radius: 50% 50% 50% 0; transform: rotate(-45deg) scale(.9); }
 .dlprs-leg i.c { background: #111; }
-.dlprs-map #dlprs-map { cursor: crosshair; }
-.dlprs-map #dlprs-map .leaflet-marker-icon, .dlprs-map #dlprs-map .leaflet-interactive { cursor: pointer; }
 
-.dlprs-cl { display: grid; place-items: center; width: 36px; height: 36px; margin: -18px 0 0 -18px; border-radius: 50%; background: #111; border: 3px solid #fff; box-shadow: 0 1px 6px rgba(0,0,0,.35); color: #fff; font: 700 13px/1 "Helvetica Neue", Arial, sans-serif; }
-.dlprs-me { width: 18px; height: 18px; margin: -9px 0 0 -9px; border-radius: 50%; background: #2563eb; border: 3px solid #fff; box-shadow: 0 0 0 8px rgba(37,99,235,.18); }
-.dlprs .leaflet-popup-content-wrapper { border-radius: 14px; }
-.dlprs .leaflet-popup-content { margin: 10px 12px; width: auto !important; }
+.dlprs-cl { display: grid; place-items: center; width: 36px; height: 36px; cursor: pointer; border-radius: 50%; background: #111; border: 3px solid #fff; box-shadow: 0 1px 6px rgba(0,0,0,.35); color: #fff; font: 700 13px/1 "Helvetica Neue", Arial, sans-serif; }
+.dlprs-me { width: 18px; height: 18px; cursor: grab; border-radius: 50%; background: #2563eb; border: 3px solid #fff; box-shadow: 0 0 0 8px rgba(37,99,235,.18); }
+.dlprs-pinbox { cursor: pointer; }
+.dlprs-pinbox:focus-visible { outline: 2px solid #111; outline-offset: 2px; border-radius: 8px; }
+.dlprs .dlprs-popup { z-index: 5; }
+.dlprs .dlprs-popup .maplibregl-popup-content { padding: 10px 12px; border-radius: 14px; box-shadow: 0 6px 20px rgba(0,0,0,.18); }
 .dlprs-pop { display: flex; align-items: center; gap: 12px; white-space: nowrap; font: 14px/1.2 "Helvetica Neue", Arial, sans-serif; }
 .dlprs-pop b { font-weight: 700; }
 .dlprs-pop .dlprs-ico { margin: 0; display: inline-flex !important; }
 .dlprs-pop .dlprs-ico a { width: 32px; height: 32px; }
+.dlprs .maplibregl-ctrl-attrib { font-size: 11px; background: rgba(255,255,255,.85); }
+.dlprs .maplibregl-ctrl-attrib a { color: #52525b; }
+.dlprs .maplibregl-ctrl-group { border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,.12); }
 
 @media (max-width: 900px) {
   .dlprs { padding: 28px 16px 40px; gap: 16px; }

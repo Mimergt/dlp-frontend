@@ -221,15 +221,16 @@ add_action('wp_enqueue_scripts', function () {
     if (!dlp_fe_rs_is_page() || !defined('DLP_TIENDAS_URL') || !function_exists('dlp_tiendas_map_config') || !wp_script_is('dlp-fe-restaurantes', 'enqueued')) {
         return;
     }
-    $u = DLP_TIENDAS_URL . 'assets/vendor/';
-    wp_enqueue_style('dlp-leaflet', $u . 'leaflet.css', [], '1.9.4');
-    wp_enqueue_script('dlp-leaflet', $u . 'leaflet.js', [], '1.9.4', true);
-    wp_enqueue_script('dlp-protomaps', $u . 'protomaps-leaflet.js', ['dlp-leaflet'], '5.1.0', true);
-    wp_enqueue_script('dlp-map-style', DLP_TIENDAS_URL . 'assets/js/map-style.js', ['dlp-leaflet', 'dlp-protomaps'], defined('DLP_TIENDAS_VERSION') ? DLP_TIENDAS_VERSION : '1', true);
+    // Mapa 3D: MapLibre GL + PMTiles (propios del módulo) y el estilo/pines compartidos de dlp-tiendas.
+    $m = DLP_FE_URL . 'modules/restaurantes/mapa/';
+    wp_enqueue_style('dlprs-maplibre', $m . 'vendor/maplibre-gl.css', [], '5.24.0');
+    wp_enqueue_script('dlprs-maplibre', $m . 'vendor/maplibre-gl.js', [], '5.24.0', true);
+    wp_enqueue_script('dlprs-pmtiles', $m . 'vendor/pmtiles.js', [], '4.5.0', true);
+    wp_enqueue_script('dlp-map-style', DLP_TIENDAS_URL . 'assets/js/map-style.js', [], defined('DLP_TIENDAS_VERSION') ? DLP_TIENDAS_VERSION : '1', true);
     $datos = array_map(function ($t) {
         return ['id' => $t['id'], 'n' => $t['nombre'], 'lat' => $t['lat'], 'lng' => $t['lng'], 'r' => $t['region']];
     }, dlp_fe_rs_tiendas());
-    wp_localize_script('dlp-fe-restaurantes', 'dlpRs', array_merge(dlp_tiendas_map_config(), ['tiendas' => $datos, 'color' => dlp_fe_rs_cfg('color')]));
+    wp_localize_script('dlp-fe-restaurantes', 'dlpRs', array_merge(dlp_tiendas_map_config(), ['tiendas' => $datos, 'color' => dlp_fe_rs_cfg('color'), 'mapaUrl' => $m, 'ver' => DLP_FE_VERSION]));
 }, 20);
 
 /* Caja en la tienda: región y ocultar de la página */

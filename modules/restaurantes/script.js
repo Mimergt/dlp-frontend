@@ -1,4 +1,4 @@
-/* Restaurantes: filtros, búsqueda, «Cerca de mí» y mapa (Leaflet + Protomaps, los de dlp-tiendas). */
+/* Restaurantes: filtros, búsqueda, «Cerca de mí» y mapa 3D (MapLibre GL + PMTiles, mismos tiles de dlp-tiendas). */
 (function () {
   var root = document.getElementById('dlprs');
   if (!root) return;
@@ -10,7 +10,7 @@
   cards.forEach(function (c, i) { c.setAttribute('data-i', i); byId[c.getAttribute('data-id')] = c; });
 
   var st = { srv: '', open: false, region: '', q: '', pt: null, label: '', sel: 0 };
-  var map = null, group = null, me = null, closedAt = 0;
+  var map = null, mks = [], me = null, pop = null;
   var HINT = 'Toca el mapa para marcar dónde estás, o usa «Cerca de mí».';
   var bar = root.querySelector('.dlprs-bar-t'), barX = root.querySelector('.dlprs-bar-x');
   var empty = root.querySelector('.dlprs-empty'), msg = root.querySelector('.dlprs-msg');
@@ -63,39 +63,50 @@
     drawMarkers();
   }
 
-  /* ---------- Mapa ---------- */
+  /* ---------- Mapa (MapLibre: [lng, lat]) ---------- */
+  var SEL_ZOOM = 15.5, TILT = 55;
   function visibleStores() {
     return cards.filter(function (c) { return !c.hidden; }).map(function (c) { return data[c.getAttribute('data-id')]; }).filter(function (t) { return t && t.lat !== null; });
   }
-  function pinIcon(act) { return DLP.pinIcon({ tipo: 'tienda', color: act ? (C.color || '#ED1C24') : '#111111' }); }
+  function pinEl(t, act) {
+    var el = document.createElement('div');
+    el.className = 'dlprs-pinbox'; el.title = t.n; el.setAttribute('role', 'button'); el.setAttribute('aria-label', t.n); el.tabIndex = 0;
+    el.innerHTML = DLP.pinHtml({ tipo: 'tienda', color: act ? (C.color || '#ED1C24') : '#111111' });
+    function go(e) { e.stopPropagation(); select(t.id, true); }
+    el.addEventListener('click', go);
+    el.addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); go(e); } });
+    return el;
+  }
   function drawMarkers() {
     if (!map) return;
-    group.clearLayers();
-    var pts = visibleStores().map(function (t) { return { t: t, p: map.latLngToLayerPoint([t.lat, t.lng]), used: false }; });
+    mks.forEach(function (m) { m.remove(); }); mks = [];
+    var pts = visibleStores().map(function (t) { return { t: t, p: map.project([t.lng, t.lat]), used: false }; });
     pts.forEach(function (a) {
       if (a.used) return;
       var mem = [a]; a.used = true;
       pts.forEach(function (b) {
-        if (!b.used && a.p.distanceTo(b.p) < 36) { b.used = true; mem.push(b); }
+        if (!b.used && Math.hypot(a.p.x - b.p.x, a.p.y - b.p.y) < 36) { b.used = true; mem.push(b); }
       });
       if (mem.length === 1) {
-        var t = a.t, m = L.marker([t.lat, t.lng], { icon: pinIcon(t.id === st.sel), title: t.n, keyboard: true });
-        m.on('click', function () { select(t.id, true); });
-        m.addTo(group);
+        mks.push(new maplibregl.Marker({ element: pinEl(a.t, a.t.id === st.sel), anchor: 'bottom' }).setLngLat([a.t.lng, a.t.lat]).addTo(map));
       } else {
         var lat = 0, lng = 0; mem.forEach(function (x) { lat += x.t.lat; lng += x.t.lng; });
-        var cl = L.marker([lat / mem.length, lng / mem.length], { icon: L.divIcon({ className: '', html: '<div class="dlprs-cl">' + mem.length + '</div>', iconSize: [0, 0] }), title: mem.length + ' restaurantes' });
-        cl.on('click', function () {
-          map.fitBounds(L.latLngBounds(mem.map(function (x) { return [x.t.lat, x.t.lng]; })), { padding: [60, 60], maxZoom: 16 });
+        var el = document.createElement('div');
+        el.className = 'dlprs-cl'; el.textContent = mem.length; el.title = mem.length + ' restaurantes'; el.setAttribute('role', 'button');
+        el.addEventListener('click', function (e) {
+          e.stopPropagation();
+          var b = new maplibregl.LngLatBounds(); mem.forEach(function (x) { b.extend([x.t.lng, x.t.lat]); });
+          map.fitBounds(b, { padding: 70, maxZoom: 15 });
         });
-        cl.addTo(group);
+        mks.push(new maplibregl.Marker({ element: el, anchor: 'center' }).setLngLat([lng / mem.length, lat / mem.length]).addTo(map));
       }
     });
   }
   function fitAll() {
     var v = visibleStores();
     if (!map || !v.length) return;
-    map.fitBounds(L.latLngBounds(v.map(function (t) { return [t.lat, t.lng]; })), { padding: [40, 40], maxZoom: 14 });
+    var b = new maplibregl.LngLatBounds(); v.forEach(function (t) { b.extend([t.lng, t.lat]); });
+    map.fitBounds(b, { padding: 50, maxZoom: 13, pitch: 0, bearing: 0 });
   }
   function select(id, fromMap) {
     st.sel = id;
@@ -106,37 +117,39 @@
       if (window.innerWidth <= 900) c.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
     }
     if (map && t && t.lat !== null) {
-      if (!fromMap) map.setView([t.lat, t.lng], Math.max(map.getZoom(), 15), { animate: true });
+      map.easeTo({ center: [t.lng, t.lat], zoom: Math.max(map.getZoom(), SEL_ZOOM), pitch: TILT, duration: 900 });
       var box = document.createElement('div'); box.className = 'dlprs-pop';
       var b = document.createElement('b'); b.textContent = t.n; box.appendChild(b);
       var ico = c && c.querySelector('.dlprs-ico'); if (ico) box.appendChild(ico.cloneNode(true));
-      L.popup({ offset: [0, -48], closeButton: false, autoPanPadding: [30, 30] }).setLatLng([t.lat, t.lng]).setContent(box).openOn(map);
+      if (pop) pop.remove();
+      pop = new maplibregl.Popup({ offset: [0, -50], closeButton: false, closeOnClick: false, maxWidth: 'none', className: 'dlprs-popup' }).setLngLat([t.lng, t.lat]).setDOMContent(box).addTo(map);
     }
     drawMarkers();
   }
 
   /* ---------- Punto del cliente ---------- */
   function setPoint(lat, lng, label) {
-    st.pt = [lat, lng]; st.label = label; st.picking = false;
+    st.pt = [lat, lng]; st.label = label;
     if (map) {
       if (!me) {
-        me = L.marker([lat, lng], { draggable: true, icon: L.divIcon({ className: '', html: '<div class="dlprs-me"></div>', iconSize: [0, 0] }), zIndexOffset: 1000, title: 'Tu punto' }).addTo(map);
-        me.on('dragend', function () { var p = me.getLatLng(); setPoint(p.lat, p.lng, 'Punto elegido'); });
-      } else me.setLatLng([lat, lng]);
+        var el = document.createElement('div'); el.className = 'dlprs-me'; el.title = 'Tu punto';
+        me = new maplibregl.Marker({ element: el, draggable: true, anchor: 'center' }).setLngLat([lng, lat]).addTo(map);
+        me.on('dragend', function () { var p = me.getLngLat(); setPoint(p.lat, p.lng, 'Punto elegido'); });
+      } else me.setLngLat([lng, lat]);
     }
     say('');
     apply();
     var near = [].slice.call(list.children).filter(function (c) { return !c.hidden && c._d !== null; }).slice(0, 3);
     if (map && near.length) {
       if (near[0]._d > 300) { say('Estás lejos de nuestros restaurantes. Te mostramos el más cercano.'); }
-      var b = L.latLngBounds([[lat, lng]]);
-      near.forEach(function (c) { var t = data[c.getAttribute('data-id')]; b.extend([t.lat, t.lng]); });
-      map.fitBounds(b, { padding: [60, 60], maxZoom: 15 });
+      var b = new maplibregl.LngLatBounds([lng, lat], [lng, lat]);
+      near.forEach(function (c) { var t = data[c.getAttribute('data-id')]; b.extend([t.lng, t.lat]); });
+      map.fitBounds(b, { padding: 70, maxZoom: 14.5, pitch: 0, bearing: 0 });
     }
     list.scrollTop = 0;
   }
   function clearPoint() {
-    st.pt = null; if (me && map) { map.removeLayer(me); me = null; }
+    st.pt = null; if (me) { me.remove(); me = null; }
     apply(); fitAll();
   }
   /* ---------- Eventos ---------- */
@@ -172,28 +185,43 @@
   });
 
   /* ---------- Arranque del mapa ---------- */
-  function initMap() {
-    if (!C.tilesUrl) { root.querySelector('.dlprs-map').innerHTML = '<p class="dlprs-empty">No se pudo cargar el mapa.</p>'; return; }
-    map = L.map('dlprs-map', { center: C.center, zoom: 8, minZoom: C.minZoom, maxZoom: C.maxZoom, maxBounds: C.bounds, maxBoundsViscosity: 1, zoomSnap: 0.5, scrollWheelZoom: false, zoomControl: false });
-    L.control.zoom({ position: 'topright', zoomInTitle: 'Acercar', zoomOutTitle: 'Alejar' }).addTo(map);
-    try { DLP.baseLayer(C.tilesUrl).addTo(map); } catch (e) { say('No se pudo cargar el mapa base.'); }
-    group = L.layerGroup().addTo(map);
-    map.on('zoomend', drawMarkers);
-    map.on('popupclose', function () { closedAt = Date.now(); });
-    map.on('click', function (e) {
-      if (Date.now() - closedAt < 150) return; // el primer toque solo cierra la burbuja
-      setPoint(e.latlng.lat, e.latlng.lng, 'Punto elegido');
+  function initMap(style) {
+    style.glyphs = C.mapaUrl + 'fonts/{fontstack}/{range}.pbf';
+    style.sources.protomaps.url = 'pmtiles://' + C.tilesUrl;
+    var b = C.bounds; // [[lat, lng], [lat, lng]]
+    try {
+      maplibregl.addProtocol('pmtiles', new pmtiles.Protocol().tile);
+      map = new maplibregl.Map({
+        container: 'dlprs-map', style: style, center: [C.center[1], C.center[0]], zoom: 7.5,
+        minZoom: Math.max(5, C.minZoom - 1.5), maxZoom: 18, maxPitch: 70, maxBounds: [[b[0][1], b[0][0]], [b[1][1], b[1][0]]],
+        attributionControl: false, cooperativeGestures: true, pitchWithRotate: true, dragRotate: true,
+        locale: {
+          'CooperativeGesturesHandler.WindowsHelpText': 'Usa Ctrl + scroll para acercar el mapa',
+          'CooperativeGesturesHandler.MacHelpText': 'Usa ⌘ + scroll para acercar el mapa',
+          'CooperativeGesturesHandler.MobileHelpText': 'Usa dos dedos para mover el mapa',
+          'NavigationControl.ZoomIn': 'Acercar', 'NavigationControl.ZoomOut': 'Alejar', 'NavigationControl.ResetBearing': 'Orientar al norte'
+        }
+      });
+    } catch (e) { root.querySelector('.dlprs-map').innerHTML = '<p class="dlprs-empty">Tu dispositivo no pudo mostrar el mapa. La lista de restaurantes sigue disponible.</p>'; return; }
+    map.addControl(new maplibregl.NavigationControl({ visualizePitch: true }), 'top-right');
+    map.addControl(new maplibregl.AttributionControl({ customAttribution: DLP.ATTRIBUTION_CLARO }), 'bottom-right');
+    map.on('load', function () { apply(); fitAll(); });
+    map.on('zoomend', function () {
+      if (map.getZoom() < 12 && (map.getPitch() > 1 || Math.abs(map.getBearing()) > 1)) map.easeTo({ pitch: 0, bearing: 0, duration: 500 });
+      drawMarkers();
     });
-    map.on('focus', function () { map.scrollWheelZoom.enable(); });
-    map.on('blur', function () { map.scrollWheelZoom.disable(); });
-    apply();
-    var el = document.getElementById('dlprs-map'), first = true;
-    function resize() { map.invalidateSize(); if (first && el.offsetHeight > 50) { first = false; fitAll(); } }
-    if (window.ResizeObserver) new ResizeObserver(resize).observe(el); else setTimeout(resize, 300);
-    setTimeout(resize, 150);
+    map.on('pitchend', drawMarkers);
+    map.on('click', function (e) {
+      if (e.originalEvent && e.originalEvent.target.closest && e.originalEvent.target.closest('.maplibregl-marker, .maplibregl-popup')) return;
+      if (pop) { pop.remove(); pop = null; return; } // el primer toque solo cierra la burbuja
+      setPoint(e.lngLat.lat, e.lngLat.lng, 'Punto elegido');
+    });
   }
   (function wait(n) {
-    if (window.L && window.protomapsL && window.DLP && DLP.baseLayer) return initMap();
+    if (window.maplibregl && window.pmtiles && window.DLP && DLP.pinHtml && C.tilesUrl) {
+      fetch(C.mapaUrl + 'style.json?v=' + (C.ver || '1')).then(function (r) { return r.json(); }).then(initMap).catch(function () { say('No se pudo cargar el mapa.'); });
+      return;
+    }
     if (n > 160) { say('No se pudo cargar el mapa.'); return; }
     setTimeout(function () { wait(n + 1); }, 50);
   })(0);
