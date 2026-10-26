@@ -221,8 +221,8 @@
         title = t;
       }
       // El nombre del extra puede empezar con el título del acordeón («Carnuda 1: complemento»): dentro ya se sabe de cuál es
-      var $nm = $c.find('.wc-pao-addon-name').first(), re = new RegExp('^\\s*' + t.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '\\s*:\\s*', 'i');
-      $nm.contents().filter(function () { return this.nodeType === 3; }).first().each(function () {
+      var $nm = $c.find('h2.wc-pao-addon-name').first(), re = new RegExp('^\\s*' + t.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '\\s*:\\s*', 'i');
+      $nm.contents().filter(function () { return this.nodeType === 3 && $.trim(this.nodeValue) !== ''; }).first().each(function () {
         var tx = this.nodeValue.replace(re, ''); this.nodeValue = tx.charAt(0).toUpperCase() + tx.slice(1);
       });
       $box.append($c);
