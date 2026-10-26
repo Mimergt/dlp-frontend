@@ -247,3 +247,6 @@ Faltan: pedidos con extras de varios días de disponibilidad, cupones, tarjeta (
 - JS (home-quickview): `#editar-<key>` cierra el carrito lateral, pide los datos por `?wc-ajax=dlp_fe_edit_data`, abre la vista rápida del producto, rellena el formulario (`prefill`), pone «Editando tu pedido» y el botón «Actualizar» y manda `dlp_edit_key`. En el servidor, `woocommerce_add_to_cart_validation` (prioridad 999, ya pasadas las demás validaciones) quita el ítem viejo y se añade el nuevo (queda al final).
 - La vista rápida solo carga en home, tienda, categorías y /menu/; en las demás páginas el enlace lleva a /menu/ y allí abre la edición.
 - Nota de pruebas: el navegador integrado deja de pintar si la pestaña no está al frente (`document.hidden`); comprobar el DOM.
+
+## 0.36.x — Resumen corto de opciones en el carrito
+- Módulo `carrito-resumen` (filtro `woocommerce_get_item_data`, prioridad 999; los Add-Ons usan `name` y `display` puede venir vacío): junta «Complemento 1…N», las cantidades de grupos `[grupo:…]` y «<hamburguesa>: quitar ingredientes» en 3 líneas («Complementos», «Bebidas», «Sin ingredientes»). Solo cambia lo que ve el cliente; el pedido y el panel guardan cada opción igual. El precio extra de cada opción ya no se lista (sigue en el subtotal).
