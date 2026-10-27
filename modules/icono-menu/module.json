@@ -1,0 +1,14 @@
+{
+  "label": "Ícono del Menú (hamburguesa con vapor y mordida)",
+  "description": "Reemplaza el ícono del botón «Menú» en el menú inferior del celular y en el header de computadora (botón que apunta a /menu/). Fuera del Menú sale vapor; en la página del Menú la hamburguesa aparece mordida, con migajas.",
+  "section": "apariencia",
+  "tab": "Ícono del Menú",
+  "order": 5,
+  "where": [
+    "all"
+  ],
+  "default": true,
+  "php": "module.php",
+  "css": "style.css",
+  "js": "script.js"
+}

@@ -33,7 +33,7 @@ add_action('wp_footer', function () {
     ?>
     <nav class="dlpmi" aria-label="Menú inferior">
         <a class="dlpmi-it<?php echo $is_menu ? ' is-on' : ''; ?>" href="<?php echo esc_url($menu_url); ?>" data-dlpmi="menu">
-            <?php echo $icons['menu']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+            <?php echo function_exists('dlp_fe_im_svg') ? dlp_fe_im_svg() : $icons['menu']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
             <span><?php echo esc_html($o('texto_menu')); ?></span>
         </a>
         <a class="dlpmi-it<?php echo $is_loc ? ' is-on' : ''; ?>" href="<?php echo esc_url($loc_url); ?>">
