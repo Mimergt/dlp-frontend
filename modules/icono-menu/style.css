@@ -23,7 +23,7 @@ body.dlp-en-menu .dlp-im .crumbs circle:nth-child(3), html.dlpqv-lock .dlp-im .c
 /* Divi pone su relleno con un id y !important: se iguala con #page-container */
 html body #page-container .et_pb_section a.et_pb_button.dlp-im-btn, html body #page-container .et_pb_section a.et_pb_button.dlp-im-btn:hover { position: relative; padding-left: 2.8em !important; }
 .et-l--header a.et_pb_button.dlp-im-btn::after, .et-l--header a.et_pb_button.dlp-im-btn::before { display: none !important; }
-.et-l--header a.et_pb_button.dlp-im-btn .dlp-im { position: absolute; left: .5em; top: 50%; width: 1.8em; height: 1.8em; margin-top: -.8em; }
+.et-l--header a.et_pb_button.dlp-im-btn .dlp-im { position: absolute; left: .5em; top: 50%; width: 1.8em; height: 1.8em; margin-top: -.95em; }
 
 /* Botón activo (como en hover: fondo casi blanco y texto negro) cuando se ve la página Menú, una ficha o una ventana de producto */
 html body.dlp-en-menu #page-container .et_pb_section a.et_pb_button.dlp-im-btn,
