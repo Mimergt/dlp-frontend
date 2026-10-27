@@ -37,7 +37,7 @@ add_action('wp_footer', function () {
             <span><?php echo esc_html($o('texto_menu')); ?></span>
         </a>
         <a class="dlpmi-it<?php echo $is_loc ? ' is-on' : ''; ?>" href="<?php echo esc_url($loc_url); ?>">
-            <?php echo $icons['pin']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+            <?php echo function_exists('dlp_fe_ip_svg') ? dlp_fe_ip_svg() : $icons['pin']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
             <span><?php echo esc_html($o('texto_ubicaciones')); ?></span>
         </a>
         <a class="dlpmi-it<?php echo $is_acct ? ' is-on' : ''; ?>" href="<?php echo esc_url($account); ?>">

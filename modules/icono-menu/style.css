@@ -21,11 +21,29 @@ body.dlp-en-menu .dlp-im .crumbs circle:nth-child(3), html.dlpqv-lock .dlp-im .c
 
 /* Header de Divi (computadora): el ícono ocupa el lugar que Divi deja a la izquierda del texto y se oculta el de Divi */
 /* Divi pone su relleno con un id y !important: se iguala con #page-container */
-html body #page-container .et_pb_section a.et_pb_button.dlp-im-btn, html body #page-container .et_pb_section a.et_pb_button.dlp-im-btn:hover { position: relative; padding-left: 2.8em !important; }
-.et-l--header a.et_pb_button.dlp-im-btn::after, .et-l--header a.et_pb_button.dlp-im-btn::before { display: none !important; }
+html body #page-container .et_pb_section a.et_pb_button.dlp-ic-btn, html body #page-container .et_pb_section a.et_pb_button.dlp-ic-btn:hover { position: relative; padding-left: 2.8em !important; }
+.et-l--header a.et_pb_button.dlp-ic-btn::after, .et-l--header a.et_pb_button.dlp-ic-btn::before { display: none !important; }
 .et-l--header a.et_pb_button.dlp-im-btn .dlp-im { position: absolute; left: .5em; top: 50%; width: 1.8em; height: 1.8em; margin-top: -.95em; }
 
 /* Botón activo (como en hover: fondo casi blanco y texto negro) cuando se ve la página Menú, una ficha o una ventana de producto */
 html body.dlp-en-menu #page-container .et_pb_section a.et_pb_button.dlp-im-btn,
 html.dlpqv-lock body #page-container .et_pb_section a.et_pb_button.dlp-im-btn { background-color: rgb(247, 247, 247) !important; color: #000 !important; }
 html.dlpqv-lock .dlpmi-it[data-dlpmi="menu"] { background: var(--dlp-mi-on, var(--dlp-menu-inferior-color-activo, #111)); color: var(--dlp-btn-tx, #fff); }
+
+/* Restaurantes: pin con el logo. En /restaurantes/ salta como una pelota; en el resto está quieto. */
+.dlp-ip { display: block; overflow: visible; fill: none; }
+.dlp-ip * { transform-box: fill-box; transform-origin: center; }
+.dlp-ip .lgt { transform-box: view-box; transform-origin: 0 0; }
+.dlp-ip .pn { fill: none; stroke: currentColor; stroke-width: 3.6; stroke-linecap: round; stroke-linejoin: round; }
+.dlp-ip .lgp { fill: currentColor; stroke: currentColor; stroke-width: 12; stroke-linejoin: round; }
+.dlp-ip .sh { fill: currentColor; stroke: none; opacity: 0; }
+.dlp-ip .pg { transform-box: view-box; transform-origin: 32px 61px; }
+body.dlp-en-restaurantes .dlp-ip .pg { animation: dlp-ip-hop 2.4s ease-in-out infinite; }
+body.dlp-en-restaurantes .dlp-ip .sh { opacity: .35; animation: dlp-ip-sh 2.4s ease-in-out infinite; }
+@keyframes dlp-ip-hop { 0%, 60%, 100% { transform: none; } 22% { transform: translateY(-6px); } 36% { transform: scale(1.05, .93); } 46% { transform: scale(.99, 1.02); } }
+@keyframes dlp-ip-sh { 0%, 60%, 100% { transform: scale(1); } 22% { transform: scale(.55); } 36% { transform: scale(1.15); } }
+@media (prefers-reduced-motion: reduce) { .dlp-ip * { animation: none !important; } }
+.dlpmi-it svg.dlp-ip { width: 26px; height: 26px; stroke: none; }
+.et-l--header a.et_pb_button.dlp-ip-btn .dlp-ip { position: absolute; left: .5em; top: 50%; width: 1.8em; height: 1.8em; margin-top: -.9em; }
+/* Botón de Restaurantes activo (como en hover) cuando se ve la página Restaurantes */
+html body.dlp-en-restaurantes #page-container .et_pb_section a.et_pb_button.dlp-ip-btn { background-color: rgb(247, 247, 247) !important; color: #000 !important; }

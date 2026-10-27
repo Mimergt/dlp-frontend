@@ -300,3 +300,10 @@ Faltan: pedidos con extras de varios días de disponibilidad, cupones, tarjeta (
 - Verificado en dev: header de escritorio en /restaurantes/ (vapor) y /menu/ (mordida), barra inferior en celular (375 px) en ambas. Animaciones CSS, respetan «reducir movimiento».
 - **0.40.1**: el ícono del menú inferior mide 23 px (el mismo peso visual que los otros tres). El estado «en el Menú» (mordida, sin vapor) ahora también se activa en la ficha de producto (`is_product()`) y mientras hay una ventana de producto abierta (`html.dlpqv-lock`). En el header, el botón MENÚ queda «activo» (fondo `rgb(247,247,247)` y texto negro, igual que su hover) en esos mismos estados; en celular, el botón Menú de la barra se marca activo con la ventana de producto abierta.
 - **0.40.2**: el ícono del botón MENÚ del header queda centrado (vertical y horizontal): margen superior -.95em; medido en dev: centro del logo 66,3 px vs botón 66 px, hueco izquierdo 13,3 px vs derecho 13,2 px.
+
+## 0.41.0 — Ícono de Restaurantes (pin con el logo)
+- Elegido por el usuario: «Pin con logo» (sin mapa de Guatemala; se probaron mapas y se descartaron), con la hamburguesa más pequeña dentro del pin para dejar aire (`dlp_fe_ip_svg()`, logo a escala .056, trazo reforzado 12).
+- Se usa en: botón RESTAURANTES del header de Divi (a la izquierda del texto, igual que el Menú; se detecta por enlace a `/restaurantes/`), botón «Ubicaciones» del menú inferior del celular, y los pines del mapa de /restaurantes/ (ver dlp-tiendas 0.15.3).
+- Estado «en la página»: `body.dlp-en-restaurantes` → el pin salta como pelota con sombra (CSS) y el botón del header queda activo (fondo `rgb(247,247,247)`, texto negro). Fuera de /restaurantes/ está quieto.
+- Header: las clases `dlp-ic-btn` (común: relleno izquierdo 2.8em, oculta el ícono de Divi) + `dlp-im-btn` / `dlp-ip-btn` las pone `script.js` desde los `<template id="dlp-im-tpl|dlp-ip-tpl">`.
+- Mapas en perspectiva de Guatemala: se trazó el contorno a partir de una imagen enviada por el usuario; no se usó (la forma sola no convenció a 24 px).

@@ -1,6 +1,6 @@
 <?php
 /**
- * Ícono del Menú: logo de línea con vapor (sin seleccionar) y mordida con migajas (en /menu/).
+ * Íconos del header y del menú inferior: Menú (logo con vapor / mordida con migajas en /menu/) y Restaurantes (pin con el logo, salta en /restaurantes/).
  * dlp_fe_im_svg() lo usan el menú inferior (PHP) y el botón del header de Divi (script.js, desde un <template>).
  * Estado: clase dlp-en-menu en <body> cuando se ve la página «Menú».
  */
@@ -36,13 +36,27 @@ function dlp_fe_im_svg() {
         . '</svg>';
 }
 
+const DLP_FE_IP_PIN = 'M32 61C32 61 8 42 8 28a24 24 0 0 1 48 0C56 42 32 61 32 61Z';
+
+/** Ícono de Restaurantes: pin de ubicación con el logo del cliente dentro (más pequeño, para dejar aire con el borde). */
+function dlp_fe_ip_svg() {
+    return '<svg class="dlp-ip" viewBox="0 0 64 64" aria-hidden="true" focusable="false">'
+        . '<ellipse class="sh" cx="32" cy="62" rx="12" ry="2.4"/>'
+        . '<g class="pg"><path class="pn" d="' . DLP_FE_IP_PIN . '"/>'
+        . '<g class="lgt" transform="translate(17.2 14.4) scale(.056)"><path class="lgp" d="' . DLP_FE_IM_BOT . '"/><path class="lgp" d="' . DLP_FE_IM_TOP . '"/></g></g>'
+        . '</svg>';
+}
+
 add_filter('body_class', function ($c) {
     $pg = get_page_by_path('menu');
     if (($pg && is_page($pg->ID)) || (function_exists('is_product') && is_product())) { $c[] = 'dlp-en-menu'; }
+    $rp = get_page_by_path('restaurantes');
+    if ($rp && is_page($rp->ID)) { $c[] = 'dlp-en-restaurantes'; }
     return $c;
 });
 
 /* Plantilla para el botón del header de Divi: script.js la clona dentro del botón que apunta a /menu/. */
 add_action('wp_footer', function () {
     echo '<template id="dlp-im-tpl">' . dlp_fe_im_svg() . '</template>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+    echo '<template id="dlp-ip-tpl">' . dlp_fe_ip_svg() . '</template>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 }, 5);
