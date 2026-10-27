@@ -38,7 +38,7 @@ function dlp_fe_im_svg() {
 
 add_filter('body_class', function ($c) {
     $pg = get_page_by_path('menu');
-    if ($pg && is_page($pg->ID)) { $c[] = 'dlp-en-menu'; }
+    if (($pg && is_page($pg->ID)) || (function_exists('is_product') && is_product())) { $c[] = 'dlp-en-menu'; }
     return $c;
 });
 

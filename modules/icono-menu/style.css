@@ -6,21 +6,26 @@
 .dlp-im .steam path:nth-child(2) { animation-delay: .7s; }
 .dlp-im .steam path:nth-child(3) { animation-delay: 1.4s; }
 .dlp-im .crumbs circle { opacity: 0; }
-body.dlp-en-menu .dlp-im .bite { transform: scale(1); }
-body.dlp-en-menu .dlp-im .steam path { animation: none; opacity: 0; }
-body.dlp-en-menu .dlp-im .crumbs circle { animation: dlp-im-crumb 2.4s ease-in infinite; }
-body.dlp-en-menu .dlp-im .crumbs circle:nth-child(2) { animation-delay: .8s; }
-body.dlp-en-menu .dlp-im .crumbs circle:nth-child(3) { animation-delay: 1.6s; }
+body.dlp-en-menu .dlp-im .bite, html.dlpqv-lock .dlp-im .bite { transform: scale(1); }
+body.dlp-en-menu .dlp-im .steam path, html.dlpqv-lock .dlp-im .steam path { animation: none; opacity: 0; }
+body.dlp-en-menu .dlp-im .crumbs circle, html.dlpqv-lock .dlp-im .crumbs circle { animation: dlp-im-crumb 2.4s ease-in infinite; }
+body.dlp-en-menu .dlp-im .crumbs circle:nth-child(2), html.dlpqv-lock .dlp-im .crumbs circle:nth-child(2) { animation-delay: .8s; }
+body.dlp-en-menu .dlp-im .crumbs circle:nth-child(3), html.dlpqv-lock .dlp-im .crumbs circle:nth-child(3) { animation-delay: 1.6s; }
 @keyframes dlp-im-steam { 0% { opacity: 0; transform: translateY(24px); } 30% { opacity: .85; } 100% { opacity: 0; transform: translateY(-34px); } }
 @keyframes dlp-im-crumb { 0% { opacity: 0; transform: translate(0, 0) scale(.6); } 12% { opacity: 1; } 100% { opacity: 0; transform: translate(22px, 200px) rotate(220deg) scale(1); } }
 @media (prefers-reduced-motion: reduce) { .dlp-im * { animation: none !important; transition-duration: .01ms !important; } }
 
 /* Menú inferior (celular): el estilo general de sus íconos es de línea; este va relleno */
-.dlpmi-it svg.dlp-im { width: 30px; height: 30px; fill: currentColor; stroke: none; }
-.dlpmi-it:has(svg.dlp-im) { gap: 1px; }
+.dlpmi-it svg.dlp-im { width: 23px; height: 23px; fill: currentColor; stroke: none; }
+.dlpmi-it:has(svg.dlp-im) { gap: 3px; }
 
 /* Header de Divi (computadora): el ícono ocupa el lugar que Divi deja a la izquierda del texto y se oculta el de Divi */
 /* Divi pone su relleno con un id y !important: se iguala con #page-container */
 html body #page-container .et_pb_section a.et_pb_button.dlp-im-btn, html body #page-container .et_pb_section a.et_pb_button.dlp-im-btn:hover { position: relative; padding-left: 2.8em !important; }
 .et-l--header a.et_pb_button.dlp-im-btn::after, .et-l--header a.et_pb_button.dlp-im-btn::before { display: none !important; }
 .et-l--header a.et_pb_button.dlp-im-btn .dlp-im { position: absolute; left: .5em; top: 50%; width: 1.8em; height: 1.8em; margin-top: -.8em; }
+
+/* Botón activo (como en hover: fondo casi blanco y texto negro) cuando se ve la página Menú, una ficha o una ventana de producto */
+html body.dlp-en-menu #page-container .et_pb_section a.et_pb_button.dlp-im-btn,
+html.dlpqv-lock body #page-container .et_pb_section a.et_pb_button.dlp-im-btn { background-color: rgb(247, 247, 247) !important; color: #000 !important; }
+html.dlpqv-lock .dlpmi-it[data-dlpmi="menu"] { background: var(--dlp-mi-on, var(--dlp-menu-inferior-color-activo, #111)); color: var(--dlp-btn-tx, #fff); }
