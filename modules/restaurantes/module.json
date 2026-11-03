@@ -17,6 +17,7 @@
     {"key": "eyebrow", "label": "Texto pequeño sobre el título", "type": "text", "default": "NUESTRAS TIENDAS", "css_var": false},
     {"key": "titulo", "label": "Título", "type": "text", "default": "Restaurantes", "css_var": false},
     {"key": "subtitulo", "label": "Subtítulo", "type": "text", "default": "Encuentra el Del Puente más cercano a ti, en toda Guatemala.", "css_var": false},
-    {"key": "color", "label": "Color de pines y acentos", "type": "color", "default": "#ED1C24"}
+    {"key": "color", "label": "Color de pines y acentos", "type": "color", "default": "#ED1C24"},
+    {"key": "express", "label": "Del Puente Express (una por línea)", "type": "textarea", "css_var": false, "default": "Villa Canales |  | 2306 2323 | 14.4791131 | -90.5326764\nSan José Pinula |  | 2306 2323\nBoca Del Monte |  | 2306 2323 | 14.5395399 | -90.5214618\nProgreso Jutiapa |  | 2306 2323 | 14.353365 | -89.8429296\nChiquimulilla |  | 2306 2323 | 14.0780239 | -90.3802695\nOlintepeque |  | 2306 2323\nZacapa | Calzada Nueva Barrio La Reforma, 12a calle, CC El Encuentro, Zacapa | 2306 2323 | 14.9652671 | -89.537274", "help": "Locales Express: solo se listan en /restaurantes/ (no son tiendas del sistema, no tienen panel, cobertura, delivery ni pickup). Formato: Nombre | Dirección | Teléfono | latitud | longitud | región (guatemala, centro, occidente, costa u oriente; opcional). Sin latitud y longitud aparecen en la lista pero no en el mapa."}
   ]
 }

@@ -30,6 +30,9 @@ body.dlprs-page #sidebar { display: none !important; }
 .dlprs-chips button { padding: 8px 16px; border: 1px solid #d4d4d8; border-radius: 999px; background: #fff; color: #3f3f46; font: 500 13px/1.2 var(--rs-b); cursor: pointer; }
 .dlprs-chips button:hover { border-color: #111; }
 .dlprs-chips button.on { background: #111; border-color: #111; color: #fff; font-weight: 600; }
+.dlprs-chips button.dlprs-chip-ex { display: inline-flex; align-items: center; gap: 6px; border-color: var(--rs-ac); color: var(--rs-ac); font-weight: 600; }
+.dlprs-chips button.dlprs-chip-ex:hover { background: #fff1f1; }
+.dlprs-chips button.dlprs-chip-ex.on { background: var(--rs-ac); border-color: var(--rs-ac); color: #fff; }
 .dlprs-chips i { width: 1px; height: 24px; background: #e4e4e7; margin: 0 6px; }
 
 .dlprs-body { display: flex; flex-wrap: wrap; gap: 24px; align-items: stretch; }
@@ -48,6 +51,8 @@ body.dlprs-page #sidebar { display: none !important; }
 .dlprs-ad { margin: 0; padding: 0; font-size: 13px; line-height: 1.45; color: #52525b; }
 .dlprs-c2 { display: flex; flex-wrap: wrap; gap: 8px 12px; align-items: center; font-size: 12px; }
 .dlprs-st.ok { color: #15803d; font-weight: 600; }
+.dlprs-st.ex { color: var(--rs-ac); font-weight: 600; }
+.dlprs-ex { display: inline-flex; align-items: center; gap: 3px; margin-left: 8px; padding: 2px 8px 2px 6px; border-radius: 999px; background: var(--rs-ac); color: #fff; font: 700 10px/1.4 var(--rs-b); letter-spacing: .06em; text-transform: uppercase; vertical-align: 2px; }
 .dlprs-st.no { color: #71717a; font-weight: 600; }
 .dlprs-sv { color: #71717a; }
 .dlprs-ico { margin-left: auto; display: inline-flex; gap: 6px; }

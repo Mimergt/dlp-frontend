@@ -117,10 +117,48 @@ function dlp_fe_rs_tiendas() {
             'region'   => $region,
         ];
     }
+    foreach (dlp_fe_rs_express() as $e) {
+        $out[] = $e;
+    }
     usort($out, function ($a, $b) {
         $r = array_keys(dlp_fe_rs_regiones());
         return [array_search($a['region'], $r), $a['nombre']] <=> [array_search($b['region'], $r), $b['nombre']];
     });
+    return $out;
+}
+
+/**
+ * Del Puente Express: locales sin panel, cobertura, delivery ni pickup. No son tiendas del sistema: salen del ajuste
+ * «express» (una por línea: Nombre | Dirección | Teléfono | lat | lng | región) y solo se muestran en esta página.
+ */
+function dlp_fe_rs_express() {
+    $out = [];
+    $n = 0;
+    foreach (preg_split('/\r\n|\r|\n/', (string) dlp_fe_rs_cfg('express')) as $linea) {
+        $c = array_map('trim', explode('|', $linea));
+        if (($c[0] ?? '') === '') {
+            continue;
+        }
+        $n++;
+        $la = $c[3] ?? '';
+        $lo = $c[4] ?? '';
+        $reg = $c[5] ?? '';
+        $out[] = [
+            'id'        => -$n,
+            'nombre'    => $c[0],
+            'direccion' => $c[1] ?? '',
+            'tel'       => $c[2] ?? '',
+            'lat'       => is_numeric($la) && is_numeric($lo) ? (float) $la : null,
+            'lng'       => is_numeric($la) && is_numeric($lo) ? (float) $lo : null,
+            'delivery'  => false,
+            'pickup'    => false,
+            'abierto'   => false,
+            'estado'    => 'Del Puente Express',
+            'mesa'      => false,
+            'express'   => true,
+            'region'    => isset(dlp_fe_rs_regiones()[$reg]) ? $reg : dlp_fe_rs_region_defecto($c[0]),
+        ];
+    }
     return $out;
 }
 
@@ -153,6 +191,7 @@ add_filter('body_class', function ($c) {
     return $c;
 });
 
+const DLP_FE_RS_ICO_RAYO = '<svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M13.5 2 4 13.5h6.2L9.5 22 20 9.8h-6.4z"/></svg>';
 const DLP_FE_RS_ICO_MAPA  = '<svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a7 7 0 00-7 7c0 5.2 7 13 7 13s7-7.8 7-13a7 7 0 00-7-7z" fill="#ea4335"/><circle cx="12" cy="9" r="2.6" fill="#fff"/></svg>';
 const DLP_FE_RS_ICO_WAZE  = '<svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3c-4.6 0-8 3.3-8 7.4 0 1.3.3 2.4.8 3.4-.5.9-1.2 1.4-1.9 1.7 1.2.4 2.5.2 3.6-.4.9.5 2 .8 3.2.9.3 1.4 1.7 2.5 3.3 2.5 1.9 0 3.3-1.4 3.4-3.1 2-1 3.6-3 3.6-5C20 6.3 16.6 3 12 3z" fill="#33ccff"/><circle cx="9.5" cy="9.5" r="1" fill="#111"/><circle cx="14.5" cy="9.5" r="1" fill="#111"/><path d="M9.5 12.2c1.4 1.2 3.6 1.2 5 0" stroke="#111" stroke-width="1.2" fill="none" stroke-linecap="round"/></svg>';
 const DLP_FE_RS_ICO_RUTA  = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#111" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11l18-8-8 18-2-8-8-2z"/></svg>';
@@ -179,6 +218,7 @@ add_filter('the_content', function ($content) {
             </div>
         </header>
         <div class="dlprs-chips" role="group" aria-label="Filtros">
+            <button type="button" class="dlprs-chip-ex" data-k="express"><?php echo DLP_FE_RS_ICO_RAYO; ?>Express</button>
             <button type="button" class="on" data-k="todos">Todos</button>
             <button type="button" data-k="delivery">Delivery</button>
             <button type="button" data-k="pickup">Pickup</button>
@@ -196,12 +236,12 @@ add_filter('the_content', function ($content) {
                         $tel = dlp_fe_rs_tel_href($t['tel']);
                         $txt = strtolower(remove_accents($t['nombre'] . ' ' . $t['direccion'] . ' ' . $reg[$t['region']]));
                         ?>
-                        <li class="dlprs-card" data-id="<?php echo (int) $t['id']; ?>" data-r="<?php echo esc_attr($t['region']); ?>" data-d="<?php echo $t['delivery'] ? 1 : 0; ?>" data-p="<?php echo $t['pickup'] ? 1 : 0; ?>" data-o="<?php echo $t['abierto'] ? 1 : 0; ?>" data-txt="<?php echo esc_attr($txt); ?>">
-                            <div class="dlprs-c1"><h2><?php echo esc_html($t['nombre']); ?></h2><b class="dlprs-km"></b></div>
+                        <li class="dlprs-card" data-id="<?php echo (int) $t['id']; ?>" data-r="<?php echo esc_attr($t['region']); ?>" data-d="<?php echo $t['delivery'] ? 1 : 0; ?>" data-p="<?php echo $t['pickup'] ? 1 : 0; ?>" data-o="<?php echo $t['abierto'] ? 1 : 0; ?>" data-x="<?php echo !empty($t['express']) ? 1 : 0; ?>" data-txt="<?php echo esc_attr($txt); ?>">
+                            <div class="dlprs-c1"><h2><?php echo esc_html($t['nombre']); ?><?php if (!empty($t['express'])) : ?><span class="dlprs-ex"><?php echo DLP_FE_RS_ICO_RAYO; ?>Express</span><?php endif; ?></h2><b class="dlprs-km"></b></div>
                             <?php if ($t['direccion'] !== '') : ?><p class="dlprs-ad"><?php echo esc_html($t['direccion']); ?></p><?php endif; ?>
                             <div class="dlprs-c2">
-                                <span class="dlprs-st <?php echo $t['abierto'] ? 'ok' : 'no'; ?>">● <?php echo esc_html($t['estado']); ?></span>
-                                <span class="dlprs-sv"><?php echo esc_html(implode(' · ', array_filter([$t['delivery'] ? 'Delivery' : '', $t['pickup'] ? 'Pickup' : ''])) ?: 'Solo en restaurante'); ?></span>
+                                <span class="dlprs-st <?php echo !empty($t['express']) ? 'ex' : ($t['abierto'] ? 'ok' : 'no'); ?>">● <?php echo esc_html($t['estado']); ?></span>
+                                <span class="dlprs-sv"><?php echo esc_html(implode(' · ', array_filter([$t['delivery'] ? 'Delivery' : '', $t['pickup'] ? 'Pickup' : ''])) ?: (!empty($t['express']) ? 'En el local' : 'Solo en restaurante')); ?></span>
                                 <span class="dlprs-ico">
                                     <a href="<?php echo esc_url(dlp_fe_rs_url_maps($t)); ?>" target="_blank" rel="noopener" aria-label="Abrir mapa de <?php echo esc_attr($t['nombre']); ?>"><?php echo DLP_FE_RS_ICO_MAPA; ?></a>
                                     <a class="dlprs-wz" href="<?php echo esc_url(dlp_fe_rs_url_waze($t)); ?>" target="_blank" rel="noopener" aria-label="Cómo llegar a <?php echo esc_attr($t['nombre']); ?> con Waze"><?php echo DLP_FE_RS_ICO_WAZE; ?></a>
@@ -242,7 +282,7 @@ add_action('wp_enqueue_scripts', function () {
     wp_enqueue_script('dlp-map-style', $u . 'map-style.js', [], $v, true);
     wp_enqueue_script('dlp-map-3d', $u . 'map-3d.js', ['dlp-map-style'], $v, true);
     $datos = array_map(function ($t) {
-        return ['id' => $t['id'], 'n' => $t['nombre'], 'lat' => $t['lat'], 'lng' => $t['lng'], 'r' => $t['region']];
+        return ['id' => $t['id'], 'n' => $t['nombre'], 'lat' => $t['lat'], 'lng' => $t['lng'], 'r' => $t['region'], 'x' => !empty($t['express']) ? 1 : 0];
     }, dlp_fe_rs_tiendas());
     wp_localize_script('dlp-fe-restaurantes', 'dlpRs', array_merge(dlp_tiendas_map_config(), ['tiendas' => $datos, 'color' => dlp_fe_rs_cfg('color')]));
 }, 20);

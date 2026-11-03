@@ -30,6 +30,7 @@
   function ok(c) {
     if (st.srv === 'delivery' && c.getAttribute('data-d') !== '1') return false;
     if (st.srv === 'pickup' && c.getAttribute('data-p') !== '1') return false;
+    if (st.srv === 'express' && c.getAttribute('data-x') !== '1') return false;
     if (st.open && c.getAttribute('data-o') !== '1') return false;
     if (st.region && c.getAttribute('data-r') !== st.region) return false;
     if (st.q && c.getAttribute('data-txt').indexOf(st.q) === -1) return false;
@@ -112,7 +113,7 @@
     var b = e.target.closest('button'); if (!b) return;
     var k = b.getAttribute('data-k'), r = b.getAttribute('data-r');
     if (k === 'todos') { st.srv = ''; st.open = false; st.region = ''; }
-    else if (k === 'delivery' || k === 'pickup') st.srv = st.srv === k ? '' : k;
+    else if (k === 'delivery' || k === 'pickup' || k === 'express') st.srv = st.srv === k ? '' : k;
     else if (k === 'abierto') st.open = !st.open;
     else if (r) st.region = st.region === r ? '' : r;
     [].forEach.call(root.querySelectorAll('.dlprs-chips button'), function (x) {
@@ -175,7 +176,7 @@
           if (mem.length === 1) {
             var t = p.t, el = document.createElement('div');
             el.className = 'dlprs-pinbox'; el.title = t.n; el.setAttribute('role', 'button'); el.setAttribute('aria-label', t.n); el.tabIndex = 0;
-            el.innerHTML = DLP.pinHtml({ tipo: 'tienda', color: t.id === st.sel ? (C.color || '#ED1C24') : '#111111' });
+            el.innerHTML = DLP.pinHtml({ tipo: 'tienda', color: t.id === st.sel || t.x ? (C.color || '#ED1C24') : '#111111' });
             var go = function (e) { e.stopPropagation(); select(t.id, true); };
             el.addEventListener('click', go);
             el.addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); go(e); } });
@@ -249,7 +250,7 @@
           var mem = [p]; p.used = true;
           pts.forEach(function (q) { if (!q.used && p.p.distanceTo(q.p) < 36) { q.used = true; mem.push(q); } });
           if (mem.length === 1) {
-            var t = p.t, m = L.marker([t.lat, t.lng], { icon: DLP.pinIcon({ tipo: 'tienda', color: t.id === st.sel ? (C.color || '#ED1C24') : '#111111' }), title: t.n, keyboard: true });
+            var t = p.t, m = L.marker([t.lat, t.lng], { icon: DLP.pinIcon({ tipo: 'tienda', color: t.id === st.sel || t.x ? (C.color || '#ED1C24') : '#111111' }), title: t.n, keyboard: true });
             m.on('click', function () { select(t.id, true); });
             m.addTo(group);
           } else {

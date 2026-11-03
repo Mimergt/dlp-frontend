@@ -327,3 +327,11 @@ Faltan: pedidos con extras de varios días de disponibilidad, cupones, tarjeta (
 - La página y el mapa ya no esconden las tiendas desactivadas: se listan las 35 (antes 30). Una tienda desactivada se muestra sin Delivery ni Pickup, con «Servicio en el restaurante» / «Solo en restaurante» (pueden tener servicio de mesa).
 - Siguen ocultas solo las que tengan marcado «No mostrar en la página Restaurantes». Los filtros Delivery, Pickup y «Abierto ahora» las excluyen; «Todos» las incluye.
 - Alamos, Diagonal 6, Metroplaza Morales, San Miguel Petapa y Villa Lobos son las 5 sin servicio hoy.
+
+## 0.42.0 — Del Puente Express en Restaurantes (2026-11-03)
+- Los Express NO son tiendas del sistema (sin extra_store, panel, cobertura, pickup ni checkout). Salen del ajuste `express` del módulo Restaurantes, una por línea: `Nombre | Dirección | Teléfono | lat | lng | región` (región opcional).
+- Filtro «Express» (rojo, con rayo) antes de «Todos»; las tarjetas llevan la etiqueta roja EXPRESS y «En el local»; en el mapa su pin va en rojo. No entran en Delivery, Pickup ni «Abierto ahora».
+- Ids internos negativos (-1, -2…) para no chocar con los de tiendas reales.
+- Carga inicial (de la lista de producción y del mapa del cliente): Villa Canales (punto del mapa rotulado «Express Boca Del Monte», supuesto), Boca Del Monte, Progreso Jutiapa, Chiquimulilla y Zacapa con coordenadas; San José Pinula y Olintepeque sin coordenadas ni dirección (pendiente del cliente). Teléfono general 2306 2323.
+- Si un Express pasa a tener pickup/delivery, hay que crearlo como tienda real y quitarlo de este ajuste.
+- Producción: el ajuste `express` es dato (opción `dlp_fe_modules`), viaja con el overwrite.
