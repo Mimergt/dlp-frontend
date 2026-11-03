@@ -135,6 +135,12 @@ function dlp_fe_rs_url_waze($t) {
         : 'https://waze.com/ul?q=' . rawurlencode('Del Puente ' . $t['nombre'] . ', ' . $t['direccion'] . ', Guatemala') . '&navigate=yes';
 }
 
+// En computador Waze solo ofrece su mapa web (bloquea con 429 las IP compartidas): ahí se usa la ruta de Google Maps.
+function dlp_fe_rs_url_ruta($t) {
+    $q = $t['lat'] !== null ? $t['lat'] . ',' . $t['lng'] : rawurlencode('Del Puente ' . $t['nombre'] . ', ' . $t['direccion'] . ', Guatemala');
+    return 'https://www.google.com/maps/dir/?api=1&destination=' . $q;
+}
+
 add_filter('body_class', function ($c) {
     if (dlp_fe_rs_is_page()) {
         $c[] = 'dlprs-page';
@@ -144,6 +150,7 @@ add_filter('body_class', function ($c) {
 
 const DLP_FE_RS_ICO_MAPA  = '<svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a7 7 0 00-7 7c0 5.2 7 13 7 13s7-7.8 7-13a7 7 0 00-7-7z" fill="#ea4335"/><circle cx="12" cy="9" r="2.6" fill="#fff"/></svg>';
 const DLP_FE_RS_ICO_WAZE  = '<svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3c-4.6 0-8 3.3-8 7.4 0 1.3.3 2.4.8 3.4-.5.9-1.2 1.4-1.9 1.7 1.2.4 2.5.2 3.6-.4.9.5 2 .8 3.2.9.3 1.4 1.7 2.5 3.3 2.5 1.9 0 3.3-1.4 3.4-3.1 2-1 3.6-3 3.6-5C20 6.3 16.6 3 12 3z" fill="#33ccff"/><circle cx="9.5" cy="9.5" r="1" fill="#111"/><circle cx="14.5" cy="9.5" r="1" fill="#111"/><path d="M9.5 12.2c1.4 1.2 3.6 1.2 5 0" stroke="#111" stroke-width="1.2" fill="none" stroke-linecap="round"/></svg>';
+const DLP_FE_RS_ICO_RUTA  = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#111" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11l18-8-8 18-2-8-8-2z"/></svg>';
 const DLP_FE_RS_ICO_TEL   = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#111" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 4h3l2 5-2.5 1.5a11 11 0 005 5L14 13l5 2v3a2 2 0 01-2 2A14 14 0 013 6a2 2 0 012-2z"/></svg>';
 
 add_filter('the_content', function ($content) {
@@ -192,13 +199,15 @@ add_filter('the_content', function ($content) {
                                 <span class="dlprs-sv"><?php echo esc_html(implode(' · ', array_filter([$t['delivery'] ? 'Delivery' : '', $t['pickup'] ? 'Pickup' : '']))); ?></span>
                                 <span class="dlprs-ico">
                                     <a href="<?php echo esc_url(dlp_fe_rs_url_maps($t)); ?>" target="_blank" rel="noopener" aria-label="Abrir mapa de <?php echo esc_attr($t['nombre']); ?>"><?php echo DLP_FE_RS_ICO_MAPA; ?></a>
-                                    <a href="<?php echo esc_url(dlp_fe_rs_url_waze($t)); ?>" target="_blank" rel="noopener" aria-label="Cómo llegar a <?php echo esc_attr($t['nombre']); ?> con Waze"><?php echo DLP_FE_RS_ICO_WAZE; ?></a>
+                                    <a class="dlprs-wz" href="<?php echo esc_url(dlp_fe_rs_url_waze($t)); ?>" target="_blank" rel="noopener" aria-label="Cómo llegar a <?php echo esc_attr($t['nombre']); ?> con Waze"><?php echo DLP_FE_RS_ICO_WAZE; ?></a>
+                                    <a class="dlprs-gd" href="<?php echo esc_url(dlp_fe_rs_url_ruta($t)); ?>" target="_blank" rel="noopener" aria-label="Cómo llegar a <?php echo esc_attr($t['nombre']); ?>"><?php echo DLP_FE_RS_ICO_RUTA; ?></a>
                                     <?php if ($tel) : ?><a href="<?php echo esc_url($tel); ?>" aria-label="Llamar al <?php echo esc_attr($t['tel']); ?>"><?php echo DLP_FE_RS_ICO_TEL; ?></a><?php endif; ?>
                                 </span>
                             </div>
                             <div class="dlprs-full">
                                 <a href="<?php echo esc_url(dlp_fe_rs_url_maps($t)); ?>" target="_blank" rel="noopener"><?php echo DLP_FE_RS_ICO_MAPA; ?>Abrir mapa</a>
-                                <a href="<?php echo esc_url(dlp_fe_rs_url_waze($t)); ?>" target="_blank" rel="noopener"><?php echo DLP_FE_RS_ICO_WAZE; ?>Cómo llegar</a>
+                                <a class="dlprs-wz" href="<?php echo esc_url(dlp_fe_rs_url_waze($t)); ?>" target="_blank" rel="noopener"><?php echo DLP_FE_RS_ICO_WAZE; ?>Cómo llegar</a>
+                                <a class="dlprs-gd" href="<?php echo esc_url(dlp_fe_rs_url_ruta($t)); ?>" target="_blank" rel="noopener"><?php echo DLP_FE_RS_ICO_RUTA; ?>Cómo llegar</a>
                                 <?php if ($tel) : ?><a href="<?php echo esc_url($tel); ?>"><?php echo DLP_FE_RS_ICO_TEL; ?><?php echo esc_html($t['tel']); ?></a><?php endif; ?>
                             </div>
                         </li>

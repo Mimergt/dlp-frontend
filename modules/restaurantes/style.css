@@ -112,3 +112,11 @@ html.dlprs-lock, html.dlprs-lock body { overflow: hidden !important; }
   .dlprs-list { order: 2; flex: none; max-width: none; width: 100%; height: auto; }
   .dlprs-items { overflow: visible; }
 }
+
+/* Computador: Waze web limita por IP (429); se ofrece la ruta de Google Maps. En celular queda Waze (abre la app). */
+.dlprs-gd { display: none !important; }
+@media (hover: hover) and (pointer: fine) {
+  .dlprs-wz { display: none !important; }
+  .dlprs-ico .dlprs-gd { display: grid !important; }
+  .dlprs-full .dlprs-gd { display: inline-flex !important; }
+}
