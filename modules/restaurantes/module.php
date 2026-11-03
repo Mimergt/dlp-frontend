@@ -51,7 +51,7 @@ function dlp_fe_rs_hora($hm) {
     return $hm ? strtolower(gmdate('g:i a', strtotime('2000-01-01 ' . $hm . ' UTC'))) : '';
 }
 
-/** Tiendas habilitadas con los datos que usa la página. */
+/** Todas las tiendas con los datos que usa la página (las desactivadas se listan sin delivery ni pickup). */
 function dlp_fe_rs_tiendas() {
     if (!function_exists('dlp_tiendas_store_flags')) {
         return [];
@@ -63,8 +63,11 @@ function dlp_fe_rs_tiendas() {
     $tiendas = get_posts(['post_type' => 'extra_store', 'post_status' => 'publish', 'numberposts' => -1, 'orderby' => 'title', 'order' => 'ASC']);
     foreach ($tiendas as $s) {
         $f = dlp_tiendas_store_flags($s->ID);
-        if (empty($f['enabled']) || get_post_meta($s->ID, '_dlp_ocultar_web', true)) {
+        if (get_post_meta($s->ID, '_dlp_ocultar_web', true)) {
             continue;
+        }
+        if (empty($f['enabled'])) {
+            $f['delivery'] = $f['pickup'] = false;
         }
         $pt = function_exists('dlp_tiendas_store_point') ? dlp_tiendas_store_point($s->ID) : null;
         if (!$pt) {
@@ -92,7 +95,8 @@ function dlp_fe_rs_tiendas() {
                 $abre = $ini;
             }
         }
-        $estado = $abierto ? 'Abierto · hasta ' . dlp_fe_rs_hora($cierra) : ($abre !== '' ? 'Cerrado · abre a las ' . dlp_fe_rs_hora($abre) : 'Cerrado por hoy');
+        $solo_mesa = empty($f['delivery']) && empty($f['pickup']);
+        $estado = $solo_mesa ? 'Servicio en el restaurante' : ($abierto ? 'Abierto · hasta ' . dlp_fe_rs_hora($cierra) : ($abre !== '' ? 'Cerrado · abre a las ' . dlp_fe_rs_hora($abre) : 'Cerrado por hoy'));
         $region = get_post_meta($s->ID, '_dlp_region', true);
         if (!isset(dlp_fe_rs_regiones()[$region])) {
             $region = dlp_fe_rs_region_defecto($s->post_title);
@@ -109,6 +113,7 @@ function dlp_fe_rs_tiendas() {
             'pickup'   => !empty($f['pickup']),
             'abierto'  => $abierto,
             'estado'   => $estado,
+            'mesa'     => $solo_mesa,
             'region'   => $region,
         ];
     }
@@ -196,7 +201,7 @@ add_filter('the_content', function ($content) {
                             <?php if ($t['direccion'] !== '') : ?><p class="dlprs-ad"><?php echo esc_html($t['direccion']); ?></p><?php endif; ?>
                             <div class="dlprs-c2">
                                 <span class="dlprs-st <?php echo $t['abierto'] ? 'ok' : 'no'; ?>">● <?php echo esc_html($t['estado']); ?></span>
-                                <span class="dlprs-sv"><?php echo esc_html(implode(' · ', array_filter([$t['delivery'] ? 'Delivery' : '', $t['pickup'] ? 'Pickup' : '']))); ?></span>
+                                <span class="dlprs-sv"><?php echo esc_html(implode(' · ', array_filter([$t['delivery'] ? 'Delivery' : '', $t['pickup'] ? 'Pickup' : ''])) ?: 'Solo en restaurante'); ?></span>
                                 <span class="dlprs-ico">
                                     <a href="<?php echo esc_url(dlp_fe_rs_url_maps($t)); ?>" target="_blank" rel="noopener" aria-label="Abrir mapa de <?php echo esc_attr($t['nombre']); ?>"><?php echo DLP_FE_RS_ICO_MAPA; ?></a>
                                     <a class="dlprs-wz" href="<?php echo esc_url(dlp_fe_rs_url_waze($t)); ?>" target="_blank" rel="noopener" aria-label="Cómo llegar a <?php echo esc_attr($t['nombre']); ?> con Waze"><?php echo DLP_FE_RS_ICO_WAZE; ?></a>

@@ -322,3 +322,8 @@ Faltan: pedidos con extras de varios días de disponibilidad, cupones, tarjeta (
 - 2026-11-02, segunda carpeta de Drive (1Ih-7g1E7eRVyTV4zdhMeQPcuVb8qM6mQ, JPG 500×500; repite 1–18 y suma Kids 19, Trío de Clásicas, Trío Del Puente, Felices los 4): se pusieron (WebP q82, ~37 KB) Trío de Clásicas 126123 (adjunto 159200), Trío Del Puente 126125 (159201) y Felices los 4 122472 (159202). Respaldo: `~/dlp-backups/combos-thumbnails-antes-drive2-2026-11-02.txt`. No se tocaron las fotos 1–15 ya cargadas ni 16–18 (Express, sin producto) ni la 19 (Kids); siguen sin foto nueva Las Favoritas, Carnuda lovers y los SMASH.
 - 2026-11-02: foto 19 (Kids, JPG 500×500) → Combo - Hamburguesa Infantil 2059 (adjunto nuevo; antes 159198). Respaldo: `~/dlp-backups/combos-thumbnails-antes-kids19-2026-11-02.txt`.
 - 2026-11-02: íconos del carrusel de /menu/ (página 158945): «promos» → `felices4-150x150.webp` (Felices los 4) y «Combos de pollo» → `11-honey-150x150.webp` (Chicken Honey Mustard). Respaldo: `~/dlp-backups/pagina-menu-158945-antes-iconos-promos-pollo.txt` (servidor). Purgado solo `/menu/`.
+
+## 0.41.2 — Restaurantes lista todas las tiendas (2026-11-03)
+- La página y el mapa ya no esconden las tiendas desactivadas: se listan las 35 (antes 30). Una tienda desactivada se muestra sin Delivery ni Pickup, con «Servicio en el restaurante» / «Solo en restaurante» (pueden tener servicio de mesa).
+- Siguen ocultas solo las que tengan marcado «No mostrar en la página Restaurantes». Los filtros Delivery, Pickup y «Abierto ahora» las excluyen; «Todos» las incluye.
+- Alamos, Diagonal 6, Metroplaza Morales, San Miguel Petapa y Villa Lobos son las 5 sin servicio hoy.
