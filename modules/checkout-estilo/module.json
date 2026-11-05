@@ -10,6 +10,7 @@
   "default": true,
   "css": "style.css",
   "js": "script.js",
+  "php": "module.php",
   "settings": [
     {
       "key": "color_icono",
