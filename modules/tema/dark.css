@@ -77,7 +77,7 @@ body.dlpck-on .dlpck input[type=checkbox] { accent-color: var(--dlp-btn); }
 .dlpck .selec-del label.wf_field_wrapper:has(input:checked) { background: var(--dlp-btn); color: var(--dlp-btn-tx); box-shadow: none; }
 .dlpck #dlp-delivery-box > p, .dlpck-sum table.shop_table .variation, .dlpck-sum table.shop_table dl, .dlpck #payment div.payment_box, .dlpck-legal { color: var(--dlp-mut) !important; }
 body.dlpck-on .dlpck .dlp-actions .button { background: transparent !important; border-color: var(--dlp-tx) !important; color: var(--dlp-tx) !important; }
-body.dlpck-on .dlpck .dlp-actions .button.alt { background: var(--dlp-btn) !important; border-color: var(--dlp-btn) !important; color: var(--dlp-btn-tx) !important; }
+body.dlpck-on .dlpck .dlp-actions .button.alt, body.dlpck-on .dlpck .dlp-actions .button.dlp-sel { background: var(--dlp-btn) !important; border-color: var(--dlp-btn) !important; color: var(--dlp-btn-tx) !important; }
 .dlpck-sum table.shop_table th, .dlpck-sum table.shop_table td { border-bottom-color: var(--dlp-line); }
 .dlpck #payment ul.payment_methods > li { background: var(--dlp-field); border-color: var(--dlp-line); }
 .dlpck #payment ul.payment_methods > li:has(input:checked) { border-color: var(--dlp-tx); }

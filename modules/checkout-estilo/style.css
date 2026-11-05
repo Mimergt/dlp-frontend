@@ -49,7 +49,11 @@ body.dlpck-on .dlpck label.checkbox { display: flex; align-items: center; margin
 .dlpck #dlp-delivery-box > p { margin: 0 0 10px; font-size: 13px; color: #6b6b75; }
 .dlpck .dlp-actions { display: flex; gap: 8px; flex-wrap: wrap; margin: 0 0 10px; }
 body.dlpck-on .dlpck .dlp-actions .button { flex: 1; margin: 0; padding: 12px 10px !important; border: 1.5px solid #111 !important; border-radius: 999px !important; background: #fff !important; color: #111 !important; font: 700 11.5px/1.1 "Open Sans", system-ui, sans-serif !important; letter-spacing: .03em; text-transform: uppercase; }
-body.dlpck-on .dlpck .dlp-actions .button.alt { background: #111 !important; color: #fff !important; }
+body.dlpck-on .dlpck .dlp-actions .button.alt, body.dlpck-on .dlpck .dlp-actions .button.dlp-sel { background: #111 !important; color: #fff !important; }
+.dlpck .dlp-actions .button.dlp-sel::before { content: "\2713\00a0"; display: inline !important; position: static !important; width: auto !important; height: auto !important; margin: 0 !important; font: inherit !important; color: inherit !important; opacity: 1 !important; transform: none !important; }
+/* Woo oculta la etiqueta de los campos de dirección (screen-reader-text): aquí se muestra para explicar qué va en el campo. */
+body.dlpck-on .dlpck #billing_address_2_field > label.screen-reader-text { position: static !important; clip: auto !important; clip-path: none !important; width: auto !important; height: auto !important; overflow: visible !important; margin: 0 0 4px 2px !important; padding: 0 !important; }
+body.dlpck-on .dlpck #billing_address_2_field::after { content: "Calle, avenida, zona, número de casa o apartamento y clave de acceso, para que el repartidor te encuentre."; display: block; margin: 5px 2px 0; font: 400 12px/1.35 "Open Sans", system-ui, sans-serif; color: #8d8d96; }
 .dlpck #dlp-checkout-map { border-radius: 14px; overflow: hidden; }
 
 /* Resumen */
