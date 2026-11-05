@@ -36,7 +36,7 @@ function dlp_fe_cr_grupos($product_id) {
     }
     foreach ((array) WC_Product_Addons_Helper::get_product_addons($product_id) as $a) {
         if (($a['type'] ?? '') === 'input_multiplier' && function_exists('dlp_fe_xg_marca') && ($g = dlp_fe_xg_marca($a['description'] ?? ''))) {
-            $t = preg_replace(['/^Elige tus? \d+\s+/iu', '/^Añade\s+/iu'], '', $g['titulo']);
+            $t = preg_replace(['/^Elige tus? \d+\s+/iu', '/^Añade\s+/iu', '/^Agrega\s+(?:un|una)\s+/iu'], '', $g['titulo']);
             $mapa[dlp_fe_cr_txt($a['name'])] = ['t' => mb_strtoupper(mb_substr($t, 0, 1)) . mb_substr($t, 1), 'p' => !empty($a['adjust_price']) ? (float) $a['price'] : 0.0];
         }
     }
