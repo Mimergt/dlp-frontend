@@ -152,3 +152,8 @@ body.dlpck-on .dlpck p.form-row.woocommerce-invalid > label { color: #ff9a92 !im
 .dlpck-cp form input.input-text { background: var(--dlp-field) !important; border-color: var(--dlp-line) !important; color: var(--dlp-tx); }
 .dlpck-cp form input.input-text:focus { border-color: var(--dlp-tx) !important; }
 .dlpck-cp form button.button { background: var(--dlp-btn) !important; color: var(--dlp-btn-tx) !important; }
+
+body.dlpck-on .dlpck .dlp-combo-input { background-color: var(--dlp-surface, transparent); color: var(--dlp-tx); border-color: var(--dlp-line) !important; }
+.dlpck .dlp-combo-list { background: var(--dlp-surface, #1b1b1f); border-color: var(--dlp-line); }
+.dlpck .dlp-combo-list li { color: var(--dlp-tx); }
+.dlpck .dlp-combo-list li:hover, .dlpck .dlp-combo-list li.dlp-combo-act { background: rgba(255,255,255,.08); }
