@@ -335,3 +335,8 @@ Faltan: pedidos con extras de varios días de disponibilidad, cupones, tarjeta (
 - Carga inicial (de la lista de producción y del mapa del cliente): Villa Canales (punto del mapa rotulado «Express Boca Del Monte», supuesto), Boca Del Monte, Progreso Jutiapa, Chiquimulilla y Zacapa con coordenadas; San José Pinula y Olintepeque sin coordenadas ni dirección (pendiente del cliente). Teléfono general 2306 2323.
 - Si un Express pasa a tener pickup/delivery, hay que crearlo como tienda real y quitarlo de este ajuste.
 - Producción: el ajuste `express` es dato (opción `dlp_fe_modules`), viaja con el overwrite.
+
+## Postres reales (2026-11-05, solo dev, datos)
+- 7 productos simples en la categoría Postres (89), publicados, creados con WC_Product_Simple (sin descripción): Tres Leches Q29 (159212), Chocolate Fudge Q29 (159214), Pie de Manzana Q29 (159216), Galleta Chispas de Chocolate Q15 (159218), Galleta Azúcar Canela Q15 (159220), Galleta Sprinkles Q15 (159222), Galleta Macadamia Q15 (159224); `menu_order` 10–70 en ese orden. Fotos de la carpeta de Drive del cliente (1kXlZWLVErf3pagMzmF1pl-mJLgE3isfk): los frascos 500×500 y las galletas PNG 1254² reducidas a WebP 700 px.
+- Las 12 bebidas de relleno (9 publicadas + 3 borrador) salieron de Postres y siguen solo en Bebidas (ids en `~/dlp-backups/postres-relleno-bebidas-ids-2026-11-05.txt` del servidor). No hay tab de Bebidas en /menu/: solo se ven como extras de los combos.
+- Verificado en dev: la pestaña Postres de /menu/ muestra los 7 con foto y precio. La miniatura de la categoría (portada) sigue siendo el vaso de postres. Para producción: son productos y adjuntos (datos); crearlos allí o llevarlos con la base.
