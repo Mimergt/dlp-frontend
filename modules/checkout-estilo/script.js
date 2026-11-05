@@ -108,6 +108,24 @@
   if (window.jQuery) jQuery(document.body).on('updated_checkout', function () { setTimeout(tune, 30); });
   [600, 1500, 3000].forEach(function (ms) { setTimeout(tune, ms); });
 
+  // Etiquetas más cortas del formulario de tarjeta (el plugin de Cybersource las dibuja de nuevo al cambiar los totales o elegir el método).
+  var cortas = { 'wc-cybersource-credit-card-expiry': 'Vence', 'wc-cybersource-credit-card-csc': 'CVV' };
+  function etiquetas() {
+    Object.keys(cortas).forEach(function (k) {
+      var l = document.querySelector('#wc-cybersource-credit-card-credit-card-form label[for^="' + k + '"]');
+      if (!l || l.getAttribute('data-dlp') === cortas[k]) return;
+      var t = l.firstChild;
+      while (t && t.nodeType !== 3) t = t.nextSibling;
+      if (t) {
+        var sig = t.nextSibling && t.nextSibling.textContent || '';
+        t.nodeValue = cortas[k] + (/^\s/.test(sig) ? '' : '\u00a0'); // el asterisco de algunos campos ya trae su espacio
+        l.setAttribute('data-dlp', cortas[k]);
+      }
+    });
+  }
+  if (window.MutationObserver) new MutationObserver(etiquetas).observe(document.getElementById('order_review') || document.body, { childList: true, subtree: true });
+  etiquetas();
+
   // ---- Avisos: tocar un error lleva al campo que hay que corregir -----------------------------------------------------------
   document.addEventListener('click', function (e) {
     var li = e.target.closest && e.target.closest('ul.woocommerce-error li[data-id]');
