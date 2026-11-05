@@ -81,6 +81,9 @@ body.dlpck-on .dlpck .dlp-actions .button.alt, body.dlpck-on .dlpck .dlp-actions
 .dlpck-sum table.shop_table th, .dlpck-sum table.shop_table td { border-bottom-color: var(--dlp-line); }
 .dlpck #payment ul.payment_methods > li { background: var(--dlp-field); border-color: var(--dlp-line); }
 .dlpck #payment ul.payment_methods > li:has(input:checked) { border-color: var(--dlp-tx); }
+.dlpck #payment ul.payment_methods > li > input.input-radio { background-color: transparent; border-color: var(--dlp-mut); }
+.dlpck #payment ul.payment_methods > li > input.input-radio:checked { border-color: var(--dlp-tx); background: radial-gradient(circle, var(--dlp-bg) 0 3px, var(--dlp-tx) 3.5px); }
+.dlpck #payment ul.payment_methods > li.payment_method_cod > label::after { filter: none; background-color: #f3f3f5; }
 body.dlpck-on .dlpck #place_order { background: var(--dlp-btn) !important; color: var(--dlp-btn-tx) !important; }
 body.dlpck-on .dlpck #payment .woocommerce-terms-and-conditions-wrapper { color: var(--dlp-mut); }
 @media (max-width: 1023px) { body.dlpck-on .dlpck #payment .place-order { background: color-mix(in srgb, var(--dlp-bg) 97%, transparent); border-top-color: var(--dlp-line); box-shadow: 0 -10px 24px -14px rgba(0,0,0,.8); } }
