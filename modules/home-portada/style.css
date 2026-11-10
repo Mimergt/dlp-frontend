@@ -140,6 +140,8 @@ body.dlp-prod--etiqueta ul.products li.product:hover a.woocommerce-LoopProduct-l
 }
 /* El módulo Shop de Divi fuerza (con !important) título en Open Sans 13px, precio en Abel delgado y texto centrado;
    por eso estas reglas llevan el selector largo. Título y precio quedan en la misma tipografía. */
+/* Todas las tarjetas del menú miden lo mismo: el título reserva siempre dos líneas. Divi pone `min-height: 0 !important` a los h2 de los módulos de tienda 1 y 2 (pestañas Combos, Individuales...), así que aquí se le gana con más especificidad. Solo afecta a la tarjeta (texto), no a las fotos. */
+body.dlp-prod--etiqueta .et_pb_shop ul.products li.product h2.woocommerce-loop-product__title { min-height: calc(1.3em * 2) !important; }
 body.dlp-prod--etiqueta .et_pb_shop .woocommerce ul.products li.product .woocommerce-loop-product__title { font-family: "Open Sans", Helvetica, Arial, sans-serif !important; font-size: 14px !important; font-weight: 700 !important; line-height: 1.3 !important; text-align: left !important; text-transform: uppercase !important; }
 body.dlp-prod--etiqueta .et_pb_shop .woocommerce ul.products li.product .price, body.dlp-prod--etiqueta .et_pb_shop .woocommerce ul.products li.product .price .amount, body.dlp-prod--etiqueta .et_pb_shop .woocommerce ul.products li.product .price bdi, body.dlp-prod--etiqueta .et_pb_shop .woocommerce ul.products li.product .price .woocommerce-Price-currencySymbol { font-family: "Open Sans", Helvetica, Arial, sans-serif !important; font-weight: 700 !important; font-size: 15px !important; color: #fff !important; text-transform: none !important; }
 @media (max-width: 767px) {
