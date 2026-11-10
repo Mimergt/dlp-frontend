@@ -142,6 +142,9 @@ body.dlp-prod--etiqueta ul.products li.product:hover a.woocommerce-LoopProduct-l
    por eso estas reglas llevan el selector largo. Título y precio quedan en la misma tipografía. */
 /* Todas las tarjetas del menú miden lo mismo: el título reserva siempre dos líneas. Divi pone `min-height: 0 !important` a los h2 de los módulos de tienda 1 y 2 (pestañas Combos, Individuales...), así que aquí se le gana con más especificidad. Solo afecta a la tarjeta (texto), no a las fotos. */
 body.dlp-prod--etiqueta .et_pb_shop ul.products li.product h2.woocommerce-loop-product__title { min-height: calc(1.3em * 2) !important; }
+/* Respaldo: las tarjetas de una misma fila se estiran a la altura de la más alta (flex en lugar de float; los anchos y márgenes de WooCommerce no cambian). */
+body.dlp-prod--etiqueta .et_pb_shop ul.products { display: flex !important; flex-wrap: wrap; align-items: stretch; }
+body.dlp-prod--etiqueta .et_pb_shop ul.products::before, body.dlp-prod--etiqueta .et_pb_shop ul.products::after { display: none !important; }
 body.dlp-prod--etiqueta .et_pb_shop .woocommerce ul.products li.product .woocommerce-loop-product__title { font-family: "Open Sans", Helvetica, Arial, sans-serif !important; font-size: 14px !important; font-weight: 700 !important; line-height: 1.3 !important; text-align: left !important; text-transform: uppercase !important; }
 body.dlp-prod--etiqueta .et_pb_shop .woocommerce ul.products li.product .price, body.dlp-prod--etiqueta .et_pb_shop .woocommerce ul.products li.product .price .amount, body.dlp-prod--etiqueta .et_pb_shop .woocommerce ul.products li.product .price bdi, body.dlp-prod--etiqueta .et_pb_shop .woocommerce ul.products li.product .price .woocommerce-Price-currencySymbol { font-family: "Open Sans", Helvetica, Arial, sans-serif !important; font-weight: 700 !important; font-size: 15px !important; color: #fff !important; text-transform: none !important; }
 @media (max-width: 767px) {
