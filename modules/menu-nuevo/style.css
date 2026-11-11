@@ -1,0 +1,58 @@
+/* Menú nuevo: barra de categorías fija + todas las categorías en una página. Todo va dentro de .dlpm. */
+body.dlpm-page #main-content, body.dlpm-page #page-container, body.dlpm-page #et-main-area, body.dlpm-page .et-l--post { background: var(--dlp-bg, #fff) !important; }
+body.dlpm-page #main-content .container { padding-top: 0 !important; width: 100% !important; max-width: none !important; }
+body.dlpm-page #main-content .container::before { display: none !important; }
+body.dlpm-page #left-area { width: 100% !important; float: none !important; padding: 0 !important; }
+body.dlpm-page #sidebar, body.dlpm-page .entry-title, body.dlpm-page h1.main_title { display: none !important; }
+body.dlpm-page .et_pb_post, body.dlpm-page .entry-content { margin: 0 !important; padding: 0 !important; }
+
+.dlpm { --dlpm-ac: var(--dlp-menu-nuevo-acento, #CF1E26); --dlpm-top: 0px; position: relative; max-width: 1240px; margin: 0 auto; padding: 0 12px 110px; font-family: "Open Sans", system-ui, sans-serif; color: var(--dlp-tx, #111); }
+.dlpm *, .dlpm *::before, .dlpm *::after { box-sizing: border-box; }
+
+/* ---- Barra fija ---------------------------------------------------------------------------------------- */
+.dlpm-nav { position: sticky; top: var(--dlpm-top); z-index: 40; margin: 0 -12px; padding: 8px 12px 6px; background: color-mix(in srgb, var(--dlp-bg, #fff) 94%, transparent); -webkit-backdrop-filter: saturate(1.4) blur(10px); backdrop-filter: saturate(1.4) blur(10px); border-bottom: 1px solid var(--dlp-line, #ececf0); }
+.dlpm-bar { display: flex; align-items: center; gap: 8px; }
+.dlpm-sbtn { flex: none; display: grid; place-items: center; width: 44px; height: 44px; padding: 0; border: 1.5px solid var(--dlp-line, #e3e3e8); border-radius: 999px; background: var(--dlp-bg, #fff); color: var(--dlp-tx, #111); cursor: pointer; }
+.dlpm-sbtn[aria-expanded="true"] { background: var(--dlp-tx, #111); color: var(--dlp-bg, #fff); border-color: var(--dlp-tx, #111); }
+.dlpm-chips { flex: 1; min-width: 0; display: flex; gap: 8px; overflow-x: auto; overscroll-behavior-x: contain; scroll-snap-type: x proximity; scrollbar-width: none; -webkit-overflow-scrolling: touch; padding: 2px 2px; }
+.dlpm-chips::-webkit-scrollbar { display: none; }
+.dlpm-chip { flex: none; display: inline-flex; align-items: center; gap: 8px; height: 44px; padding: 0 16px 0 7px; border: 1.5px solid var(--dlp-line, #e3e3e8); border-radius: 999px; background: var(--dlp-bg, #fff); color: var(--dlp-tx, #111) !important; font: 700 12.5px/1 "Open Sans", system-ui, sans-serif; letter-spacing: .02em; text-transform: uppercase; text-decoration: none !important; white-space: nowrap; scroll-snap-align: center; transition: background .15s, color .15s, border-color .15s; -webkit-tap-highlight-color: transparent; }
+.dlpm-chip img { width: 30px; height: 30px; border-radius: 50%; object-fit: cover; background: #fff; }
+.dlpm-chip:not(:has(img)) { padding-left: 16px; }
+.dlpm-chip.on { background: var(--dlp-tx, #111); border-color: var(--dlp-tx, #111); color: var(--dlp-bg, #fff) !important; }
+.dlpm-chip.vacio { opacity: .35; }
+.dlpm-search { display: flex; align-items: center; gap: 6px; padding: 8px 0 2px; }
+.dlpm-search[hidden] { display: none; }
+.dlpm-search label { flex: 1; margin: 0; }
+.dlpm-q { width: 100%; height: 44px; padding: 0 14px; border: 1.5px solid var(--dlp-line, #e3e3e8); border-radius: 14px; background: var(--dlp-field, #fcfcfd); color: var(--dlp-tx, #111); font: 400 16px/1 "Open Sans", system-ui, sans-serif; box-shadow: none; -webkit-appearance: none; appearance: none; }
+.dlpm-q:focus { outline: 0; border-color: var(--dlp-tx, #111); }
+.dlpm-q::-webkit-search-cancel-button { display: none; }
+.dlpm-qx { flex: none; width: 44px; height: 44px; padding: 0; border: 0; border-radius: 999px; background: transparent; color: var(--dlp-mut, #6b6b75); font-size: 26px; line-height: 1; cursor: pointer; }
+.dlpm-qx[hidden] { display: none; }
+
+/* ---- Secciones ----------------------------------------------------------------------------------------- */
+.dlpm-sec { padding-top: 22px; } /* sin content-visibility: sus alturas estimadas movían las secciones y el scroll por categoría caía mal */
+.dlpm-sec[hidden] { display: none; }
+.dlpm-sec > h2 { display: flex; align-items: baseline; gap: 8px; margin: 0 2px 12px; padding: 0; font: 800 20px/1.2 "Open Sans", system-ui, sans-serif; letter-spacing: .01em; text-transform: uppercase; color: var(--dlp-tx, #111); }
+.dlpm-sec > h2 small { font: 600 12px/1 "Open Sans", system-ui, sans-serif; color: var(--dlp-mut, #8d8d96); letter-spacing: 0; }
+.dlpm-grid.products { display: grid !important; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; margin: 0 !important; padding: 0 !important; list-style: none; }
+.dlpm-grid.products::before, .dlpm-grid.products::after { display: none !important; }
+@media (min-width: 768px) { .dlpm { padding-inline: 20px; } .dlpm-nav { margin-inline: -20px; padding-inline: 20px; } .dlpm-grid.products { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; } .dlpm-sec > h2 { font-size: 24px; } }
+@media (min-width: 1100px) { .dlpm-grid.products { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 20px; } }
+
+/* ---- Tarjeta ------------------------------------------------------------------------------------------- */
+.dlpm-grid.products li.product { position: relative; float: none !important; width: auto !important; margin: 0 !important; padding: 8px 8px 12px !important; clear: none !important; background: var(--dlp-card, #fff); border: 1px solid var(--dlp-line, #ececf0); border-radius: 18px; transition: box-shadow .2s, transform .2s, border-color .2s; }
+.dlpm-grid.products li.product:hover { box-shadow: 0 12px 26px rgba(0,0,0,.10); transform: translateY(-3px); border-color: transparent; }
+.dlpm-grid.products li.product a.woocommerce-LoopProduct-link { display: block; text-align: left; color: inherit !important; text-decoration: none !important; -webkit-tap-highlight-color: transparent; }
+.dlpm-img { position: relative; display: block; margin: 0; }
+.dlpm-img img { display: block; width: 100%; height: auto; aspect-ratio: 1; object-fit: cover; margin: 0; border-radius: 12px; background: transparent; }
+.dlpm-plus { position: absolute; right: 6px; bottom: 6px; display: grid; place-items: center; width: 30px; height: 30px; border-radius: 50%; background: #111; color: #fff; font: 400 21px/1 "Open Sans", system-ui, sans-serif; font-style: normal; box-shadow: 0 2px 8px rgba(0,0,0,.25); transition: background .2s, transform .2s; }
+li.product:hover .dlpm-plus { background: var(--dlpm-ac); transform: scale(1.08); }
+.dlpm-grid.products li.product .woocommerce-loop-product__title { margin: 8px 4px 0 !important; padding: 0 !important; min-height: calc(1.3em * 2); font: 700 12px/1.3 "Open Sans", system-ui, sans-serif; letter-spacing: .02em; text-transform: uppercase; text-align: left; color: var(--dlp-tx, #111) !important; }
+.dlpm-grid.products li.product .price { position: absolute; left: 14px; top: 14px; z-index: 2; margin: 0 !important; padding: 6px 10px !important; border-radius: 999px; background: #111; color: #fff !important; font: 700 13px/1 "Open Sans", system-ui, sans-serif !important; font-variant-numeric: tabular-nums; box-shadow: 0 6px 14px rgba(0,0,0,.28); }
+.dlpm-grid.products li.product .price .amount, .dlpm-grid.products li.product .price bdi, .dlpm-grid.products li.product .price .woocommerce-Price-currencySymbol { color: #fff !important; font: inherit !important; }
+.dlpm-grid.products li.product .price del { opacity: .7; margin-right: 4px; }
+@media (min-width: 768px) { .dlpm-grid.products li.product { padding: 10px 10px 14px !important; border-radius: 20px; } .dlpm-grid.products li.product .woocommerce-loop-product__title { font-size: 14px; margin-top: 12px !important; } .dlpm-grid.products li.product .price { left: 20px; top: 20px; padding: 8px 13px !important; font-size: 15px !important; } .dlpm-plus { width: 34px; height: 34px; right: 8px; bottom: 8px; font-size: 24px; } }
+.dlpm-none { margin: 40px 0; text-align: center; font-size: 15px; color: var(--dlp-mut, #6b6b75); }
+.dlpm-none[hidden] { display: none; }
+@media (prefers-reduced-motion: reduce) { .dlpm *, .dlpm *::before { transition: none !important; } }

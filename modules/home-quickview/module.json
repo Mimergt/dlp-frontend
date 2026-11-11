@@ -10,7 +10,8 @@
     "home",
     "shop",
     "category",
-    "page:menu"
+    "page:menu",
+    "page:menu-nuevo"
   ],
   "default": true,
   "css": "style.css",

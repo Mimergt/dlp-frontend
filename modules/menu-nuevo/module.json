@@ -1,0 +1,29 @@
+{
+  "label": "Menú nuevo (categorías con barra fija y búsqueda)",
+  "description": "Página de menú propia, sin Divi ni el plugin de pestañas: una barra de categorías fija que se mueve sola con el scroll, todas las categorías en una sola página, búsqueda y tarjetas ligeras (imágenes diferidas, HTML guardado en caché). Los productos abren la vista rápida de siempre. Se pinta sobre la página con el slug indicado (menu-nuevo mientras se prueba; al cambiar el menú se pone menu).",
+  "section": "home",
+  "tab": "Menú nuevo",
+  "order": 8,
+  "boot": true,
+  "php": "module.php",
+  "where": [
+    "page:menu-nuevo",
+    "page:menu"
+  ],
+  "default": true,
+  "css": "style.css",
+  "js": "script.js",
+  "settings": [
+    {"key": "slug", "label": "Página (slug)", "type": "text", "default": "menu-nuevo", "css_var": false},
+    {"key": "buscar", "label": "Texto del buscador", "type": "text", "default": "Buscar en el menú", "css_var": false},
+    {
+      "key": "categorias",
+      "label": "Categorías (una por línea)",
+      "type": "textarea",
+      "css_var": false,
+      "default": "promos | Promos | /wp-content/uploads/2024/10/felices4-150x150.webp\ncombos | Combos de res | /wp-content/uploads/2020/07/1-clasica-150x150.webp\nopciones-pollo | Combos de pollo | /wp-content/uploads/2023/11/11-honey-150x150.webp\nhamburguesas | Hamburguesas individuales | /wp-content/uploads/2026/01/2-Hamburguesa-Del_Puente-150x150.png\npara-compartir | Para compartir | /wp-content/uploads/2020/07/BOX-Mr_Tocino-1200x1200px-150x150.jpg\nsides | Sides | /wp-content/uploads/2020/07/WEB-Cheese-Poppers-1200x1200px-150x150.jpg\npostres | Postres | /wp-content/uploads/2026/10/postres-vaso-500x500-1-150x150.jpg\ndo-it-yourself | Para hacer en casa | /wp-content/uploads/2020/07/Web-del-puente-150x150.jpg",
+      "help": "Formato: slug-de-la-categoría | Título | foto del ícono (ruta que empieza con /wp-content/… o URL; opcional). El orden de los productos es el de «Orden» de cada producto."
+    },
+    {"key": "acento", "label": "Color de acento", "type": "color", "default": "#CF1E26"}
+  ]
+}
