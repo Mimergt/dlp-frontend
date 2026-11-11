@@ -81,25 +81,47 @@ function dlp_fe_mn_tarjeta($p, $eager) {
     return ob_get_clean();
 }
 
+function dlp_fe_mn_barras() {
+    return ['burbujas' => 'Burbujas', 'pestanas' => 'Pestañas', 'pildoras' => 'Píldoras', 'selector' => 'Selector'];
+}
+
 function dlp_fe_mn_html() {
-    $cats = dlp_fe_mn_categorias();
-    $key  = 'dlp_fe_mn_' . md5(DLP_FE_VERSION . '|' . get_option('dlp_fe_mn_ver', '0') . '|' . dlp_fe_mn_cfg('categorias') . '|' . dlp_fe_mn_cfg('buscar'));
-    $html = get_transient($key);
+    $cats  = dlp_fe_mn_categorias();
+    $barra = dlp_fe_mn_cfg('barra');
+    $barra = isset(dlp_fe_mn_barras()[$barra]) ? $barra : 'burbujas';
+    $prueba = trim((string) dlp_fe_mn_cfg('slug'), '/') !== 'menu';
+    $key   = 'dlp_fe_mn_' . md5(DLP_FE_VERSION . '|' . get_option('dlp_fe_mn_ver', '0') . '|' . dlp_fe_mn_cfg('categorias') . '|' . dlp_fe_mn_cfg('buscar') . '|' . $barra . '|' . (int) $prueba);
+    $html  = get_transient($key);
     if (is_string($html) && $html !== '') {
         return $html;
     }
+    $con = [];
+    foreach ($cats as $c) {
+        $prods = wc_get_products(['status' => 'publish', 'limit' => -1, 'category' => [$c['slug']], 'orderby' => 'menu_order', 'order' => 'ASC', 'visibility' => 'catalog']);
+        if ($prods) {
+            $c['prods'] = $prods;
+            $con[] = $c;
+        }
+    }
+    $img = function ($c, $w) {
+        return $c['foto'] ? '<img src="' . esc_url($c['foto']) . '" alt="" width="' . $w . '" height="' . $w . '" loading="eager" decoding="async">' : '';
+    };
     ob_start();
     ?>
-    <div class="dlpm" id="dlpm">
+    <div class="dlpm" id="dlpm" data-barra="<?php echo esc_attr($barra); ?>"<?php echo $prueba ? ' data-prueba="1"' : ''; ?>>
         <div class="dlpm-nav" id="dlpm-nav">
             <div class="dlpm-bar">
                 <button type="button" class="dlpm-sbtn" aria-label="<?php echo esc_attr(dlp_fe_mn_cfg('buscar')); ?>" aria-expanded="false">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
                 </button>
+                <button type="button" class="dlpm-cur" aria-haspopup="true" aria-expanded="false">
+                    <span class="dlpm-cur-i"></span><span class="dlpm-cur-t"></span>
+                    <svg class="dlpm-cur-v" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+                </button>
                 <div class="dlpm-chips" role="tablist" aria-label="Categorías">
-                    <?php foreach ($cats as $i => $c) : ?>
-                        <a class="dlpm-chip<?php echo $i === 0 ? ' on' : ''; ?>" href="#categoria-<?php echo esc_attr($c['slug']); ?>" data-s="<?php echo esc_attr($c['slug']); ?>">
-                            <?php if ($c['foto']) : ?><img src="<?php echo esc_url($c['foto']); ?>" alt="" width="30" height="30" loading="eager" decoding="async"><?php endif; ?>
+                    <?php foreach ($con as $i => $c) : ?>
+                        <a class="dlpm-chip<?php echo $i === 0 ? ' on' : ''; ?>" role="tab" aria-selected="<?php echo $i === 0 ? 'true' : 'false'; ?>" href="#categoria-<?php echo esc_attr($c['slug']); ?>" data-s="<?php echo esc_attr($c['slug']); ?>" data-t="<?php echo esc_attr($c['titulo']); ?>">
+                            <?php echo $img($c, 56); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
                             <span><?php echo esc_html($c['titulo']); ?></span>
                         </a>
                     <?php endforeach; ?>
@@ -111,18 +133,31 @@ function dlp_fe_mn_html() {
                 </label>
                 <button type="button" class="dlpm-qx" aria-label="Borrar búsqueda" hidden>&times;</button>
             </div>
+            <div class="dlpm-sheet" hidden>
+                <?php foreach ($con as $i => $c) : ?>
+                    <a class="dlpm-tile<?php echo $i === 0 ? ' on' : ''; ?>" href="#categoria-<?php echo esc_attr($c['slug']); ?>" data-s="<?php echo esc_attr($c['slug']); ?>">
+                        <?php echo $img($c, 64); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+                        <span><?php echo esc_html($c['titulo']); ?></span>
+                    </a>
+                <?php endforeach; ?>
+            </div>
         </div>
-        <?php $n = 0; foreach ($cats as $c) :
-            $prods = wc_get_products(['status' => 'publish', 'limit' => -1, 'category' => [$c['slug']], 'orderby' => 'menu_order', 'order' => 'ASC', 'visibility' => 'catalog']);
-            if (!$prods) { continue; } ?>
-            <section class="dlpm-sec" id="categoria-<?php echo esc_attr($c['slug']); ?>" data-s="<?php echo esc_attr($c['slug']); ?>" aria-labelledby="dlpm-h-<?php echo esc_attr($c['slug']); ?>">
-                <h2 id="dlpm-h-<?php echo esc_attr($c['slug']); ?>"><?php echo esc_html($c['titulo']); ?><small><?php echo count($prods); ?></small></h2>
-                <ul class="products dlpm-grid columns-4">
-                    <?php foreach ($prods as $p) { echo dlp_fe_mn_tarjeta($p, $n++ < 4); } // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
-                </ul>
-            </section>
-        <?php endforeach; ?>
-        <p class="dlpm-none" hidden>No encontramos productos con ese nombre.</p>
+        <div class="dlpm-body">
+            <?php $n = 0; foreach ($con as $i => $c) : ?>
+                <section class="dlpm-sec" id="categoria-<?php echo esc_attr($c['slug']); ?>" data-s="<?php echo esc_attr($c['slug']); ?>" aria-label="<?php echo esc_attr($c['titulo']); ?>"<?php echo $i === 0 ? '' : ' hidden'; ?>>
+                    <ul class="products dlpm-grid columns-4">
+                        <?php foreach ($c['prods'] as $p) { echo dlp_fe_mn_tarjeta($p, $i === 0 && $n++ < 4); } // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+                    </ul>
+                </section>
+            <?php endforeach; ?>
+            <p class="dlpm-none" hidden>No encontramos productos con ese nombre.</p>
+        </div>
+        <?php if ($prueba) : ?>
+            <div class="dlpm-prueba" hidden role="group" aria-label="Probar diseño de la barra">
+                <b>Diseño</b>
+                <?php foreach (dlp_fe_mn_barras() as $k => $l) : ?><button type="button" data-b="<?php echo esc_attr($k); ?>"><?php echo esc_html($l); ?></button><?php endforeach; ?>
+            </div>
+        <?php endif; ?>
     </div>
     <?php
     $html = ob_get_clean();
