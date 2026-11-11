@@ -116,13 +116,14 @@ function dlp_fe_mn_html() {
                 </button>
                 <div class="dlpm-chips" role="tablist" aria-label="Categorías">
                     <?php foreach ($con as $i => $c) : ?>
-                        <a class="dlpm-chip<?php echo $i === 0 ? ' on' : ''; ?>" role="tab" aria-selected="<?php echo $i === 0 ? 'true' : 'false'; ?>" href="#categoria-<?php echo esc_attr($c['slug']); ?>" data-s="<?php echo esc_attr($c['slug']); ?>" data-t="<?php echo esc_attr($c['titulo']); ?>">
+                        <a class="dlpm-chip<?php echo $i === 0 ? ' on' : ''; ?>" role="tab" aria-selected="<?php echo $i === 0 ? 'true' : 'false'; ?>" href="<?php echo esc_url(add_query_arg('categoria', $c['slug'])); ?>" data-s="<?php echo esc_attr($c['slug']); ?>" data-t="<?php echo esc_attr($c['titulo']); ?>">
                             <?php echo $img($c, 64); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
                             <span><?php echo esc_html($c['titulo']); ?></span>
                         </a>
                     <?php endforeach; ?>
                 </div>
             </div>
+            <div class="dlpm-prog" aria-hidden="true"><i></i></div>
             <div class="dlpm-search" hidden>
                 <label><span class="screen-reader-text"><?php echo esc_html(dlp_fe_mn_cfg('buscar')); ?></span>
                     <input type="search" class="dlpm-q" placeholder="<?php echo esc_attr(dlp_fe_mn_cfg('buscar')); ?>" autocomplete="off" enterkeyhint="search">

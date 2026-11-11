@@ -7,6 +7,7 @@
   var chips = [].slice.call(nav.querySelectorAll('.dlpm-chip')), secs = [].slice.call(root.querySelectorAll('.dlpm-sec'));
   var sBtn = nav.querySelector('.dlpm-sbtn'), sBox = nav.querySelector('.dlpm-search'), q = nav.querySelector('.dlpm-q'), qx = nav.querySelector('.dlpm-qx'), none = root.querySelector('.dlpm-none');
   var slugs = chips.map(function (c) { return c.getAttribute('data-s'); });
+  var prog = nav.querySelector('.dlpm-prog'), thumb = prog && prog.querySelector('i');
   var activa = slugs[0], reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   // Alto de lo que el tema deja fijo arriba (header de Divi, si queda fijo): la barra se pega justo debajo.
@@ -22,6 +23,21 @@
     return Math.round(max);
   }
   function setTop() { root.style.setProperty('--dlpm-top', topOffset() + 'px'); }
+
+  // ---- Indicador de desplazamiento de la barra (celular) ------------------------------------------------
+  function indicar() {
+    var max = chipsBox.scrollWidth - chipsBox.clientWidth, x = chipsBox.scrollLeft;
+    var hay = max > 4;
+    chipsBox.classList.toggle('fade-r', hay && x < max - 4);
+    chipsBox.classList.toggle('fade-l', hay && x > 4);
+    if (!prog) return;
+    prog.hidden = !hay;
+    if (hay) {
+      var w = Math.max(18, Math.round(100 * chipsBox.clientWidth / chipsBox.scrollWidth));
+      thumb.style.width = w + '%'; thumb.style.left = (x / max * (100 - w)) + '%';
+    }
+  }
+  chipsBox.addEventListener('scroll', indicar, { passive: true });
 
   // ---- Cambio de categoría ------------------------------------------------------------------------------
   function pintar(slug) {
@@ -47,6 +63,10 @@
     secs.forEach(function (s) { s.hidden = s.getAttribute('data-s') !== slug; });
     pintar(slug);
     if (!opts.sinScroll) alInicio();
+    if (window.history.replaceState) { // la categoría queda en la dirección (compartir, recargar); la primera no lleva parámetro
+      var u = new URL(location.href); if (slug === slugs[0]) u.searchParams.delete('categoria'); else u.searchParams.set('categoria', slug);
+      history.replaceState(null, '', u.pathname + u.search + (/^#categoria-/.test(location.hash) ? '' : location.hash));
+    }
   }
   chips.forEach(function (a) {
     a.addEventListener('click', function (e) { e.preventDefault(); mostrar(a.getAttribute('data-s')); });
@@ -98,7 +118,7 @@
     if (m) mostrar(m[1], { sinScroll: true });
   }
   window.addEventListener('hashchange', desdeHash);
-  window.addEventListener('resize', setTop);
+  window.addEventListener('resize', function () { setTop(); indicar(); });
 
   // ---- Página de prueba: cambiar cómo se resalta la categoría actual al vuelo (?resalte=…) ------------------------
   var pr = root.querySelector('.dlpm-prueba');
@@ -117,5 +137,9 @@
 
   setTop();
   pintar(activa);
-  if (location.hash) desdeHash();
+  indicar();
+  var pc = new URL(location.href).searchParams.get('categoria');
+  if (pc) mostrar(pc, { sinScroll: true });
+  else if (location.hash) desdeHash();
+  window.addEventListener('load', indicar);
 })();

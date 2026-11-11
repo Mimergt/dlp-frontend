@@ -11,20 +11,34 @@ body.dlpm-page .et_pb_post, body.dlpm-page .entry-content { margin: 0 !important
 
 /* ---- Barra fija ---------------------------------------------------------------------------------------- */
 .dlpm-nav { position: sticky; top: var(--dlpm-top); z-index: 40; margin: 0 -12px; padding: 6px 12px 4px; background: color-mix(in srgb, var(--dlp-bg, #fff) 95%, transparent); -webkit-backdrop-filter: saturate(1.4) blur(10px); backdrop-filter: saturate(1.4) blur(10px); border-bottom: 1px solid var(--dlp-line, #ececf0); }
-.dlpm-bar { display: flex; align-items: center; gap: 4px; }
-.dlpm-sbtn { flex: none; display: grid; place-items: center; width: 44px; height: 44px; padding: 0; border: 1.5px solid var(--dlp-line, #e3e3e8); border-radius: 999px; background: var(--dlp-bg, #fff); color: var(--dlp-tx, #111); cursor: pointer; }
+.dlpm-bar { display: flex; align-items: center; gap: 6px; }
+.dlpm-sbtn { flex: none; display: grid; place-items: center; width: 46px; height: 46px; padding: 0; border: 1.5px solid var(--dlp-line, #e3e3e8); border-radius: 999px; background: var(--dlp-bg, #fff); color: var(--dlp-tx, #111); cursor: pointer; }
 .dlpm-sbtn[aria-expanded="true"] { background: var(--dlp-tx, #111); color: var(--dlp-bg, #fff); border-color: var(--dlp-tx, #111); }
-.dlpm-chips { flex: 1; min-width: 0; display: flex; gap: 2px; align-items: stretch; overflow-x: auto; overscroll-behavior-x: contain; scroll-snap-type: x proximity; scrollbar-width: none; -webkit-overflow-scrolling: touch; padding: 4px 2px 5px; }
+.dlpm-chips { flex: 1; min-width: 0; display: flex; gap: 8px; align-items: stretch; overflow-x: auto; overscroll-behavior-x: contain; scroll-snap-type: x proximity; scrollbar-width: none; -webkit-overflow-scrolling: touch; padding: 4px 4px 5px; }
 .dlpm-chips::-webkit-scrollbar { display: none; }
+/* Indicador de desplazamiento horizontal: los bordes se difuminan donde hay más categorías y una barra fina muestra dónde estamos. */
+.dlpm-chips.fade-r { -webkit-mask-image: linear-gradient(90deg, #000 calc(100% - 34px), transparent); mask-image: linear-gradient(90deg, #000 calc(100% - 34px), transparent); }
+.dlpm-chips.fade-l { -webkit-mask-image: linear-gradient(90deg, transparent, #000 34px); mask-image: linear-gradient(90deg, transparent, #000 34px); }
+.dlpm-chips.fade-l.fade-r { -webkit-mask-image: linear-gradient(90deg, transparent, #000 34px, #000 calc(100% - 34px), transparent); mask-image: linear-gradient(90deg, transparent, #000 34px, #000 calc(100% - 34px), transparent); }
+.dlpm-prog { position: relative; height: 4px; margin: 3px 0 2px 52px; border-radius: 4px; background: var(--dlp-line, #e9e9ee); overflow: hidden; }
+.dlpm-prog[hidden] { display: none; }
+.dlpm-prog i { position: absolute; top: 0; bottom: 0; left: 0; width: 30%; border-radius: 4px; background: var(--dlp-tx, #111); opacity: .75; }
 .dlpm.buscando .dlpm-chip { opacity: .4; }
 
 /* Categoría: foto completa (sin recorte ni círculo) y el nombre debajo. */
-.dlpm-chip { position: relative; flex: none; scroll-snap-align: center; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; gap: 4px; width: 88px; padding: 6px 4px 7px; border: 1.5px solid transparent; border-radius: 14px; color: var(--dlp-mut, #7a7a84) !important; font: 700 10px/1.15 "Open Sans", system-ui, sans-serif; letter-spacing: .03em; text-align: center; text-transform: uppercase; text-decoration: none !important; -webkit-tap-highlight-color: transparent; transition: background .18s, color .18s, border-color .18s, box-shadow .18s, opacity .18s, transform .18s; }
-.dlpm-chip img { display: block; width: 56px; height: 56px; object-fit: contain; border-radius: 0; background: none; mix-blend-mode: multiply; /* los fondos blancos de las fotos desaparecen sobre el color de resalte */ transition: transform .2s, opacity .2s, filter .2s; }
+.dlpm-chip { position: relative; flex: none; scroll-snap-align: center; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; gap: 5px; width: 110px; padding: 9px 6px 9px; border: 1.5px solid transparent; border-radius: 16px; color: var(--dlp-mut, #7a7a84) !important; font: 700 10px/1.15 "Open Sans", system-ui, sans-serif; letter-spacing: .03em; text-align: center; text-transform: uppercase; text-decoration: none !important; -webkit-tap-highlight-color: transparent; transition: background .18s, color .18s, border-color .18s, box-shadow .18s, opacity .18s, transform .18s; }
+.dlpm-chip img { display: block; width: 66px; height: 66px; object-fit: contain; border-radius: 0; background: none; mix-blend-mode: multiply; /* los fondos blancos de las fotos desaparecen sobre el color de resalte */ transition: transform .2s, opacity .2s, filter .2s; }
 html[data-dlp-tema="oscuro"] .dlpm-chip img { mix-blend-mode: normal; }
 .dlpm-chip span { display: block; min-height: 2.3em; }
 .dlpm-chip.on { color: var(--dlp-tx, #111) !important; font-weight: 800; }
-@media (min-width: 768px) { .dlpm-chip { width: 104px; font-size: 11px; } .dlpm-chip img { width: 64px; height: 64px; } }
+/* Escritorio: las fichas se reparten todo el ancho de la barra y la foto crece. */
+@media (min-width: 768px) {
+  .dlpm-bar { gap: 12px; }
+  .dlpm-chips { gap: 8px; }
+  .dlpm-chip { flex: 1 1 0; width: auto; min-width: 104px; max-width: 220px; padding: 10px 8px 10px; font-size: 11px; }
+  .dlpm-chip img { width: 82px; height: 82px; }
+  .dlpm-prog { display: none; }
+}
 
 /* Formas de resaltar la actual (ajuste «resalte» / ?resalte=) */
 .dlpm[data-resalte="fondo"] .dlpm-chip.on { background: var(--dlp-surface, #f1f1f4); }
