@@ -390,5 +390,9 @@ Faltan: pedidos con extras de varios días de disponibilidad, cupones, tarjeta (
 
 ## 0.42.9 — Nombres completos en las tarjetas del menú (celular)
 - En celular los títulos se cortaban (38 de 91 tarjetas a 375 px): el título tenía `margin-right: 42px` para no chocar con el botón «+», quedaba de ~98 px y `overflow: hidden` ocultaba la 3.ª línea en adelante (hasta 5 líneas en «Combo – Hamburguesa Bacon Cheddar 1/2 Lb»).
-- `home-portada/style.css`: en ≤767 px el título ocupa todo el ancho de la tarjeta (136 px), el botón «+» baja a una franja propia (relleno inferior 48 px, botón a 9 px del borde) y, en todos los anchos, el título lleva `overflow: visible` y sin `line-clamp`. Las tarjetas de una fila siguen igualadas (flex + stretch) y el mínimo de dos líneas se mantiene.
-- Verificado en dev a 375 px: 0 de 91 títulos cortados, máximo 4 líneas. Costo: las tarjetas de celular son algo más altas que antes.
+- `home-portada/style.css`: en ≤767 px el título ocupa todo el ancho de la tarjeta (136 px) y, en todos los anchos, lleva `overflow: visible` y sin `line-clamp`. (La franja inferior para el «+» que se probó primero hacía las tarjetas de 245–276 px: se descartó en 0.42.10.) Las tarjetas de una fila siguen igualadas (flex + stretch) y el mínimo de dos líneas se mantiene.
+- Verificado en dev a 375 px: 0 de 91 títulos cortados, máximo 4 líneas.
+
+## 0.42.10 — Tarjetas del menú en celular, más compactas
+- El botón «+» ya no reserva una franja bajo el título: en ≤767 px el `::after` del enlace se oculta y el «+» (28 px) se dibuja en la esquina inferior derecha de la foto (`.et_shop_image::after`, que sigue siendo parte del enlace: tocar abre la ventana del producto). Título con margen superior 8 px y relleno inferior de la tarjeta 10 px. La foto y su proporción no cambian.
+- Altura a 375 px: 204 px en 77 de 91 tarjetas, 220 en 12 y 235 en 2 (las de nombre de 3–4 líneas); antes 245–276 px (0.42.9) y ~209 px con los nombres cortados (0.42.8). Siguen 0 títulos cortados.
