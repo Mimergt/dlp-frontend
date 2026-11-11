@@ -154,6 +154,29 @@ function dlp_fe_mn_html() {
     return $html;
 }
 
+/**
+ * En esta página no se cargan los estilos ni scripts del menú viejo (home-portada: tarjetas «etiqueta» sobre ul.products,
+ * home-nuevo: pestañas de Divi). Sus reglas (más específicas) pisarían las de las tarjetas nuevas y duplicarían el «+».
+ * Hacerlo aquí, y no quitando `page:menu` de sus module.json, permite volver al menú viejo sin tocar nada más.
+ */
+add_action('wp_enqueue_scripts', function () {
+    if (!dlp_fe_mn_is_page()) {
+        return;
+    }
+    foreach (['home-portada', 'home-nuevo'] as $id) {
+        wp_dequeue_style('dlp-fe-' . $id);
+        wp_dequeue_script('dlp-fe-' . $id);
+    }
+}, 99);
+add_filter('body_class', function ($c) {
+    if (!dlp_fe_mn_is_page()) {
+        return $c;
+    }
+    return array_values(array_filter($c, function ($x) {
+        return strpos($x, 'dlp-prod--') !== 0 && strpos($x, 'dlp-cat--') !== 0;
+    }));
+}, PHP_INT_MAX);
+
 add_filter('the_content', function ($content) {
     if (!dlp_fe_mn_is_page() || !in_the_loop() || !is_main_query() || !function_exists('wc_get_products')) {
         return $content;
