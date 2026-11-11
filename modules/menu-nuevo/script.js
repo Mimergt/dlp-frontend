@@ -46,7 +46,7 @@
       c.classList.toggle('on', on); c.setAttribute('aria-selected', on ? 'true' : 'false');
       if (on) { // centra la píldora activa en la barra sin mover la página
         var x = c.offsetLeft - (chipsBox.clientWidth - c.offsetWidth) / 2;
-        if (chipsBox.scrollTo) chipsBox.scrollTo({ left: x, behavior: reduce ? 'auto' : 'smooth' }); else chipsBox.scrollLeft = x;
+        chipsBox.scrollLeft = x; // directo: con el ajuste a los bordes (scroll-snap) un movimiento suave dejaba la ficha a medias
       }
     });
   }
