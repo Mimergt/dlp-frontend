@@ -10,17 +10,33 @@ body.dlpm-page .et_pb_post, body.dlpm-page .entry-content { margin: 0 !important
 .dlpm *, .dlpm *::before, .dlpm *::after { box-sizing: border-box; }
 
 /* ---- Barra fija ---------------------------------------------------------------------------------------- */
-.dlpm-nav { position: sticky; top: var(--dlpm-top); z-index: 40; margin: 0 -12px; padding: 8px 12px 6px; background: color-mix(in srgb, var(--dlp-bg, #fff) 95%, transparent); -webkit-backdrop-filter: saturate(1.4) blur(10px); backdrop-filter: saturate(1.4) blur(10px); border-bottom: 1px solid var(--dlp-line, #ececf0); }
-.dlpm-bar { display: flex; align-items: center; gap: 8px; }
+.dlpm-nav { position: sticky; top: var(--dlpm-top); z-index: 40; margin: 0 -12px; padding: 6px 12px 4px; background: color-mix(in srgb, var(--dlp-bg, #fff) 95%, transparent); -webkit-backdrop-filter: saturate(1.4) blur(10px); backdrop-filter: saturate(1.4) blur(10px); border-bottom: 1px solid var(--dlp-line, #ececf0); }
+.dlpm-bar { display: flex; align-items: center; gap: 4px; }
 .dlpm-sbtn { flex: none; display: grid; place-items: center; width: 44px; height: 44px; padding: 0; border: 1.5px solid var(--dlp-line, #e3e3e8); border-radius: 999px; background: var(--dlp-bg, #fff); color: var(--dlp-tx, #111); cursor: pointer; }
 .dlpm-sbtn[aria-expanded="true"] { background: var(--dlp-tx, #111); color: var(--dlp-bg, #fff); border-color: var(--dlp-tx, #111); }
-.dlpm-chips { flex: 1; min-width: 0; display: flex; gap: 8px; overflow-x: auto; overscroll-behavior-x: contain; scroll-snap-type: x proximity; scrollbar-width: none; -webkit-overflow-scrolling: touch; padding: 2px; }
+.dlpm-chips { flex: 1; min-width: 0; display: flex; gap: 2px; align-items: stretch; overflow-x: auto; overscroll-behavior-x: contain; scroll-snap-type: x proximity; scrollbar-width: none; -webkit-overflow-scrolling: touch; padding: 4px 2px 5px; }
 .dlpm-chips::-webkit-scrollbar { display: none; }
-.dlpm-chip { flex: none; scroll-snap-align: center; color: var(--dlp-tx, #111) !important; text-decoration: none !important; -webkit-tap-highlight-color: transparent; transition: background .15s, color .15s, border-color .15s, box-shadow .15s, opacity .15s; }
-.dlpm-chip img { object-fit: cover; background: #fff; border-radius: 50%; }
-.dlpm.buscando .dlpm-chip, .dlpm.buscando .dlpm-cur { opacity: .4; }
-.dlpm-cur, .dlpm-sheet { display: none; }
-.dlpm-search { display: flex; align-items: center; gap: 6px; padding: 8px 0 2px; }
+.dlpm.buscando .dlpm-chip { opacity: .4; }
+
+/* Categoría: foto completa (sin recorte ni círculo) y el nombre debajo. */
+.dlpm-chip { position: relative; flex: none; scroll-snap-align: center; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; gap: 4px; width: 88px; padding: 6px 4px 7px; border: 1.5px solid transparent; border-radius: 14px; color: var(--dlp-mut, #7a7a84) !important; font: 700 10px/1.15 "Open Sans", system-ui, sans-serif; letter-spacing: .03em; text-align: center; text-transform: uppercase; text-decoration: none !important; -webkit-tap-highlight-color: transparent; transition: background .18s, color .18s, border-color .18s, box-shadow .18s, opacity .18s, transform .18s; }
+.dlpm-chip img { display: block; width: 56px; height: 56px; object-fit: contain; border-radius: 0; background: none; mix-blend-mode: multiply; /* los fondos blancos de las fotos desaparecen sobre el color de resalte */ transition: transform .2s, opacity .2s, filter .2s; }
+html[data-dlp-tema="oscuro"] .dlpm-chip img { mix-blend-mode: normal; }
+.dlpm-chip span { display: block; min-height: 2.3em; }
+.dlpm-chip.on { color: var(--dlp-tx, #111) !important; font-weight: 800; }
+@media (min-width: 768px) { .dlpm-chip { width: 104px; font-size: 11px; } .dlpm-chip img { width: 64px; height: 64px; } }
+
+/* Formas de resaltar la actual (ajuste «resalte» / ?resalte=) */
+.dlpm[data-resalte="fondo"] .dlpm-chip.on { background: var(--dlp-surface, #f1f1f4); }
+.dlpm[data-resalte="linea"] .dlpm-chip.on::after { content: ""; position: absolute; left: 16%; right: 16%; bottom: -1px; height: 3px; border-radius: 3px; background: var(--dlpm-ac); }
+.dlpm[data-resalte="escala"] .dlpm-chip img { transform: scale(.92); opacity: .8; }
+.dlpm[data-resalte="escala"] .dlpm-chip.on img { transform: scale(1.14); opacity: 1; }
+.dlpm[data-resalte="escala"] .dlpm-chip.on { color: var(--dlpm-ac) !important; }
+.dlpm[data-resalte="tarjeta"] .dlpm-chip.on { background: var(--dlp-card, #fff); border-color: var(--dlpm-ac); box-shadow: 0 6px 16px rgba(0,0,0,.13); transform: translateY(-1px); }
+.dlpm[data-resalte="contraste"] .dlpm-chip:not(.on) img { opacity: .5; filter: grayscale(.7); }
+.dlpm[data-resalte="contraste"] .dlpm-chip:not(.on) { opacity: .8; }
+
+.dlpm-search { display: flex; align-items: center; gap: 6px; padding: 8px 0 4px; }
 .dlpm-search[hidden] { display: none; }
 .dlpm-search label { flex: 1; margin: 0; }
 .dlpm-q { width: 100%; height: 44px; padding: 0 14px; border: 1.5px solid var(--dlp-line, #e3e3e8); border-radius: 14px; background: var(--dlp-field, #fcfcfd); color: var(--dlp-tx, #111); font: 400 16px/1 "Open Sans", system-ui, sans-serif; box-shadow: none; -webkit-appearance: none; appearance: none; }
@@ -28,42 +44,6 @@ body.dlpm-page .et_pb_post, body.dlpm-page .entry-content { margin: 0 !important
 .dlpm-q::-webkit-search-cancel-button { display: none; }
 .dlpm-qx { flex: none; width: 44px; height: 44px; padding: 0; border: 0; border-radius: 999px; background: transparent; color: var(--dlp-mut, #6b6b75); font-size: 26px; line-height: 1; cursor: pointer; }
 .dlpm-qx[hidden] { display: none; }
-
-/* Diseño 1 · Burbujas: foto redonda con el nombre debajo; la activa lleva un aro de color y el nombre en negrita. */
-.dlpm[data-barra="burbujas"] .dlpm-chips { gap: 4px; align-items: flex-start; }
-.dlpm[data-barra="burbujas"] .dlpm-chip { display: flex; flex-direction: column; align-items: center; gap: 6px; width: 80px; padding: 3px 2px 4px; border: 0; background: none; color: var(--dlp-mut, #7a7a84) !important; font: 700 10.5px/1.15 "Open Sans", system-ui, sans-serif; letter-spacing: .03em; text-align: center; text-transform: uppercase; white-space: normal; }
-.dlpm[data-barra="burbujas"] .dlpm-chip img { width: 58px; height: 58px; box-shadow: 0 0 0 1.5px var(--dlp-line, #e3e3e8); }
-.dlpm[data-barra="burbujas"] .dlpm-chip.on { color: var(--dlp-tx, #111) !important; font-weight: 800; }
-.dlpm[data-barra="burbujas"] .dlpm-chip.on img { box-shadow: 0 0 0 3px var(--dlpm-ac); }
-.dlpm[data-barra="burbujas"] .dlpm-sbtn { align-self: flex-start; margin-top: 7px; }
-
-/* Diseño 2 · Pestañas: solo texto, la activa con línea de color debajo. */
-.dlpm[data-barra="pestanas"] .dlpm-nav { padding-bottom: 0; }
-.dlpm[data-barra="pestanas"] .dlpm-chips { gap: 2px; padding: 0; }
-.dlpm[data-barra="pestanas"] .dlpm-chip { display: inline-flex; align-items: center; height: 48px; padding: 0 14px; border: 0; border-bottom: 3px solid transparent; border-radius: 0; background: none; color: var(--dlp-mut, #7a7a84) !important; font: 700 12.5px/1 "Open Sans", system-ui, sans-serif; letter-spacing: .04em; text-transform: uppercase; white-space: nowrap; }
-.dlpm[data-barra="pestanas"] .dlpm-chip img { display: none; }
-.dlpm[data-barra="pestanas"] .dlpm-chip.on { color: var(--dlp-tx, #111) !important; border-bottom-color: var(--dlpm-ac); }
-.dlpm[data-barra="pestanas"] .dlpm-sbtn { margin-bottom: 4px; }
-.dlpm[data-barra="pestanas"] .dlpm-search { padding-bottom: 8px; }
-
-/* Diseño 3 · Píldoras: cápsulas con foto; la activa se rellena en negro. */
-.dlpm[data-barra="pildoras"] .dlpm-chip { display: inline-flex; align-items: center; gap: 8px; height: 44px; padding: 0 16px 0 7px; border: 1.5px solid var(--dlp-line, #e3e3e8); border-radius: 999px; background: var(--dlp-bg, #fff); font: 700 12.5px/1 "Open Sans", system-ui, sans-serif; letter-spacing: .02em; text-transform: uppercase; white-space: nowrap; }
-.dlpm[data-barra="pildoras"] .dlpm-chip img { width: 30px; height: 30px; }
-.dlpm[data-barra="pildoras"] .dlpm-chip:not(:has(img)) { padding-left: 16px; }
-.dlpm[data-barra="pildoras"] .dlpm-chip.on { background: var(--dlp-tx, #111); border-color: var(--dlp-tx, #111); color: var(--dlp-bg, #fff) !important; }
-
-/* Diseño 4 · Selector: un botón con la categoría actual; al tocarlo se abre la cuadrícula con todas. */
-.dlpm[data-barra="selector"] .dlpm-chips { display: none; }
-.dlpm[data-barra="selector"] .dlpm-cur { flex: 1; min-width: 0; display: flex; align-items: center; gap: 10px; height: 48px; padding: 0 14px 0 8px; border: 1.5px solid var(--dlp-tx, #111); border-radius: 999px; background: var(--dlp-bg, #fff); color: var(--dlp-tx, #111); font: 800 13.5px/1 "Open Sans", system-ui, sans-serif; letter-spacing: .03em; text-transform: uppercase; text-align: left; cursor: pointer; }
-.dlpm-cur-i img { display: block; width: 34px; height: 34px; border-radius: 50%; object-fit: cover; background: #fff; }
-.dlpm-cur-t { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.dlpm-cur-v { flex: none; transition: transform .2s; }
-.dlpm-cur[aria-expanded="true"] .dlpm-cur-v { transform: rotate(180deg); }
-.dlpm[data-barra="selector"] .dlpm-sheet:not([hidden]) { position: absolute; left: 0; right: 0; top: 100%; display: grid; grid-template-columns: repeat(auto-fill, minmax(86px, 1fr)); gap: 6px; padding: 12px; max-height: calc(100vh - 140px); overflow-y: auto; background: var(--dlp-bg, #fff); border-bottom: 1px solid var(--dlp-line, #ececf0); box-shadow: 0 18px 30px rgba(0,0,0,.14); }
-.dlpm-tile { display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 8px 4px; border-radius: 14px; color: var(--dlp-tx, #111) !important; font: 700 10.5px/1.15 "Open Sans", system-ui, sans-serif; letter-spacing: .03em; text-align: center; text-transform: uppercase; text-decoration: none !important; -webkit-tap-highlight-color: transparent; }
-.dlpm-tile img { width: 58px; height: 58px; border-radius: 50%; object-fit: cover; background: #fff; box-shadow: 0 0 0 1.5px var(--dlp-line, #e3e3e8); }
-.dlpm-tile.on { background: var(--dlp-surface, #f4f4f6); font-weight: 800; }
-.dlpm-tile.on img { box-shadow: 0 0 0 3px var(--dlpm-ac); }
 
 /* ---- Productos ----------------------------------------------------------------------------------------- */
 .dlpm-body { padding-top: 14px; }

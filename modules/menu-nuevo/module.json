@@ -1,6 +1,6 @@
 {
   "label": "Menú nuevo (categorías al instante, barra fija y búsqueda)",
-  "description": "Página de menú propia, sin Divi ni el plugin de pestañas: abre solo en Promos, las categorías cambian al instante desde una barra fija (4 diseños para elegir), búsqueda en todo el menú con resultados al momento y tarjetas ligeras (imágenes diferidas, HTML en caché). Los productos abren la vista rápida de siempre. Se pinta sobre la página con el slug indicado (menu-nuevo mientras se prueba; al cambiar el menú se pone menu).",
+  "description": "Página de menú propia, sin Divi ni el plugin de pestañas: abre solo en Promos, las categorías cambian al instante desde una barra fija con la foto completa de cada una y su nombre debajo, búsqueda en todo el menú con resultados al momento y tarjetas ligeras (imágenes diferidas, HTML en caché). Los productos abren la vista rápida de siempre. Se pinta sobre la página con el slug indicado (menu-nuevo mientras se prueba; al cambiar el menú se pone menu).",
   "section": "home",
   "tab": "Menú nuevo",
   "order": 8,
@@ -22,18 +22,19 @@
       "css_var": false
     },
     {
-      "key": "barra",
-      "label": "Diseño de la barra de categorías",
+      "key": "resalte",
+      "label": "Cómo se resalta la categoría actual",
       "type": "select",
-      "default": "burbujas",
+      "default": "fondo",
       "css_var": false,
       "options": {
-        "burbujas": "Burbujas (foto redonda y nombre debajo)",
-        "pestanas": "Pestañas (texto con línea de color)",
-        "pildoras": "Píldoras (cápsulas con foto)",
-        "selector": "Selector (categoría actual + lista en cuadrícula)"
+        "fondo": "Fondo suave detrás",
+        "linea": "Línea de color debajo",
+        "escala": "Foto más grande y nombre en color",
+        "tarjeta": "Tarjeta con borde y sombra",
+        "contraste": "Las demás se atenúan"
       },
-      "help": "En la página de prueba se puede cambiar al vuelo con ?barra=burbujas|pestanas|pildoras|selector."
+      "help": "En la página de prueba se puede cambiar al vuelo con ?resalte=fondo|linea|escala|tarjeta|contraste."
     },
     {
       "key": "buscar",

@@ -4,9 +4,8 @@
   var root = document.getElementById('dlpm');
   if (!root) return;
   var nav = document.getElementById('dlpm-nav'), chipsBox = nav.querySelector('.dlpm-chips'), body = root.querySelector('.dlpm-body');
-  var chips = [].slice.call(nav.querySelectorAll('.dlpm-chip')), tiles = [].slice.call(nav.querySelectorAll('.dlpm-tile')), secs = [].slice.call(root.querySelectorAll('.dlpm-sec'));
+  var chips = [].slice.call(nav.querySelectorAll('.dlpm-chip')), secs = [].slice.call(root.querySelectorAll('.dlpm-sec'));
   var sBtn = nav.querySelector('.dlpm-sbtn'), sBox = nav.querySelector('.dlpm-search'), q = nav.querySelector('.dlpm-q'), qx = nav.querySelector('.dlpm-qx'), none = root.querySelector('.dlpm-none');
-  var cur = nav.querySelector('.dlpm-cur'), curI = nav.querySelector('.dlpm-cur-i'), curT = nav.querySelector('.dlpm-cur-t'), sheet = nav.querySelector('.dlpm-sheet');
   var slugs = chips.map(function (c) { return c.getAttribute('data-s'); });
   var activa = slugs[0], reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
 
@@ -34,12 +33,6 @@
         if (chipsBox.scrollTo) chipsBox.scrollTo({ left: x, behavior: reduce ? 'auto' : 'smooth' }); else chipsBox.scrollLeft = x;
       }
     });
-    tiles.forEach(function (t) { t.classList.toggle('on', t.getAttribute('data-s') === slug); });
-    var c0 = chips.filter(function (c) { return c.getAttribute('data-s') === slug; })[0];
-    if (c0 && cur) {
-      curT.textContent = c0.getAttribute('data-t');
-      var im = c0.querySelector('img'); curI.innerHTML = im ? '<img src="' + im.getAttribute('src') + '" alt="" width="34" height="34">' : '';
-    }
   }
   // Si la página está más abajo de la barra, vuelve al inicio de los productos para no dejar al cliente a mitad de la lista.
   function alInicio() {
@@ -53,23 +46,11 @@
     if (q.value) { q.value = ''; filtrar(); }
     secs.forEach(function (s) { s.hidden = s.getAttribute('data-s') !== slug; });
     pintar(slug);
-    cerrarSheet();
     if (!opts.sinScroll) alInicio();
   }
-  chips.concat(tiles).forEach(function (a) {
+  chips.forEach(function (a) {
     a.addEventListener('click', function (e) { e.preventDefault(); mostrar(a.getAttribute('data-s')); });
   });
-
-  // ---- Selector desplegable (diseño 4) ------------------------------------------------------------------
-  function cerrarSheet() { if (!sheet) return; sheet.hidden = true; if (cur) cur.setAttribute('aria-expanded', 'false'); }
-  if (cur) {
-    cur.addEventListener('click', function (e) {
-      e.stopPropagation();
-      var abrir = sheet.hidden; sheet.hidden = !abrir; cur.setAttribute('aria-expanded', abrir ? 'true' : 'false');
-    });
-    document.addEventListener('click', function (e) { if (sheet && !sheet.hidden && !sheet.contains(e.target)) cerrarSheet(); });
-    document.addEventListener('keydown', function (e) { if (e.key === 'Escape') cerrarSheet(); });
-  }
 
   // ---- Búsqueda: resultados al instante en todas las categorías -------------------------------------------
   function plano(t) { return String(t || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().trim(); }
@@ -90,7 +71,7 @@
   }
   function abrirBusqueda(abrir) {
     sBox.hidden = !abrir; sBtn.setAttribute('aria-expanded', abrir ? 'true' : 'false');
-    if (abrir) { cerrarSheet(); q.focus(); } else if (q.value) { q.value = ''; filtrar(); }
+    if (abrir) q.focus(); else if (q.value) { q.value = ''; filtrar(); }
   }
   sBtn.addEventListener('click', function () { abrirBusqueda(sBox.hidden); });
   q.addEventListener('input', function () { filtrar(); if (q.value && window.pageYOffset > 0) alInicio(); });
@@ -119,20 +100,19 @@
   window.addEventListener('hashchange', desdeHash);
   window.addEventListener('resize', setTop);
 
-  // ---- Página de prueba: cambiar el diseño de la barra al vuelo (?barra=…) --------------------------------------
+  // ---- Página de prueba: cambiar cómo se resalta la categoría actual al vuelo (?resalte=…) ------------------------
   var pr = root.querySelector('.dlpm-prueba');
   if (pr && root.getAttribute('data-prueba')) {
     pr.hidden = false;
     var bs = [].slice.call(pr.querySelectorAll('button'));
-    var ponerBarra = function (b, guardar) {
-      root.setAttribute('data-barra', b);
+    var ponerResalte = function (b, guardar) {
+      root.setAttribute('data-resalte', b);
       bs.forEach(function (x) { x.classList.toggle('on', x.getAttribute('data-b') === b); });
-      cerrarSheet(); pintar(activa);
-      if (guardar && window.history.replaceState) { var u = new URL(location.href); u.searchParams.set('barra', b); history.replaceState(null, '', u.pathname + u.search + location.hash); }
+      if (guardar && window.history.replaceState) { var u = new URL(location.href); u.searchParams.set('resalte', b); history.replaceState(null, '', u.pathname + u.search + location.hash); }
     };
-    var p0 = new URL(location.href).searchParams.get('barra');
-    bs.forEach(function (x) { x.addEventListener('click', function () { ponerBarra(x.getAttribute('data-b'), true); }); });
-    ponerBarra(p0 && bs.some(function (x) { return x.getAttribute('data-b') === p0; }) ? p0 : root.getAttribute('data-barra'), false);
+    var p0 = new URL(location.href).searchParams.get('resalte');
+    bs.forEach(function (x) { x.addEventListener('click', function () { ponerResalte(x.getAttribute('data-b'), true); }); });
+    ponerResalte(p0 && bs.some(function (x) { return x.getAttribute('data-b') === p0; }) ? p0 : root.getAttribute('data-resalte'), false);
   }
 
   setTop();
