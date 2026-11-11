@@ -14,7 +14,7 @@ body.dlpm-page .et_pb_post, body.dlpm-page .entry-content { margin: 0 !important
 .dlpm-bar { display: flex; align-items: center; gap: 6px; }
 .dlpm-sbtn { flex: none; display: grid; place-items: center; width: 46px; height: 46px; padding: 0; border: 1.5px solid var(--dlp-line, #e3e3e8); border-radius: 999px; background: var(--dlp-bg, #fff); color: var(--dlp-tx, #111); cursor: pointer; }
 .dlpm-sbtn[aria-expanded="true"] { background: var(--dlp-tx, #111); color: var(--dlp-bg, #fff); border-color: var(--dlp-tx, #111); }
-.dlpm-chips { flex: 1; min-width: 0; display: flex; gap: 8px; align-items: stretch; overflow-x: auto; overscroll-behavior-x: contain; scroll-snap-type: x proximity; scrollbar-width: none; -webkit-overflow-scrolling: touch; padding: 4px 4px 5px; }
+.dlpm-chips { position: relative; flex: 1; min-width: 0; display: flex; gap: 8px; align-items: stretch; overflow-x: auto; overscroll-behavior-x: contain; scroll-snap-type: x proximity; scrollbar-width: none; -webkit-overflow-scrolling: touch; padding: 4px 4px 5px; }
 .dlpm-chips::-webkit-scrollbar { display: none; }
 /* Indicador de desplazamiento horizontal: los bordes se difuminan donde hay más categorías y una barra fina muestra dónde estamos. */
 .dlpm-chips.fade-r { -webkit-mask-image: linear-gradient(90deg, #000 calc(100% - 34px), transparent); mask-image: linear-gradient(90deg, #000 calc(100% - 34px), transparent); }
