@@ -459,3 +459,7 @@ Faltan: pedidos con extras de varios días de disponibilidad, cupones, tarjeta (
 - Home: los títulos largos de las tarjetas de categoría ya no parten la palabra a la mitad («HAMBURGUESA / S INDIVIDUALES»): fuente 19 px en móvil, sin cortar palabras.
 - Para producción: crear la categoría `hamburguesas-smash` y asignar los 6 productos (o traer los datos de dev). Para quitar la cinta, borrar el 4.º campo de la línea.
 - Verificado en dev a 375 px (menú: pestaña con cinta y 6 productos; home: tarjeta con cinta). Escritorio y tema oscuro no verificados.
+
+### Banner Smash del home → categoría Smash (sin cambio de código)
+- Feedback del cliente: al tocar el banner de las Smash en el home, que lleve a la nueva categoría. En el módulo home-nuevo, ajuste `banner1_url` = `/menu/?categoria=hamburguesas-smash` (los banners 2 y 3 siguen en `/menu/`, que abre en Promos). Es un ajuste guardado: en producción hay que ponerlo igual (o traer los ajustes de dev).
+- Verificado en dev: el clic en el primer banner abre /menu/ con la pestaña Hamburguesas Smash activa.
