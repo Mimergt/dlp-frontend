@@ -471,3 +471,12 @@ Faltan: pedidos con extras de varios días de disponibilidad, cupones, tarjeta (
 - Si se agrega un combo nuevo con «Papas fritas», volver a correr `aplicar`.
 - Verificado en dev: Combo Del Puente muestra «Papas Grandes (+Q5.00)» y el total sube de Q65 a Q70. No probado agregar al carrito (dev estaba fuera de horario).
 - Producción: correr `aplicar` allá (o traer los datos de dev).
+
+## 0.44.3 — Comentarios solo en la página de pago
+- Feedback del cliente: quitar el campo «Comentarios» de todos los productos (ya existe «Quitar ingredientes»); dejar comentarios solo en el pago, con un texto que aclare que es para especificaciones de la orden (no códigos de acceso ni otros datos).
+- El campo de producto no era un add-on sino el ajuste `comentarios` del módulo `home-quickview` (caja `#dlp_nota`). Ahora el default es 0 (apagado) y en dev se apagó. No se borró código: si se quiere de vuelta, es el mismo ajuste.
+- Checkout: el campo de notas es `order_comments`, del editor de campos del checkout (`checkout-campos-editor`). Nuevo texto: etiqueta «Comentarios sobre tu orden» y ayuda «Escríbenos alguna especificación sobre tu orden (por ejemplo: sin cebolla, salsa aparte). No escribas aquí códigos de acceso ni otros datos.» (también en los valores de fábrica del módulo).
+- `scripts/comentarios-pedido.php` aplica ambos cambios en cualquier sitio (apaga `comentarios` y actualiza el texto de `order_comments` en la opción `dlp_fe_checkout_fields`); idempotente. En producción: correrlo, o traer los datos de dev.
+- Los pedidos viejos conservan su «Comentarios» (meta del ítem); no se tocó nada del historial.
+- Aparte: `scripts/deploy-dev.sh` ya no sube `.claude/` ni `fotos-combos-reducidas-png/` (se estaban copiando 11 MB + 7.5 MB al plugin de dev); se borraron esas carpetas del plugin en dev.
+- Verificado en dev a 375 px: la ventana de producto ya no tiene la caja de comentarios; el checkout muestra el campo con el texto nuevo. No probado: hacer un pedido completo (dev fuera de horario).

@@ -28,7 +28,7 @@ function dlp_fe_cf_defaults() {
         $i('billing_email', 'Dirección de correo electrónico', 'micorreo@ejemplo.com', true, 'full', 'datos', false, 0, 0, 'billing', 'email'),
         $i('billing_nitname', 'Nombre para la factura', 'Nombre de Facturación', false, 'full', 'factura', true, 1, 1),
         $i('billing_nit', 'NIT o C/F', 'Ingresa tu NIT o escribe CF', false, 'full', 'factura', true, 1, 1),
-        $i('order_comments', 'Notas del pedido', 'Notas adicionales para su pedido, por ejemplo instrucciones de entrega.', false, 'full', 'factura', false, 0, 0, 'order', 'textarea'),
+        $i('order_comments', 'Comentarios sobre tu orden', 'Escríbenos alguna especificación sobre tu orden (por ejemplo: sin cebolla, salsa aparte). No escribas aquí códigos de acceso ni otros datos.', false, 'full', 'factura', false, 0, 0, 'order', 'textarea'),
     ];
 }
 
