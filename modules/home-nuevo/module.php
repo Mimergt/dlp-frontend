@@ -172,24 +172,23 @@ function dlp_fe_hn_categorias($a = []) {
 }
 
 function dlp_fe_hn_mas_pedidos($a = []) {
-    $ids   = isset($a['ids']) ? $a['ids'] : (string) dlp_fe_hn_o('top');
-    $filas = '';
+    $ids    = isset($a['ids']) ? $a['ids'] : (string) dlp_fe_hn_o('top');
+    $cards  = '';
+    $n      = 0;
     foreach (array_filter(array_map('absint', explode(',', $ids))) as $id) {
         $p = wc_get_product($id);
-        if (!$p || !$p->is_visible()) {
-            continue;
+        if ($p && $p->is_visible()) {
+            $cards .= dlp_fe_hn_tarjeta($p); // mismas tarjetas (y misma vista rápida) que las promos
+            $n++;
         }
-        $img  = get_the_post_thumbnail_url($id, 'woocommerce_single');
-        $desc = wp_trim_words(wp_strip_all_tags($p->get_short_description() ?: $p->get_description()), 14, '…');
-        $filas .= '<a class="dlph-li" href="' . esc_url(get_permalink($id)) . '" data-slug="' . esc_attr($p->get_slug()) . '">' . ($img ? '<img src="' . esc_url($img) . '" alt="" loading="eager" decoding="async">' : '') . '<span class="dlph-li-t"><b class="dlph-h">' . esc_html($p->get_name()) . '</b>' . ($desc ? '<em>' . esc_html($desc) . '</em>' : '') . '<strong>' . wp_kses_post($p->get_price_html()) . '</strong></span><u aria-hidden="true">+</u></a>';
     }
-    if ($filas === '') {
+    if ($cards === '') {
         return '';
     }
     $rotulo = isset($a['rotulo']) ? $a['rotulo'] : dlp_fe_hn_o('rotulo_top');
     $titulo = isset($a['titulo']) ? $a['titulo'] : dlp_fe_hn_o('titulo_top');
-    $h      = '<section class="dlph-sec"><div class="dlph-eb">' . esc_html($rotulo) . '</div><div class="dlph-sh"><h2 class="dlph-h">' . esc_html($titulo) . '</h2></div><div class="dlph-list">' . $filas . '</div>';
-    $h     .= '</section>';
+    $h      = '<section class="dlph-sec"><div class="dlph-eb">' . esc_html($rotulo) . '</div><div class="dlph-sh"><h2 class="dlph-h">' . esc_html($titulo) . '</h2></div>';
+    $h     .= dlp_fe_hn_slider('<div class="dlph-track dlph-cards"><ul class="products columns-4">' . $cards . '</ul></div>', $n, 'is-cards') . '</section>';
     return dlp_fe_hn_envolver($h);
 }
 

@@ -227,7 +227,7 @@
       "key": "titulo_top",
       "label": "Más pedidos: título",
       "type": "text",
-      "default": "Los más pedidos",
+      "default": "Lo más pedido",
       "css_var": false,
       "group": "Más pedidos"
     },

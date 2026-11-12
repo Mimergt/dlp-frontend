@@ -444,3 +444,10 @@ Faltan: pedidos con extras de varios días de disponibilidad, cupones, tarjeta (
 - Ajustes del módulo: `categoria` (slug, `postres`), `cantidad` (6).
 - Dev: `min_delivery` de dlp-tiendas cambiado de 60 a **65** (pickup 0, sin mínimo). Respaldo de los ajustes anteriores en `~/dlp-backups/dlp_tiendas_settings-2026-11-11.json`. En producción hay que poner el mismo valor.
 - Verificado en dev a 375 px (carrito lateral y checkout). Para probar fuera de horario: ajuste de Tiendas «Horario general → forzar abierto» (dejarlo en vacío al terminar). No verificado: tema oscuro, escritorio, teléfono real.
+
+## 0.44.1 — Home: «Lo más pedido» en tarjetas con slide
+- Feedback del cliente (Diego): cambiar «Los más pedidos» por «Lo más pedido» y que los productos se vean como tarjetas (como las promos), no como lista.
+- `dlp_fe_hn_mas_pedidos()` (modules/home-nuevo/module.php) ahora usa `dlp_fe_hn_tarjeta()` + `dlp_fe_hn_slider(..., 'is-cards')`, igual que `[dlp_promos]`: mismas tarjetas, mismo slide con puntos/flechas y misma vista rápida. Los IDs siguen saliendo del ajuste «Más pedidos: IDs de producto».
+- Título: default del ajuste `titulo_top` = «Lo más pedido»; en dev el valor guardado también se cambió (los ajustes guardados mandan sobre el default; en producción hay que cambiarlo en el módulo o traerlo con la base de dev). El rótulo sigue «Los favoritos».
+- Las reglas CSS/JS de las filas (`.dlph-li`) quedan sin uso; se pueden borrar más adelante.
+- Verificado en dev: móvil 375 px (slide, abre la vista rápida) y escritorio 1280 px (4 tarjetas en fila).
