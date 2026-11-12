@@ -14,8 +14,8 @@ $items = get_option('dlp_fe_checkout_fields');
 if (is_array($items) && $items) {
     foreach ($items as $k => $it) {
         if (($it['key'] ?? '') === 'order_comments') {
-            $items[$k]['label'] = 'Comentarios sobre tu orden';
-            $items[$k]['placeholder'] = 'Escríbenos alguna especificación sobre tu orden (por ejemplo: sin cebolla, salsa aparte). No escribas aquí códigos de acceso ni otros datos.';
+            $items[$k]['label'] = 'Comentarios para tu pedido';
+            $items[$k]['placeholder'] = 'Escríbenos lo que necesitemos para entregarte: código de acceso, dejarlo en recepción, o alguna especificación sobre tu orden.';
             $items[$k]['enabled'] = 1;
             echo "checkout order_comments actualizado\n";
         }
