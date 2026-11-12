@@ -1,0 +1,17 @@
+{
+  "label": "Pedido mínimo: barra y postres sugeridos",
+  "description": "Cuando el pedido no llega al mínimo, el carrito lateral y el checkout muestran cuánto falta (barra de progreso), un botón para seguir pidiendo y postres que se agregan con un toque. Toma el mínimo de los ajustes de Del Puente Tiendas (delivery o pickup).",
+  "section": "checkout",
+  "tab": "Pedido mínimo",
+  "order": 7,
+  "boot": true,
+  "php": "module.php",
+  "default": true,
+  "css": "style.css",
+  "js": "script.js",
+  "where": ["all"],
+  "settings": [
+    {"key": "categoria", "label": "Categoría de los sugeridos (slug)", "type": "text", "default": "postres", "css_var": false},
+    {"key": "cantidad", "label": "Cuántos sugeridos mostrar", "type": "number", "default": 6, "css_var": false}
+  ]
+}
