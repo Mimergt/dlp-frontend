@@ -209,3 +209,4 @@ body.dlph-page { overflow-x: clip; }
 .dlph-ct b { overflow-wrap: normal; word-break: normal; hyphens: none; font-size: 19px; }
 @media (min-width: 768px) { .dlph-ct b { font-size: 21px; } }
 .dlph-ct .dlph-w { display: inline-block; white-space: nowrap; }
+.dlph-slider.sin-scroll .dlph-ind { display: none; }

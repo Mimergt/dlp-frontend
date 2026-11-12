@@ -486,3 +486,8 @@ Faltan: pedidos con extras de varios días de disponibilidad, cupones, tarjeta (
 - Feedback del cliente (en su teléfono Android): «HAMBURGUESA / S INDIVIDUALES» seguía partido. En 0.44.2 solo se bajó la letra a 19 px, pero en Android la fuente de los títulos (o su fallback mientras carga) es más ancha y la palabra no cabía. No se pudo reproducir en el navegador de escritorio.
 - Solución robusta: `ajustarTitulosCategorias()` en `modules/home-nuevo/script.js` envuelve cada palabra en `.dlph-w` (nowrap) y reduce la letra (de 0.5 en 0.5 px, mínimo 12 px) hasta que la palabra más larga cabe en el ancho de la tarjeta. Se corre al cargar, al terminar de cargar fuentes (`document.fonts.ready`), a los 1.5 s y al cambiar el tamaño. Así funciona con cualquier fuente.
 - Verificado en dev a 375 px, también simulando una fuente muy ancha (Verdana): «Hamburguesas» baja a 13.5 px y cabe (127/128 px). **No** verificado en un Android real: pedirle al cliente que revise.
+
+## 0.44.6 — Home: sin flechas inútiles en «Lo más pedido» (escritorio)
+- Reporte: en escritorio las flechas de «Lo más pedido» no hacían nada. No era un fallo del slide: con 4 productos, las 4 tarjetas caben en la pantalla (scrollWidth = clientWidth) y no hay nada que desplazar. Las flechas de Promos sí funcionan (24 tarjetas con clones).
+- Cambio: `ocultarIndicadoresInutiles()` (modules/home-nuevo/script.js) marca `.sin-scroll` en los slides de tarjetas cuyo contenido cabe entero y el CSS oculta sus flechas y puntos. Se recalcula al cargar y al cambiar el tamaño. En móvil siguen visibles (4 tarjetas no caben).
+- Si se quiere que en escritorio también se deslice: agregar más productos (8 o más) al ajuste «Más pedidos: IDs de producto» del módulo home-nuevo.

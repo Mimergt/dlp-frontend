@@ -211,4 +211,17 @@
   window.addEventListener('resize', ajustarTitulosCategorias);
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(ajustarTitulosCategorias);
   setTimeout(ajustarTitulosCategorias, 1500);
+
+  // Slides de tarjetas: si todas caben en pantalla (p. ej. 4 productos en escritorio) no hay nada que desplazar,
+  // así que se ocultan las flechas y los puntos (en vez de dejar botones que parecen rotos).
+  function ocultarIndicadoresInutiles() {
+    [].forEach.call(document.querySelectorAll('.dlph-slider.is-cards'), function (sl) {
+      var tr = sl.querySelector('.dlph-track');
+      if (tr) sl.classList.toggle('sin-scroll', tr.scrollWidth <= tr.clientWidth + 2);
+    });
+  }
+  ocultarIndicadoresInutiles();
+  window.addEventListener('load', ocultarIndicadoresInutiles);
+  window.addEventListener('resize', ocultarIndicadoresInutiles);
+  setTimeout(ocultarIndicadoresInutiles, 1500);
 })();
