@@ -131,7 +131,7 @@ function dlp_fe_hn_promos($a = []) {
     }
     $rotulo = isset($a['rotulo']) ? $a['rotulo'] : dlp_fe_hn_o('rotulo_promos');
     $titulo = isset($a['titulo']) ? $a['titulo'] : dlp_fe_hn_o('titulo_promos');
-    $h      = '<section class="dlph-sec"><div class="dlph-eb">' . esc_html($rotulo) . '</div><div class="dlph-sh"><h2 class="dlph-h">' . esc_html($titulo) . '</h2>';
+    $h      = '<section class="dlph-sec">' . ($rotulo !== '' ? '<div class="dlph-eb">' . esc_html($rotulo) . '</div>' : '') . '<div class="dlph-sh"><h2 class="dlph-h">' . esc_html($titulo) . '</h2>';
     $h     .= '<a class="dlph-pill" href="' . esc_url(dlp_fe_hn_url(dlp_fe_hn_o('url_menu')) . '#categoria-' . $slug) . '">' . esc_html(dlp_fe_hn_o('texto_ver_todas')) . '</a></div>';
     $h     .= dlp_fe_hn_slider('<div class="dlph-track dlph-cards"><ul class="products columns-4">' . $cards . '</ul></div>', count($ids), 'is-cards') . '</section>';
     return dlp_fe_hn_envolver($h);
@@ -169,7 +169,7 @@ function dlp_fe_hn_categorias($a = []) {
     }
     $rotulo = isset($a['rotulo']) ? $a['rotulo'] : dlp_fe_hn_o('rotulo_cats');
     $titulo = isset($a['titulo']) ? $a['titulo'] : dlp_fe_hn_o('titulo_cats');
-    return dlp_fe_hn_envolver('<section class="dlph-sec"><div class="dlph-eb">' . esc_html($rotulo) . '</div><div class="dlph-sh"><h2 class="dlph-h">' . esc_html($titulo) . '</h2></div>' . dlp_fe_hn_slider('<div class="dlph-track dlph-cats">' . $tiles . '</div>', $n, 'is-cats') . '</section>');
+    return dlp_fe_hn_envolver('<section class="dlph-sec">' . ($rotulo !== '' ? '<div class="dlph-eb">' . esc_html($rotulo) . '</div>' : '') . '<div class="dlph-sh"><h2 class="dlph-h">' . esc_html($titulo) . '</h2></div>' . dlp_fe_hn_slider('<div class="dlph-track dlph-cats">' . $tiles . '</div>', $n, 'is-cats') . '</section>');
 }
 
 function dlp_fe_hn_mas_pedidos($a = []) {
@@ -188,7 +188,7 @@ function dlp_fe_hn_mas_pedidos($a = []) {
     }
     $rotulo = isset($a['rotulo']) ? $a['rotulo'] : dlp_fe_hn_o('rotulo_top');
     $titulo = isset($a['titulo']) ? $a['titulo'] : dlp_fe_hn_o('titulo_top');
-    $h      = '<section class="dlph-sec"><div class="dlph-eb">' . esc_html($rotulo) . '</div><div class="dlph-sh"><h2 class="dlph-h">' . esc_html($titulo) . '</h2></div>';
+    $h      = '<section class="dlph-sec">' . ($rotulo !== '' ? '<div class="dlph-eb">' . esc_html($rotulo) . '</div>' : '') . '<div class="dlph-sh"><h2 class="dlph-h">' . esc_html($titulo) . '</h2></div>';
     $h     .= dlp_fe_hn_slider('<div class="dlph-track dlph-cards"><ul class="products columns-4">' . $cards . '</ul></div>', $n, 'is-cards') . '</section>';
     return dlp_fe_hn_envolver($h);
 }

@@ -162,7 +162,7 @@
       "key": "titulo_promos",
       "label": "Promociones: título",
       "type": "text",
-      "default": "Hoy se come en grande",
+      "default": "Tu momento de disfrutar y compartir",
       "css_var": false,
       "group": "Promociones"
     },
@@ -202,7 +202,7 @@
       "key": "titulo_cats",
       "label": "Categorías: título",
       "type": "text",
-      "default": "Elige el nivel de tu hambre",
+      "default": "Elige cómo quieres disfrutar",
       "css_var": false,
       "group": "Categorías"
     },
@@ -220,7 +220,7 @@
       "key": "rotulo_top",
       "label": "Más pedidos: rótulo",
       "type": "text",
-      "default": "Los favoritos",
+      "default": "",
       "css_var": false,
       "group": "Más pedidos"
     },
@@ -253,7 +253,7 @@
       "key": "footer_titulo",
       "label": "Título",
       "type": "text",
-      "default": "Visítanos y sorpréndete con nuestras promociones",
+      "default": "Las mejores hamburguesas de Guatemala cerca de ti.",
       "css_var": false,
       "group": "Footer"
     },

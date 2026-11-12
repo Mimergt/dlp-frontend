@@ -503,3 +503,9 @@ Faltan: pedidos con extras de varios días de disponibilidad, cupones, tarjeta (
 ## Cambio de nombre: «Tenders de pollo» → «Chicken Tenders» (feedback del cliente)
 - Dev: producto 159010 «Combo  Tenders de pollo infantil» → «Combo Chicken Tenders infantil» (también se corrigió el doble espacio); producto 159008 «Tenders de pollo infantil – Individual» → «Chicken Tenders infantil – Individual». Solo cambia el título: las URL (slug) quedan igual para no romper enlaces ni la vista rápida (`#producto-…`). El historial de pedidos conserva el nombre viejo. Los textos alternativos de las fotos (adjuntos) no se cambiaron.
 - Producción: renombrar esos dos productos igual (o traer los datos de dev). Al renombrar, invalidar la caché del menú nuevo (se hace sola al guardar el producto).
+
+## 0.45.1 — Textos del home (feedback del cliente)
+- Promociones: «Hoy se come en grande» → «Tu momento de disfrutar y compartir». Categorías: «Elige el nivel de tu hambre» → «Elige cómo quieres disfrutar». Más pedidos: se quita el rótulo «Los favoritos» (queda solo «Lo más pedido»). Footer: «Visítanos y sorpréndete con nuestras promociones» → «Las mejores hamburguesas de Guatemala cerca de ti.»
+- Son ajustes del módulo `home-nuevo` (`titulo_promos`, `titulo_cats`, `rotulo_top` vacío, `footer_titulo`); defaults del `module.json` actualizados y valores guardados en dev cambiados. Un rótulo vacío ya no deja un espacio: `module.php` omite el `div.dlph-eb` si está vacío. Los rótulos pequeños «Promociones» y «Categorías» se mantienen (no se pidió cambiarlos).
+- Producción: poner estos 4 valores en el módulo «Home nuevo» (o traer los ajustes de dev).
+- Verificado en dev: textos nuevos en el home y sin rastro de los viejos.
