@@ -202,3 +202,9 @@ body.dlph-page { overflow-x: clip; }
 /* Página /menu/: la columna que contiene el carrusel de categorías no puede depender del CSS que genera Divi (al regenerarse su caché
    la columna quedaba como flotante de ancho «según el contenido» y el carrusel la estiraba a cientos de miles de píxeles → página en blanco). */
 .et-l--post .et_pb_column:has(.navMenu_slide), .et-l--post .et_pb_column:has(.main_slider) { float: none !important; width: 100% !important; max-width: 100% !important; margin: 0 !important; }
+
+/* Cinta en la esquina del cuadro de categoría (ej. «¡Lo nuevo!») */
+.dlph-ct .dlph-cinta { position: absolute; top: 12px; left: 0; z-index: 3; padding: 5px 12px 5px 10px; border-radius: 0 99px 99px 0; background: #ED1C24; color: #fff; font: 800 11px/1 var(--hn-b); letter-spacing: .05em; font-style: normal; text-transform: uppercase; }
+/* Títulos largos: la palabra no se parte a la mitad («HAMBURGUESA / S») */
+.dlph-ct b { overflow-wrap: normal; word-break: normal; hyphens: none; font-size: 19px; }
+@media (min-width: 768px) { .dlph-ct b { font-size: 21px; } }

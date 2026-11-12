@@ -451,3 +451,11 @@ Faltan: pedidos con extras de varios días de disponibilidad, cupones, tarjeta (
 - Título: default del ajuste `titulo_top` = «Lo más pedido»; en dev el valor guardado también se cambió (los ajustes guardados mandan sobre el default; en producción hay que cambiarlo en el módulo o traerlo con la base de dev). El rótulo sigue «Los favoritos».
 - Las reglas CSS/JS de las filas (`.dlph-li`) quedan sin uso; se pueden borrar más adelante.
 - Verificado en dev: móvil 375 px (slide, abre la vista rápida) y escritorio 1280 px (4 tarjetas en fila).
+
+## 0.44.2 — Categoría «Hamburguesas Smash» con cinta «¡Lo nuevo!»
+- Feedback del cliente: nueva categoría «Hamburguesas Smash» con una cinta «lo nuevo», con los combos Smash y las individuales; en el menú, después de Promos (y también en el home, «Elige el nivel de tu hambre»).
+- Dev: categoría de producto `hamburguesas-smash` (term 90). Productos asignados **sin quitarlos de sus categorías anteriores** (siguen en Promos/Combos/De temporada o en Hamburguesas): combos 158996 Clásica, 158998 Legendaria, 159006 Jalapeño Popper; individuales 159000 Clásica, 159004 Legendaria, 159002 Jalapeño Popper. Estado anterior de categorías en `~/dlp-backups/smash-categorias-antes-2026-11-11.txt`.
+- Las listas de categorías (menú-nuevo y home-nuevo) aceptan un 4.º campo: `slug | Título | foto | cinta`. La cinta es un globo rojo en la esquina de la ficha (menú) o de la tarjeta (home). Default de menú-nuevo: Smash va 2.º, después de Promos («¡Nuevo!»). Home: va 1.º («¡Lo nuevo!»); en dev el ajuste guardado del home se actualizó a mano (en producción hay que agregar esa línea o traer los ajustes de dev). Foto: IMG_6022.png (Legendaria Smash).
+- Home: los títulos largos de las tarjetas de categoría ya no parten la palabra a la mitad («HAMBURGUESA / S INDIVIDUALES»): fuente 19 px en móvil, sin cortar palabras.
+- Para producción: crear la categoría `hamburguesas-smash` y asignar los 6 productos (o traer los datos de dev). Para quitar la cinta, borrar el 4.º campo de la línea.
+- Verificado en dev a 375 px (menú: pestaña con cinta y 6 productos; home: tarjeta con cinta). Escritorio y tema oscuro no verificados.

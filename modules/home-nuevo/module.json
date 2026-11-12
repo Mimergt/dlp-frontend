@@ -211,8 +211,8 @@
       "label": "Categorías (una por línea)",
       "type": "textarea",
       "css_var": false,
-      "default": "promos | Promos\ncombos | Combos de res\nopciones-pollo | Combos de pollo\nhamburguesas | Hamburguesas individuales\npara-compartir | Para compartir\nsides | Sides\nbebidas | Bebidas\ndo-it-yourself | Para hacer en casa",
-      "help": "Formato: slug-de-la-categoría | Título que se muestra | URL de la foto (opcional; si falta se usa la imagen de la categoría).",
+      "default": "hamburguesas-smash | Hamburguesas Smash | /wp-content/uploads/2026/10/IMG_6022.png | ¡Lo nuevo!\npromos | Promos\ncombos | Combos de res\nopciones-pollo | Combos de pollo\nhamburguesas | Hamburguesas individuales\npara-compartir | Para compartir\nsides | Sides\nbebidas | Bebidas\ndo-it-yourself | Para hacer en casa",
+      "help": "Formato: slug-de-la-categoría | Título que se muestra | URL de la foto (opcional; si falta se usa la imagen de la categoría) | cinta en la esquina (opcional, ej. ¡Lo nuevo!).",
       "group": "Categorías"
     },
     {

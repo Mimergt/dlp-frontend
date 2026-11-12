@@ -51,7 +51,7 @@ function dlp_fe_mn_categorias() {
         } elseif (!preg_match('#^https?://#i', $foto)) {
             $foto = home_url('/' . ltrim($foto, '/'));
         }
-        $out[] = ['slug' => $t->slug, 'titulo' => ($p[1] ?? '') !== '' ? $p[1] : $t->name, 'foto' => $foto, 'id' => $t->term_id];
+        $out[] = ['slug' => $t->slug, 'titulo' => ($p[1] ?? '') !== '' ? $p[1] : $t->name, 'foto' => $foto, 'id' => $t->term_id, 'cinta' => $p[3] ?? ''];
     }
     return $out;
 }
@@ -119,6 +119,7 @@ function dlp_fe_mn_html() {
                         <a class="dlpm-chip<?php echo $i === 0 ? ' on' : ''; ?>" role="tab" aria-selected="<?php echo $i === 0 ? 'true' : 'false'; ?>" href="<?php echo esc_url(add_query_arg('categoria', $c['slug'])); ?>" data-s="<?php echo esc_attr($c['slug']); ?>" data-t="<?php echo esc_attr($c['titulo']); ?>">
                             <?php echo $img($c, 64); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
                             <span><?php echo esc_html($c['titulo']); ?></span>
+                            <?php if (!empty($c['cinta'])) : ?><em class="dlpm-cinta"><?php echo esc_html($c['cinta']); ?></em><?php endif; ?>
                         </a>
                     <?php endforeach; ?>
                 </div>

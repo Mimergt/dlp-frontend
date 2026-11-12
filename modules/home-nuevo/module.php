@@ -156,8 +156,9 @@ function dlp_fe_hn_categorias($a = []) {
             $tid = (int) get_term_meta($term->term_id, 'thumbnail_id', true);
             $img = $tid ? wp_get_attachment_image_url($tid, 'large') : '';
         }
+        $cinta = $partes[3] ?? '';
         $n++;
-        $tiles .= '<a class="dlph-ct" href="' . esc_url(dlp_fe_hn_url(dlp_fe_hn_o('url_menu')) . '#categoria-' . $term->slug) . '">' . ($img ? '<img src="' . esc_url($img) . '" alt="" loading="eager" decoding="async">' : '') . '<b class="dlph-h">' . esc_html($titulo) . '</b></a>';
+        $tiles .= '<a class="dlph-ct' . ($cinta !== '' ? ' dlph-ct--cinta' : '') . '" href="' . esc_url(dlp_fe_hn_url(dlp_fe_hn_o('url_menu')) . '#categoria-' . $term->slug) . '">' . ($img ? '<img src="' . esc_url($img) . '" alt="" loading="eager" decoding="async">' : '') . ($cinta !== '' ? '<em class="dlph-cinta">' . esc_html($cinta) . '</em>' : '') . '<b class="dlph-h">' . esc_html($titulo) . '</b></a>';
     }
     if ($tiles === '') {
         return '';

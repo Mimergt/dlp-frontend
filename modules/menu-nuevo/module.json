@@ -48,8 +48,8 @@
       "label": "Categorías (una por línea)",
       "type": "textarea",
       "css_var": false,
-      "default": "promos | Promos | /wp-content/uploads/2024/10/felices4-150x150.webp\ncombos | Combos de res | /wp-content/uploads/2020/07/1-clasica-150x150.webp\nopciones-pollo | Combos de pollo | /wp-content/uploads/2023/11/11-honey-150x150.webp\nhamburguesas | Hamburguesas individuales | /wp-content/uploads/2026/01/2-Hamburguesa-Del_Puente-150x150.png\npara-compartir | Para compartir | /wp-content/uploads/2020/07/BOX-Mr_Tocino-1200x1200px-150x150.jpg\nsides | Sides | /wp-content/uploads/2020/07/WEB-Cheese-Poppers-1200x1200px-150x150.jpg\npostres | Postres | /wp-content/uploads/2026/10/postres-vaso-500x500-1-150x150.jpg\ndo-it-yourself | Para hacer en casa | /wp-content/uploads/2020/07/Web-del-puente-150x150.jpg",
-      "help": "Formato: slug-de-la-categoría | Título | foto del ícono (ruta que empieza con /wp-content/… o URL; opcional). El orden de los productos es el de «Orden» de cada producto."
+      "default": "promos | Promos | /wp-content/uploads/2024/10/felices4-150x150.webp\nhamburguesas-smash | Hamburguesas Smash | /wp-content/uploads/2026/10/IMG_6022-150x150.png | ¡Nuevo!\ncombos | Combos de res | /wp-content/uploads/2020/07/1-clasica-150x150.webp\nopciones-pollo | Combos de pollo | /wp-content/uploads/2023/11/11-honey-150x150.webp\nhamburguesas | Hamburguesas individuales | /wp-content/uploads/2026/01/2-Hamburguesa-Del_Puente-150x150.png\npara-compartir | Para compartir | /wp-content/uploads/2020/07/BOX-Mr_Tocino-1200x1200px-150x150.jpg\nsides | Sides | /wp-content/uploads/2020/07/WEB-Cheese-Poppers-1200x1200px-150x150.jpg\npostres | Postres | /wp-content/uploads/2026/10/postres-vaso-500x500-1-150x150.jpg\ndo-it-yourself | Para hacer en casa | /wp-content/uploads/2020/07/Web-del-puente-150x150.jpg",
+      "help": "Formato: slug-de-la-categoría | Título | foto del ícono (ruta que empieza con /wp-content/… o URL; opcional) | cinta (texto corto en la esquina, ej. ¡Nuevo!; opcional). El orden de los productos es el de «Orden» de cada producto."
     },
     {
       "key": "acento",
