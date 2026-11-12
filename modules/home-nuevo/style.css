@@ -208,3 +208,4 @@ body.dlph-page { overflow-x: clip; }
 /* Títulos largos: la palabra no se parte a la mitad («HAMBURGUESA / S») */
 .dlph-ct b { overflow-wrap: normal; word-break: normal; hyphens: none; font-size: 19px; }
 @media (min-width: 768px) { .dlph-ct b { font-size: 21px; } }
+.dlph-ct .dlph-w { display: inline-block; white-space: nowrap; }

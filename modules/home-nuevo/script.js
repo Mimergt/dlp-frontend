@@ -189,4 +189,26 @@
   if (/^#categoria-/.test(location.hash)) {
     var tries = 0, t = setInterval(function () { if (irCategoria() || ++tries > 20) clearInterval(t); }, 300);
   }
+
+  // Títulos de las tarjetas de categoría: ninguna palabra se parte a la mitad («HAMBURGUESA / S»), sea cual sea la fuente
+  // que use el teléfono (en Android a veces cae a una fuente más ancha). Se achica la letra hasta que la palabra más larga cabe.
+  function ajustarTitulosCategorias() {
+    [].forEach.call(document.querySelectorAll('.dlph-ct b.dlph-h'), function (b) {
+      if (!b.getAttribute('data-orig')) {
+        b.setAttribute('data-orig', b.textContent);
+        b.innerHTML = b.textContent.split(/\s+/).map(function (w) { return '<span class="dlph-w">' + w.replace(/[&<>]/g, '') + '</span>'; }).join(' ');
+      }
+      b.style.fontSize = '';
+      var max = parseFloat(getComputedStyle(b).fontSize) || 19, fs = max, disp = b.clientWidth;
+      if (!disp) return;
+      var palabras = b.querySelectorAll('.dlph-w');
+      function cabe() { for (var i = 0; i < palabras.length; i++) { if (palabras[i].offsetWidth > disp + 0.5) return false; } return true; }
+      while (!cabe() && fs > 12) { fs -= 0.5; b.style.fontSize = fs + 'px'; }
+    });
+  }
+  ajustarTitulosCategorias();
+  window.addEventListener('load', ajustarTitulosCategorias);
+  window.addEventListener('resize', ajustarTitulosCategorias);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(ajustarTitulosCategorias);
+  setTimeout(ajustarTitulosCategorias, 1500);
 })();
