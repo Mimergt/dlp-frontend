@@ -11,7 +11,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-define('DLP_FE_VERSION', '0.44.6');
+define('DLP_FE_VERSION', '0.45.0');
 define('DLP_FE_FILE', __FILE__);
 define('DLP_FE_DIR', plugin_dir_path(__FILE__));
 define('DLP_FE_URL', plugin_dir_url(__FILE__));

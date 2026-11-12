@@ -39,6 +39,8 @@ class DLP_FE_Admin {
         }
         wp_enqueue_style('dlpfe-panel', DLP_FE_URL . 'admin/panel.css', ['wp-color-picker'], filemtime(DLP_FE_DIR . 'admin/panel.css'));
         wp_enqueue_media();
+        wp_enqueue_script('jquery-ui-sortable');
+        wp_enqueue_script('dlpfe-categorias', DLP_FE_URL . 'admin/categorias.js', ['jquery', 'jquery-ui-sortable'], filemtime(DLP_FE_DIR . 'admin/categorias.js'), true);
         wp_enqueue_style('wp-color-picker');
         wp_enqueue_script('wp-color-picker');
     }
@@ -80,6 +82,7 @@ class DLP_FE_Admin {
     private static function clean($f, $v) {
         $v = is_scalar($v) ? (string) $v : '';
         switch ($f['type']) {
+            case 'categorias':
             case 'textarea': return sanitize_textarea_field($v);
             case 'color':    return sanitize_hex_color($v) ?: $f['default'];
             case 'number':   return is_numeric($v) ? $v + 0 : $f['default'];
@@ -126,6 +129,20 @@ class DLP_FE_Admin {
         switch ($f['type']) {
             case 'textarea':
                 echo '<textarea class="large-text" rows="3" name="' . $name . '">' . esc_textarea($value) . '</textarea>';
+                break;
+            case 'categorias':
+                $terms = [];
+                foreach ((array) get_terms(['taxonomy' => 'product_cat', 'hide_empty' => false]) as $t) {
+                    if (!($t instanceof WP_Term)) {
+                        continue;
+                    }
+                    $tid = (int) get_term_meta($t->term_id, 'thumbnail_id', true);
+                    $terms[] = ['slug' => $t->slug, 'name' => html_entity_decode($t->name, ENT_QUOTES, 'UTF-8'), 'thumb' => $tid ? (string) wp_get_attachment_image_url($tid, 'thumbnail') : ''];
+                }
+                echo '<div class="dlpfe-cats" data-size="' . esc_attr($f['size']) . '" data-terms="' . esc_attr(wp_json_encode($terms)) . '">'
+                    . '<textarea hidden name="' . $name . '">' . esc_textarea($value) . '</textarea>'
+                    . '<div class="dlpfe-cats-list"></div>'
+                    . '<p><button type="button" class="button button-primary dlpfe-cats-add">+ Añadir categoría</button></p></div>';
                 break;
             case 'color':
                 echo '<input type="text" class="dlp-fe-color" name="' . $name . '" value="' . esc_attr($value) . '" data-default-color="' . esc_attr($f['default']) . '">';

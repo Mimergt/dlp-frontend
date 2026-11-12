@@ -208,11 +208,12 @@
     },
     {
       "key": "categorias",
-      "label": "Categorías (una por línea)",
-      "type": "textarea",
+      "label": "Categorías",
+      "type": "categorias",
+      "size": "large",
       "css_var": false,
       "default": "hamburguesas-smash | Hamburguesas Smash | /wp-content/uploads/2026/10/IMG_6022.png | ¡Lo nuevo!\npromos | Promos\ncombos | Combos de res\nopciones-pollo | Combos de pollo\nhamburguesas | Hamburguesas individuales\npara-compartir | Para compartir\nsides | Sides\nbebidas | Bebidas\ndo-it-yourself | Para hacer en casa",
-      "help": "Formato: slug-de-la-categoría | Título que se muestra | URL de la foto (opcional; si falta se usa la imagen de la categoría) | cinta en la esquina (opcional, ej. ¡Lo nuevo!).",
+      "help": "Elige la categoría, el título que se muestra, la foto (si no eliges, se usa la imagen de la categoría) y, si quieres, una cinta en la esquina (por ejemplo ¡Lo nuevo!). Arrastra las filas para cambiar el orden.",
       "group": "Categorías"
     },
     {

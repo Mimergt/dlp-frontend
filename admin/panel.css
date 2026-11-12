@@ -105,3 +105,24 @@
 .dlpfe-tabs a:hover { color: var(--fg); }
 .dlpfe-tabs a.on { background: #fff; color: var(--fg); font-weight: 600; box-shadow: 0 1px 2px rgba(0,0,0,.12); }
 .dlpfe-tabs em { color: #a1a1aa; font-size: 11px; font-style: normal; }
+
+/* Editor visual de categorías */
+.dlpfe-cats-list { display: flex; flex-direction: column; gap: 10px; max-width: 760px; }
+.dlpfe-cat { display: flex; align-items: flex-start; gap: 12px; padding: 12px; background: #fff; border: 1px solid var(--b); border-radius: 12px; }
+.dlpfe-cat.ui-sortable-helper { box-shadow: 0 8px 24px rgba(0,0,0,.15); }
+.dlpfe-cat .h { align-self: center; color: #a1a1aa; font-size: 20px; cursor: grab; user-select: none; }
+.dlpfe-cat .ph { flex: none; width: 84px; text-align: center; }
+.dlpfe-cat .th { display: block; width: 84px; height: 84px; padding: 0; border: 1px dashed #a1a1aa; border-radius: 10px; background: #f4f4f5 center/contain no-repeat; cursor: pointer; color: var(--mut); font-size: 12px; }
+.dlpfe-cat .th:hover { border-color: var(--fg); }
+.dlpfe-cat .th.auto { opacity: .6; border-style: solid; }
+.dlpfe-cat .th:not(.vacia) span { display: none; }
+.dlpfe-cat .q { display: block; margin: 4px auto 0; font-size: 11px; color: #b91c1c; }
+.dlpfe-cat .f { flex: 1; min-width: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 8px 12px; }
+.dlpfe-cat .f label { display: flex; flex-direction: column; gap: 3px; color: var(--mut); font-size: 12px; font-weight: 500; }
+.dlpfe-cat .f label:first-child { grid-column: 1 / -1; }
+.dlpfe-cat .f select, .dlpfe-cat .f input { width: 100%; max-width: none; margin: 0; }
+.dlpfe-cat .f em { font-style: normal; color: #a1a1aa; }
+.dlpfe-cat .x { flex: none; width: 28px; height: 28px; padding: 0; border: 0; border-radius: 50%; background: transparent; color: #a1a1aa; font-size: 20px; line-height: 1; cursor: pointer; }
+.dlpfe-cat .x:hover { background: #fee2e2; color: #b91c1c; }
+@media (max-width: 782px) { .dlpfe-cat { flex-wrap: wrap; } .dlpfe-cat .f { grid-template-columns: 1fr; } }
+.dlpfe-cat .q[hidden] { display: none; }
