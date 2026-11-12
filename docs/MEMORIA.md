@@ -463,3 +463,11 @@ Faltan: pedidos con extras de varios días de disponibilidad, cupones, tarjeta (
 ### Banner Smash del home → categoría Smash (sin cambio de código)
 - Feedback del cliente: al tocar el banner de las Smash en el home, que lleve a la nueva categoría. En el módulo home-nuevo, ajuste `banner1_url` = `/menu/?categoria=hamburguesas-smash` (los banners 2 y 3 siguen en `/menu/`, que abre en Promos). Es un ajuste guardado: en producción hay que ponerlo igual (o traer los ajustes de dev).
 - Verificado en dev: el clic en el primer banner abre /menu/ con la pestaña Hamburguesas Smash activa.
+
+## «Papas Grandes» (+Q5) en «Elige tu complemento» de todos los combos
+- Feedback del cliente: agregar el agrandado de papas por Q5 en todos los combos.
+- `scripts/papas-grandes.php` (`wp eval-file scripts/papas-grandes.php dry|aplicar|revertir`): agrega la opción «Papas Grandes» (+Q5, `quantity_based` como las demás) justo después de «Papas fritas» en **todo grupo de complemento que tenga «Papas fritas»**. No usa IDs; es idempotente. `aplicar` guarda el estado anterior en la opción `dlp_papas_grandes_respaldo` y `revertir` lo restaura.
+- Dev: 22 productos / 40 grupos: los combos de res, pollo, Smash, infantiles, Derretido, Combo Las Favoritas (4 grupos), Felices los 4, Tríos, Carnuda lovers y La Carnuda. Respaldo en archivo: `~/dlp-backups/product_addons-papas-antes-2026-11-11.json`.
+- Si se agrega un combo nuevo con «Papas fritas», volver a correr `aplicar`.
+- Verificado en dev: Combo Del Puente muestra «Papas Grandes (+Q5.00)» y el total sube de Q65 a Q70. No probado agregar al carrito (dev estaba fuera de horario).
+- Producción: correr `aplicar` allá (o traer los datos de dev).
