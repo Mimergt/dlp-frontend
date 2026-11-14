@@ -36,6 +36,13 @@
       "type": "checkbox",
       "default": 1,
       "help": "En el home, menú y demás páginas la huella de Cybersource (ThreatMetrix) se carga al primer toque/scroll del visitante o 6 s después de cargar la página, en vez de bloquear la carga. En pago, mi cuenta y pagar pedido NO cambia: sigue cargando en el <head> como siempre."
+    },
+    {
+      "key": "css_en_linea",
+      "label": "Poner los CSS pequeños dentro del HTML (menos peticiones)",
+      "type": "checkbox",
+      "default": 1,
+      "help": "Para visitantes en páginas normales, los archivos CSS locales de menos de 40 KB (módulos, WooCommerce, carrito lateral…) se insertan en el HTML en vez de pedirse uno por uno: quita ~25 peticiones que bloquean el render. Con la caché de página no cuesta nada. Para comparar: agrega ?dlp_sin_optimizar=1 a la dirección."
     }
   ]
 }

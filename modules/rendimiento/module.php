@@ -123,3 +123,47 @@ add_action('wp_footer', function () {
 </script>
     <?php
 }, 99);
+
+/**
+ * CSS en línea: cada hoja de estilo local pequeña es una petición que bloquea el primer dibujo (en móvil con red lenta pesa más
+ * la cantidad de peticiones que los KB). Se reemplaza <link> por <style> con el mismo contenido, en la misma posición (misma cascada),
+ * con las rutas relativas (url(...)) convertidas a absolutas. Solo visitantes sin sesión en páginas normales.
+ */
+function dlp_fe_rd_ruta_absoluta($base, $rel) {
+    $u = $base . $rel;
+    $n = 0;
+    do {
+        $u = preg_replace('#/[^/]+/\.\./#', '/', $u, 1, $n);
+    } while ($n);
+    return $u;
+}
+
+add_filter('style_loader_tag', function ($tag, $handle, $href, $media) {
+    static $activo = null;
+    if ($activo === null) {
+        $activo = DLP_FE_Registry::setting('rendimiento', 'css_en_linea') && !isset($_GET['dlp_sin_optimizar']) && dlp_fe_rd_visita_cacheable(); // phpcs:ignore WordPress.Security.NonceVerification
+    }
+    if (!$activo || strpos($tag, 'rel=\'stylesheet\'') === false && strpos($tag, 'rel="stylesheet"') === false) {
+        return $tag;
+    }
+    $limpia = strtok($href, '?');
+    $raiz   = trailingslashit(site_url());
+    if (strpos($limpia, $raiz . 'wp-content/') !== 0 && strpos($limpia, $raiz . 'wp-includes/') !== 0) {
+        return $tag; // externos (Google Fonts…) no se tocan
+    }
+    $archivo = wp_normalize_path(ABSPATH . substr($limpia, strlen($raiz)));
+    if (substr($archivo, -4) !== '.css' || !is_readable($archivo) || filesize($archivo) > 40960) {
+        return $tag;
+    }
+    $css = file_get_contents($archivo);
+    if ($css === false || stripos($css, '@import') !== false) {
+        return $tag;
+    }
+    $base = dirname($limpia) . '/';
+    $css  = preg_replace_callback('#url\(\s*([\'"]?)(?!data:|https?:|//|/|\#)([^)\'"]+?)\1\s*\)#i', function ($m) use ($base) {
+        return 'url("' . dlp_fe_rd_ruta_absoluta($base, $m[2]) . '")';
+    }, $css);
+    $css = preg_replace('#/\*.*?\*/#s', '', $css);
+    $med = ($media && $media !== 'all') ? ' media="' . esc_attr($media) . '"' : '';
+    return '<style id="' . esc_attr($handle) . '-inline"' . $med . '>' . trim($css) . "</style>\n";
+}, 10, 4);
