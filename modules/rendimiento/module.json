@@ -57,6 +57,13 @@
       "type": "checkbox",
       "default": 1,
       "help": "woocommerce.css pesa ~90 KB y en el home el 99 % no se usa (las tarjetas tienen su propio estilo). Solo afecta a visitantes en la portada."
+    },
+    {
+      "key": "limpiar_home",
+      "label": "Home: no cargar CSS que la portada no usa",
+      "type": "checkbox",
+      "default": 1,
+      "help": "Solo portada y visitantes: quita AnythingSlider, select2 y el diseño de tienda de WooCommerce (layout/smallscreen), y carga la hoja de Google Fonts sin bloquear el primer dibujo. Cada KB menos acerca el primer dibujo en celulares con red lenta."
     }
   ]
 }

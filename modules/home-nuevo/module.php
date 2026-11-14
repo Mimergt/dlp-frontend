@@ -202,7 +202,7 @@ function dlp_fe_hn_categorias($a = []) {
             $img = $web['url'];
             $dim = ' width="' . (int) $web['w'] . '" height="' . (int) $web['h'] . '"';
         }
-        $tiles .= '<a class="dlph-ct' . ($cinta !== '' ? ' dlph-ct--cinta' : '') . '" href="' . esc_url(dlp_fe_hn_url(dlp_fe_hn_o('url_menu')) . '#categoria-' . $term->slug) . '">' . ($img ? '<img src="' . esc_url($img) . '"' . $dim . ' alt="" loading="' . ($n <= 2 ? 'eager' : 'lazy') . '" decoding="async">' : '') . ($cinta !== '' ? '<em class="dlph-cinta">' . esc_html($cinta) . '</em>' : '') . '<b class="dlph-h">' . esc_html($titulo) . '</b></a>';
+        $tiles .= '<a class="dlph-ct' . ($cinta !== '' ? ' dlph-ct--cinta' : '') . '" href="' . esc_url(dlp_fe_hn_url(dlp_fe_hn_o('url_menu')) . '#categoria-' . $term->slug) . '">' . ($img ? '<img src="' . esc_url($img) . '"' . $dim . ' alt="" loading="lazy" decoding="async">' : '') . ($cinta !== '' ? '<em class="dlph-cinta">' . esc_html($cinta) . '</em>' : '') . '<b class="dlph-h">' . esc_html($titulo) . '</b></a>';
     }
     if ($tiles === '') {
         return '';

@@ -574,3 +574,11 @@ Medición (6ceswgrofk, 23:46, con CSS en línea): **Móvil 79** (FCP 1.8 s, LCP 
 - **Módulo rendimiento**: `diferir_js` (underscore, wp-util, js.cookie y handl-utm-grabber con `defer`; jQuery y migrate NO) y `quitar_css_woo_home` (dequeue de `woocommerce-general` solo en la portada, visitantes). Ambos desactivables y comparables con `?dlp_sin_optimizar=1`.
 - Verificado en dev: comparación de estilos computados home 375 px (solo ruido de animaciones), HandL sigue guardando las cookies UTM (`?utm_source=...`), `jQuery`, `_`, `wp.template` y `Cookies` definidos, sin errores de consola, vista rápida de producto abre con sus complementos.
 - Límite: jQuery (30 KB) y migrate se quedan bloqueantes (hay scripts en línea de Divi/WooCommerce que lo usan al leer el HTML).
+
+## 0.52.0 — Solo el home cuenta: limpieza específica de la portada — 2026-11-14
+
+Decisión del dueño: **la meta de 95 es solo para el home** (móvil y escritorio); las demás páginas pueden tardar un poco más. Eso permite optimizar la portada más agresivamente (todo con `is_front_page()` + visitante sin sesión, y comparable con `?dlp_sin_optimizar=1`).
+- **Módulo rendimiento → `limpiar_home`**: en la portada se quitan AnythingSlider, select2 y woocommerce-layout/smallscreen (CSS sin uso) y la hoja de Google Fonts se carga sin bloquear (`media=print` + onload, con `preconnect` a gstatic; las fuentes entran con `font-display: swap`). Divi solo puede insertar en línea las fuentes «estándar» (Roboto es variable), por eso se hizo así.
+- **home-nuevo**: las imágenes de los cuadros de categoría ahora son todas `lazy` (están debajo de Promociones; en móvil lo primero que se ve es el banner y la primera tarjeta).
+- Verificado en dev: comparación de estilos computados con/sin optimización en home 375 y 1280 px = **0 diferencias**; CLS 0; fuentes Roboto/Roboto Condensed cargan; sin errores de consola.
+- Siguiente (si el móvil no llega a 95): jQuery + migrate siguen bloqueantes (hay scripts en línea de Divi/Cybersource que los usan al leer el HTML); peso de las fuentes variables de Google (≈106 KB); HTML de ≈340 KB sin comprimir por el CSS en línea.

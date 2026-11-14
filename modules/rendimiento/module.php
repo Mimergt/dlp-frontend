@@ -187,3 +187,23 @@ add_action('wp_enqueue_scripts', function () {
     }
     wp_dequeue_style('woocommerce-general');
 }, 9999);
+
+/** CSS que el home no usa (comprobado: ningún elemento de la portada los necesita). */
+add_action('wp_enqueue_scripts', function () {
+    if (!DLP_FE_Registry::setting('rendimiento', 'limpiar_home') || isset($_GET['dlp_sin_optimizar']) || !is_front_page() || !dlp_fe_rd_visita_cacheable()) { // phpcs:ignore WordPress.Security.NonceVerification
+        return;
+    }
+    foreach (['anythingslider-styles', 'select2', 'woocommerce-layout', 'woocommerce-smallscreen'] as $h) {
+        wp_dequeue_style($h);
+    }
+}, 9999);
+
+/** Google Fonts del home: la hoja de estilos de Google ya no bloquea el primer dibujo (se carga aparte y las fuentes entran con font-display: swap). */
+add_filter('style_loader_tag', function ($tag, $handle, $href) {
+    if (strpos($href, 'fonts.googleapis.com') === false || !DLP_FE_Registry::setting('rendimiento', 'limpiar_home') || isset($_GET['dlp_sin_optimizar']) || !is_front_page() || !dlp_fe_rd_visita_cacheable()) { // phpcs:ignore WordPress.Security.NonceVerification
+        return $tag;
+    }
+    return '<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>' . "\n"
+        . '<link rel="stylesheet" id="' . esc_attr($handle) . '-css" href="' . esc_url($href) . '" media="print" onload="this.media=\'all\'">' . "\n"
+        . '<noscript><link rel="stylesheet" href="' . esc_url($href) . '"></noscript>' . "\n";
+}, 10, 3);
