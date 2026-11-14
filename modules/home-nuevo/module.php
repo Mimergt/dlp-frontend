@@ -55,11 +55,14 @@ function dlp_fe_hn_hermana($url, $sufijo = '') {
         return $cache[$k];
     }
     $cache[$k] = null;
-    if (!preg_match('#/wp-content/uploads/(.+)\.(?:jpe?g|png)$#i', (string) $url, $m)) {
+    if (!preg_match('#/wp-content/uploads/(.+)\.(?:jpe?g|png|webp)$#i', (string) $url, $m)) {
         return null;
     }
     $up   = wp_get_upload_dir();
     $file = $up['basedir'] . '/' . $m[1] . $sufijo . '.webp';
+    if ($sufijo === '' && preg_match('/\.webp$/i', (string) $url)) {
+        return null; // ya es WebP
+    }
     if (!is_file($file)) {
         return null;
     }
@@ -196,7 +199,7 @@ function dlp_fe_hn_categorias($a = []) {
         }
         $cinta = $partes[3] ?? '';
         $n++;
-        $web = $img !== '' ? dlp_fe_hn_hermana($img) : null;
+        $web = $img !== '' ? (dlp_fe_hn_hermana($img, '-t') ?: dlp_fe_hn_hermana($img)) : null;
         $dim = '';
         if ($web) {
             $img = $web['url'];

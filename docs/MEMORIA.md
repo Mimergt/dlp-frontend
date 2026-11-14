@@ -582,3 +582,8 @@ Decisión del dueño: **la meta de 95 es solo para el home** (móvil y escritori
 - **home-nuevo**: las imágenes de los cuadros de categoría ahora son todas `lazy` (están debajo de Promociones; en móvil lo primero que se ve es el banner y la primera tarjeta).
 - Verificado en dev: comparación de estilos computados con/sin optimización en home 375 y 1280 px = **0 diferencias**; CLS 0; fuentes Roboto/Roboto Condensed cargan; sin errores de consola.
 - Siguiente (si el móvil no llega a 95): jQuery + migrate siguen bloqueantes (hay scripts en línea de Divi/Cybersource que los usan al leer el HTML); peso de las fuentes variables de Google (≈106 KB); HTML de ≈340 KB sin comprimir por el CSS en línea.
+
+## 0.53.0 — Cuadros de categoría a 480 px — 2026-11-14
+
+Medición auq78uhxhv (tras 0.52.0): **Móvil 80** (FCP 1.3 s, LCP 4.9 s, SI 3.8 s, TBT 0, CLS 0) · **Escritorio 98**. Meta del dueño: llegar al verde (90) en móvil; 95 era optimista. Lo que más marcaba: «Mejorar la entrega de imágenes» −559 KiB (cuadros de categoría de 720–1080 px mostrados a ~280 px) y jQuery/migrate/blockUI bloqueantes.
+- `scripts/optimizar-imagenes.php` genera además `nombre-t.webp` (480 px) para los cuadros (acepta también fuentes .webp); `dlp_fe_hn_hermana()` acepta .webp y los cuadros usan `-t` si existe (4163 KB → 246 KB). Verificado: 8 cuadros cargan a 480 px, sin rotas. En producción: correr el script `aplicar` (o traer `uploads`).

@@ -24,6 +24,7 @@ foreach (preg_split('/\R/', (string) ($s['categorias'] ?? '')) as $linea) {
     $p = array_map('trim', explode('|', $linea));
     if (!empty($p[2])) {
         $trabajos[] = [$p[2], 720, ''];
+        $trabajos[] = [$p[2], 480, '-t']; // cuadros del home (se muestran a ~280 px de ancho)
     }
 }
 
@@ -43,11 +44,14 @@ foreach (array_unique($ids) as $pid) {
 
 $antes = $despues = 0;
 foreach ($trabajos as [$url, $max, $suf]) {
-    if (!preg_match('#/wp-content/uploads/(.+\.(jpe?g|png))$#i', $url, $m)) {
+    if (!preg_match('#/wp-content/uploads/(.+\.(jpe?g|png|webp))$#i', $url, $m)) {
         continue;
     }
     $orig = $up['basedir'] . '/' . $m[1];
-    $dest = preg_replace('/\.(jpe?g|png)$/i', $suf . '.webp', $orig);
+    $dest = preg_replace('/\.(jpe?g|png|webp)$/i', $suf . '.webp', $orig);
+    if ($dest === $orig) {
+        continue; // un .webp sin sufijo ya es el original
+    }
     if (!is_file($orig)) {
         echo "NO EXISTE  $orig\n";
         continue;
@@ -61,7 +65,7 @@ foreach ($trabajos as [$url, $max, $suf]) {
         echo "crearía    " . basename($dest) . " (original " . round($tam / 1024) . " KB)\n";
         continue;
     }
-    $img = preg_match('/png$/i', $orig) ? @imagecreatefrompng($orig) : @imagecreatefromjpeg($orig);
+    $img = preg_match('/png$/i', $orig) ? @imagecreatefrompng($orig) : (preg_match('/webp$/i', $orig) ? @imagecreatefromwebp($orig) : @imagecreatefromjpeg($orig));
     if (!$img) {
         echo "ERROR leyendo $orig\n";
         continue;
@@ -82,7 +86,7 @@ foreach ($trabajos as [$url, $max, $suf]) {
     imagewebp($img, $dest, 80);
     imagedestroy($img);
     $nuevo = filesize($dest);
-    if ($nuevo > $tam * 0.85) {
+    if ($nuevo > $tam * 0.85 && $suf !== '-t') {
         unlink($dest);
         echo "descartado " . basename($dest) . " (" . round($nuevo / 1024) . " KB no mejora " . round($tam / 1024) . " KB)\n";
         continue;
