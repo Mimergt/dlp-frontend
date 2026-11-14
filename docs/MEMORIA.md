@@ -539,3 +539,16 @@ Segunda medición móvil (tras 0.47.0): Rendimiento 48 (varía ±8 entre corrida
 - **Causa del CLS (0.3)**: Divi tenía `et_pb_css_in_footer = on`, así que el CSS de los módulos del encabezado salía casi al final del HTML (posición ~211 KB de 225 KB) y el encabezado medía 210 px hasta que llegaba, empujando todo. Se cambió a **off** en dev (`scripts/divi-css-en-head.php aplicar`): ese CSS va en el CSS crítico de la cabecera. Medido en el navegador: CLS 0.31 → 0. Verificados home, menú y restaurantes. Respaldo: `~/dlp-backups/et_divi-antes-2026-11-13.json`. Es una opción de la base de datos: viaja con la sobrescritura de producción; si no, correr el script.
 - La primera medición mostraba CLS 0.004 por suerte de tiempos: el salto ya existía (0.276 en los causantes).
 - Pendiente: unir/reducir los ~16 CSS bloqueantes de los módulos (LCP/FCP), `defer` al JS propio, accesibilidad/SEO. Decisión de infraestructura (VPS propio con LiteSpeed + caché de objetos) y plan de migración: ver conversación; lo que depende del servidor (page cache, Redis, cabeceras, PHP) se afina en el VPS, no en Hostinger.
+
+## 0.48.0 — LiteSpeed Cache en dev y 3.ª medición — 2026-11-13
+
+Medición (reporte 1yrtoz0l0u, 23:24, antes de la caché de página): **Móvil 56** (FCP 2.3 s, LCP 4.9 s, TBT 750 ms, CLS 0.001, SI 5.9 s) · **Escritorio 90** (FCP 0.5 s, LCP 1.5 s, TBT 170 ms, CLS 0.001, SI 1.3 s). Accesibilidad 81, Recomendaciones 100, SEO 61 en ambos. El CLS ya está corregido.
+Tope actual: en móvil el TBT lo marca ThreatMetrix (online-metrix); mientras cargue durante la carga de la página, 95 en móvil no es alcanzable. Pendiente de decisión del dueño (ver conversación).
+
+- **LiteSpeed Cache 7.9.2 activado en dev** (estaba instalado inactivo). Ajustes cambiados: TTL portada 3600 s, TTL público 21600 s, caché del navegador activada, **caché de REST desactivada** (el endpoint `dlp/v1/sitio/estado` —horario abierto/cerrado— no debe cachearse; con la opción por defecto quedaba en caché). Resto en valores por defecto (no cachea usuarios con sesión; WooCommerce excluye carrito/pago/cuenta).
+- No hay Redis/Memcached en este Hostinger (conexión rechazada): **no hay caché de objetos en dev**. El `object-cache.php` de LiteSpeed queda sin servidor detrás. En el VPS sí (Redis).
+- **Módulo rendimiento** (nuevo ajuste «No abrir sesión PHP a visitantes»): User Blocker abría una sesión PHP en cada visita (cookie PHPSESSID + `Cache-Control: no-store`) y eso impedía cachear. Se omite solo para visitantes sin sesión en páginas normales (no ingresar, mi cuenta, pagar, carrito).
+- Al guardar ajustes de `dlp_fe_modules`, `dlp_tiendas_settings`, `dlp_fe_checkout_fields` o `dlp_fe_mn_ver` se vacía la caché de LiteSpeed (`litespeed_purge_all`); verificado (miss tras el cambio, hit después).
+- Resultado: TTFB del home 0.95–1.2 s → ≈0.2 s (curl, hit). Verificado: el conteo del carrito sale correcto tras agregar un producto; el REST de horario no se cachea.
+- Atención: con caché de página, HandL UTM Grabber ya no corre en PHP en las visitas cacheadas (solo su JS): revisar que la atribución de UTM siga registrándose.
+- Para producción: activar LiteSpeed Cache con los mismos ajustes (sobre todo REST desactivado y el purge) y confirmar en el VPS que el servidor sea LiteSpeed/OpenLiteSpeed.

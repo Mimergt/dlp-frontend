@@ -22,6 +22,13 @@
       "type": "checkbox",
       "default": 1,
       "help": "Es un archivo de 35 KB que solo usa la barra de administración. Si hay sesión iniciada sigue cargando."
+    },
+    {
+      "key": "sin_sesion_php",
+      "label": "No abrir sesión PHP a visitantes (permite la caché de página)",
+      "type": "checkbox",
+      "default": 1,
+      "help": "El plugin User Blocker abre una sesión en cada visita y eso impide que LiteSpeed Cache guarde las páginas. Solo se omite para visitantes sin sesión que abren páginas normales (no en ingresar, mi cuenta, pagar ni carrito)."
     }
   ]
 }
