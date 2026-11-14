@@ -44,13 +44,39 @@ function dlp_fe_hn_url($u) {
     return preg_match('#^https?://#i', $u) ? $u : home_url('/' . ltrim($u, '/'));
 }
 
-function dlp_fe_hn_tarjeta($p) {
+/**
+ * Si junto a una imagen de uploads (jpg/png) existe su versión WebP (nombre.webp o nombre-m.webp), devuelve su URL y medidas.
+ * Se crean con scripts/optimizar-imagenes.php. Sin el archivo, devuelve null y se usa el original.
+ */
+function dlp_fe_hn_hermana($url, $sufijo = '') {
+    static $cache = [];
+    $k = $url . '|' . $sufijo;
+    if (array_key_exists($k, $cache)) {
+        return $cache[$k];
+    }
+    $cache[$k] = null;
+    if (!preg_match('#/wp-content/uploads/(.+)\.(?:jpe?g|png)$#i', (string) $url, $m)) {
+        return null;
+    }
+    $up   = wp_get_upload_dir();
+    $file = $up['basedir'] . '/' . $m[1] . $sufijo . '.webp';
+    if (!is_file($file)) {
+        return null;
+    }
+    $sz = @getimagesize($file);
+    if (!$sz) {
+        return null;
+    }
+    return $cache[$k] = ['url' => $up['baseurl'] . '/' . $m[1] . $sufijo . '.webp', 'w' => $sz[0], 'h' => $sz[1]];
+}
+
+function dlp_fe_hn_tarjeta($p, $perezosa = false) {
     $img = get_the_post_thumbnail_url($p->get_id(), 'woocommerce_single');
     ob_start();
     ?>
     <li class="product type-product post-<?php echo (int) $p->get_id(); ?> status-publish">
         <a href="<?php echo esc_url(get_permalink($p->get_id())); ?>" class="woocommerce-LoopProduct-link woocommerce-loop-product__link">
-            <span class="et_shop_image"><?php if ($img) : ?><img src="<?php echo esc_url($img); ?>" alt="<?php echo esc_attr($p->get_name()); ?>" loading="eager" decoding="async"><?php endif; ?><span class="et_overlay"></span></span>
+            <span class="et_shop_image"><?php if ($img) : ?><img src="<?php echo esc_url($img); ?>" alt="<?php echo esc_attr($p->get_name()); ?>" loading="<?php echo $perezosa ? 'lazy' : 'eager'; ?>" decoding="async"><?php endif; ?><span class="et_overlay"></span></span>
             <h2 class="woocommerce-loop-product__title"><?php echo esc_html($p->get_name()); ?></h2>
             <span class="price"><?php echo wp_kses_post($p->get_price_html()); ?></span>
         </a>
@@ -88,9 +114,14 @@ function dlp_fe_hn_banner() {
         }
         $nb++;
         $mov = trim((string) dlp_fe_hn_o('banner' . $i . '_img_movil'));
+        $web = dlp_fe_hn_hermana($img);
+        $wm  = $mov === '' ? dlp_fe_hn_hermana($img, '-m') : null;
+        $src = $web ? $web['url'] : $img;
+        $dim = $web ? ' width="' . (int) $web['w'] . '" height="' . (int) $web['h'] . '"' : '';
         $banners .= '<a class="dlph-slide' . ($nb === 1 ? ' on' : '') . ($mov !== '' ? ' has-m' : '') . '" href="' . esc_url(dlp_fe_hn_url(dlp_fe_hn_o('banner' . $i . '_url'))) . '"><picture>'
             . ($mov !== '' ? '<source media="(max-width: 767px)" srcset="' . esc_url($mov) . '">' : '')
-            . '<img class="dlph-bimg" src="' . esc_url($img) . '" alt="" ' . ($nb > 1 ? 'loading="lazy"' : 'fetchpriority="high"') . '></picture></a>';
+            . ($wm ? '<source media="(max-width: 767px)" srcset="' . esc_url($wm['url']) . '">' : '')
+            . '<img class="dlph-bimg" src="' . esc_url($src) . '"' . $dim . ' alt="" ' . ($nb > 1 ? 'loading="lazy"' : 'fetchpriority="high"') . '></picture></a>';
     }
     if (!$nb) {
         return '';
@@ -120,10 +151,11 @@ function dlp_fe_hn_promos($a = []) {
         'orderby' => 'menu_order title', 'order' => 'ASC',
     ]);
     $cards = '';
+    $k     = 0;
     foreach ($ids as $id) {
         $p = wc_get_product($id);
         if ($p && $p->is_visible()) {
-            $cards .= dlp_fe_hn_tarjeta($p);
+            $cards .= dlp_fe_hn_tarjeta($p, $k++ >= 2);
         }
     }
     if ($cards === '') {
@@ -158,7 +190,13 @@ function dlp_fe_hn_categorias($a = []) {
         }
         $cinta = $partes[3] ?? '';
         $n++;
-        $tiles .= '<a class="dlph-ct' . ($cinta !== '' ? ' dlph-ct--cinta' : '') . '" href="' . esc_url(dlp_fe_hn_url(dlp_fe_hn_o('url_menu')) . '#categoria-' . $term->slug) . '">' . ($img ? '<img src="' . esc_url($img) . '" alt="" loading="eager" decoding="async">' : '') . ($cinta !== '' ? '<em class="dlph-cinta">' . esc_html($cinta) . '</em>' : '') . '<b class="dlph-h">' . esc_html($titulo) . '</b></a>';
+        $web = $img !== '' ? dlp_fe_hn_hermana($img) : null;
+        $dim = '';
+        if ($web) {
+            $img = $web['url'];
+            $dim = ' width="' . (int) $web['w'] . '" height="' . (int) $web['h'] . '"';
+        }
+        $tiles .= '<a class="dlph-ct' . ($cinta !== '' ? ' dlph-ct--cinta' : '') . '" href="' . esc_url(dlp_fe_hn_url(dlp_fe_hn_o('url_menu')) . '#categoria-' . $term->slug) . '">' . ($img ? '<img src="' . esc_url($img) . '"' . $dim . ' alt="" loading="' . ($n <= 2 ? 'eager' : 'lazy') . '" decoding="async">' : '') . ($cinta !== '' ? '<em class="dlph-cinta">' . esc_html($cinta) . '</em>' : '') . '<b class="dlph-h">' . esc_html($titulo) . '</b></a>';
     }
     if ($tiles === '') {
         return '';
@@ -176,10 +214,11 @@ function dlp_fe_hn_mas_pedidos($a = []) {
     $ids    = isset($a['ids']) ? $a['ids'] : (string) dlp_fe_hn_o('top');
     $cards  = '';
     $n      = 0;
+    $k     = 0;
     foreach (array_filter(array_map('absint', explode(',', $ids))) as $id) {
         $p = wc_get_product($id);
         if ($p && $p->is_visible()) {
-            $cards .= dlp_fe_hn_tarjeta($p); // mismas tarjetas (y misma vista rápida) que las promos
+            $cards .= dlp_fe_hn_tarjeta($p, $k++ >= 2); // mismas tarjetas (y misma vista rápida) que las promos
             $n++;
         }
     }
@@ -245,6 +284,29 @@ add_action('wp_head', function () {
         echo '<style id="dlph-fonts">' . $css . '</style>' . "\n"; // phpcs:ignore
     }
 }, 8);
+
+// Precarga la imagen principal (la del primer banner) para que aparezca antes: es lo que Google mide como LCP
+add_action('wp_head', function () {
+    if (!dlp_fe_hn_activo() || !is_front_page()) {
+        return;
+    }
+    $img = trim((string) dlp_fe_hn_o('banner1_img'));
+    if ($img === '') {
+        return;
+    }
+    $web = dlp_fe_hn_hermana($img);
+    $wm  = dlp_fe_hn_hermana($img, '-m');
+    $mov = trim((string) dlp_fe_hn_o('banner1_img_movil'));
+    if ($mov !== '') {
+        echo '<link rel="preload" as="image" href="' . esc_url($mov) . '" media="(max-width: 767px)" fetchpriority="high">' . "\n";
+        echo '<link rel="preload" as="image" href="' . esc_url($web ? $web['url'] : $img) . '" media="(min-width: 768px)" fetchpriority="high">' . "\n";
+    } elseif ($wm) {
+        echo '<link rel="preload" as="image" href="' . esc_url($wm['url']) . '" media="(max-width: 767px)" fetchpriority="high">' . "\n";
+        echo '<link rel="preload" as="image" href="' . esc_url($web ? $web['url'] : $img) . '" media="(min-width: 768px)" fetchpriority="high">' . "\n";
+    } else {
+        echo '<link rel="preload" as="image" href="' . esc_url($web ? $web['url'] : $img) . '" fetchpriority="high">' . "\n";
+    }
+}, 3);
 
 // Los banners se sirven con su tamaño original: el CDN de imágenes de Jetpack los reducía a 1080 px de ancho.
 foreach (['jetpack_photon_skip_image', 'jetpack_image_cdn_skip_image'] as $hook) {

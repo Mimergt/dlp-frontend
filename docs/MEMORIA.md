@@ -509,3 +509,14 @@ Faltan: pedidos con extras de varios días de disponibilidad, cupones, tarjeta (
 - Son ajustes del módulo `home-nuevo` (`titulo_promos`, `titulo_cats`, `rotulo_top` vacío, `footer_titulo`); defaults del `module.json` actualizados y valores guardados en dev cambiados. Un rótulo vacío ya no deja un espacio: `module.php` omite el `div.dlph-eb` si está vacío. Los rótulos pequeños «Promociones» y «Categorías» se mantienen (no se pidió cambiarlos).
 - Producción: poner estos 4 valores en el módulo «Home nuevo» (o traer los ajustes de dev).
 - Verificado en dev: textos nuevos en el home y sin rastro de los viejos.
+
+## 0.46.0 — Optimización Fase 1 (PageSpeed) — 2026-11-13
+
+Punto de partida medido en dev: imágenes del home ≈ 7.9 MB (IMG_6022.png 3.2 MB, 3 banners JPG de ~850 KB), TTFB ≈ 0.95 s (producción ≈ 2.3 s, PHP 7.4).
+
+- **WebP junto al original** (`scripts/optimizar-imagenes.php dry|aplicar`): crea `nombre.webp` (banners 1600 px, cuadros de categorías 720 px) y `nombre-m.webp` (banners en celular, 800 px) al lado de cada imagen de los ajustes de home-nuevo. No toca originales ni ajustes; descarta el WebP si no ahorra ≥ 15 %. Resultado: 8.9 MB → 0.55 MB. **En producción:** si se sobrescribe con dev viajan los archivos; si no, correr el script (`wp eval-file`, sin IDs fijos).
+- **home-nuevo** (`dlp_fe_hn_hermana()`): usa el WebP hermano solo si existe; agrega `width`/`height`; banner móvil con `<source>` al `-m.webp`; precarga (`<link rel=preload>` con `media`) de la imagen del primer banner + `fetchpriority=high` (LCP); cuadros de categoría y tarjetas: solo los 2 primeros `eager`, el resto `lazy`.
+- **Módulo nuevo `rendimiento`** (ajuste «No cargar scripts de tarjeta fuera del pago»): quita Cybersource (formulario de tarjeta, flex-microform, sv-wc-payment-gateway) y jquery.payment + sus CSS en páginas que no son pago/cuenta/pagar pedido. **La huella antifraude (`wc-cybersource-device-data` / online-metrix) NO se toca** (decisión pendiente: sacarla del home podría afectar el puntaje antifraude).
+- Verificado en dev: home sin imágenes rotas (375 px), checkout sigue con tarjeta (tags.js, jquery.payment, sv-wc, wc-cybersource, flex-microform), sin errores de consola. Imágenes referenciadas por el home: 7.9 MB → 1.9 MB.
+- Pendiente (Fase 2): fuentes (Google Fonts Roboto), fotos del footer (DP_XELA ≈ 520 KB), carga de CSS/JS de los módulos, decisión sobre online-metrix; Fase 3: LiteSpeed Cache.
+- Nota: la cabecera `Version:` de `dlp-frontend.php` sigue en 0.43.4 (solo cambia la constante `DLP_FE_VERSION`).
