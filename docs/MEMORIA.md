@@ -552,3 +552,11 @@ Tope actual: en móvil el TBT lo marca ThreatMetrix (online-metrix); mientras ca
 - Resultado: TTFB del home 0.95–1.2 s → ≈0.2 s (curl, hit). Verificado: el conteo del carrito sale correcto tras agregar un producto; el REST de horario no se cachea.
 - Atención: con caché de página, HandL UTM Grabber ya no corre en PHP en las visitas cacheadas (solo su JS): revisar que la atribución de UTM siga registrándose.
 - Para producción: activar LiteSpeed Cache con los mismos ajustes (sobre todo REST desactivado y el purge) y confirmar en el VPS que el servidor sea LiteSpeed/OpenLiteSpeed.
+
+## 0.49.0 — Huella antifraude (ThreatMetrix) fuera del pago — 2026-11-13
+
+Autorizado por el dueño («Sí, probar») para intentar llegar a 95 en móvil; **revertible** (ajuste del módulo rendimiento: «Antifraude: cargar la huella…», o `define('DLP_FE_DISABLED_MODULES','rendimiento')`).
+- **Qué hace**: en páginas que NO son pago/mi cuenta/pagar pedido, el script `h.online-metrix.net/fp/tags.js` (Cybersource Device Data) ya no va en el `<head>`; se carga con el primer toque/scroll/tecla del visitante o 6 s después de cargar la página, con un `session_id` nuevo por visita (generado en el navegador).
+- **Qué NO cambia**: en pago, mi cuenta, agregar método y pagar pedido el plugin de Cybersource sigue igual (tags.js en el `<head>`, `session_id` del plugin en la sesión de WooCommerce). Verificado en dev: checkout con tags.js en el head, scripts de tarjeta presentes, sin el cargador diferido.
+- **Por qué es seguro para la transacción**: el plugin genera un `session_id` NUEVO en cada carga de página y lo guarda en la sesión de WooCommerce, así que el que viaja con la transacción siempre es el de la última página renderizada (la del pago); el de home/menú nunca fue el de la transacción. Con caché de página, el HTML cacheado repetiría el mismo `session_id` para todos los visitantes; por eso el cargador genera uno propio.
+- Pendiente de confirmar con quien administre Cybersource/NeoNet que la huella tomada solo al terminar la carga (y en el pago) cumple con sus requisitos de Decision Manager.

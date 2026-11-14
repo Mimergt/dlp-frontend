@@ -29,6 +29,13 @@
       "type": "checkbox",
       "default": 1,
       "help": "El plugin User Blocker abre una sesión en cada visita y eso impide que LiteSpeed Cache guarde las páginas. Solo se omite para visitantes sin sesión que abren páginas normales (no en ingresar, mi cuenta, pagar ni carrito)."
+    },
+    {
+      "key": "diferir_huella",
+      "label": "Antifraude: cargar la huella del dispositivo al terminar la carga (fuera del pago)",
+      "type": "checkbox",
+      "default": 1,
+      "help": "En el home, menú y demás páginas la huella de Cybersource (ThreatMetrix) se carga al primer toque/scroll del visitante o 6 s después de cargar la página, en vez de bloquear la carga. En pago, mi cuenta y pagar pedido NO cambia: sigue cargando en el <head> como siempre."
     }
   ]
 }

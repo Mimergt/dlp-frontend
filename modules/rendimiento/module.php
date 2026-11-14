@@ -77,3 +77,49 @@ foreach (['dlp_fe_modules', 'dlp_tiendas_settings', 'dlp_fe_checkout_fields', 'd
         do_action('litespeed_purge_all');
     });
 }
+
+/**
+ * Antifraude (Cybersource / ThreatMetrix): fuera del pago, el script de la huella del dispositivo no se pone en el <head>
+ * (bloqueaba el render y gastaba ~1 s de CPU). Se carga al primer toque/scroll o 6 s después de cargar la página.
+ * Se usa un identificador de sesión nuevo por visita (la página puede venir de la caché y no debe repetir el mismo para todos).
+ * En el pago el plugin de Cybersource sigue igual: ese es el identificador que viaja con la transacción.
+ */
+function dlp_fe_rd_diferir_huella() {
+    if (!DLP_FE_Registry::setting('rendimiento', 'diferir_huella') || dlp_fe_rd_es_pago()) {
+        return;
+    }
+    $scripts = wp_scripts();
+    if (empty($scripts->registered['wc-cybersource-device-data']) || !wp_script_is('wc-cybersource-device-data', 'enqueued')) {
+        return;
+    }
+    $GLOBALS['dlp_fe_rd_huella'] = (string) $scripts->registered['wc-cybersource-device-data']->src;
+    wp_dequeue_script('wc-cybersource-device-data');
+}
+add_action('wp_print_scripts', 'dlp_fe_rd_diferir_huella', 1);
+
+add_action('wp_footer', function () {
+    if (empty($GLOBALS['dlp_fe_rd_huella'])) {
+        return;
+    }
+    ?>
+<script id="dlp-fe-huella">
+(function (u) {
+  var hecho = false;
+  function uuid() {
+    if (window.crypto && crypto.randomUUID) return crypto.randomUUID();
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) { var r = Math.random() * 16 | 0; return (c === 'x' ? r : (r & 3 | 8)).toString(16); });
+  }
+  function cargar() {
+    if (hecho) return; hecho = true;
+    var s = document.createElement('script');
+    s.src = u.replace(/(session_id=[^&]*?)[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/i, function (m, p) { return p + uuid(); });
+    s.async = true;
+    document.body.appendChild(s);
+  }
+  ['scroll', 'touchstart', 'pointerdown', 'keydown'].forEach(function (e) { window.addEventListener(e, cargar, { once: true, passive: true }); });
+  function programar() { setTimeout(cargar, 6000); }
+  if (document.readyState === 'complete') programar(); else window.addEventListener('load', programar);
+})(<?php echo wp_json_encode($GLOBALS['dlp_fe_rd_huella']); ?>);
+</script>
+    <?php
+}, 99);
