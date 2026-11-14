@@ -43,6 +43,20 @@
       "type": "checkbox",
       "default": 1,
       "help": "Para visitantes en páginas normales, los archivos CSS locales de menos de 40 KB (módulos, WooCommerce, carrito lateral…) se insertan en el HTML en vez de pedirse uno por uno: quita ~25 peticiones que bloquean el render. Con la caché de página no cuesta nada. Para comparar: agrega ?dlp_sin_optimizar=1 a la dirección."
+    },
+    {
+      "key": "diferir_js",
+      "label": "Diferir scripts menores (underscore, wp-util, js.cookie, HandL)",
+      "type": "checkbox",
+      "default": 1,
+      "help": "Para visitantes en páginas normales, esos 4 scripts ya no bloquean el primer dibujo: se ejecutan después de leer el HTML (jQuery sigue igual). Para comparar: ?dlp_sin_optimizar=1."
+    },
+    {
+      "key": "quitar_css_woo_home",
+      "label": "No cargar el CSS general de WooCommerce en el home",
+      "type": "checkbox",
+      "default": 1,
+      "help": "woocommerce.css pesa ~90 KB y en el home el 99 % no se usa (las tarjetas tienen su propio estilo). Solo afecta a visitantes en la portada."
     }
   ]
 }

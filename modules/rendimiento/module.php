@@ -167,3 +167,23 @@ add_filter('style_loader_tag', function ($tag, $handle, $href, $media) {
     $med = ($media && $media !== 'all') ? ' media="' . esc_attr($media) . '"' : '';
     return '<style id="' . esc_attr($handle) . '-inline"' . $med . '>' . trim($css) . "</style>\n";
 }, 10, 4);
+
+/** Scripts menores en el <head> que no hacen falta para dibujar: se ejecutan después de leer el HTML (en orden, antes de DOMContentLoaded). */
+add_filter('script_loader_tag', function ($tag, $handle) {
+    static $activo = null;
+    if ($activo === null) {
+        $activo = DLP_FE_Registry::setting('rendimiento', 'diferir_js') && !isset($_GET['dlp_sin_optimizar']) && dlp_fe_rd_visita_cacheable(); // phpcs:ignore WordPress.Security.NonceVerification
+    }
+    if (!$activo || !in_array($handle, ['underscore', 'wp-util', 'js.cookie', 'handl-utm-grabber'], true) || stripos($tag, ' defer') !== false || stripos($tag, ' async') !== false) {
+        return $tag;
+    }
+    return preg_replace('/<script\s/i', '<script defer ', $tag, 1);
+}, 10, 2);
+
+/** woocommerce.css (general) no se usa en la portada. */
+add_action('wp_enqueue_scripts', function () {
+    if (!DLP_FE_Registry::setting('rendimiento', 'quitar_css_woo_home') || isset($_GET['dlp_sin_optimizar']) || !is_front_page() || !dlp_fe_rd_visita_cacheable()) { // phpcs:ignore WordPress.Security.NonceVerification
+        return;
+    }
+    wp_dequeue_style('woocommerce-general');
+}, 9999);
