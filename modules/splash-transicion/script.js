@@ -14,8 +14,15 @@
   var min = first ? (parseInt(cfg.min_ms, 10) || 700) : 250;
 
   function hide() { el.classList.remove('is-on'); }
-  function done() { setTimeout(hide, Math.max(0, min - (Date.now() - started))); }
-  if (document.readyState === 'complete') done(); else window.addEventListener('load', done);
+  var quitado = false;
+  function done() { if (quitado) return; quitado = true; setTimeout(hide, Math.max(0, min - (Date.now() - started))); }
+  // Se quita cuando carga toda la página, o antes si la imagen principal del banner ya cargó (no hace falta esperar scripts de terceros).
+  var hero = document.querySelector('.dlph-bimg');
+  if (document.readyState === 'complete') done();
+  else {
+    window.addEventListener('load', done);
+    if (hero) { if (hero.complete && hero.naturalWidth) done(); else hero.addEventListener('load', done); }
+  }
   // Volver con "Atrás" (página en caché): sin capa.
   window.addEventListener('pageshow', function (e) { if (e.persisted) hide(); });
 

@@ -1,6 +1,6 @@
 {
   "label": "Rendimiento (velocidad de carga)",
-  "description": "Ajustes para que el sitio cargue más rápido sin cambiar cómo se ve: no carga en las páginas sin pago los scripts y estilos de la tarjeta (Cybersource), que solo se usan al pagar.",
+  "description": "Ajustes para que el sitio cargue más rápido sin cambiar cómo se ve: no carga en las páginas sin pago los scripts y estilos de la tarjeta (Cybersource) ni los íconos de WordPress para visitantes.",
   "section": "avanzado",
   "tab": "Rendimiento",
   "order": 90,
@@ -15,6 +15,13 @@
       "type": "checkbox",
       "default": 1,
       "help": "Quita Cybersource (formulario de tarjeta) y jquery.payment en el home, el menú y los productos. Siguen cargando en pago, mi cuenta y pagar pedido. La huella de dispositivo antifraude NO se toca."
+    },
+    {
+      "key": "quitar_dashicons",
+      "label": "No cargar los íconos de WordPress (dashicons) a visitantes",
+      "type": "checkbox",
+      "default": 1,
+      "help": "Es un archivo de 35 KB que solo usa la barra de administración. Si hay sesión iniciada sigue cargando."
     }
   ]
 }

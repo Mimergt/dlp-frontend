@@ -27,6 +27,20 @@ foreach (preg_split('/\R/', (string) ($s['categorias'] ?? '')) as $linea) {
     }
 }
 
+// Fotos de los productos que salen en el home (Promociones y Lo más pedido), en el tamaño que usan las tarjetas
+$ids = array_filter(array_map('absint', explode(',', (string) ($s['top'] ?? ''))));
+$cat = sanitize_title((string) ($s['promos_cat'] ?? ''));
+if ($cat !== '') {
+    $ids = array_merge($ids, get_posts(['post_type' => 'product', 'post_status' => 'publish', 'fields' => 'ids', 'numberposts' => 40,
+        'tax_query' => [['taxonomy' => 'product_cat', 'field' => 'slug', 'terms' => $cat]]]));
+}
+foreach (array_unique($ids) as $pid) {
+    $u = get_the_post_thumbnail_url($pid, 'woocommerce_single');
+    if ($u) {
+        $trabajos[] = [$u, 600, ''];
+    }
+}
+
 $antes = $despues = 0;
 foreach ($trabajos as [$url, $max, $suf]) {
     if (!preg_match('#/wp-content/uploads/(.+\.(jpe?g|png))$#i', $url, $m)) {

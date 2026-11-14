@@ -149,6 +149,17 @@
   [].forEach.call(document.querySelectorAll('.dlph-slider'), slider);
 
   // Footer: las fotos cambian solas con fundido, sin controles
+  // Las fotos del pie se descargan solo cuando el pie está por aparecer (antes competían con la imagen principal)
+  (function () {
+    var pie = [].slice.call(document.querySelectorAll('.dlph-fs[data-bg]'));
+    if (!pie.length) return;
+    function cargar() { pie.forEach(function (d) { d.style.backgroundImage = 'url(' + d.getAttribute('data-bg') + ')'; d.removeAttribute('data-bg'); }); pie = []; }
+    var cont = document.querySelector('.dlph-ft');
+    if (!('IntersectionObserver' in window) || !cont) { cargar(); return; }
+    var io = new IntersectionObserver(function (es) { if (es.some(function (e) { return e.isIntersecting; })) { io.disconnect(); cargar(); } }, { rootMargin: '250px 0px' });
+    io.observe(cont);
+  })();
+
   [].forEach.call(document.querySelectorAll('.dlph-fslides'), function (box) {
     var fs = [].slice.call(box.querySelectorAll('.dlph-fs')), secs = parseFloat(cfg.footer_autoplay) || 0, i = 0;
     if (fs.length < 2 || secs <= 0 || reduce) return;

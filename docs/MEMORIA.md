@@ -520,3 +520,15 @@ Punto de partida medido en dev: imágenes del home ≈ 7.9 MB (IMG_6022.png 3.2 
 - Verificado en dev: home sin imágenes rotas (375 px), checkout sigue con tarjeta (tags.js, jquery.payment, sv-wc, wc-cybersource, flex-microform), sin errores de consola. Imágenes referenciadas por el home: 7.9 MB → 1.9 MB.
 - Pendiente (Fase 2): fuentes (Google Fonts Roboto), fotos del footer (DP_XELA ≈ 520 KB), carga de CSS/JS de los módulos, decisión sobre online-metrix; Fase 3: LiteSpeed Cache.
 - Nota: la cabecera `Version:` de `dlp-frontend.php` sigue en 0.43.4 (solo cambia la constante `DLP_FE_VERSION`).
+
+## 0.47.0 — Optimización Fase 2 (tras el primer PageSpeed de dev) — 2026-11-13
+
+PageSpeed móvil de dev tras la Fase 1: **Rendimiento 56** (FCP 2.4 s, LCP 4.7 s, TBT 690 ms, CLS 0.004, Speed Index 7.0 s), Accesibilidad 81, Recomendaciones 100, SEO 61.
+Hallazgos: ThreatMetrix (online-metrix, antifraude) = ~914 ms de CPU (casi todo el TBT) — **decisión del dueño: se deja tal cual** (no se retrasa ni se quita); el splash esperaba al evento `load` (retenido por ese script) y por eso el Speed Index era 7 s; dashicons.css 35 KB 100 % sin uso; fotos del footer (3 × ~170 KB) compitiendo con el banner; fotos de productos en JPG de 500 px.
+
+- **Splash**: se quita cuando carga toda la página **o antes, cuando la imagen principal del banner ya cargó** (mismo tiempo mínimo y mismo diseño).
+- **Fotos del footer** (`data-bg`): se descargan cuando el pie está a 250 px de aparecer (IntersectionObserver).
+- **Fotos de productos del home** (Promociones y Lo más pedido): WebP hermano (`scripts/optimizar-imagenes.php` ahora también las genera, 1.3 MB → 0.35 MB) y la tarjeta las usa con `width`/`height`.
+- **Módulo rendimiento**: nuevo ajuste «No cargar dashicons a visitantes» (se deja vacío para que los estilos que lo piden como dependencia, como Product Add-ons, sigan cargando).
+- Verificado en dev (375 px): sin imágenes rotas, sin errores de consola, splash se quita, footer carga al hacer scroll.
+- **Pendiente**: reducir/unir CSS bloqueantes (~16 archivos de módulos + woocommerce.css), `defer` a JS propio, accesibilidad (viewport con `user-scalable=0`, falta `<main>`, enlaces sin nombre, contraste), SEO (meta descripción; el «bloqueó la indexación» es solo de dev: en producción debe estar indexable), LiteSpeed Cache (Fase 3), cabeceras de caché larga para estáticos (`.htaccess`/servidor; no viaja con el plugin).

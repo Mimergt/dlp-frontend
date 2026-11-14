@@ -72,11 +72,17 @@ function dlp_fe_hn_hermana($url, $sufijo = '') {
 
 function dlp_fe_hn_tarjeta($p, $perezosa = false) {
     $img = get_the_post_thumbnail_url($p->get_id(), 'woocommerce_single');
+    $web = $img ? dlp_fe_hn_hermana($img) : null;
+    $dim = '';
+    if ($web) {
+        $img = $web['url'];
+        $dim = ' width="' . (int) $web['w'] . '" height="' . (int) $web['h'] . '"';
+    }
     ob_start();
     ?>
     <li class="product type-product post-<?php echo (int) $p->get_id(); ?> status-publish">
         <a href="<?php echo esc_url(get_permalink($p->get_id())); ?>" class="woocommerce-LoopProduct-link woocommerce-loop-product__link">
-            <span class="et_shop_image"><?php if ($img) : ?><img src="<?php echo esc_url($img); ?>" alt="<?php echo esc_attr($p->get_name()); ?>" loading="<?php echo $perezosa ? 'lazy' : 'eager'; ?>" decoding="async"><?php endif; ?><span class="et_overlay"></span></span>
+            <span class="et_shop_image"><?php if ($img) : ?><img src="<?php echo esc_url($img); ?>"<?php echo $dim; // phpcs:ignore ?> alt="<?php echo esc_attr($p->get_name()); ?>" loading="<?php echo $perezosa ? 'lazy' : 'eager'; ?>" decoding="async"><?php endif; ?><span class="et_overlay"></span></span>
             <h2 class="woocommerce-loop-product__title"><?php echo esc_html($p->get_name()); ?></h2>
             <span class="price"><?php echo wp_kses_post($p->get_price_html()); ?></span>
         </a>
@@ -240,7 +246,7 @@ function dlp_fe_hn_footer($a = []) {
         if ($img === '') {
             continue;
         }
-        $fotos .= '<div class="dlph-fs' . ($n === 0 ? ' on' : '') . '" style="background-image:url(' . esc_url($img) . ')"></div>';
+        $fotos .= '<div class="dlph-fs' . ($n === 0 ? ' on' : '') . '" data-bg="' . esc_url($img) . '"></div>';
         $n++;
     }
     $titulo = isset($a['titulo']) ? $a['titulo'] : dlp_fe_hn_o('footer_titulo');

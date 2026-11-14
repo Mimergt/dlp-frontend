@@ -39,3 +39,12 @@ function dlp_fe_rd_quitar_pago() {
 add_action('wp_enqueue_scripts', 'dlp_fe_rd_quitar_pago', 9999);
 add_action('wp_print_scripts', 'dlp_fe_rd_quitar_pago', 1);
 add_action('wp_print_footer_scripts', 'dlp_fe_rd_quitar_pago', 1);
+
+/** Dashicons: lo usa la barra de administración. Para visitantes se deja vacío (otros estilos lo piden como dependencia y así siguen cargando). */
+add_action('wp_enqueue_scripts', function () {
+    if (!DLP_FE_Registry::setting('rendimiento', 'quitar_dashicons') || is_user_logged_in()) {
+        return;
+    }
+    wp_deregister_style('dashicons');
+    wp_register_style('dashicons', false, [], DLP_FE_VERSION);
+}, 9999);
