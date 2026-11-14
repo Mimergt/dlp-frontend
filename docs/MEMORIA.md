@@ -532,3 +532,10 @@ Hallazgos: ThreatMetrix (online-metrix, antifraude) = ~914 ms de CPU (casi todo 
 - **Módulo rendimiento**: nuevo ajuste «No cargar dashicons a visitantes» (se deja vacío para que los estilos que lo piden como dependencia, como Product Add-ons, sigan cargando).
 - Verificado en dev (375 px): sin imágenes rotas, sin errores de consola, splash se quita, footer carga al hacer scroll.
 - **Pendiente**: reducir/unir CSS bloqueantes (~16 archivos de módulos + woocommerce.css), `defer` a JS propio, accesibilidad (viewport con `user-scalable=0`, falta `<main>`, enlaces sin nombre, contraste), SEO (meta descripción; el «bloqueó la indexación» es solo de dev: en producción debe estar indexable), LiteSpeed Cache (Fase 3), cabeceras de caché larga para estáticos (`.htaccess`/servidor; no viaja con el plugin).
+
+## Optimización: segunda medición de dev y CLS — 2026-11-13
+
+Segunda medición móvil (tras 0.47.0): Rendimiento 48 (varía ±8 entre corridas del mismo código), FCP 2.3 s, LCP 4.7 s, TBT 510 ms, **CLS 0.304**, SI 5.4 s (antes 7.0 s). ThreatMetrix = 1.3 s de CPU (se deja a propósito: antifraude).
+- **Causa del CLS (0.3)**: Divi tenía `et_pb_css_in_footer = on`, así que el CSS de los módulos del encabezado salía casi al final del HTML (posición ~211 KB de 225 KB) y el encabezado medía 210 px hasta que llegaba, empujando todo. Se cambió a **off** en dev (`scripts/divi-css-en-head.php aplicar`): ese CSS va en el CSS crítico de la cabecera. Medido en el navegador: CLS 0.31 → 0. Verificados home, menú y restaurantes. Respaldo: `~/dlp-backups/et_divi-antes-2026-11-13.json`. Es una opción de la base de datos: viaja con la sobrescritura de producción; si no, correr el script.
+- La primera medición mostraba CLS 0.004 por suerte de tiempos: el salto ya existía (0.276 en los causantes).
+- Pendiente: unir/reducir los ~16 CSS bloqueantes de los módulos (LCP/FCP), `defer` al JS propio, accesibilidad/SEO. Decisión de infraestructura (VPS propio con LiteSpeed + caché de objetos) y plan de migración: ver conversación; lo que depende del servidor (page cache, Redis, cabeceras, PHP) se afina en el VPS, no en Hostinger.
