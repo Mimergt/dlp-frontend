@@ -593,3 +593,9 @@ Medición auq78uhxhv (tras 0.52.0): **Móvil 80** (FCP 1.3 s, LCP 4.9 s, SI 3.8 
 Medición 7j5axc82tj (tras 0.53.0): **Móvil 86** (FCP 1.3 s, LCP 4.1 s, TBT 10 ms, CLS 0, SI 3.1 s) · **Escritorio 100**. Meta del dueño: verde (90) en móvil.
 - `scripts/optimizar-imagenes.php` crea `nombre-t.webp` de 420 px para las fotos de producto del home (1627 KB → 359 KB) y la tarjeta las usa si existen. Se ve nítido en 375 px (verificado). **Revertir** si se ve suave: borrar los `*-t.webp` de uploads o quitar el `-t` en `dlp_fe_hn_tarjeta()`.
 - Quedan para el VPS (acordado con el dueño): caché larga de archivos (95 KiB, servidor), jQuery/migrate/blockUI bloqueantes (riesgo para carrito), 17 KiB de CSS sin uso, fuentes (30 ms).
+
+## 0.55.0 — Accesibilidad sin cambios visuales (2026-11-14)
+- Hallazgo previo: el **splash** retrasaba el LCP del home ~2 s (PageSpeed móvil 77 con splash vs **95** sin él: LCP 5.1→2.9 s, SI 5.3→1.6 s). Decisión del usuario: dejarlo **apagado en dev** (`dlp_fe_modules['splash-transicion'].enabled=0`) mientras mide; luego evaluar activarlo solo fuera del home. Respaldo: `~/dlp-backups/dlp_fe_modules-antes-splash-2026-11-14.json`.
+- home-nuevo: enlaces del banner con `aria-label="Ver promoción N"`; `role="main"` en `#main-content` (el tema no trae `<main>`); en los clones del carrusel los elementos enfocables llevan `tabindex=-1` (siguen siendo pulsables, pero salen del orden de teclado/lector).
+- Pendiente (a decidir): `user-scalable=0` del viewport (riesgo de zoom automático en iPhone en campos <16 px; probar checkout) y contraste de color de textos pequeños (cambia colores de marca; requiere OK).
+- Verificación completa de no regresión hecha: páginas 200 sin errores PHP/JS, compra anónima y logueada, checkout con tarjeta + ThreatMetrix, caché de /sitio/estado desactivada, cookies HandL.

@@ -3,6 +3,10 @@
 (function () {
   'use strict';
 
+  // Accesibilidad: marca el contenido principal como zona principal de la página (el tema no trae <main>).
+  var mc = document.getElementById('main-content');
+  if (mc && !document.querySelector('main, [role="main"]')) mc.setAttribute('role', 'main');
+
   // Slides infinitos y automáticos. Cada uno avanza a su ritmo (el banner es el más rápido). Se duplican los elementos
   // a cada lado y, cuando el scroll queda quieto, se salta de vuelta al conjunto original sin que se note.
   var cfg = (window.dlpFE && window.dlpFE['home-nuevo']) || {};
@@ -59,8 +63,8 @@
       if (isCats && !mqMovil.matches) scrollable = false;
       if (orig.length < 2 || (!scrollable && !isBanner)) { update(); return; }
       var first = parent.firstElementChild;
-      orig.slice().reverse().forEach(function (e) { var c = e.cloneNode(true); c.classList.add('dlph-clone'); c.setAttribute('aria-hidden', 'true'); c.setAttribute('tabindex', '-1'); parent.insertBefore(c, first); first = c; });
-      orig.forEach(function (e) { var c = e.cloneNode(true); c.classList.add('dlph-clone'); c.setAttribute('aria-hidden', 'true'); c.setAttribute('tabindex', '-1'); parent.appendChild(c); afters.push(c); });
+      orig.slice().reverse().forEach(function (e) { var c = e.cloneNode(true); c.classList.add('dlph-clone'); c.setAttribute('aria-hidden', 'true'); c.setAttribute('tabindex', '-1'); [].slice.call(c.querySelectorAll('a, button, input, select, textarea, [tabindex]')).forEach(function (f) { f.setAttribute('tabindex', '-1'); }); parent.insertBefore(c, first); first = c; });
+      orig.forEach(function (e) { var c = e.cloneNode(true); c.classList.add('dlph-clone'); c.setAttribute('aria-hidden', 'true'); c.setAttribute('tabindex', '-1'); [].slice.call(c.querySelectorAll('a, button, input, select, textarea, [tabindex]')).forEach(function (f) { f.setAttribute('tabindex', '-1'); }); parent.appendChild(c); afters.push(c); });
       looping = true;
       measure();
       track.style.scrollBehavior = 'auto';

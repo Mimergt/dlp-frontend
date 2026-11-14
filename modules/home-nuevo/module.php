@@ -127,7 +127,7 @@ function dlp_fe_hn_banner() {
         $wm  = $mov === '' ? dlp_fe_hn_hermana($img, '-m') : null;
         $src = $web ? $web['url'] : $img;
         $dim = $web ? ' width="' . (int) $web['w'] . '" height="' . (int) $web['h'] . '"' : '';
-        $banners .= '<a class="dlph-slide' . ($nb === 1 ? ' on' : '') . ($mov !== '' ? ' has-m' : '') . '" href="' . esc_url(dlp_fe_hn_url(dlp_fe_hn_o('banner' . $i . '_url'))) . '"><picture>'
+        $banners .= '<a class="dlph-slide' . ($nb === 1 ? ' on' : '') . ($mov !== '' ? ' has-m' : '') . '" aria-label="' . esc_attr('Ver promoción ' . $nb) . '" href="' . esc_url(dlp_fe_hn_url(dlp_fe_hn_o('banner' . $i . '_url'))) . '"><picture>'
             . ($mov !== '' ? '<source media="(max-width: 767px)" srcset="' . esc_url($mov) . '">' : '')
             . ($wm ? '<source media="(max-width: 767px)" srcset="' . esc_url($wm['url']) . '">' : '')
             . '<img class="dlph-bimg" src="' . esc_url($src) . '"' . $dim . ' alt="" ' . ($nb > 1 ? 'loading="lazy"' : 'fetchpriority="high"') . '></picture></a>';
