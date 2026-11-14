@@ -39,6 +39,7 @@ foreach (array_unique($ids) as $pid) {
     $u = get_the_post_thumbnail_url($pid, 'woocommerce_single');
     if ($u) {
         $trabajos[] = [$u, 600, ''];
+        $trabajos[] = [$u, 420, '-t']; // tarjetas del home (se muestran a ~364 px)
     }
 }
 

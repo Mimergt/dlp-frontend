@@ -587,3 +587,9 @@ Decisión del dueño: **la meta de 95 es solo para el home** (móvil y escritori
 
 Medición auq78uhxhv (tras 0.52.0): **Móvil 80** (FCP 1.3 s, LCP 4.9 s, SI 3.8 s, TBT 0, CLS 0) · **Escritorio 98**. Meta del dueño: llegar al verde (90) en móvil; 95 era optimista. Lo que más marcaba: «Mejorar la entrega de imágenes» −559 KiB (cuadros de categoría de 720–1080 px mostrados a ~280 px) y jQuery/migrate/blockUI bloqueantes.
 - `scripts/optimizar-imagenes.php` genera además `nombre-t.webp` (480 px) para los cuadros (acepta también fuentes .webp); `dlp_fe_hn_hermana()` acepta .webp y los cuadros usan `-t` si existe (4163 KB → 246 KB). Verificado: 8 cuadros cargan a 480 px, sin rotas. En producción: correr el script `aplicar` (o traer `uploads`).
+
+## 0.54.0 — Tarjetas de producto del home a 420 px — 2026-11-14
+
+Medición 7j5axc82tj (tras 0.53.0): **Móvil 86** (FCP 1.3 s, LCP 4.1 s, TBT 10 ms, CLS 0, SI 3.1 s) · **Escritorio 100**. Meta del dueño: verde (90) en móvil.
+- `scripts/optimizar-imagenes.php` crea `nombre-t.webp` de 420 px para las fotos de producto del home (1627 KB → 359 KB) y la tarjeta las usa si existen. Se ve nítido en 375 px (verificado). **Revertir** si se ve suave: borrar los `*-t.webp` de uploads o quitar el `-t` en `dlp_fe_hn_tarjeta()`.
+- Quedan para el VPS (acordado con el dueño): caché larga de archivos (95 KiB, servidor), jQuery/migrate/blockUI bloqueantes (riesgo para carrito), 17 KiB de CSS sin uso, fuentes (30 ms).

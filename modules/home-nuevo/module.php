@@ -75,7 +75,7 @@ function dlp_fe_hn_hermana($url, $sufijo = '') {
 
 function dlp_fe_hn_tarjeta($p, $perezosa = false) {
     $img = get_the_post_thumbnail_url($p->get_id(), 'woocommerce_single');
-    $web = $img ? dlp_fe_hn_hermana($img) : null;
+    $web = $img ? (dlp_fe_hn_hermana($img, '-t') ?: dlp_fe_hn_hermana($img)) : null;
     $dim = '';
     if ($web) {
         $img = $web['url'];
