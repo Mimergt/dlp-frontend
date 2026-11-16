@@ -305,3 +305,60 @@ function dlp_fe_af_render_admin() {
         echo '</tbody></table>';
     }
 }
+
+/* ------------------------------------------------------------------
+ * Bloqueo de login por cuenta (reemplaza al plugin User Blocker).
+ * Convención heredada: usermeta `is_active` = 'n' impide iniciar sesión;
+ * `block_msg_permenant` es el mensaje que ve el cliente.
+ * Sin consultas masivas: una lectura de meta por intento de login.
+ * ------------------------------------------------------------------ */
+add_filter('authenticate', function ($user) {
+    if (is_wp_error($user) || !($user instanceof WP_User)) {
+        return $user;
+    }
+    if (get_user_meta($user->ID, 'is_active', true) === 'n') {
+        $msg = (string) get_user_meta($user->ID, 'block_msg_permenant', true);
+        if ($msg === '') {
+            $msg = (string) dlp_fe_af_cfg('mensaje', 'Tu cuenta ha sido bloqueada. Contacta a la tienda para más información.');
+        }
+        return new WP_Error('dlp_cuenta_bloqueada', '<strong>ERROR</strong>: ' . esc_html($msg));
+    }
+    return $user;
+}, 30, 1);
+
+/** Al bloquear una cuenta se cierran sus sesiones abiertas (User Blocker solo actuaba al iniciar sesión). */
+add_action('updated_user_meta', function ($meta_id, $user_id, $key, $value) {
+    if ($key === 'is_active' && $value === 'n') {
+        WP_Session_Tokens::get_instance((int) $user_id)->destroy_all();
+    }
+}, 10, 4);
+add_action('added_user_meta', function ($meta_id, $user_id, $key, $value) {
+    if ($key === 'is_active' && $value === 'n') {
+        WP_Session_Tokens::get_instance((int) $user_id)->destroy_all();
+    }
+}, 10, 4);
+
+/** Usuarios > Todos los usuarios: pestaña «Bloqueados» (is_active = n) y columna «Estado». */
+add_filter('views_users', function ($views) {
+    global $wpdb;
+    $n = (int) $wpdb->get_var("SELECT COUNT(*) FROM {$wpdb->usermeta} WHERE meta_key='is_active' AND meta_value='n'");
+    $cur = isset($_GET['dlp_bloqueados']) ? ' class="current"' : '';
+    $views['dlp_bloqueados'] = '<a href="' . esc_url(add_query_arg('dlp_bloqueados', 1, admin_url('users.php'))) . '"' . $cur . '>Bloqueados <span class="count">(' . $n . ')</span></a>';
+    return $views;
+});
+add_action('pre_get_users', function ($q) {
+    if (is_admin() && !empty($_GET['dlp_bloqueados']) && $GLOBALS['pagenow'] === 'users.php') {
+        $q->set('meta_key', 'is_active');
+        $q->set('meta_value', 'n');
+    }
+});
+add_filter('manage_users_columns', function ($c) {
+    $c['dlp_bloqueo'] = 'Estado';
+    return $c;
+});
+add_filter('manage_users_custom_column', function ($out, $col, $uid) {
+    if ($col === 'dlp_bloqueo') {
+        return get_user_meta($uid, 'is_active', true) === 'n' ? '<strong style="color:#b32d2e">Bloqueado</strong>' : '';
+    }
+    return $out;
+}, 10, 3);
