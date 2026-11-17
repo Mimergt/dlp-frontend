@@ -1,0 +1,10 @@
+{
+  "label": "Pedidos (admin): columnas y filtros Tipo, Origen y Pago",
+  "description": "En WooCommerce → Pedidos agrega las columnas Tipo (Delivery/Pickup), Origen (Web/Android/iOS) y Pago (Efectivo/Tarjeta) y tres filtros combinables entre sí y con el estado y la búsqueda. El origen sale de la landing page de HandL (origin=webview&device=…) o de la meta device en pedidos viejos, igual que el Excel del panel.",
+  "section": "checkout",
+  "tab": "Pedidos (admin)",
+  "order": 11,
+  "boot": true,
+  "php": "module.php",
+  "default": true
+}
