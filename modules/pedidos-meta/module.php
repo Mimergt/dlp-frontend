@@ -9,7 +9,7 @@ add_action('woocommerce_order_status_changed', function ($order_id, $from, $to) 
         return;
     }
     $order = wc_get_order($order_id);
-    if (!$order || !$order->get_date_created() || !$order->get_date_completed()) {
+    if (!$order || $order->get_type() !== 'shop_order' || !$order->get_date_created() || !$order->get_date_completed()) {
         return;
     }
     $dif = gmdate('H:i', $order->get_date_completed()->getTimestamp() - $order->get_date_created()->getTimestamp());

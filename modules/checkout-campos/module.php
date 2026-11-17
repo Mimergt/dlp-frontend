@@ -85,7 +85,7 @@ add_filter('woocommerce_checkout_update_customer_data', function ($update) {
 
 add_action('woocommerce_new_order', function ($order_id) {
     $order = wc_get_order($order_id);
-    if (!$order || $order->get_user_id()) {
+    if (!$order || $order->get_type() !== 'shop_order' || $order->get_user_id()) {
         return;
     }
     $user = get_user_by('email', $order->get_billing_email());

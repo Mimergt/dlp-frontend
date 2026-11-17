@@ -510,7 +510,7 @@ add_action('woocommerce_order_status_processing', function ($order_id, $order = 
         return;
     }
     $order = $order ?: wc_get_order($order_id);
-    if (!$order || $order->get_meta('_dlp_mail_tienda', true) !== '' || !dlp_fe_mail_store_id($order)) {
+    if (!$order || $order->get_type() !== 'shop_order' || $order->get_meta('_dlp_mail_tienda', true) !== '' || !dlp_fe_mail_store_id($order)) {
         return;
     }
     dlp_fe_mail_notify_tienda($order, 'nuevo');
@@ -525,7 +525,7 @@ add_action('woocommerce_update_order', function ($order_id, $order = null) {
         return;
     }
     $order = $order ?: wc_get_order($order_id);
-    if (!$order || !in_array($order->get_status(), ['processing', 'prep', 'dlv', 'rtp'], true)) {
+    if (!$order || $order->get_type() !== 'shop_order' || !in_array($order->get_status(), ['processing', 'prep', 'dlv', 'rtp'], true)) {
         return;
     }
     $notificada = (int) $order->get_meta('_dlp_mail_tienda', true);
@@ -545,7 +545,7 @@ foreach (['failed' => 'fallido', 'cancelled' => 'cancelado'] as $dlp_fe_mail_st 
     add_action('woocommerce_order_status_' . $dlp_fe_mail_st, function ($order_id, $order = null) use ($dlp_fe_mail_tp) {
         $order = $order ?: wc_get_order($order_id);
         $pedidos = dlp_fe_mail_pedidos();
-        if (!$order || $pedidos === '') {
+        if (!$order || $order->get_type() !== 'shop_order' || $pedidos === '') {
             return;
         }
         dlp_fe_mail_send([$pedidos], ($dlp_fe_mail_tp === 'fallido' ? 'Pedido fallido #' : 'Pedido cancelado #') . $order->get_order_number(), dlp_fe_mail_aviso_html($order, $dlp_fe_mail_tp));
@@ -576,7 +576,7 @@ function dlp_fe_mail_tipos() {
 }
 
 function dlp_fe_mail_ultimo_pedido() {
-    $q = wc_get_orders(['limit' => 1, 'orderby' => 'date', 'order' => 'DESC', 'status' => ['processing', 'completed', 'prep', 'dlv', 'rtp'], 'return' => 'ids']);
+    $q = wc_get_orders(['type' => 'shop_order', 'limit' => 1, 'orderby' => 'date', 'order' => 'DESC', 'status' => ['processing', 'completed', 'prep', 'dlv', 'rtp'], 'return' => 'ids']);
     return $q ? (int) $q[0] : 0;
 }
 
