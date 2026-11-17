@@ -16,7 +16,7 @@
     { "key": "logo", "label": "Logo del correo", "type": "image", "default": "", "help": "Va sobre la barra negra: usa un logo blanco. Vacío = logo de Divi.", "group": "Marca" },
     { "key": "color", "label": "Color de acento", "type": "color", "default": "#111111", "group": "Marca" },
     { "key": "pie", "label": "Texto del pie", "type": "textarea", "default": "Hamburguesas Del Puente · Guatemala", "group": "Marca" },
-    { "key": "contacto_telefono", "label": "Teléfono de contacto", "type": "text", "default": "", "help": "Vacío = no se muestra.", "group": "Contacto" },
+    { "key": "contacto_telefono", "label": "Teléfono de contacto", "type": "text", "default": "2306 2323", "help": "Vacío = no se muestra.", "group": "Contacto" },
     { "key": "contacto_correo", "label": "Correo de contacto", "type": "text", "default": "pedidos@delpuente.com.gt", "group": "Contacto" },
     { "key": "contacto_web", "label": "Sitio web", "type": "text", "default": "https://delpuente.com.gt", "group": "Contacto" }
   ]
