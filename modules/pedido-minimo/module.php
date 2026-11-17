@@ -60,14 +60,15 @@ function dlp_fe_pm_html($contexto = 'carrito') {
     $q   = function ($n) {
         return 'Q' . number_format((float) $n, $n == floor($n) ? 0 : 2);
     };
-    $h  = '<div class="dlpmin dlpmin--' . esc_attr($contexto) . ($ok ? ' dlpmin--ok' : '') . '" data-falta="' . esc_attr($e['falta']) . '">';
-    $h .= '<div class="dlpmin-top"><b>' . ($ok ? 'Ya alcanzas el pedido mínimo' : 'Te faltan ' . esc_html($q($e['falta'])) . ' para el pedido mínimo') . '</b>';
+    // El mínimo es solo de delivery. En el carrito la barra es informativa (sin data-falta no bloquea «Pagar»: el tipo de
+    // pedido se elige en el checkout y ahí es donde Tiendas bloquea de verdad); en el checkout lleva data-falta como antes.
+    $falta_attr = $contexto === 'carrito' ? '' : ' data-falta="' . esc_attr($e['falta']) . '"';
+    $h  = '<div class="dlpmin dlpmin--' . esc_attr($contexto) . ($ok ? ' dlpmin--ok' : '') . '"' . $falta_attr . '>';
+    $h .= '<div class="dlpmin-top"><b>' . ($ok ? 'Ya alcanzas el mínimo de delivery' : 'Delivery: te faltan ' . esc_html($q($e['falta'])) . ' para el mínimo') . '</b>';
     $h .= '<span>' . esc_html($q($e['sub'])) . ' / ' . esc_html($q($e['min'])) . '</span></div>';
     $h .= '<div class="dlpmin-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="' . (int) $pct . '"><i style="width:' . (int) $pct . '%"></i></div>';
+    $h .= '<p class="dlpmin-nota">El pedido mínimo aplica solo a delivery.' . ($contexto === 'carrito' ? ' En pickup no hay mínimo.' : '') . '</p>';
     if (!$ok) {
-        if (!$e['tipo'] || $e['tipo'] === 'delivery') {
-            $h .= '<p class="dlpmin-nota">Mínimo para pedidos a domicilio.</p>';
-        }
         $sug = dlp_fe_pm_sugeridos($e['falta']);
         if ($sug) {
             $h .= '<div class="dlpmin-tit">Completa con un postre</div><div class="dlpmin-fila">';
