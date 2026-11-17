@@ -1,0 +1,13 @@
+{
+  "label": "Checkout: errores visibles y registro de fallas",
+  "description": "La dirección escrita y su referencia dejan de ser obligatorias (lo mínimo en delivery es la ubicación en el mapa + nombre, apellido, teléfono y correo; en pickup no se pide dirección). Al fallar el envío, en el celular se lleva la vista al campo que falta y se marca, con un aviso fijo arriba. Cada falla de validación se registra (sin datos personales) en WooCommerce → Estado → Registros, fuente dlp-checkout.",
+  "section": "checkout",
+  "tab": "Errores y registro",
+  "order": 5,
+  "boot": true,
+  "php": "module.php",
+  "where": ["checkout"],
+  "default": true,
+  "css": "style.css",
+  "js": "script.js"
+}
