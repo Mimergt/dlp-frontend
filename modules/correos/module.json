@@ -1,0 +1,23 @@
+{
+  "label": "Correos de pedidos",
+  "description": "Correo a la tienda asignada (con copia a pedidos@), aviso de pedidos fallidos/cancelados y rediseño de todos los correos de WooCommerce al cliente. Apaga los correos de administrador de WooCommerce. En dev y sitios de prueba todo se redirige al correo de pruebas. Vista previa en Herramientas → Vista previa de correos.",
+  "section": "checkout",
+  "tab": "Correos",
+  "order": 10,
+  "boot": true,
+  "php": "module.php",
+  "default": true,
+  "settings": [
+    { "key": "pedidos_email", "label": "Correo de pedidos (copia oculta de todo)", "type": "text", "default": "pedidos@delpuente.com.gt", "help": "Recibe copia de cada correo de tienda y los avisos de pedido fallido o cancelado. Es el único destino de administrador.", "group": "Destinos" },
+    { "key": "aviso_tienda", "label": "Enviar correo a la tienda asignada", "type": "checkbox", "default": 1, "help": "Usa el campo extra_store_email de la tienda. Si la tienda no tiene correo, solo llega a pedidos@.", "group": "Destinos" },
+    { "key": "avisar_anterior", "label": "Al reasignar, avisar también a la tienda anterior", "type": "checkbox", "default": 1, "group": "Destinos" },
+    { "key": "modo_pruebas", "label": "Modo de pruebas", "type": "checkbox", "default": 0, "help": "Todos los correos del sitio (tienda y clientes) se envían solo al correo de pruebas, con un aviso con el destinatario real. Se activa solo en dev., staging. y test. y mientras exista DLP_STAGING_GUARD.", "group": "Seguridad" },
+    { "key": "correo_pruebas", "label": "Correo de pruebas", "type": "text", "default": "m@epic.gt", "group": "Seguridad" },
+    { "key": "logo", "label": "Logo del correo", "type": "image", "default": "", "help": "Va sobre la banda del color de acento: usa un logo blanco. Vacío = logo de Divi.", "group": "Marca" },
+    { "key": "color", "label": "Color de acento", "type": "color", "default": "#CF1E26", "group": "Marca" },
+    { "key": "pie", "label": "Texto del pie", "type": "textarea", "default": "Hamburguesas Del Puente · Guatemala", "group": "Marca" },
+    { "key": "contacto_telefono", "label": "Teléfono de contacto", "type": "text", "default": "", "help": "Vacío = no se muestra.", "group": "Contacto" },
+    { "key": "contacto_correo", "label": "Correo de contacto", "type": "text", "default": "pedidos@delpuente.com.gt", "group": "Contacto" },
+    { "key": "contacto_web", "label": "Sitio web", "type": "text", "default": "https://delpuente.com.gt", "group": "Contacto" }
+  ]
+}
