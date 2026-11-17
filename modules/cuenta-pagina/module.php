@@ -36,7 +36,14 @@ add_action('template_redirect', function () {
     if (untrailingslashit(wp_parse_url($url, PHP_URL_PATH) ?: '') === untrailingslashit(wp_parse_url(home_url(add_query_arg([])), PHP_URL_PATH) ?: '')) {
         return; // ya estamos ahí
     }
-    wp_safe_redirect(add_query_arg('redirect_to', rawurlencode(wc_get_page_permalink('myaccount')), $url));
+    // Solo se pide volver a una ruta concreta de Mi cuenta (un pedido, direcciones...) si eso fue lo que se abrió; abrir
+    // /mi-cuenta/ a secas ya no obliga a terminar ahí después de ingresar (el destino por defecto es el inicio).
+    $cuenta = untrailingslashit((string) wc_get_page_permalink('myaccount'));
+    $pedido = untrailingslashit((string) strtok(set_url_scheme(home_url(add_query_arg([]))), '?'));
+    if ($pedido !== $cuenta && strpos($pedido, $cuenta) === 0) {
+        $url = add_query_arg('redirect_to', rawurlencode(home_url(add_query_arg([]))), $url);
+    }
+    wp_safe_redirect($url);
     exit;
 }, 5);
 

@@ -8,6 +8,19 @@ if (!defined('ABSPATH')) {
  * enlaces y las redirecciones; el contenido de Divi de esa página ya no se muestra.
  * Entrada por Ajax con wp_signon (acepta correo o usuario) y límite de intentos por IP y por cuenta.
  */
+/**
+ * Destino por defecto tras ingresar cuando NO hay un redirect_to explícito y válido: el inicio (ajuste «destino»).
+ * Los usuarios de las tiendas (roles dlp_tienda / dlp_supervisor) entran directo al panel de pedidos.
+ * Un redirect_to explícito (/orders/, /finalizar-compra/, cualquier ruta del sitio) siempre se respeta.
+ */
+function dlp_fe_lg_destino($user = null) {
+    if ($user instanceof WP_User && array_intersect(['dlp_tienda', 'dlp_supervisor'], (array) $user->roles)) {
+        return home_url('/' . trim((string) apply_filters('dlp_paneles_app_slug', 'orders'), '/') . '/');
+    }
+    $d = trim((string) DLP_FE_Registry::setting('login-pagina', 'destino', '/'));
+    return home_url($d === '' ? '/' : $d);
+}
+
 function dlp_fe_lg_is_page() {
     $slug = trim((string) DLP_FE_Registry::setting('login-pagina', 'slug'), '/');
     return $slug !== '' && !is_admin() && function_exists('is_page') && is_page($slug);
@@ -17,7 +30,7 @@ function dlp_fe_lg_is_page() {
 add_action('template_redirect', function () {
     if (dlp_fe_lg_is_page() && is_user_logged_in()) {
         $to = isset($_GET['redirect_to']) ? wp_validate_redirect(wp_unslash($_GET['redirect_to']), '') : '';
-        wp_safe_redirect($to ?: (function_exists('wc_get_page_permalink') ? wc_get_page_permalink('myaccount') : home_url('/')));
+        wp_safe_redirect($to ?: dlp_fe_lg_destino(wp_get_current_user()));
         exit;
     }
 });
@@ -62,7 +75,7 @@ add_action('wp_enqueue_scripts', function () {
     if (dlp_fe_lg_is_page() && wp_script_is('dlp-fe-login-pagina', 'enqueued')) {
         wp_localize_script('dlp-fe-login-pagina', 'dlpLg', [
             'ajaxurl' => admin_url('admin-ajax.php'),
-            'home'    => function_exists('wc_get_page_permalink') ? wc_get_page_permalink('myaccount') : home_url('/'),
+            'home'    => dlp_fe_lg_destino(),
         ]);
     }
 }, 20);
@@ -96,10 +109,36 @@ function dlp_fe_lg_ajax() {
         wp_send_json_error(['msg' => 'Correo o contraseña incorrectos.']);
     }
     $to = isset($_POST['redirect_to']) ? wp_validate_redirect(esc_url_raw(wp_unslash($_POST['redirect_to'])), '') : '';
-    wp_send_json_success(['to' => $to ?: (function_exists('wc_get_page_permalink') ? wc_get_page_permalink('myaccount') : home_url('/'))]);
+    wp_send_json_success(['to' => $to ?: dlp_fe_lg_destino($user)]);
 }
 add_action('wp_ajax_nopriv_dlp_fe_login', 'dlp_fe_lg_ajax');
 add_action('wp_ajax_dlp_fe_login', 'dlp_fe_lg_ajax');
+
+/*
+ * Ingreso estándar de WooCommerce (formulario de «Mi cuenta» y del checkout) y de WordPress: sin destino explícito ya no se
+ * cae en «Mi cuenta». Un destino explícito (el checkout manda su propia URL, /orders/, etc.) se respeta siempre.
+ */
+add_filter('woocommerce_login_redirect', function ($redirect, $user = null) {
+    $cuenta = function_exists('wc_get_page_permalink') ? untrailingslashit((string) wc_get_page_permalink('myaccount')) : '';
+    if ($redirect === '' || $redirect === null || ($cuenta !== '' && untrailingslashit((string) $redirect) === $cuenta)) {
+        return dlp_fe_lg_destino($user);
+    }
+    return $redirect;
+}, 20, 2);
+
+add_filter('login_redirect', function ($redirect_to, $requested = '', $user = null) {
+    if (!($user instanceof WP_User) || user_can($user, 'edit_posts')) {
+        return $redirect_to; // equipo y administradores: como siempre
+    }
+    // Prioridad muy alta: el plugin LoginWP (peters-login-redirect, prioridad 999999999) devolvía siempre el inicio, también cuando se pidió /orders/.
+    return ($requested === '' || $requested === null) ? dlp_fe_lg_destino($user) : (wp_validate_redirect($requested, '') ?: $redirect_to);
+}, 1000000000, 3);
+
+// Cuenta creada desde el formulario de registro de WooCommerce: también al inicio.
+add_filter('woocommerce_registration_redirect', function ($redirect) {
+    $cuenta = function_exists('wc_get_page_permalink') ? untrailingslashit((string) wc_get_page_permalink('myaccount')) : '';
+    return ($redirect === '' || ($cuenta !== '' && untrailingslashit((string) $redirect) === $cuenta)) ? dlp_fe_lg_destino() : $redirect;
+}, 20);
 
 // wp-login.php (solo la pantalla de ingreso, GET) → página de ingreso propia. Atajo de emergencia: ?dlp_native=1 muestra el ingreso nativo.
 add_action('login_form_login', function () {

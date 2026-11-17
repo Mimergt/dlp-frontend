@@ -1,4 +1,4 @@
-/* Página de ingreso: envía por Ajax y va a Mi cuenta (o a donde pidió redirect_to). */
+/* Página de ingreso: envía por Ajax y va a donde pidió redirect_to o, si no, al destino por defecto (inicio; el panel para las tiendas). */
 (function () {
   'use strict';
   var root = document.querySelector('.dlplg');

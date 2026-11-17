@@ -35,6 +35,14 @@
       "css_var": false
     },
     {
+      "key": "destino",
+      "label": "Destino tras ingresar (si no se pidió otro)",
+      "type": "text",
+      "default": "/",
+      "help": "Ruta del sitio, por defecto el inicio. Un redirect_to explícito (/orders/, el checkout...) siempre se respeta; las tiendas entran al panel.",
+      "css_var": false
+    },
+    {
       "key": "url_invitado",
       "label": "«Continuar como invitado» lleva a",
       "type": "text",
