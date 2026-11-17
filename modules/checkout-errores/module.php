@@ -48,6 +48,64 @@ add_filter('woocommerce_cart_needs_shipping_address', function ($needs) {
     return apply_filters('dlp_fe_ck_sin_envio_wc', true) ? false : $needs;
 }, 99999);
 
+/*
+ * Regla del sitio: WooCommerce debe tener CERO métodos de envío (ver docs/CHECKOUT-ENVIO.md). El delivery es cobertura por mapa
+ * de Del Puente Tiendas, sin tarifas. El filtro de arriba evita que un método agregado por error bloquee las compras, pero se
+ * avisa en el administrador para que se quite.
+ */
+add_action('admin_notices', function () {
+    if (!current_user_can('manage_woocommerce') || !function_exists('wc_get_shipping_method_count')) {
+        return;
+    }
+    $screen = function_exists('get_current_screen') ? get_current_screen() : null;
+    $id     = $screen ? (string) $screen->id : '';
+    if ($id !== 'dashboard' && strpos($id, 'woocommerce') === false && strpos($id, 'dlp') === false && strpos($id, 'plugins') === false) {
+        return;
+    }
+    $n = (int) wc_get_shipping_method_count(true);
+    if ($n < 1) {
+        return;
+    }
+    $url = admin_url('admin.php?page=wc-settings&tab=shipping');
+    echo '<div class="notice notice-warning"><p><strong>Envío de WooCommerce:</strong> hay ' . $n . ' método(s) de envío activo(s) en las zonas. '
+        . 'En Del Puente el delivery se resuelve por cobertura en el mapa y <strong>no debe haber ningún método de envío</strong>. '
+        . 'El checkout ya lo ignora, pero conviene <a href="' . esc_url($url) . '">quitarlo</a> (WooCommerce → Ajustes → Envío).</p></div>';
+});
+
+/**
+ * Migración única: ubicaciones de zona de envío con un departamento que no existe en WooCommerce (p. ej. state:GT:GT2 en la zona GT:
+ * dispara «Undefined array key GT2» en class-wc-shipping-zone.php). Se borran solo las que no están en la lista de departamentos
+ * del país; las zonas por país y los métodos no se tocan.
+ */
+add_action('init', function () {
+    if (get_option('dlp_fe_zona_estados_v1') || !function_exists('WC') || !WC()->countries) {
+        return;
+    }
+    global $wpdb;
+    $tabla = $wpdb->prefix . 'woocommerce_shipping_zone_locations';
+    if ($wpdb->get_var("SHOW TABLES LIKE '" . esc_sql($tabla) . "'") !== $tabla) {
+        return;
+    }
+    $quitar = [];
+    foreach ((array) $wpdb->get_results("SELECT location_id, location_code FROM {$tabla} WHERE location_type = 'state'") as $loc) {
+        $parts = explode(':', (string) $loc->location_code, 2);
+        $est   = WC()->countries->get_states($parts[0]);
+        if (count($parts) < 2 || !is_array($est) || !isset($est[$parts[1]])) {
+            $quitar[] = (int) $loc->location_id;
+        }
+    }
+    if ($quitar) {
+        $wpdb->query("DELETE FROM {$tabla} WHERE location_id IN (" . implode(',', array_map('intval', $quitar)) . ')'); // phpcs:ignore WordPress.DB.PreparedSQL
+        if (class_exists('WC_Cache_Helper')) {
+            WC_Cache_Helper::get_transient_version('shipping', true);
+        }
+        if (function_exists('wc_get_logger')) {
+            wc_get_logger()->info('zona de envio: ubicaciones de departamento inexistentes quitadas: ' . count($quitar), ['source' => 'dlp-checkout']);
+        }
+    }
+    update_option('dlp_fe_zona_estados_v1', time(), false);
+}, 40);
+
 // «Escribe tu dirección completa es un campo requerido.» (sin «Facturación » delante)
 add_filter('woocommerce_checkout_required_field_notice', function ($notice, $label = '') {
     $label = preg_replace('/^(Facturación|Envío|Billing|Shipping)\s+/u', '', wp_strip_all_tags((string) $label));
