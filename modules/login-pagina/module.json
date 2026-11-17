@@ -35,6 +35,14 @@
       "css_var": false
     },
     {
+      "key": "sesion_dias",
+      "label": "Días que se recuerda la sesión de los clientes",
+      "type": "number",
+      "default": 30,
+      "help": "Solo clientes (rol customer/subscriber) con «Recordarme» o desde la app. Administradores y tiendas: 14 días (WordPress).",
+      "css_var": false
+    },
+    {
       "key": "destino",
       "label": "Destino tras ingresar (si no se pidió otro)",
       "type": "text",

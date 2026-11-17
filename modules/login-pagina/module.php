@@ -21,6 +21,32 @@ function dlp_fe_lg_destino($user = null) {
     return home_url($d === '' ? '/' : $d);
 }
 
+/**
+ * ¿La petición viene de la app móvil (webview)? La app abre el sitio con ?origin=webview&device=...; eso se recuerda en la cookie
+ * dlp_app (la pone un script mínimo en cada página, porque el HTML puede venir de caché). Respaldo: el User-Agent
+ * (Android WebView lleva «; wv)» y el WKWebView de iOS no trae el token «Safari/»).
+ */
+function dlp_fe_lg_es_app() {
+    if (!empty($_COOKIE['dlp_app']) || (isset($_REQUEST['origin']) && $_REQUEST['origin'] === 'webview')) { // phpcs:ignore WordPress.Security.NonceVerification
+        return true;
+    }
+    $ua = isset($_SERVER['HTTP_USER_AGENT']) ? (string) $_SERVER['HTTP_USER_AGENT'] : '';
+    if ($ua === '') {
+        return false;
+    }
+    return (bool) (preg_match('/;\s*wv\)/i', $ua) || (preg_match('/(iPhone|iPad|iPod).*AppleWebKit/i', $ua) && stripos($ua, 'Safari/') === false));
+}
+
+// Recuerda que se abrió desde la app (el HTML de la home puede ser de caché: por eso es JS y no PHP).
+add_action('wp_head', function () {
+    if (is_admin()) {
+        return;
+    }
+    echo '<script>if(/[?&]origin=webview(&|$)/.test(location.search)){document.cookie="dlp_app=1;path=/;max-age=31536000;SameSite=Lax"+(location.protocol==="https:"?";Secure":"")}</script>' . "\n"; // phpcs:ignore
+}, 1);
+
+// La duración de la sesión recordada (30 días para clientes) vive en includes/sesion.php: el autologin de la app corre antes que este módulo.
+
 function dlp_fe_lg_is_page() {
     $slug = trim((string) DLP_FE_Registry::setting('login-pagina', 'slug'), '/');
     return $slug !== '' && !is_admin() && function_exists('is_page') && is_page($slug);
@@ -61,7 +87,7 @@ add_filter('the_content', function ($content) {
             <div class="dlplg-msg" role="alert" aria-live="polite" hidden></div>
             <label>Correo electrónico<input type="email" name="log" autocomplete="username" inputmode="email" required></label>
             <label>Contraseña<span class="dlplg-pw"><input type="password" name="pwd" autocomplete="current-password" required><button type="button" class="dlplg-eye" aria-label="Mostrar contraseña">Ver</button></span></label>
-            <div class="dlplg-row"><label class="dlplg-chk"><input type="checkbox" name="rememberme" value="1"> Recordarme</label><a href="<?php echo esc_url($lost); ?>">¿Olvidaste tu contraseña?</a></div>
+            <div class="dlplg-row"><label class="dlplg-chk"><input type="checkbox" name="rememberme" value="1" checked> Recordarme</label><a href="<?php echo esc_url($lost); ?>">¿Olvidaste tu contraseña?</a></div>
             <button type="submit" class="dlplg-go">Ingresar</button>
             <div class="dlplg-or"><span>o</span></div>
             <a class="dlplg-guest" href="<?php echo esc_url($guest); ?>"><?php echo esc_html($o('texto_invitado')); ?></a>
@@ -104,7 +130,8 @@ function dlp_fe_lg_ajax() {
     if (!dlp_fe_lg_hit('ip:' . dlp_fe_lg_ip(), 20) || !dlp_fe_lg_hit('u:' . strtolower($log), 10)) {
         wp_send_json_error(['msg' => 'Demasiados intentos. Espera unos minutos e intenta de nuevo.']);
     }
-    $user = wp_signon(['user_login' => $log, 'user_password' => $pwd, 'remember' => !empty($_POST['rememberme'])], is_ssl());
+    // Dentro de la app (webview) la sesión siempre se recuerda: sin esto la cookie es de sesión y la app la descarta al cerrarse.
+    $user = wp_signon(['user_login' => $log, 'user_password' => $pwd, 'remember' => !empty($_POST['rememberme']) || dlp_fe_lg_es_app()], is_ssl());
     if (is_wp_error($user)) {
         wp_send_json_error(['msg' => 'Correo o contraseña incorrectos.']);
     }

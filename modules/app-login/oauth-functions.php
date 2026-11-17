@@ -26,7 +26,7 @@ function custom_register_from_app() {
             $creds = array();
             $creds['user_login'] = $e;
             $creds['user_password'] = $p;
-            $creds['remember'] = false;
+            $creds['remember'] = true; // la app necesita que la sesion sobreviva al cierre del webview
 
             $signon = wp_signon($creds, false);
 
@@ -120,7 +120,7 @@ if(isset($_GET['autologin'], $_GET['hash']) && $_GET['autologin'] == 1 && $_GET[
     $autologin_creds = array();
     $autologin_creds['user_login'] = $autologin_e;
     $autologin_creds['user_password'] = $autologin_p;
-    $autologin_creds['remember'] = false;
+    $autologin_creds['remember'] = true; // idem: sin esto la cookie es de sesion y la app la descarta al cerrarse
     try {
         @wp_signon($autologin_creds, false);
     } catch (Exception $err) {
@@ -155,7 +155,7 @@ function ws_custom_register_from_app(WP_REST_Request $request) {
             $creds = array();
             $creds['user_login'] = $e;
             $creds['user_password'] = $p;
-            $creds['remember'] = false;
+            $creds['remember'] = true; // la app necesita que la sesion sobreviva al cierre del webview
 
             $signon = wp_signon($creds, false);
 
