@@ -1,0 +1,61 @@
+/* Checkout: botón de acceso visible + ventana de login. Selectores largos: Divi y checkout-estilo aplican estilos fuertes. */
+body { --dlplm-c: var(--dlp-checkout-login-modal-color, #111); }
+
+/* El aviso «¿Ya eres cliente?» pasa a ser una barra con botón */
+body[class][class] .woocommerce-form-login-toggle { max-width: 1100px; margin: 0 auto 12px !important; }
+body[class][class] .woocommerce-form-login-toggle .woocommerce-info {
+  display: flex !important; align-items: center !important; justify-content: space-between !important; flex-wrap: wrap; gap: 10px 14px;
+  margin: 0 !important; padding: 12px 14px 12px 16px !important; border: 1.5px solid var(--dlplm-c) !important; border-radius: 14px !important;
+  background: #fff !important; color: #111 !important; box-shadow: none !important; font: 600 14px/1.35 "Open Sans", system-ui, sans-serif !important;
+}
+body[class][class] .woocommerce-form-login-toggle .woocommerce-info::before { display: none !important; }
+body[class][class] .woocommerce-form-login-toggle .woocommerce-info a.showlogin {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px; margin: 0; padding: 11px 20px; border-radius: 999px;
+  background: var(--dlplm-c); color: #fff !important; font: 700 13px/1 "Open Sans", system-ui, sans-serif !important; letter-spacing: .03em;
+  text-decoration: none !important; white-space: nowrap; cursor: pointer; transition: opacity .15s;
+}
+body[class][class] .woocommerce-form-login-toggle .woocommerce-info a.showlogin:hover, body .woocommerce-form-login-toggle .woocommerce-info a.showlogin:focus { opacity: .88; color: #fff !important; }
+body[class][class] .woocommerce-form-login-toggle .woocommerce-info a.showlogin::before {
+  content: ""; width: 16px; height: 16px; background: currentColor;
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='8' r='4'/%3E%3Cpath d='M4.5 21c.7-4 3.7-6 7.5-6s6.8 2 7.5 6'/%3E%3C/svg%3E") center/contain no-repeat;
+          mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='8' r='4'/%3E%3Cpath d='M4.5 21c.7-4 3.7-6 7.5-6s6.8 2 7.5 6'/%3E%3C/svg%3E") center/contain no-repeat;
+}
+@media (max-width: 560px) {
+  body[class][class] .woocommerce-form-login-toggle .woocommerce-info { flex-direction: column; align-items: stretch !important; text-align: center; }
+  body[class][class] .woocommerce-form-login-toggle .woocommerce-info a.showlogin { width: 100%; padding: 14px 20px; font-size: 14px !important; }
+}
+
+/* Ventana */
+html.dlplm-open, html.dlplm-open body { overflow: hidden !important; }
+.dlplm { position: fixed; inset: 0; z-index: 2147483000; display: none; align-items: center; justify-content: center; padding: 16px; background: rgba(0, 0, 0, .58); }
+.dlplm.is-open { display: flex; animation: dlplmFade .18s ease-out; }
+.dlplm-box { position: relative; box-sizing: border-box; width: 100%; max-width: 420px; max-height: calc(100vh - 32px); overflow: auto; padding: 26px 24px 22px; border-radius: 20px; background: #fff; color: #111; box-shadow: 0 24px 60px rgba(0, 0, 0, .35); font-family: "Open Sans", system-ui, sans-serif; animation: dlplmUp .22s ease-out; }
+.dlplm-x { position: absolute; top: 10px; right: 10px; display: flex; align-items: center; justify-content: center; width: 36px; height: 36px; padding: 0; border: 0; border-radius: 50%; background: #f1f1f3; color: #111; font-size: 22px; line-height: 1; cursor: pointer; }
+.dlplm-x:hover { background: #e4e4e8; }
+.dlplm-title { margin: 0 36px 4px 0; padding: 0; font: 800 21px/1.2 "Open Sans", system-ui, sans-serif; color: #111; }
+.dlplm-intro { margin: 0 0 16px; color: #6b6b73; font-size: 13.5px; line-height: 1.45; }
+.dlplm-err { display: none; margin: 0 0 12px; padding: 10px 12px; border-left: 4px solid #111; border-radius: 8px; background: #f3f3f5; color: #111; font-size: 13.5px; line-height: 1.4; }
+.dlplm-err.is-on { display: block; }
+.dlplm-box form.woocommerce-form-login { display: block !important; max-width: none !important; margin: 0 !important; padding: 0 !important; border: 0 !important; border-radius: 0 !important; background: none !important; box-shadow: none !important; }
+.dlplm-box form.woocommerce-form-login > p:first-of-type:not(.form-row) { display: none; }
+.dlplm-box form.woocommerce-form-login .form-row { float: none !important; width: 100% !important; margin: 0 0 12px !important; padding: 0 !important; }
+.dlplm-box form.woocommerce-form-login label { display: block; margin: 0 0 5px; color: #111; font: 700 12px/1.2 "Open Sans", system-ui, sans-serif; letter-spacing: .02em; }
+.dlplm-box form.woocommerce-form-login input.input-text { box-sizing: border-box; width: 100%; height: 48px; padding: 0 14px; border: 1.5px solid #dcdce2; border-radius: 12px; background: #fff; color: #111; font: 400 16px/1 "Open Sans", system-ui, sans-serif; }
+.dlplm-box form.woocommerce-form-login input.input-text:focus { border-color: var(--dlplm-c); outline: none; box-shadow: 0 0 0 3px rgba(0, 0, 0, .08); }
+.dlplm-box form.woocommerce-form-login .woocommerce-form-login__rememberme { display: flex; align-items: center; gap: 8px; margin: 2px 0 14px; font-weight: 600; font-size: 13.5px; letter-spacing: 0; }
+.dlplm-box form.woocommerce-form-login .woocommerce-form-login__rememberme input { width: 18px; height: 18px; margin: 0; accent-color: var(--dlplm-c); }
+.dlplm-box form.woocommerce-form-login .woocommerce-form-login__submit { display: block; box-sizing: border-box; width: 100%; height: 50px; margin: 0 !important; padding: 0 20px !important; border: 0 !important; border-radius: 999px !important; background: var(--dlplm-c) !important; color: #fff !important; font: 700 14px/1 "Open Sans", system-ui, sans-serif !important; letter-spacing: .04em; text-transform: uppercase; cursor: pointer; float: none !important; }
+.dlplm-box form.woocommerce-form-login .woocommerce-form-login__submit[disabled] { opacity: .55; cursor: wait; }
+.dlplm-box form.woocommerce-form-login .lost_password { margin: 14px 0 0 !important; text-align: center; }
+.dlplm-box form.woocommerce-form-login .lost_password a { color: #111; font-size: 13.5px; font-weight: 600; text-decoration: underline; }
+.dlplm-box form.woocommerce-form-login .clear { display: none; }
+@keyframes dlplmFade { from { opacity: 0; } to { opacity: 1; } }
+@keyframes dlplmUp { from { transform: translateY(14px); opacity: 0; } to { transform: none; opacity: 1; } }
+
+/* Celular: sube desde abajo, a todo el ancho */
+@media (max-width: 560px) {
+  .dlplm { align-items: flex-end; padding: 0; }
+  .dlplm-box { max-width: none; max-height: 92vh; padding: 24px 18px calc(20px + env(safe-area-inset-bottom)); border-radius: 22px 22px 0 0; animation: dlplmSheet .26s ease-out; }
+}
+@keyframes dlplmSheet { from { transform: translateY(100%); } to { transform: none; } }
+@media (prefers-reduced-motion: reduce) { .dlplm.is-open, .dlplm-box { animation: none; } }

@@ -1,0 +1,16 @@
+{
+  "label": "Checkout: login en ventana (modal)",
+  "description": "En Finalizar compra, si el cliente no tiene sesión, el enlace «¿Ya eres cliente?» se convierte en un botón visible que abre una ventana con el formulario de acceso (en celular sube desde abajo). Al iniciar sesión regresa al checkout con el carrito intacto y los datos que ya había escrito. No cambia el login de WooCommerce: es el mismo formulario.",
+  "section": "checkout",
+  "tab": "Login en checkout",
+  "order": 3,
+  "where": ["checkout"],
+  "default": true,
+  "css": "style.css",
+  "js": "script.js",
+  "settings": [
+    { "key": "color", "label": "Color del botón y acentos", "type": "color", "default": "#111111", "css_var": true },
+    { "key": "titulo", "label": "Título de la ventana", "type": "text", "default": "Inicia sesión", "group": "Textos" },
+    { "key": "intro", "label": "Texto bajo el título", "type": "text", "default": "Entra con tu cuenta y vuelves a tu pedido con todo listo.", "group": "Textos" }
+  ]
+}
