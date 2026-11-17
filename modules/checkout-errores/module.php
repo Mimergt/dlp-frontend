@@ -35,6 +35,19 @@ add_action('init', function () {
     update_option('dlp_fe_cf_opcional_v1', time(), false);
 }, 30);
 
+/*
+ * Envío de WooCommerce apagado: el delivery lo resuelve Del Puente Tiendas (cobertura por mapa, sin tarifas). Con un método de
+ * envío activo en una zona de WooCommerce (producción tenía «Envío gratuito» en la zona GT) WooCommerce exige calcular un envío
+ * y rechazaba el pedido con «Por favor introduce una dirección para continuar» (error 'shipping') cuando el país o la zona del
+ * destino no coincidían; en dev, sin métodos activos, WooCommerce no pide envío y nunca falló. Filtro dlp_fe_ck_sin_envio_wc.
+ */
+add_filter('woocommerce_cart_needs_shipping', function ($needs) {
+    return apply_filters('dlp_fe_ck_sin_envio_wc', true) ? false : $needs;
+}, 99999);
+add_filter('woocommerce_cart_needs_shipping_address', function ($needs) {
+    return apply_filters('dlp_fe_ck_sin_envio_wc', true) ? false : $needs;
+}, 99999);
+
 // «Escribe tu dirección completa es un campo requerido.» (sin «Facturación » delante)
 add_filter('woocommerce_checkout_required_field_notice', function ($notice, $label = '') {
     $label = preg_replace('/^(Facturación|Envío|Billing|Shipping)\s+/u', '', wp_strip_all_tags((string) $label));
@@ -55,6 +68,7 @@ function dlp_fe_ck_tipo() {
 function dlp_fe_ck_categoria($m) {
     $t = mb_strtolower(wp_strip_all_tags((string) $m));
     $map = [
+        'direcci.n para continuar|m.todo de env|shipping|no enviamos|no hacemos env' => 'envio_wc',
         'ubicaci|mapa|cobertura|llegamos' => 'ubicacion',
         'minimo|mínimo' => 'minimo',
         'hora|recoger|recogeras' => 'pickup_hora_tienda',
@@ -100,12 +114,26 @@ add_action('shutdown', function () {
         return;
     }
     $ua = isset($_SERVER['HTTP_USER_AGENT']) ? (string) $_SERVER['HTTP_USER_AGENT'] : '';
-    wc_get_logger()->warning('falla ' . wp_json_encode([
+    $log = [
         'tipo'    => dlp_fe_ck_tipo(),
         'campos'  => $campos,
         'avisos'  => $otros,
         'movil'   => (bool) preg_match('/Mobi|Android|iPhone|iPad/i', $ua),
-    ]), ['source' => 'dlp-checkout']);
+    ];
+    // Si la falla es de envío (código 'shipping'): contexto técnico sin datos personales (país/departamento son códigos, no direcciones).
+    if (in_array('shipping', $campos, true) && function_exists('WC') && WC()->cart && WC()->customer) {
+        $pk = WC()->shipping() ? WC()->shipping()->get_packages() : [];
+        $log['envio'] = [
+            'necesita_envio'  => (bool) WC()->cart->needs_shipping(),
+            'pais_envio'      => (string) WC()->customer->get_shipping_country(),
+            'pais_factura'    => (string) WC()->customer->get_billing_country(),
+            'estado_factura'  => (string) WC()->customer->get_billing_state(),
+            'paquetes'        => count($pk),
+            'tarifas'         => array_sum(array_map(function ($p) { return count((array) ($p['rates'] ?? [])); }, $pk)),
+            'metodos_activos' => function_exists('wc_get_shipping_method_count') ? (int) wc_get_shipping_method_count(true) : null,
+        ];
+    }
+    wc_get_logger()->warning('falla ' . wp_json_encode($log), ['source' => 'dlp-checkout']);
 });
 
 add_action('woocommerce_checkout_order_processed', function () {
