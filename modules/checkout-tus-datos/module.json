@@ -1,0 +1,18 @@
+{
+  "label": "Checkout: cuenta automática en «Tus datos»",
+  "description": "Quita la casilla «¿Crear una cuenta?» de «Factura y notas» y pone en «Tus datos» un texto claro: la cuenta se crea sola con el correo del pedido, con contraseña opcional (con ojo para verla). Si el correo ya tiene cuenta no falla: avisa y ofrece iniciar sesión (ventana de login) o seguir como invitado.",
+  "section": "checkout",
+  "tab": "Cuenta automática",
+  "order": 4,
+  "boot": true,
+  "php": "module.php",
+  "where": ["checkout"],
+  "default": true,
+  "css": "style.css",
+  "js": "script.js",
+  "settings": [
+    { "key": "nota", "label": "Texto bajo «Tus datos»", "type": "textarea", "default": "Crearemos tu cuenta automáticamente con este correo para que sigas tus pedidos. Si quieres, elige tu propia contraseña (opcional; si la dejas vacía te enviamos un correo para crearla).", "group": "Textos" },
+    { "key": "etiqueta", "label": "Etiqueta de la contraseña", "type": "text", "default": "Contraseña (opcional)", "group": "Textos" },
+    { "key": "min", "label": "Largo mínimo si la escriben", "type": "number", "default": 8, "css_var": false, "group": "Reglas" }
+  ]
+}

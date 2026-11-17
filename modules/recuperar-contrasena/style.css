@@ -1,0 +1,39 @@
+/* Recuperar contraseña: mismo estilo que el ingreso (fondo negro, hoja blanca, botón grande). */
+body.dlprc-page, body.dlprc-page #page-container, body.dlprc-page #et-main-area, body.dlprc-page .et-l--post, body.dlprc-page #main-content { background: #000 !important; }
+body.dlprc-page .et_pb_title_container, body.dlprc-page .et_pb_post_title, body.dlprc-page h1.entry-title, body.dlprc-page .et_pb_wc_title { display: none !important; }
+body.dlprc-page .et_pb_section { background: #000 !important; padding-top: 22px !important; padding-bottom: 0 !important; }
+body.dlprc-page .et_pb_row { padding-top: 0 !important; }
+body.dlprc-page .woocommerce { max-width: none; padding: 0; }
+.dlprc { max-width: 440px; margin: 0 auto; padding-bottom: 72px; font-family: "Open Sans", system-ui, sans-serif; }
+.dlprc-hero { padding: 24px 6px 20px; color: #fff; text-align: center; }
+.dlprc-hero h1 { margin: 0 0 6px; padding: 0; color: #fff; font: 800 28px/1.15 "Open Sans", system-ui, sans-serif; }
+.dlprc-hero p { margin: 0; color: rgba(255, 255, 255, .72); font-size: 14px; line-height: 1.45; }
+.dlprc-hero strong { color: #fff; }
+.dlprc-form { padding: 24px 20px 22px; border: 0 !important; border-radius: 26px; background: #fff; box-shadow: 0 20px 50px rgba(0, 0, 0, .45); }
+.dlprc-form label { display: block; margin: 0 0 6px; color: #55555e; font: 700 10.5px/1.3 "Open Sans", system-ui, sans-serif; letter-spacing: .05em; text-transform: uppercase; }
+.dlprc-form input[type=text], .dlprc-form input[type=password], .dlprc-form input[type=email] { box-sizing: border-box; display: block; width: 100%; height: 50px; margin: 0 0 14px; padding: 0 14px; border: 1px solid #e3e3e8; border-radius: 12px; background: #fcfcfd; color: #111; font: 400 16px/1.3 "Open Sans", system-ui, sans-serif; box-shadow: none; }
+.dlprc-form input:focus { outline: 0; border-color: #111; background: #fff; }
+.dlprc-pw { position: relative; display: block; }
+.dlprc-pw input { padding-right: 70px !important; }
+.dlprc-eye { position: absolute; right: 6px; top: 7px; height: 36px; padding: 0 12px; border: 0; border-radius: 999px; background: #f1f1f3; color: #111; font: 700 12px/1 "Open Sans", system-ui, sans-serif; cursor: pointer; }
+.dlprc-hint { display: block; margin: -8px 2px 14px; color: #8d8d96; font: 400 12px/1.4 "Open Sans", system-ui, sans-serif; }
+.dlprc-go { display: flex; align-items: center; justify-content: center; box-sizing: border-box; width: 100%; height: 54px; margin: 6px 0 0; padding: 0 20px; border: 0 !important; border-radius: 999px !important; background: #111 !important; color: #fff !important; font: 800 13px/1 "Open Sans", system-ui, sans-serif !important; letter-spacing: .05em; text-transform: uppercase; text-decoration: none !important; cursor: pointer; }
+.dlprc-go:hover { opacity: .9; }
+.dlprc-back { display: block; margin: 16px 0 0; color: #111 !important; font: 700 13px/1.2 "Open Sans", system-ui, sans-serif; text-align: center; text-decoration: underline !important; text-underline-offset: 3px; }
+.dlprc-msg, .dlprc-form .woocommerce-error, .dlprc-form .woocommerce-message, .dlprc-form .woocommerce-info { list-style: none; margin: 0 0 14px !important; padding: 11px 13px !important; border: 0 !important; border-left: 4px solid #b91c1c !important; border-radius: 10px !important; background: #fef2f2 !important; color: #b91c1c !important; font: 400 13px/1.45 "Open Sans", system-ui, sans-serif !important; }
+.dlprc-form .woocommerce-message { border-left-color: #166534 !important; background: #f0fdf4 !important; color: #166534 !important; }
+.dlprc-form .woocommerce-error::before, .dlprc-form .woocommerce-message::before, .dlprc-form .woocommerce-info::before { display: none !important; }
+.dlprc-form .woocommerce-error li { margin: 0; padding: 0; list-style: none; }
+.dlprc-msg[hidden] { display: none; }
+.dlprc-form .clear, .dlprc-form .woocommerce-notices-wrapper:empty { display: none; }
+.dlprc-sent { text-align: center; }
+.dlprc-ico { display: flex; align-items: center; justify-content: center; width: 84px; height: 84px; margin: 4px auto 14px; border-radius: 22px; background: #111; }
+.dlprc-ico svg { width: 46px; height: 46px; }
+.dlprc-txt { margin: 0 0 18px; color: #3f3f46; font: 400 14px/1.55 "Open Sans", system-ui, sans-serif; }
+@media (max-width: 767px) {
+  .dlprc { max-width: none; width: 100vw; margin-left: calc(50% - 50vw); padding-bottom: 0; }
+  .dlprc-form { padding: 26px 20px 120px; border-radius: 26px 26px 0 0; box-shadow: none; }
+  body.dlprc-page .et_pb_section { padding-top: 12px !important; }
+  body.dlprc-page .et_pb_row { width: 100% !important; max-width: none !important; }
+}
+.dlprc .show-password-input, .dlprc-pw .show-password-input { display: none !important; }

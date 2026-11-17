@@ -42,6 +42,9 @@ add_filter('the_content', function ($content) {
     <div class="dlplg" data-redirect="<?php echo esc_attr($to); ?>">
         <div class="dlplg-hero"><h1><?php echo esc_html($o('titulo')); ?></h1><p><?php echo esc_html($o('texto')); ?></p></div>
         <form class="dlplg-form" novalidate>
+            <?php if (isset($_GET['clave']) && $_GET['clave'] === 'ok') : // phpcs:ignore WordPress.Security.NonceVerification ?>
+                <div class="dlplg-msg ok" role="status"><?php echo esc_html((string) DLP_FE_Registry::setting('recuperar-contrasena', 'texto_exito', 'Listo, cambiaste tu contraseña. Ya puedes ingresar con la nueva.')); ?></div>
+            <?php endif; ?>
             <div class="dlplg-msg" role="alert" aria-live="polite" hidden></div>
             <label>Correo electrónico<input type="email" name="log" autocomplete="username" inputmode="email" required></label>
             <label>Contraseña<span class="dlplg-pw"><input type="password" name="pwd" autocomplete="current-password" required><button type="button" class="dlplg-eye" aria-label="Mostrar contraseña">Ver</button></span></label>

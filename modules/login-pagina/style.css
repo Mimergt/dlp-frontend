@@ -20,6 +20,7 @@ body.dlplg-page .et_pb_row { padding-top: 0 !important; }
 .dlplg-form .dlplg-chk input { width: 16px; height: 16px; margin: 0; accent-color: var(--dlp-tx, #111); }
 .dlplg-msg { margin: 0 0 12px; padding: 10px 12px; border-radius: 12px; background: #fef2f2; color: #b91c1c; font-size: 12.5px; line-height: 1.4; }
 .dlplg-msg[hidden] { display: none; }
+.dlplg-msg.ok { background: #f0fdf4; color: #166534; font-weight: 600; }
 .dlplg-go, .dlplg-guest { display: flex; align-items: center; justify-content: center; box-sizing: border-box; width: 100%; height: 52px; margin: 0; border-radius: 999px; font: 800 13px/1 "Open Sans", system-ui, sans-serif; letter-spacing: .05em; text-transform: uppercase; text-decoration: none !important; cursor: pointer; }
 .dlplg-go { border: 0; background: var(--dlp-btn, #111); color: var(--dlp-btn-tx, #fff); }
 .dlplg-go:disabled { opacity: .55; cursor: wait; }

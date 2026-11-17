@@ -1,0 +1,19 @@
+/* Checkout: cuenta automática dentro de «Tus datos». */
+body.dlpck-on .dlpck .dlptd { margin: 12px 0 0; }
+body.dlpck-on .dlpck .dlptd-note { margin: 0 0 12px; padding: 11px 13px; border-left: 4px solid #111; border-radius: 10px; background: #f6f6f8; color: #3f3f46; font: 400 13px/1.45 "Open Sans", system-ui, sans-serif; }
+body.dlpck-on .dlpck .dlptd-pw p.form-row { float: none !important; width: 100% !important; margin: 0 !important; padding: 0 !important; }
+body.dlpck-on .dlpck .dlptd-pw label { display: block; margin: 0 0 4px 2px; }
+body.dlpck-on .dlpck .dlptd-pw .woocommerce-input-wrapper { position: relative; display: block; }
+body.dlpck-on .dlpck .dlptd-pw input.input-text { padding-right: 76px !important; }
+body.dlpck-on .dlpck .dlptd-eye { position: absolute; right: 6px; top: 50%; transform: translateY(-50%); height: 36px; padding: 0 12px; border: 0; border-radius: 999px; background: #f1f1f3; color: #111; font: 700 12px/1 "Open Sans", system-ui, sans-serif; cursor: pointer; }
+body.dlpck-on .dlpck .dlptd-hint { display: block; margin: 5px 2px 0; color: #8d8d96; font: 400 12px/1.4 "Open Sans", system-ui, sans-serif; }
+body.dlpck-on .dlpck .dlptd-hint.is-err { color: #b91c1c; font-weight: 700; }
+body.dlpck-on .dlpck .dlptd-exists { padding: 13px 14px; border: 1.5px solid #111; border-radius: 14px; background: #fff; font: 400 13px/1.45 "Open Sans", system-ui, sans-serif; color: #111; }
+body.dlpck-on .dlpck .dlptd-exists[hidden] { display: none; }
+body.dlpck-on .dlpck .dlptd-exists b { display: block; margin: 0 0 2px; font-size: 14px; }
+body.dlpck-on .dlpck .dlptd-exists span { display: block; color: #55555e; }
+body.dlpck-on .dlpck .dlptd-btns { display: flex; gap: 8px; flex-wrap: wrap; margin: 11px 0 0; }
+body.dlpck-on .dlpck .dlptd-btns button { flex: 1 1 140px; height: 44px; padding: 0 14px; border-radius: 999px; font: 700 12px/1 "Open Sans", system-ui, sans-serif; letter-spacing: .03em; text-transform: uppercase; cursor: pointer; }
+body.dlpck-on .dlpck .dlptd-login { border: 0; background: #111; color: #fff; }
+body.dlpck-on .dlpck .dlptd-guest { border: 1.5px solid #111; background: #fff; color: #111; }
+body.dlpck-on .dlpck .dlptd-pw .show-password-input { display: none !important; }

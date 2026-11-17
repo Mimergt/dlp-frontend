@@ -20,16 +20,7 @@ add_filter('body_class', function ($c) {
     return $c;
 });
 
-// Recuperar / restablecer contraseña: encabezado propio
-add_action('woocommerce_before_lost_password_form', function () {
-    echo '<div class="dlpx-hero"><h1>¿Olvidaste tu contraseña?</h1><p>Escribe tu correo y te enviamos un enlace para crear una nueva.</p></div>';
-});
-add_action('woocommerce_before_reset_password_form', function () {
-    echo '<div class="dlpx-hero"><h1>Crea tu nueva contraseña</h1><p>Elige una contraseña que recuerdes.</p></div>';
-});
-add_action('woocommerce_before_lost_password_confirmation_message', function () {
-    echo '<div class="dlpx-hero"><h1>Revisa tu correo</h1></div>';
-});
+// Recuperar / restablecer contraseña: ahora lo dibuja el módulo recuperar-contrasena.
 
 // 404 propia (usa el header y footer de Divi)
 add_filter('template_include', function ($tpl) {

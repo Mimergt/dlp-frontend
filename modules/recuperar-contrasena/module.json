@@ -1,0 +1,17 @@
+{
+  "label": "Recuperar contraseña: pantallas propias",
+  "description": "Diseño propio (tarjeta blanca sobre fondo negro, igual que el ingreso) para todo el recorrido: pedir el enlace, «te enviamos un correo», crear la nueva contraseña (con ojo y confirmación), enlace vencido y contraseña cambiada (vuelve a Ingresar con un aviso). Usa los formularios de WooCommerce, solo cambia lo que se ve.",
+  "section": "cuenta",
+  "tab": "Recuperar contraseña",
+  "order": 6,
+  "boot": true,
+  "php": "module.php",
+  "where": ["account"],
+  "default": true,
+  "css": "style.css",
+  "js": "script.js",
+  "settings": [
+    { "key": "min", "label": "Largo mínimo de la contraseña nueva", "type": "number", "default": 8, "css_var": false },
+    { "key": "texto_exito", "label": "Aviso al cambiar la contraseña", "type": "text", "default": "Listo, cambiaste tu contraseña. Ya puedes ingresar con la nueva.", "css_var": false }
+  ]
+}

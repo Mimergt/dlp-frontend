@@ -65,6 +65,12 @@
     if (!a) return;
     e.preventDefault(); e.stopPropagation(); open();
   }, true);
+  // Otros módulos pueden abrirlo (p. ej. «Ya tienes una cuenta con este correo»), con el correo ya escrito.
+  document.addEventListener('dlplm:open', function (e) {
+    open();
+    var u = form.querySelector('#username');
+    if (u && e.detail && e.detail.email) { u.value = e.detail.email; var p = form.querySelector('#password'); if (p) p.focus(); }
+  });
   overlay.addEventListener('click', function (e) { if (e.target === overlay) close(); });
   overlay.querySelector('.dlplm-x').addEventListener('click', close);
   document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && overlay.classList.contains('is-open')) close(); });

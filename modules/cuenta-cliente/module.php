@@ -26,18 +26,13 @@ add_action('woocommerce_save_account_details', function ($user_id) {
     }
 }, 20);
 
-// Avisos tras recuperar / cambiar contraseña (se mantienen igual que en el tema).
-function dlp_fe_alert_redirect($mensaje) {
-    echo '<script>alert(' . wp_json_encode($mensaje) . ');window.location.href="/ingresar/";</script>';
-    exit;
-}
-
+// Tras recuperar / cambiar la contraseña ya no hay alert() del navegador:
+// - «te enviamos un correo» lo muestra la pantalla propia (módulo recuperar-contrasena);
+// - al cambiarla, vuelve a Ingresar con un aviso (?clave=ok).
 add_action('init', function () {
     $uri = isset($_SERVER['REQUEST_URI']) ? (string) wp_unslash($_SERVER['REQUEST_URI']) : '';
-    if (strpos($uri, '/mi-cuenta/lost-password/?reset-link-sent=true') !== false) {
-        dlp_fe_alert_redirect('Reestablecimiento de contraseña Exitoso!!! Se ha enviado el enlace a su correo electrónico. Desde ahí podrá reestablecer su contraseña.');
-    }
     if (strpos($uri, '/mi-cuenta/?password-reset=true') !== false) {
-        dlp_fe_alert_redirect('Has cambiado exitosamente tu contraseña. Ahora puedes ingresar como tu usuario y nueva contraseña');
+        wp_safe_redirect(home_url('/ingresar/?clave=ok'));
+        exit;
     }
 });
