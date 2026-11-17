@@ -128,8 +128,8 @@ add_action('init', function () {
  * Marca y diseño
  * ------------------------------------------------------------------ */
 function dlp_fe_mail_color() {
-    $c = sanitize_hex_color((string) dlp_fe_mail_cfg('color', '#CF1E26'));
-    return $c ?: '#CF1E26';
+    $c = sanitize_hex_color((string) dlp_fe_mail_cfg('color', '#111111'));
+    return $c ?: '#111111';
 }
 
 function dlp_fe_mail_logo() {
@@ -141,21 +141,54 @@ function dlp_fe_mail_logo() {
     return $l;
 }
 
-/** Encabezado del correo (lo imprime plantillas/email-header.php). */
-function dlp_fe_mail_open($heading) {
+function dlp_fe_mail_icon_url($name) {
+    return DLP_FE_URL . 'modules/correos/iconos/' . $name . '.gif?v=' . DLP_FE_VERSION;
+}
+
+/** Etiqueta de estado e ícono animado de cada correo de WooCommerce al cliente. */
+function dlp_fe_mail_estado($email) {
+    $id = is_object($email) && isset($email->id) ? (string) $email->id : '';
+    $mapa = [
+        'customer_processing_order' => ['EN PREPARACIÓN', 'proc'],
+        'customer_completed_order'  => ['ENTREGADO', 'done'],
+        'customer_failed_order'     => ['PAGO NO COMPLETADO', 'fail'],
+        'customer_on_hold_order'    => ['EN ESPERA', 'hold'],
+        'customer_refunded_order'   => ['REEMBOLSO', 'refund'],
+        'customer_note'             => ['NOTA DEL PEDIDO', 'note'],
+        'customer_new_account'      => ['CUENTA NUEVA', 'user'],
+        'customer_reset_password'   => ['SEGURIDAD', 'key'],
+        'customer_verify_email'     => ['CONFIRMA TU CORREO', 'mail'],
+    ];
+    if (!isset($mapa[$id])) {
+        return ['', ''];
+    }
+    list($chip, $icon) = $mapa[$id];
+    if ($icon === 'proc') { // motorista si es a domicilio, tienda si es para recoger
+        $o = (is_object($email) && isset($email->object) && is_object($email->object) && method_exists($email->object, 'get_meta')) ? $email->object : null;
+        $icon = ($o && dlp_fe_mail_is_pickup($o)) ? 'pickup' : 'delivery';
+    }
+    return [$chip, $icon];
+}
+
+/** Encabezado del correo (lo imprime plantillas/email-header.php): barra negra con logo y estado, ícono animado y título. */
+function dlp_fe_mail_open($heading, $chip = '', $icon = '') {
     $c    = dlp_fe_mail_color();
     $logo = dlp_fe_mail_logo();
     $h  = '<!DOCTYPE html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">'
         . '<title>' . esc_html(wp_strip_all_tags((string) $heading)) . '</title></head>';
-    $h .= '<body style="margin:0;padding:0;background:#f4f1ee;-webkit-text-size-adjust:100%">';
-    $h .= '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#f4f1ee"><tr><td align="center" style="padding:24px 12px">';
+    $h .= '<body style="margin:0;padding:0;background:#ececec;-webkit-text-size-adjust:100%">';
+    $h .= '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#ececec"><tr><td align="center" style="padding:24px 12px">';
     $h .= '<table role="presentation" width="600" cellpadding="0" cellspacing="0" style="width:100%;max-width:600px;background:#ffffff;border-radius:10px;overflow:hidden;font-family:Arial,Helvetica,sans-serif;color:#2b2b2b">';
-    $h .= '<tr><td align="center" style="background:' . $c . ';padding:24px 24px">';
-    $h .= $logo !== '' ? '<img src="' . esc_url($logo) . '" alt="Hamburguesas Del Puente" width="170" style="display:block;border:0;max-width:170px;height:auto">'
-        : '<span style="font-size:22px;font-weight:bold;color:#ffffff">Hamburguesas Del Puente</span>';
-    $h .= '</td></tr>';
-    $h .= '<tr><td style="padding:24px 28px 4px"><h1 style="margin:0;font-size:24px;line-height:1.25;color:#1d1d1d;text-align:center">' . esc_html(wp_strip_all_tags((string) $heading)) . '</h1></td></tr>';
-    $h .= '<tr><td style="padding:14px 28px 26px;font-size:15px;line-height:1.55;color:#2b2b2b">';
+    $h .= '<tr><td style="background:' . $c . ';padding:14px 28px"><table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr><td>';
+    $h .= $logo !== '' ? '<img src="' . esc_url($logo) . '" alt="Hamburguesas Del Puente" height="30" style="display:block;border:0;height:30px;width:auto">'
+        : '<span style="font-size:18px;font-weight:bold;color:#ffffff">Hamburguesas Del Puente</span>';
+    $h .= '</td><td align="right" style="font-size:11px;letter-spacing:.14em;color:#bdbdbd;font-weight:bold">' . esc_html($chip) . '</td></tr></table></td></tr>';
+    $h .= '<tr><td style="padding:28px 28px 4px"><table role="presentation" cellpadding="0" cellspacing="0"><tr>';
+    if ($icon !== '') {
+        $h .= '<td valign="middle" style="width:88px"><img src="' . esc_url(dlp_fe_mail_icon_url($icon)) . '" width="72" height="72" alt="" style="display:block;border:0;width:72px;height:72px"></td>';
+    }
+    $h .= '<td valign="middle"><h1 style="margin:0;font-size:25px;line-height:1.2;color:' . $c . '">' . esc_html(wp_strip_all_tags((string) $heading)) . '</h1></td></tr></table></td></tr>';
+    $h .= '<tr><td style="padding:16px 28px 24px;font-size:15px;line-height:1.55;color:#2b2b2b">';
     return $h;
 }
 
@@ -177,7 +210,7 @@ function dlp_fe_mail_close() {
         $cont[] = '<a href="' . esc_url($web) . '" style="color:' . $c . ';text-decoration:none">' . esc_html(preg_replace('#^https?://#', '', rtrim($web, '/'))) . '</a>';
     }
     $f  = '</td></tr>';
-    $f .= '<tr><td style="background:#faf8f6;border-top:1px solid #eee;padding:18px 28px;text-align:center;font-size:12px;line-height:1.6;color:#777">';
+    $f .= '<tr><td style="background:#f6f6f6;border-top:1px solid #eee;padding:18px 28px;text-align:center;font-size:12px;line-height:1.6;color:#777">';
     if ($cont) {
         $f .= '<div style="margin-bottom:6px">' . implode(' &nbsp;·&nbsp; ', $cont) . '</div>';
     }
@@ -209,10 +242,7 @@ function dlp_fe_mail_button($url, $label) {
 }
 
 function dlp_fe_mail_box($html, $tono = 'gris') {
-    $c = dlp_fe_mail_color();
-    $bg = $tono === 'rojo' ? '#fdecec' : '#f7f4f1';
-    $bd = $tono === 'rojo' ? $c : '#d9d2cb';
-    return '<div style="background:' . $bg . ';border-left:4px solid ' . $bd . ';border-radius:6px;padding:12px 16px;margin:0 0 16px">' . $html . '</div>';
+    return '<div style="background:#f3f3f3;border-left:4px solid ' . dlp_fe_mail_color() . ';border-radius:6px;padding:12px 16px;margin:0 0 16px">' . $html . '</div>';
 }
 
 /* ------------------------------------------------------------------
@@ -427,7 +457,9 @@ function dlp_fe_mail_tienda_html($order, $tipo = 'nuevo', $extra = []) {
         $head = 'Pedido #' . $order->get_order_number() . ' reasignado a otra tienda';
         $intro = dlp_fe_mail_box('Este pedido pasó a <strong>' . esc_html($store['name']) . '</strong>. Ya no tienes que prepararlo.');
     }
-    $h = dlp_fe_mail_open($head) . $intro;
+    $icono = dlp_fe_mail_is_pickup($order) ? 'pickup' : 'delivery';
+    $chip  = $tipo === 'nuevo' ? 'NUEVO PEDIDO' : 'REASIGNADO';
+    $h = dlp_fe_mail_open($head, $chip, $icono) . $intro;
     $h .= dlp_fe_mail_order_html($order, ['cliente' => true, 'tienda' => false]);
     if ($tipo !== 'anterior') {
         $h .= dlp_fe_mail_button(dlp_fe_mail_panel_url(), 'Abrir el panel de pedidos');
@@ -441,7 +473,7 @@ function dlp_fe_mail_aviso_html($order, $tipo) {
     $head   = ($falla ? 'Pedido fallido #' : 'Pedido cancelado #') . $order->get_order_number();
     $motivo = trim((string) $order->get_meta('_motivo_cancelacion_tienda', true));
     $txt    = $falla ? 'El pago de este pedido no se completó.' : 'Este pedido fue cancelado' . ($motivo !== '' ? ': ' . esc_html($motivo) : '.');
-    $h = dlp_fe_mail_open($head) . dlp_fe_mail_box($txt . ($store['name'] !== '' ? ' Tienda: <strong>' . esc_html($store['name']) . '</strong>.' : ''), 'rojo');
+    $h = dlp_fe_mail_open($head, $falla ? 'PEDIDO FALLIDO' : 'PEDIDO CANCELADO', 'fail') . dlp_fe_mail_box($txt . ($store['name'] !== '' ? ' Tienda: <strong>' . esc_html($store['name']) . '</strong>.' : ''), 'rojo');
     $h .= dlp_fe_mail_order_html($order, ['cliente' => true, 'tienda' => false]);
     $h .= dlp_fe_mail_button(admin_url('post.php?post=' . $order->get_id() . '&action=edit'), 'Ver pedido en el administrador');
     return $h . dlp_fe_mail_close();

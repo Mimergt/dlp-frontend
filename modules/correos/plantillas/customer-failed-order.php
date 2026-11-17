@@ -1,6 +1,7 @@
 <?php
 if (!defined('ABSPATH')) { exit; }
-do_action('woocommerce_email_header', $email_heading, $email);
+list($dlp_chip, $dlp_icon) = dlp_fe_mail_estado($email);
+echo dlp_fe_mail_open($email_heading, $dlp_chip, $dlp_icon); // phpcs:ignore WordPress.Security.EscapeOutput
 $nom = trim($order->get_billing_first_name());
 echo dlp_fe_mail_p('Hola' . ($nom !== '' ? ' <strong>' . esc_html($nom) . '</strong>' : '') . ',');
 echo dlp_fe_mail_box('No pudimos procesar el pago de tu pedido <strong>#' . esc_html($order->get_order_number()) . '</strong>, así que todavía no lo estamos preparando. No se te cobró nada si el banco no aprobó el pago.', 'rojo'); // phpcs:ignore WordPress.Security.EscapeOutput
