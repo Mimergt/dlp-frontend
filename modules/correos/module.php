@@ -467,6 +467,131 @@ function dlp_fe_mail_tienda_html($order, $tipo = 'nuevo', $extra = []) {
     return $h . dlp_fe_mail_close();
 }
 
+/* ------------------------------------------------------------------
+ * Detalle del pago (solo aviso de pedido fallido a pedidos@)
+ * Lee las notas del pedido que escribe el gateway de Cybersource y su meta.
+ * Nunca muestra numero completo de tarjeta ni CVN (solo marca + ultimos 4).
+ * ------------------------------------------------------------------ */
+function dlp_fe_mail_luhn($n) {
+    $sum = 0; $alt = false;
+    for ($i = strlen($n) - 1; $i >= 0; $i--) {
+        $d = (int) $n[$i];
+        if ($alt) { $d *= 2; if ($d > 9) { $d -= 9; } }
+        $sum += $d; $alt = !$alt;
+    }
+    return $sum % 10 === 0;
+}
+
+function dlp_fe_mail_pago_limpiar($t) {
+    $t = trim(wp_strip_all_tags((string) $t));
+    return preg_replace_callback('/\b\d{13,19}\b/', function ($m) {
+        return dlp_fe_mail_luhn($m[0]) ? '****' . substr($m[0], -4) : $m[0];
+    }, $t);
+}
+
+function dlp_fe_mail_pago_razon_es($txt) {
+    $mapa = [
+        'Card Verification Number|CVN|CVV'         => 'Código de seguridad (CVN) inválido',
+        'Insufficient Funds|insufficient'          => 'Fondos insuficientes',
+        'Expired Card|expired'                     => 'Tarjeta vencida',
+        'Invalid Account Number|invalid card'      => 'Número de tarjeta inválido',
+        'Address Verification|AVS'                 => 'La dirección no coincide con la del banco (AVS)',
+        'Decision Manager|DM |Fraud|Velocity|Score' => 'Rechazado o en revisión por antifraude',
+        'Stolen|Lost Card|Pickup'                  => 'Tarjeta reportada (robo/pérdida)',
+        'Do Not Honor|General decline|Processor declined|Declined' => 'El banco emisor rechazó la tarjeta',
+    ];
+    foreach ($mapa as $pat => $es) {
+        if (preg_match('/' . $pat . '/i', $txt)) {
+            return $es;
+        }
+    }
+    return '';
+}
+
+/** Devuelve array con los datos del pago o null si no hay nada. */
+function dlp_fe_mail_pago_info($order) {
+    $notas = function_exists('wc_get_order_notes') ? wc_get_order_notes(['order_id' => $order->get_id(), 'type' => 'internal', 'orderby' => 'date_created', 'order' => 'DESC', 'limit' => 60]) : [];
+    $fallas = [];
+    foreach ($notas as $n) {
+        if (preg_match('/Payment Failed|Status code|Decision Manager/i', (string) $n->content)) {
+            $fallas[] = $n;
+        }
+    }
+    $m = function ($k) use ($order) { return trim((string) $order->get_meta($k, true)); };
+    $r = ['intentos' => count($fallas), 'nota' => '', 'codigo' => '', 'detalle' => '', 'tx' => '', 'fecha' => null];
+    if ($fallas) {
+        $txt = dlp_fe_mail_pago_limpiar($fallas[0]->content);
+        $r['nota']  = $txt;
+        $r['fecha'] = $fallas[0]->date_created;
+        if (preg_match('/Status code\s+([A-Za-z_]+)\s*:\s*(.*?)(?:\.?\s*Transaction ID\s+(\d+)|\)\s*$|$)/si', $txt, $mm)) {
+            $r['codigo']  = strtoupper($mm[1]);
+            $r['detalle'] = trim($mm[2], " .)");
+            $r['tx']      = isset($mm[3]) ? $mm[3] : '';
+        }
+        if ($r['tx'] === '' && preg_match('/Transaction ID\s+(\d+)/i', $txt, $mm)) {
+            $r['tx'] = $mm[1];
+        }
+    }
+    foreach (['_wc_cybersource_credit_card_trans_id', '_processor_transaction_id'] as $k) {
+        if ($r['tx'] === '' && $m($k) !== '') { $r['tx'] = $m($k); }
+    }
+    $r['auth']   = $m('_authorization_code');
+    $r['recon']  = $m('_reconciliation_id');
+    $r['marca']  = $m('_card_type');
+    $r['ult4']   = preg_match('/^\d{4}$/', $m('_account_four')) ? $m('_account_four') : '';
+    $r['monto']  = $m('_authorization_amount');
+    $r['trans']  = $m('_trans_date');
+    $r['reint']  = $m('_retry_count');
+    $r['amb']    = $m('_environment');
+    $r['hay']    = $fallas || $r['tx'] !== '' || $r['marca'] !== '' || $r['ult4'] !== '' || $r['auth'] !== '';
+    return $r;
+}
+
+function dlp_fe_mail_pago_html($order) {
+    $i = dlp_fe_mail_pago_info($order);
+    $h = '<div style="margin:0 0 6px;font-size:12px;color:#888;text-transform:uppercase;letter-spacing:.06em">Detalle del pago</div>';
+    $h .= '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:0 0 14px;border-top:1px solid #eee;border-bottom:1px solid #eee">';
+    $h .= dlp_fe_mail_row('Método', esc_html($order->get_payment_method_title()));
+    if (!$i['hay']) {
+        return $h . dlp_fe_mail_row('Procesador', '<em>Sin detalle del procesador</em>') . '</table>';
+    }
+    if ($i['tx'] !== '') {
+        $h .= dlp_fe_mail_row('ID de transacción', '<span style="font-family:monospace">' . esc_html($i['tx']) . '</span>');
+    }
+    if ($i['codigo'] !== '' || $i['detalle'] !== '') {
+        $es = dlp_fe_mail_pago_razon_es($i['detalle'] . ' ' . $i['nota']);
+        $v  = '<strong>' . esc_html($i['codigo']) . '</strong>';
+        if ($es !== '') { $v .= ' · ' . esc_html($es); }
+        if ($i['detalle'] !== '') { $v .= '<br><span style="color:#888;font-size:12px">' . esc_html($i['detalle']) . '</span>'; }
+        $h .= dlp_fe_mail_row('Estado y razón', $v);
+    } elseif ($i['nota'] !== '') {
+        $es = dlp_fe_mail_pago_razon_es($i['nota']);
+        $h .= dlp_fe_mail_row('Razón', ($es !== '' ? esc_html($es) . '<br>' : '') . '<span style="color:#888;font-size:12px">' . esc_html($i['nota']) . '</span>');
+    } else {
+        $h .= dlp_fe_mail_row('Razón', '<em>Sin detalle del procesador</em>');
+    }
+    if ($i['marca'] !== '' || $i['ult4'] !== '') {
+        $h .= dlp_fe_mail_row('Tarjeta', esc_html(trim(strtoupper($i['marca']) . ' •••• ' . $i['ult4'])));
+    }
+    $monto = $i['monto'] !== '' && is_numeric($i['monto']) ? (float) $i['monto'] : (float) $order->get_total();
+    $h .= dlp_fe_mail_row('Monto', esc_html('Q' . number_format($monto, 2)));
+    $f = $i['fecha'] ? $i['fecha']->getTimestamp() : ($i['trans'] !== '' ? strtotime($i['trans']) : 0);
+    if ($f) {
+        $h .= dlp_fe_mail_row('Fecha del intento', esc_html(wp_date('d/m/Y g:i a', $f)));
+    }
+    $h .= dlp_fe_mail_row('Intentos fallidos', esc_html((string) max($i['intentos'], (int) $i['reint'])) . ' en este pedido');
+    if ($i['auth'] !== '') {
+        $h .= dlp_fe_mail_row('Código de autorización', esc_html($i['auth']));
+    }
+    // Fallos del mismo cliente (barato: 1 consulta con limite).
+    $cid = (int) $order->get_customer_id();
+    if ($cid > 0) {
+        $ids = wc_get_orders(['customer_id' => $cid, 'status' => 'failed', 'limit' => 20, 'return' => 'ids', 'date_created' => '>' . (time() - 30 * DAY_IN_SECONDS)]);
+        $h .= dlp_fe_mail_row('Pedidos fallidos del cliente', esc_html((string) count($ids)) . ' en los últimos 30 días');
+    }
+    return $h . '</table>';
+}
+
 function dlp_fe_mail_aviso_html($order, $tipo) {
     $store  = dlp_fe_mail_store_info(dlp_fe_mail_store_id($order));
     $falla  = $tipo === 'fallido';
@@ -475,6 +600,9 @@ function dlp_fe_mail_aviso_html($order, $tipo) {
     $txt    = $falla ? 'El pago de este pedido no se completó.' : 'Este pedido fue cancelado' . ($motivo !== '' ? ': ' . esc_html($motivo) : '.');
     $h = dlp_fe_mail_open($head, $falla ? 'PEDIDO FALLIDO' : 'PEDIDO CANCELADO', 'fail') . dlp_fe_mail_box($txt . ($store['name'] !== '' ? ' Tienda: <strong>' . esc_html($store['name']) . '</strong>.' : ''), 'rojo');
     $h .= dlp_fe_mail_order_html($order, ['cliente' => true, 'tienda' => false]);
+    if ($falla) {
+        $h .= dlp_fe_mail_pago_html($order);
+    }
     $h .= dlp_fe_mail_button(admin_url('post.php?post=' . $order->get_id() . '&action=edit'), 'Ver pedido en el administrador');
     return $h . dlp_fe_mail_close();
 }
